@@ -1,0 +1,98 @@
+---
+# Source: nautobot/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nautobot
+  namespace: "monitoring"
+  labels:
+    app.kubernetes.io/name: nautobot
+    helm.sh/chart: nautobot-0.1.0
+    app.kubernetes.io/instance: nautobot
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: nautobot
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nautobot
+      app.kubernetes.io/instance: nautobot
+      app.kubernetes.io/component: nautobot
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nautobot
+        helm.sh/chart: nautobot-0.1.0
+        app.kubernetes.io/instance: nautobot
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: nautobot
+    spec:
+      serviceAccountName: nautobot-foo
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: nautobot
+                    app.kubernetes.io/instance: nautobot
+                    app.kubernetes.io/component: nautobot
+                namespaces:
+                  - "monitoring"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 999
+      initContainers:
+      containers:
+        - name: nautobot
+          image: ghcr.io/nautobot/nautobot:1.0.1
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsGroup: 999
+            runAsUser: 999
+          args:
+            - nautobot-server
+            - start
+            - --ini
+            - /opt/nautobot/uwsgi.ini
+          env:
+          envFrom:
+          resources:
+            limits:
+              cpu: "3"
+              memory: 2Gi
+            requests:
+              cpu: "0.7"
+              memory: 784Mi
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/status/
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/status/
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          volumeMounts:
+          ports:
+            - name: "https"
+              containerPort: 8443
+            - name: "http"
+              containerPort: 8080

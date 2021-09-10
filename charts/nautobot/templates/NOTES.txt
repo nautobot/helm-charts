@@ -1,0 +1,67 @@
+{{- if and (or .Values.postgresql.enabled .Values.nautobot.envVars.dbHost ) (or .Values.redis.enabled .Values.nautobot.envVars.redisHost) -}}
+
+*******************************************************************
+*** PLEASE BE PATIENT: Nautobot may take a few minutes to install ***
+*******************************************************************
+
+1. Get the Nautobot URL:
+
+{{- if .Values.ingress.enabled }}
+
+  You should be able to access your new Nautobot installation through
+
+  http://{{- .Values.ingress.hostname }}/
+
+{{- else if eq .Values.service.type "LoadBalancer" }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+
+{{- $port:=.Values.service.port | toString }}
+  echo "Nautobot URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+
+{{- else if eq .Values.service.type "ClusterIP" }}
+
+  echo "Nautobot URL: http://127.0.0.1:8080/"
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.port }}
+
+{{- end }}
+
+{{- if eq .Values.service.type "NodePort" }}
+
+  Or running:
+
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "Nautobot URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- end }}
+
+2. Get your Nautobot login admin credentials by running:
+
+  echo Username: {{ .Values.nautobot.superuser_name }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.superuser_password}" | base64 --decode)
+  echo api-token: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.superuser_api_token}" | base64 --decode)
+
+{{- else -}}
+
+########################################################################################
+### ERROR: You did not provide an external database host in your 'helm install' call ###
+########################################################################################
+
+This deployment will be incomplete until you configure Nautobot with a resolvable database
+host. To configure Nautobot to use and external database host:
+
+## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
+
+  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    --set service.type={{ .Values.service.type }},postgres.enabled=false{{- if not (empty .Values.nautobot.envVars.dbUser) }},nautobot.envVars.dBuser={{ .Values.nautobot.envVars.dbUser }}{{- end }}{{- if not (empty .Values.nautobot.envVars.dbPassword) }},nautobot.envVars.dbPassword={{ .Values.nautobot.envVars.dbPassword }}{{- end }}{{- if not (empty .Values.nautobot.envVars.dbName) }},nautobot.envVars.dbName={{ .Values.nautobot.envVars.dbName }}{{- end }},nautobot.envVars.dbHost=YOUR_EXTERNAL_DATABASE_HOST{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+
+{{- end }}
+
+
+{{- include "common.warnings.rollingTag" .Values.nautobot.image }}
+
+# TODO CHeck for Secret_key, postgres/redis password should be defined

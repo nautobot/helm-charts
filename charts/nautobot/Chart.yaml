@@ -1,16 +1,16 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.0.2
+appVersion: 1.1.2
 dependencies:
-#   - condition: redis.enabled
-#     name: redis
-#     repository: https://charts.bitnami.com/bitnami
-#     version: 14.X.X
-#   - condition: postgresql.enabled
-#     name: postgresql
-#     repository: https://charts.bitnami.com/bitnami
-#     version: 10.x.x
+  - condition: redis.enabled
+    name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 14.X.X
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:

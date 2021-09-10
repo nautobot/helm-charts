@@ -1,0 +1,123 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}-rq-worker
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: nautobot-rq-worker
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.rqWorker.replicaCount }}
+  {{- if .Values.rqWorker.updateStrategy }}
+  strategy: {{- toYaml .Values.rqWorker.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: nautobot-rq-worker
+  template:
+    metadata:
+      {{- if .Values.rqWorker.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: nautobot-rq-worker
+        {{- if .Values.rqWorker.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ template "nautobot.serviceAccountName" . }}
+      {{- include "nautobot.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.rqWorker.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.rqWorker.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.rqWorker.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.rqWorker.podAffinityPreset "component" "nautobot-rq-worker" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.rqWorker.podAntiAffinityPreset "component" "nautobot-rq-worker" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.rqWorker.nodeAffinityPreset.type "key" .Values.rqWorker.nodeAffinityPreset.key "values" .Values.rqWorker.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.rqWorker.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.rqWorker.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.rqWorker.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.rqWorker.priorityClassName }}
+      priorityClassName: {{ .Values.rqWorker.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.rqWorker.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.rqWorker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.rqWorker.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: nautobot
+          image: {{ template "nautobot.image" . }}
+          imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
+          {{- if .Values.rqWorker.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.rqWorker.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.rqWorker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.rqWorker.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.rqWorker.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.rqWorker.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "common.names.fullname" . }}-env
+            - secretRef:
+                name: {{ include "common.names.fullname" . }}-env
+            {{- if .Values.rqWorker.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.rqWorker.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.rqWorker.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.rqWorker.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.rqWorker.resources }}
+          resources: {{- toYaml .Values.rqWorker.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.rqWorker.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.rqWorker.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.rqWorker.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.rqWorker.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.rqWorker.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.rqWorker.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.rqWorker.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: "https"
+              containerPort: 8443
+            - name: "http"
+              containerPort: 8080
+        {{- if .Values.rqWorker.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.rqWorker.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.rqWorker.extraVolumes }}
+      volumes:
+        {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}

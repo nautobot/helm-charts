@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: nautobot
@@ -80,6 +80,10 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
+            - configMapRef:
+                name: {{ include "common.names.fullname" . }}-env
+            - secretRef:
+                name: {{ include "common.names.fullname" . }}-env
             {{- if .Values.nautobot.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.nautobot.extraEnvVarsCM "context" $) }}

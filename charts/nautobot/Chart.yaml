@@ -28,6 +28,7 @@ keywords:
 maintainers:
   - email: "opensource@networktocode.com"
     name: "Network to Code"
+    url: "https://www.networktocode.com/"
 name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"

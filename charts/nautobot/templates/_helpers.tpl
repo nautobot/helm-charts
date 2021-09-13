@@ -119,7 +119,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "nautobot.database.rawPassword" -}}
   {{- if eq .Values.postgresql.enabled true -}}
-      {{- .Values.postgresql.postgresqlPassword -}}
+      {{- required "A Postgres Password is required!" .Values.postgresql.postgresqlPassword -}}
   {{- else -}}
       {{- .Values.nautobot.envVars.dbPassword -}}
   {{- end -}}
@@ -164,10 +164,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "nautobot.redis.rawPassword" -}}
   {{- if and (not .Values.redis.enabled) .Values.nautobot.envVars.redisPassword -}}
-    {{- .Values.nautobot.envVars.redisPassword -}}
+    {{- required "A Redis Password is required!" .Values.nautobot.envVars.redisPassword -}}
   {{- end -}}
-  {{- if and .Values.redis.enabled .Values.redis.auth.password .Values.redis.auth.enabled -}}
-    {{- .Values.redis.auth.password -}}
+  {{- if and .Values.redis.enabled .Values.redis.auth.enabled -}}
+    {{- required "A Redis Password is required!" .Values.redis.auth.password -}}
   {{- end -}}
 {{- end -}}
 

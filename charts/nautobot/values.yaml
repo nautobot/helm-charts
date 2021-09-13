@@ -858,10 +858,10 @@ postgresql:
   enabled: true
   postgresqlUsername: "nautobot"
   postgresqlDatabase: "nautobot"
-  postgresqlPassword: "change-me"
+  postgresqlPassword: ""
 
 redis:
   enabled: true
   auth:
     enabled: true
-    password: "change-me"
+    password: ""

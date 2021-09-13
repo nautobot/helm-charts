@@ -10,7 +10,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Network to Code | opensource@networktocode.com |  |
+| Network to Code | opensource@networktocode.com | https://www.networktocode.com/ |
 
 ## Source Code
 
@@ -185,11 +185,11 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` |  |
 | postgresql.enabled | bool | `true` |  |
 | postgresql.postgresqlDatabase | string | `"nautobot"` |  |
-| postgresql.postgresqlPassword | string | `"change-me"` |  |
+| postgresql.postgresqlPassword | string | `""` |  |
 | postgresql.postgresqlUsername | string | `"nautobot"` |  |
 | rbac.create | bool | `false` |  |
 | redis.auth.enabled | bool | `true` |  |
-| redis.auth.password | string | `"change-me"` |  |
+| redis.auth.password | string | `""` |  |
 | redis.enabled | bool | `true` |  |
 | rqWorker.affinity | object | `{}` |  |
 | rqWorker.args | list | `[]` |  |

@@ -247,12 +247,12 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | service.annotations | object | `{}` |  |
 | service.clusterIP | string | `nil` |  |
 | service.externalTrafficPolicy | string | `"Cluster"` |  |
-| service.httpsPort | int | `8443` |  |
+| service.httpsPort | int | `443` |  |
 | service.loadBalancerIP | string | `nil` |  |
 | service.loadBalancerSourceRanges | list | `[]` |  |
 | service.nodePorts.http | string | `nil` |  |
 | service.nodePorts.https | string | `nil` |  |
-| service.port | int | `8080` |  |
+| service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |

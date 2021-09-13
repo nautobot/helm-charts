@@ -9,10 +9,10 @@ service:
   type: "ClusterIP"
   ## @param service.port nautobot service HTTP port
   ##
-  port: 8080
+  port: 80
   ## @param service.httpsPort nautobot service HTTPS port
   ##
-  httpsPort: 8443
+  httpsPort: 443
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.https Node port for HTTPS

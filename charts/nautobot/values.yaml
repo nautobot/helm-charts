@@ -152,7 +152,7 @@ nautobot:
     enabled: true
     runAsUser: 999
     runAsGroup: 999
-  
+
   ## @param nautobot.existingConfigmap The name of an existing ConfigMap with your custom configuration for nautobot
   ##
   existingConfigmap:
@@ -162,10 +162,7 @@ nautobot:
   ## @param nautobot.args Override default container args (useful when using custom images)
   ##
   args:
-    - "nautobot-server"
-    - "start"
-    - "--ini"
-    - "/opt/nautobot/uwsgi.ini"
+
   ## @param nautobot.hostAliases nautobot pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -281,7 +278,7 @@ nautobot:
     dbUser: "nautobot"  # NAUTOBOT_DB_USER
     debug: "False"  # NAUTOBOT_DEBUG
     logLevel: "INFO"
-    metrics: "True" # NAUTOBOT_METRICS_ENABLED Should really use .metrics.enabled instead of this 
+    metrics: "True" # NAUTOBOT_METRICS_ENABLED Should really use .metrics.enabled instead of this
     redisHost: ""  # NAUTOBOT_REDIS_HOST
     redisPassword: ""  # NAUTOBOT_REDIS_PASSWORD
     redisPort: "6379"  # NAUTOBOT_REDIS_PORT
@@ -369,18 +366,18 @@ rqWorker:
   containerSecurityContext:
     enabled: true
     runAsUser: 999
-  
+
   ## @param worker.existingConfigmap The name of an existing ConfigMap with your custom configuration for nautobot
   ##
   existingConfigmap:
   ## @param worker.command Override default container command (useful when using custom images)
   ##
-  command: []
-  ## @param worker.args Override default container args (useful when using custom images)
-  ##
-  args:
+  command:
     - "nautobot-server"
     - "rqworker"
+  ## @param worker.args Override default container args (useful when using custom images)
+  ##
+  args: []
   ## @param worker.hostAliases nautobot pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -566,21 +563,21 @@ celeryWorker:
   containerSecurityContext:
     enabled: true
     runAsUser: 999
-  
+
   ## @param worker.existingConfigmap The name of an existing ConfigMap with your custom configuration for nautobot
   ##
   existingConfigmap:
   ## @param worker.command Override default container command (useful when using custom images)
   ##
-  command: []
-  ## @param worker.args Override default container args (useful when using custom images)
-  ##
-  args:
+  command:
     - "nautobot-server"
     - "celery"
     - "worker"
     - "--loglevel"
     - "$(NAUTOBOT_LOG_LEVEL)"
+  ## @param worker.args Override default container args (useful when using custom images)
+  ##
+  args: []
   ## @param worker.hostAliases nautobot pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

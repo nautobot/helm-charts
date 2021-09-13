@@ -1,4 +1,6 @@
-## nautobot service parameters
+## @section Nautobot Service Parameters
+
+## Nautobot service parameters
 ##
 service:
   ## @param service.type nautobot service type
@@ -42,7 +44,7 @@ service:
   ##
   annotations: {}
 
-## @section nautobot Parameters
+## @section Nautobot Parameters
 
 ## Nautobot Server
 ##

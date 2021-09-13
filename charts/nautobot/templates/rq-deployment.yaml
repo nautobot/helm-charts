@@ -60,7 +60,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: nautobot
+        - name: nautobot-rq
           image: {{ template "nautobot.image" . }}
           imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
           {{- if .Values.rqWorker.lifecycleHooks }}

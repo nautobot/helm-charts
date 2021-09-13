@@ -1,3 +1,4 @@
+{{- if .Values.rqWorker.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -123,3 +124,4 @@ spec:
       volumes:
         {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
+{{- end }}

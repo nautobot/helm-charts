@@ -130,7 +130,7 @@ nautobot:
   ##
   resources:
     limits:
-      cpu: "1"
+      cpu: "2"
       memory: "2Gi"
     requests:
       cpu: "0.7"
@@ -269,6 +269,7 @@ nautobot:
   initContainers: {}
   envVars:  # https://nautobot.readthedocs.io/en/stable/configuration/required-settings/
     allowedHosts: "*"  # NAUTOBOT_ALLOWED_HOSTS space separated list of allowed hosts
+    createSuperUser: "true"
     dbEngine: "django.db.backends.postgresql"  # NAUTOBOT_DB_ENGINE
     dbHost: "postgres"  # NAUTOBOT_DB_HOST
     dbName: "nautobot"  # NAUTOBOT_DB_NAME
@@ -284,7 +285,11 @@ nautobot:
     redisPort: "6379"  # NAUTOBOT_REDIS_PORT
     redisUsername: ""  # NAUTOBOT_REDIS_USERNAME
     redisSSL: "False"  # NAUTOBOT_REDIS_SSL
-    # secretKey: ""  # NAUTOBOT_SECRET_KEY
+    secretKey: ""  # NAUTOBOT_SECRET_KEY
+    superUserAPIToken: ""
+    superUserEmail: "admin@example.com"
+    superUserName: "admin"
+    superUserPassword: ""
     # extraVars are env vars common to all Nautobot containers (rq worker, celery, and nautobot)
     # extraVars:  # https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/
     #   - name: "NAUTOBOT_BANNER_TOP"
@@ -293,6 +298,7 @@ nautobot:
 ## Nautobot RQ Worker
 ##
 rqWorker:
+  enabled: true
   ## @param worker.replicaCount Number of nautobot replicas to deploy
   ##
   replicaCount: 2
@@ -307,12 +313,13 @@ rqWorker:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: "/"
-      port: 8001
-    initialDelaySeconds: 3
-    periodSeconds: 10
-    timeoutSeconds: 5
+    exec:
+      command:
+        - nautobot-server
+        - health_check
+    initialDelaySeconds: 5
+    periodSeconds: 15
+    timeoutSeconds: 8
     failureThreshold: 3
     successThreshold: 1
   ## @param worker.readinessProbe.enabled Enable readinessProbe on nautobot nodes
@@ -324,12 +331,13 @@ rqWorker:
   ##
   readinessProbe:
     enabled: true
-    httpGet:
-      path: "/"
-      port: 8001
-    initialDelaySeconds: 3
-    periodSeconds: 10
-    timeoutSeconds: 5
+    exec:
+      command:
+        - nautobot-server
+        - health_check
+    initialDelaySeconds: 5
+    periodSeconds: 15
+    timeoutSeconds: 8
     failureThreshold: 3
     successThreshold: 1
   ## @param worker.customLivenessProbe Custom livenessProbe that overrides the default one
@@ -486,6 +494,7 @@ rqWorker:
 ## Nautobot Celery Worker
 ##
 celeryWorker:
+  enabled: true
   ## @param worker.replicaCount Number of nautobot replicas to deploy
   ##
   replicaCount: 2

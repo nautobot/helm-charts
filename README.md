@@ -38,8 +38,11 @@ GH Actions Publish Release
 GH Actions Update Docs
 Auto create admin account
 document getting started steps
+Enable Monitoring
 
 ## TODO Later
 Provide method to update nautobot_config.py
 Provide method to update uwsgi.ini
 Automated testing
+Handle Nautobot Media
+Allow adding plugins

@@ -30,7 +30,9 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
+      {{- if .Values.serviceAccount.name }}
       serviceAccountName: {{ template "nautobot.serviceAccountName" . }}
+      {{- end }}
       {{- include "nautobot.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.nautobot.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.hostAliases "context" $) | nindent 8 }}

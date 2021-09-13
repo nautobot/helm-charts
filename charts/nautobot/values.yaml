@@ -130,7 +130,7 @@ nautobot:
   ##
   resources:
     limits:
-      cpu: "3"
+      cpu: "1"
       memory: "2Gi"
     requests:
       cpu: "0.7"
@@ -508,9 +508,9 @@ celeryWorker:
         - "bash"
         - "-c"
         - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
-    initialDelaySeconds: 3
-    periodSeconds: 10
-    timeoutSeconds: 5
+    initialDelaySeconds: 30
+    periodSeconds: 60
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
   ## @param worker.readinessProbe.enabled Enable readinessProbe on nautobot nodes
@@ -528,8 +528,8 @@ celeryWorker:
         - "-c"
         - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
     initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 60
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
   ## @param worker.customLivenessProbe Custom livenessProbe that overrides the default one

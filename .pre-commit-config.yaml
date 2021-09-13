@@ -29,3 +29,14 @@ repos:
         args:
           - "-c=.yamllint"
           - "-s"
+
+  - repo: "https://github.com/norwoodj/helm-docs"
+    rev: "v1.6.0"
+    hooks:
+      - id: "helm-docs"
+        args:
+          # Make the tool search for charts only under the `example-charts` directory
+          - "--chart-search-root=charts"
+
+          # The `./` makes it relative to the chart-search-root set above
+          - "--template-files=README.md.gotmpl"

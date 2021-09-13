@@ -21,8 +21,8 @@ You can then run `helm search repo nautobot` to see the charts.
 
 ## Support
 
-* Documentation: Eventually we may have additional documentation on [Read the Docs](https://readthedocs.org/), for now we just have the READMEs.
-* Slack: checkout the *#nautobot* channel on the [Network to Code slack](https://networktocode.slack.com/)!
+* **Documentation**: Eventually we may have additional documentation on [Read the Docs](https://readthedocs.org/), for now we just have the READMEs.
+* **Slack**: checkout the **#nautobot** channel on the [Network to Code slack](https://networktocode.slack.com/)!
 
 ## Contributing
 

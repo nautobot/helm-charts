@@ -3,6 +3,14 @@
 **WARNING** This repo is still in alpha state!
 
 # Nautobot Helm Charts
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+<!-- [![All Contributors]()](#contributors-) -->
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge)](https://github.com/pre-commit/pre-commit)
+<!-- [![renovate](https://img.shields.io/badge/renovate-enabled-brightgreen?style=for-the-badge&logo=data:image/svg+xml;base64,)](https://github.com/renovatebot/renovate) -->
+<!-- [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/nautobot&style=for-the-badge)](https://artifacthub.io/packages/search?repo=nautobot) -->
+
 
 This repo is intented to house helm charts for the Nautobot project.  (Yes, today that is only the Nautobot chart, but we are ready for more)  Each chart in this repo uses [helm-docs](https://github.com/norwoodj/helm-docs) to generate the README.md for the individual charts.
 
@@ -18,6 +26,18 @@ helm repo add nautobot https://networktocode-llc.github.io/helm-charts/
 ```
 
 You can then run `helm search repo nautobot` to see the charts.
+
+To install a chart from the nautobot repo run:
+
+```console
+helm install {Release Name} {Repo Name}/{Chart Name}
+```
+
+for example:
+
+```console
+helm install nautobot nautobot/nautobot
+```
 
 ## Support
 

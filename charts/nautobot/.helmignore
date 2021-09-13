@@ -21,3 +21,5 @@
 .idea/
 *.tmproj
 .vscode/
+# README template
+README.md.gotmpl

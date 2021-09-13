@@ -41,8 +41,8 @@ helm install nautobot nautobot/nautobot
 
 ## Support
 
-* Documentation: Eventually we may have additional documentation on [Read the Docs](https://readthedocs.org/), for now we just have the READMEs.
-* Slack: checkout the *#nautobot* channel on the [Network to Code slack](https://networktocode.slack.com/)!
+* **Documentation**: Eventually we may have additional documentation on [Read the Docs](https://readthedocs.org/), for now we just have the READMEs.
+* **Slack**: checkout the **#nautobot** channel on the [Network to Code slack](https://networktocode.slack.com/)!
 
 ## Contributing
 
@@ -58,8 +58,11 @@ GH Actions Publish Release
 GH Actions Update Docs
 Auto create admin account
 document getting started steps
+Enable Monitoring
 
 ## TODO Later
 Provide method to update nautobot_config.py
 Provide method to update uwsgi.ini
 Automated testing
+Handle Nautobot Media
+Allow adding plugins

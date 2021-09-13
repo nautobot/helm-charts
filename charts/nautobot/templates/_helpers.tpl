@@ -52,16 +52,28 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
-{{- define "nautobot.rawSecretKey" -}}
+{{- define "nautobot.encryptedSecretKey" -}}
   {{- if not .Values.nautobot.envVars.secretKey -}}
     {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SECRET_KEY" "providedValues" (list "nautobot.envVars.secretKey") "length" 64 "strong" true "context" $) }}
   {{- else -}}
-    {{- .Values.nautobot.envVars.secretKey -}}
+    {{- .Values.nautobot.envVars.secretKey | b64enc | quote -}}
   {{- end -}}
 {{- end -}}
 
-{{- define "nautobot.encryptedSecretKey" -}}
-  {{- include "nautobot.rawSecretKey" . | b64enc | quote -}}
+{{- define "nautobot.encryptedSuperUserAPIToken" -}}
+  {{- if not .Values.nautobot.envVars.superUserAPIToken -}}
+    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SUPERUSER_API_TOKEN" "providedValues" (list "nautobot.envVars.superUserAPIToken") "length" 40 "strong" false "context" $) }}
+  {{- else -}}
+    {{- .Values.nautobot.envVars.superUserAPIToken | b64enc | quote -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "nautobot.encryptedSuperUserPassword" -}}
+  {{- if not .Values.nautobot.envVars.superUserPassword -}}
+    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SUPERUSER_PASSWORD" "providedValues" (list "nautobot.envVars.superUserPassword") "length" 64 "strong" true "context" $) }}
+  {{- else -}}
+    {{- .Values.nautobot.envVars.superUserPassword | b64enc | quote -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*

@@ -37,16 +37,17 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | autoscaling.metrics[0].type | string | `"Resource"` |  |
 | autoscaling.minReplicas | int | `2` |  |
 | celeryWorker.affinity | object | `{}` |  |
-| celeryWorker.args[0] | string | `"nautobot-server"` |  |
-| celeryWorker.args[1] | string | `"celery"` |  |
-| celeryWorker.args[2] | string | `"worker"` |  |
-| celeryWorker.args[3] | string | `"--loglevel"` |  |
-| celeryWorker.args[4] | string | `"$(NAUTOBOT_LOG_LEVEL)"` |  |
-| celeryWorker.command | list | `[]` |  |
+| celeryWorker.args | list | `[]` |  |
+| celeryWorker.command[0] | string | `"nautobot-server"` |  |
+| celeryWorker.command[1] | string | `"celery"` |  |
+| celeryWorker.command[2] | string | `"worker"` |  |
+| celeryWorker.command[3] | string | `"--loglevel"` |  |
+| celeryWorker.command[4] | string | `"$(NAUTOBOT_LOG_LEVEL)"` |  |
 | celeryWorker.containerSecurityContext.enabled | bool | `true` |  |
 | celeryWorker.containerSecurityContext.runAsUser | int | `999` |  |
 | celeryWorker.customLivenessProbe | object | `{}` |  |
 | celeryWorker.customReadinessProbe | object | `{}` |  |
+| celeryWorker.enabled | bool | `true` |  |
 | celeryWorker.existingConfigmap | string | `nil` |  |
 | celeryWorker.extraEnvVars | list | `[]` |  |
 | celeryWorker.extraEnvVarsCM | string | `nil` |  |
@@ -61,10 +62,10 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | celeryWorker.livenessProbe.exec.command[1] | string | `"-c"` |  |
 | celeryWorker.livenessProbe.exec.command[2] | string | `"nautobot-server celery inspect ping --destination celery@$HOSTNAME"` |  |
 | celeryWorker.livenessProbe.failureThreshold | int | `3` |  |
-| celeryWorker.livenessProbe.initialDelaySeconds | int | `3` |  |
-| celeryWorker.livenessProbe.periodSeconds | int | `10` |  |
+| celeryWorker.livenessProbe.initialDelaySeconds | int | `30` |  |
+| celeryWorker.livenessProbe.periodSeconds | int | `60` |  |
 | celeryWorker.livenessProbe.successThreshold | int | `1` |  |
-| celeryWorker.livenessProbe.timeoutSeconds | int | `5` |  |
+| celeryWorker.livenessProbe.timeoutSeconds | int | `10` |  |
 | celeryWorker.nodeAffinityPreset.key | string | `""` |  |
 | celeryWorker.nodeAffinityPreset.type | string | `""` |  |
 | celeryWorker.nodeAffinityPreset.values | list | `[]` |  |
@@ -82,9 +83,9 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | celeryWorker.readinessProbe.exec.command[2] | string | `"nautobot-server celery inspect ping --destination celery@$HOSTNAME"` |  |
 | celeryWorker.readinessProbe.failureThreshold | int | `3` |  |
 | celeryWorker.readinessProbe.initialDelaySeconds | int | `30` |  |
-| celeryWorker.readinessProbe.periodSeconds | int | `10` |  |
+| celeryWorker.readinessProbe.periodSeconds | int | `60` |  |
 | celeryWorker.readinessProbe.successThreshold | int | `1` |  |
-| celeryWorker.readinessProbe.timeoutSeconds | int | `5` |  |
+| celeryWorker.readinessProbe.timeoutSeconds | int | `10` |  |
 | celeryWorker.replicaCount | int | `2` |  |
 | celeryWorker.resources.limits.cpu | string | `"1"` |  |
 | celeryWorker.resources.limits.memory | string | `"1Gi"` |  |
@@ -103,10 +104,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | ingress.secrets | list | `[]` |  |
 | ingress.tls | bool | `false` |  |
 | nautobot.affinity | object | `{}` |  |
-| nautobot.args[0] | string | `"nautobot-server"` |  |
-| nautobot.args[1] | string | `"start"` |  |
-| nautobot.args[2] | string | `"--ini"` |  |
-| nautobot.args[3] | string | `"/opt/nautobot/uwsgi.ini"` |  |
+| nautobot.args | list | `[]` |  |
 | nautobot.command | list | `[]` |  |
 | nautobot.containerSecurityContext.enabled | bool | `true` |  |
 | nautobot.containerSecurityContext.runAsGroup | int | `999` |  |
@@ -114,6 +112,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.customLivenessProbe | object | `{}` |  |
 | nautobot.customReadinessProbe | object | `{}` |  |
 | nautobot.envVars.allowedHosts | string | `"*"` |  |
+| nautobot.envVars.createSuperUser | string | `"true"` |  |
 | nautobot.envVars.dbEngine | string | `"django.db.backends.postgresql"` |  |
 | nautobot.envVars.dbHost | string | `"postgres"` |  |
 | nautobot.envVars.dbName | string | `"nautobot"` |  |
@@ -129,6 +128,11 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.envVars.redisPort | string | `"6379"` |  |
 | nautobot.envVars.redisSSL | string | `"False"` |  |
 | nautobot.envVars.redisUsername | string | `""` |  |
+| nautobot.envVars.secretKey | string | `""` |  |
+| nautobot.envVars.superUserAPIToken | string | `""` |  |
+| nautobot.envVars.superUserEmail | string | `"admin@example.com"` |  |
+| nautobot.envVars.superUserName | string | `"admin"` |  |
+| nautobot.envVars.superUserPassword | string | `""` |  |
 | nautobot.existingConfigmap | string | `nil` |  |
 | nautobot.extraEnvVars | list | `[]` |  |
 | nautobot.extraEnvVarsCM | string | `nil` |  |
@@ -172,7 +176,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.readinessProbe.successThreshold | int | `1` |  |
 | nautobot.readinessProbe.timeoutSeconds | int | `5` |  |
 | nautobot.replicaCount | int | `2` |  |
-| nautobot.resources.limits.cpu | string | `"3"` |  |
+| nautobot.resources.limits.cpu | string | `"2"` |  |
 | nautobot.resources.limits.memory | string | `"2Gi"` |  |
 | nautobot.resources.requests.cpu | string | `"0.7"` |  |
 | nautobot.resources.requests.memory | string | `"784Mi"` |  |
@@ -188,13 +192,14 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | redis.auth.password | string | `"change-me"` |  |
 | redis.enabled | bool | `true` |  |
 | rqWorker.affinity | object | `{}` |  |
-| rqWorker.args[0] | string | `"nautobot-server"` |  |
-| rqWorker.args[1] | string | `"rqworker"` |  |
-| rqWorker.command | list | `[]` |  |
+| rqWorker.args | list | `[]` |  |
+| rqWorker.command[0] | string | `"nautobot-server"` |  |
+| rqWorker.command[1] | string | `"rqworker"` |  |
 | rqWorker.containerSecurityContext.enabled | bool | `true` |  |
 | rqWorker.containerSecurityContext.runAsUser | int | `999` |  |
 | rqWorker.customLivenessProbe | object | `{}` |  |
 | rqWorker.customReadinessProbe | object | `{}` |  |
+| rqWorker.enabled | bool | `true` |  |
 | rqWorker.existingConfigmap | string | `nil` |  |
 | rqWorker.extraEnvVars | list | `[]` |  |
 | rqWorker.extraEnvVarsCM | string | `nil` |  |
@@ -205,13 +210,13 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | rqWorker.initContainers | object | `{}` |  |
 | rqWorker.lifecycleHooks | object | `{}` |  |
 | rqWorker.livenessProbe.enabled | bool | `true` |  |
+| rqWorker.livenessProbe.exec.command[0] | string | `"nautobot-server"` |  |
+| rqWorker.livenessProbe.exec.command[1] | string | `"health_check"` |  |
 | rqWorker.livenessProbe.failureThreshold | int | `3` |  |
-| rqWorker.livenessProbe.httpGet.path | string | `"/"` |  |
-| rqWorker.livenessProbe.httpGet.port | int | `8001` |  |
-| rqWorker.livenessProbe.initialDelaySeconds | int | `3` |  |
-| rqWorker.livenessProbe.periodSeconds | int | `10` |  |
+| rqWorker.livenessProbe.initialDelaySeconds | int | `5` |  |
+| rqWorker.livenessProbe.periodSeconds | int | `15` |  |
 | rqWorker.livenessProbe.successThreshold | int | `1` |  |
-| rqWorker.livenessProbe.timeoutSeconds | int | `5` |  |
+| rqWorker.livenessProbe.timeoutSeconds | int | `8` |  |
 | rqWorker.nodeAffinityPreset.key | string | `""` |  |
 | rqWorker.nodeAffinityPreset.type | string | `""` |  |
 | rqWorker.nodeAffinityPreset.values | list | `[]` |  |
@@ -224,13 +229,13 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | rqWorker.podSecurityContext.fsGroup | int | `999` |  |
 | rqWorker.priorityClassName | string | `""` |  |
 | rqWorker.readinessProbe.enabled | bool | `true` |  |
+| rqWorker.readinessProbe.exec.command[0] | string | `"nautobot-server"` |  |
+| rqWorker.readinessProbe.exec.command[1] | string | `"health_check"` |  |
 | rqWorker.readinessProbe.failureThreshold | int | `3` |  |
-| rqWorker.readinessProbe.httpGet.path | string | `"/"` |  |
-| rqWorker.readinessProbe.httpGet.port | int | `8001` |  |
-| rqWorker.readinessProbe.initialDelaySeconds | int | `3` |  |
-| rqWorker.readinessProbe.periodSeconds | int | `10` |  |
+| rqWorker.readinessProbe.initialDelaySeconds | int | `5` |  |
+| rqWorker.readinessProbe.periodSeconds | int | `15` |  |
 | rqWorker.readinessProbe.successThreshold | int | `1` |  |
-| rqWorker.readinessProbe.timeoutSeconds | int | `5` |  |
+| rqWorker.readinessProbe.timeoutSeconds | int | `8` |  |
 | rqWorker.replicaCount | int | `2` |  |
 | rqWorker.resources.limits.cpu | string | `"1"` |  |
 | rqWorker.resources.limits.memory | string | `"1Gi"` |  |
@@ -242,12 +247,12 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | service.annotations | object | `{}` |  |
 | service.clusterIP | string | `nil` |  |
 | service.externalTrafficPolicy | string | `"Cluster"` |  |
-| service.httpsPort | int | `8443` |  |
+| service.httpsPort | int | `443` |  |
 | service.loadBalancerIP | string | `nil` |  |
 | service.loadBalancerSourceRanges | list | `[]` |  |
 | service.nodePorts.http | string | `nil` |  |
 | service.nodePorts.https | string | `nil` |  |
-| service.port | int | `8080` |  |
+| service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |
@@ -260,6 +265,3 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | volumePermissions.image.tag | string | `"10"` |  |
 | volumePermissions.resources.limits | object | `{}` |  |
 | volumePermissions.resources.requests | object | `{}` |  |
-
-----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)

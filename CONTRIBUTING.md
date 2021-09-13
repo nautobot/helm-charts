@@ -17,9 +17,9 @@ This project utilizes [Semver](https://semver.org/) versioning. As part of PRs t
 
 The following dependencies are required for development, their installation is outside the scope of this document.
 
-* [Kubernetes](https://kubernetes.io/)/[Minikube](https://minikube.sigs.k8s.io/docs/start/) Obviously for testing you will need a Kubernetes cluster, any cluster will do, for local development minikube is suggested as the official Kubernetes 
+* [Kubernetes](https://kubernetes.io/)/[Minikube](https://minikube.sigs.k8s.io/docs/start/) Obviously for testing you will need a Kubernetes cluster, any cluster will do, for local development minikube is suggested as the official Kubernetes
 * [Helm 3](https://helm.sh/docs/intro/install/)
-Pre-commit
+* [Pre-commit](https://pre-commit.com/)
 
 ## Running tests locally
 

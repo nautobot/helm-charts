@@ -1,3 +1,4 @@
+---
 {{- if .Values.rqWorker.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment

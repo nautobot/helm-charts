@@ -1,3 +1,4 @@
+---
 ## @section Nautobot Service Parameters
 
 ## Nautobot service parameters
@@ -5,7 +6,7 @@
 service:
   ## @param service.type nautobot service type
   ##
-  type: ClusterIP
+  type: "ClusterIP"
   ## @param service.port nautobot service HTTP port
   ##
   port: 8080
@@ -18,17 +19,17 @@ service:
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    http:
-    https:
+    http:  # yamllint disable-line rule:empty-values
+    https:  # yamllint disable-line rule:empty-values
   ## @param service.clusterIP nautobot service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP:  # yamllint disable-line rule:empty-values
   ## @param service.loadBalancerIP nautobot service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP:  # yamllint disable-line rule:empty-values
   ## @param service.loadBalancerSourceRanges nautobot service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -39,7 +40,7 @@ service:
   ## @param service.externalTrafficPolicy nautobot service external traffic policy
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
-  externalTrafficPolicy: Cluster
+  externalTrafficPolicy: "Cluster"
   ## @param service.annotations Additional custom annotations for nautobot service
   ##
   annotations: {}
@@ -59,14 +60,14 @@ nautobot:
   ## @param image.debug Enable image debug mode
   ##
   image:
-    registry: ghcr.io
-    repository: nautobot/nautobot
-    tag: 1.1.2
+    registry: "ghcr.io"
+    repository: "nautobot/nautobot"
+    tag: "1.1.2"
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
-    pullPolicy: IfNotPresent
+    pullPolicy: "IfNotPresent"
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -155,13 +156,13 @@ nautobot:
 
   ## @param nautobot.existingConfigmap The name of an existing ConfigMap with your custom configuration for nautobot
   ##
-  existingConfigmap:
+  existingConfigmap:  # yamllint disable-line rule:empty-values
   ## @param nautobot.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param nautobot.args Override default container args (useful when using custom images)
   ##
-  args:
+  args: []
 
   ## @param nautobot.hostAliases nautobot pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -182,7 +183,7 @@ nautobot:
   ## @param nautobot.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  podAntiAffinityPreset: soft
+  podAntiAffinityPreset: "soft"
   ## Node nautobot.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -220,7 +221,7 @@ nautobot:
     ## StrategyType
     ## Can be set to RollingUpdate or OnDelete
     ##
-    type: RollingUpdate
+    type: "RollingUpdate"
   ## @param nautobot.priorityClassName nautobot pods' priorityClassName
   ##
   priorityClassName: ""
@@ -236,10 +237,10 @@ nautobot:
   extraEnvVars: []
   ## @param nautobot.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for nautobot nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM:  # yamllint disable-line rule:empty-values
   ## @param nautobot.extraEnvVarsSecret Name of existing Secret containing extra env vars for nautobot nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret:  # yamllint disable-line rule:empty-values
   ## @param nautobot.extraVolumes Optionally specify extra list of additional volumes for the nautobot pod(s)
   ##
   extraVolumes: []
@@ -279,17 +280,17 @@ nautobot:
     dbUser: "nautobot"  # NAUTOBOT_DB_USER
     debug: "False"  # NAUTOBOT_DEBUG
     logLevel: "INFO"
-    metrics: "True" # NAUTOBOT_METRICS_ENABLED Should really use .metrics.enabled instead of this
+    metrics: "True"  # NAUTOBOT_METRICS_ENABLED Should really use .metrics.enabled instead of this
     redisHost: ""  # NAUTOBOT_REDIS_HOST
     redisPassword: ""  # NAUTOBOT_REDIS_PASSWORD
     redisPort: "6379"  # NAUTOBOT_REDIS_PORT
     redisUsername: ""  # NAUTOBOT_REDIS_USERNAME
     redisSSL: "False"  # NAUTOBOT_REDIS_SSL
     secretKey: ""  # NAUTOBOT_SECRET_KEY
-    superUserAPIToken: ""
-    superUserEmail: "admin@example.com"
-    superUserName: "admin"
-    superUserPassword: ""
+    superUserAPIToken: ""  # NAUTOBOT_SUPERUSER_API_TOKEN
+    superUserEmail: "admin@example.com"  # NAUTOBOT_SUPERUSER_EMAIL
+    superUserName: "admin"  # NAUTOBOT_SUPERUSER_NAME
+    superUserPassword: ""  # NAUTOBOT_SUPERUSER_PASSWORD
     # extraVars are env vars common to all Nautobot containers (rq worker, celery, and nautobot)
     # extraVars:  # https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/
     #   - name: "NAUTOBOT_BANNER_TOP"
@@ -315,8 +316,8 @@ rqWorker:
     enabled: true
     exec:
       command:
-        - nautobot-server
-        - health_check
+        - "nautobot-server"
+        - "health_check"
     initialDelaySeconds: 5
     periodSeconds: 15
     timeoutSeconds: 8
@@ -333,8 +334,8 @@ rqWorker:
     enabled: true
     exec:
       command:
-        - nautobot-server
-        - health_check
+        - "nautobot-server"
+        - "health_check"
     initialDelaySeconds: 5
     periodSeconds: 15
     timeoutSeconds: 8
@@ -377,7 +378,7 @@ rqWorker:
 
   ## @param worker.existingConfigmap The name of an existing ConfigMap with your custom configuration for nautobot
   ##
-  existingConfigmap:
+  existingConfigmap:  # yamllint disable-line rule:empty-values
   ## @param worker.command Override default container command (useful when using custom images)
   ##
   command:
@@ -405,7 +406,7 @@ rqWorker:
   ## @param worker.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  podAntiAffinityPreset: soft
+  podAntiAffinityPreset: "soft"
   ## Node worker.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -443,7 +444,7 @@ rqWorker:
     ## StrategyType
     ## Can be set to RollingUpdate or OnDelete
     ##
-    type: RollingUpdate
+    type: "RollingUpdate"
   ## @param worker.priorityClassName nautobot pods' priorityClassName
   ##
   priorityClassName: ""
@@ -459,10 +460,10 @@ rqWorker:
   extraEnvVars: []
   ## @param worker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for nautobot nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM:  # yamllint disable-line rule:empty-values
   ## @param worker.extraEnvVarsSecret Name of existing Secret containing extra env vars for nautobot nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret:  # yamllint disable-line rule:empty-values
   ## @param worker.extraVolumes Optionally specify extra list of additional volumes for the nautobot pod(s)
   ##
   extraVolumes: []
@@ -575,7 +576,7 @@ celeryWorker:
 
   ## @param worker.existingConfigmap The name of an existing ConfigMap with your custom configuration for nautobot
   ##
-  existingConfigmap:
+  existingConfigmap:  # yamllint disable-line rule:empty-values
   ## @param worker.command Override default container command (useful when using custom images)
   ##
   command:
@@ -606,7 +607,7 @@ celeryWorker:
   ## @param worker.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  podAntiAffinityPreset: soft
+  podAntiAffinityPreset: "soft"
   ## Node worker.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -644,7 +645,7 @@ celeryWorker:
     ## StrategyType
     ## Can be set to RollingUpdate or OnDelete
     ##
-    type: RollingUpdate
+    type: "RollingUpdate"
   ## @param worker.priorityClassName nautobot pods' priorityClassName
   ##
   priorityClassName: ""
@@ -660,10 +661,10 @@ celeryWorker:
   extraEnvVars: []
   ## @param worker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for nautobot nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM:  # yamllint disable-line rule:empty-values
   ## @param worker.extraEnvVarsSecret Name of existing Secret containing extra env vars for nautobot nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret:  # yamllint disable-line rule:empty-values
   ## @param worker.extraVolumes Optionally specify extra list of additional volumes for the nautobot pod(s)
   ##
   extraVolumes: []
@@ -709,10 +710,10 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
   ##
   image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
+    registry: "docker.io"
+    repository: "bitnami/bitnami-shell"
     tag: "10"
-    pullPolicy: Always
+    pullPolicy: "Always"
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -770,20 +771,20 @@ ingress:
 
   ## Ingress Path type
   ##
-  pathType: ImplementationSpecific
+  pathType: "ImplementationSpecific"
 
   ## Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion:  # yamllint disable-line rule:empty-values
 
   ## When the ingress is enabled, a host pointing to this will be created
   ##
-  hostname: nautobot.local
+  hostname: "nautobot.local"
 
   ## The Path to Nautobot. You may need to set this to '/*' in order to use this
   ## with ALB ingress controllers.
   ##
-  path: /
+  path: "/"
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -844,16 +845,15 @@ ingress:
 ##
 autoscaling:
   enabled: false
-  apiVersion: autoscaling/v2beta2
+  apiVersion: "autoscaling/v2beta2"
   minReplicas: 2
   maxReplicas: 5
   metrics:
-    - type: Resource
+    - type: "Resource"
       resource:
-        name: cpu
+        name: "cpu"
         targetAverageUtilization: 80
 
-  # TODO Add Postgres/Redis configuration
 postgresql:
   enabled: true
   postgresqlUsername: "nautobot"

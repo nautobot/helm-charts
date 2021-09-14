@@ -27,7 +27,7 @@ jobs:
       env:
         GO111MODULE: "on"
 
-    - run: "echo $PATH; find / -name helm-docs -type f"
+    - run: "echo $HOME/go/bin >> $GITHUB_PATH"
 
     - uses: "dorny/paths-filter@v2"
       id: "filter"

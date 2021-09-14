@@ -19,6 +19,14 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: "Setup Go"
+      uses: "actions/setup-go@v2"
+
+    - name: "Install helm-docs"
+      run: "go get github.com/norwoodj/helm-docs/cmd/helm-docs"
+      env:
+        GO111MODULE: "on"
+
     - uses: "dorny/paths-filter@v2"
       id: "filter"
       with:

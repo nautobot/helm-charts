@@ -1,8 +1,7 @@
 ---
-## @section Nautobot Service Parameters
+commonAnnotations: {}
 
-## Nautobot service parameters
-##
+# -- The Nautobot UI front end service
 service:
   ## @param service.type nautobot service type
   ##
@@ -76,9 +75,6 @@ nautobot:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
   ## @param nautobot.replicaCount Number of nautobot replicas to deploy
   ##
   replicaCount: 2
@@ -118,12 +114,7 @@ nautobot:
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
-  ## @param nautobot.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param nautobot.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
+
   ## nautobot resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param nautobot.resources.limits The resources limits for the nautobot containers
@@ -154,9 +145,6 @@ nautobot:
     runAsUser: 999
     runAsGroup: 999
 
-  ## @param nautobot.existingConfigmap The name of an existing ConfigMap with your custom configuration for nautobot
-  ##
-  existingConfigmap:  # yamllint disable-line rule:empty-values
   ## @param nautobot.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -268,24 +256,25 @@ nautobot:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: {}
+
+  createSuperUser: true  # NAUTOBOT_CREATE_SUPERUSER
+  debug: false  # NAUTOBOT_DEBUG
   envVars:  # https://nautobot.readthedocs.io/en/stable/configuration/required-settings/
     allowedHosts: "*"  # NAUTOBOT_ALLOWED_HOSTS space separated list of allowed hosts
-    createSuperUser: "true"
     dbEngine: "django.db.backends.postgresql"  # NAUTOBOT_DB_ENGINE
     dbHost: "postgres"  # NAUTOBOT_DB_HOST
     dbName: "nautobot"  # NAUTOBOT_DB_NAME
     dbPassword: ""  # NAUTOBOT_DB_PASSWORD defaults to postgresql.postgresqlPassword
-    dbPort: ""  # NAUTOBOT_DB_PORT
-    dbTimeout: "300"  # NAUTOBOT_DB_TIMEOUT
+    dbPort: 5432  # NAUTOBOT_DB_PORT
+    dbTimeout: 300  # NAUTOBOT_DB_TIMEOUT
     dbUser: "nautobot"  # NAUTOBOT_DB_USER
-    debug: "False"  # NAUTOBOT_DEBUG
     logLevel: "INFO"
-    metrics: "True"  # NAUTOBOT_METRICS_ENABLED Should really use .metrics.enabled instead of this
+    metrics: true  # NAUTOBOT_METRICS_ENABLED Should really use .metrics.enabled instead of this
     redisHost: ""  # NAUTOBOT_REDIS_HOST
     redisPassword: ""  # NAUTOBOT_REDIS_PASSWORD
-    redisPort: "6379"  # NAUTOBOT_REDIS_PORT
+    redisPort: 6379  # NAUTOBOT_REDIS_PORT
+    redisSSL: false  # NAUTOBOT_REDIS_SSL
     redisUsername: ""  # NAUTOBOT_REDIS_USERNAME
-    redisSSL: "False"  # NAUTOBOT_REDIS_SSL
     secretKey: ""  # NAUTOBOT_SECRET_KEY
     superUserAPIToken: ""  # NAUTOBOT_SUPERUSER_API_TOKEN
     superUserEmail: "admin@example.com"  # NAUTOBOT_SUPERUSER_EMAIL
@@ -341,12 +330,7 @@ rqWorker:
     timeoutSeconds: 8
     failureThreshold: 3
     successThreshold: 1
-  ## @param worker.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param worker.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
+
   ## nautobot resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param worker.resources.limits The resources limits for the nautobot containers
@@ -376,9 +360,6 @@ rqWorker:
     enabled: true
     runAsUser: 999
 
-  ## @param worker.existingConfigmap The name of an existing ConfigMap with your custom configuration for nautobot
-  ##
-  existingConfigmap:  # yamllint disable-line rule:empty-values
   ## @param worker.command Override default container command (useful when using custom images)
   ##
   command:
@@ -539,12 +520,7 @@ celeryWorker:
     timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
-  ## @param worker.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param worker.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
+
   ## nautobot resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param worker.resources.limits The resources limits for the nautobot containers
@@ -574,9 +550,6 @@ celeryWorker:
     enabled: true
     runAsUser: 999
 
-  ## @param worker.existingConfigmap The name of an existing ConfigMap with your custom configuration for nautobot
-  ##
-  existingConfigmap:  # yamllint disable-line rule:empty-values
   ## @param worker.command Override default container command (useful when using custom images)
   ##
   command:
@@ -693,61 +666,7 @@ celeryWorker:
   ##
   initContainers: {}
 
-## 'volumePermissions' init container parameters
-## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
-##   based on the *podSecurityContext/*containerSecurityContext parameters
-##
-volumePermissions:
-  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
-  ##
-  enabled: false
-  ## Bitnami Shell image
-  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
-  ## @param volumePermissions.image.registry Bitnami Shell image registry
-  ## @param volumePermissions.image.repository Bitnami Shell image repository
-  ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
-  ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
-  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
-  ##
-  image:
-    registry: "docker.io"
-    repository: "bitnami/bitnami-shell"
-    tag: "10"
-    pullPolicy: "Always"
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-  ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
-  ##
-  resources:
-    limits: {}
-    requests: {}
-  ## Init container Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
-  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
-  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
-  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
-  ##
-  containerSecurityContext:
-    runAsUser: 0
-
 ## @section Other Parameters
-
-## RBAC configuration
-##
-rbac:
-  ## @param rbac.create Specifies whether RBAC resources should be created
-  ##
-  create: false
 
 ## ServiceAccount configuration
 ##

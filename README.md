@@ -2,6 +2,14 @@
 
 **WARNING** This repo is still in alpha state!
 
+**NOTE!!** Due to the nature of the Nautobot GitHub organization and Private repositories, GitHub pages is unavailable.  Therefore the helm repo is not available directly.  This will be fixed when we go public, for now:
+
+```
+git clone git@github.com:nautobot/helm-charts.git
+cd helm-charts/charts
+helm install nautobot nautobot
+```
+
 # Nautobot Helm Charts
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 <!-- [![All Contributors]()](#contributors-) -->
@@ -22,7 +30,7 @@ Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
 Once Helm is set up properly, add the repo as follows:
 
 ```console
-helm repo add nautobot https://networktocode-llc.github.io/helm-charts/
+helm repo add nautobot https://nautobot.github.io/helm-charts/
 ```
 
 You can then run `helm search repo nautobot` to see the charts.
@@ -66,3 +74,4 @@ Provide method to update uwsgi.ini
 Automated testing
 Handle Nautobot Media
 Allow adding plugins
+Helm value validation

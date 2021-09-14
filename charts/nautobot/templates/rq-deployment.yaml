@@ -101,13 +101,9 @@ spec:
           {{- end }}
           {{- if .Values.rqWorker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.rqWorker.livenessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.rqWorker.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.rqWorker.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.rqWorker.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.rqWorker.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Values.rqWorker.extraVolumeMounts }}

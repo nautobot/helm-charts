@@ -100,13 +100,9 @@ spec:
           {{- end }}
           {{- if .Values.nautobot.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nautobot.livenessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.nautobot.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.nautobot.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nautobot.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.nautobot.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Values.nautobot.extraVolumeMounts }}

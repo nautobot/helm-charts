@@ -38,7 +38,7 @@
   echo "Nautobot URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- end }}
-{{- if eq .Values.nautobot.envVars.createSuperUser "true" }}
+{{- if .Values.nautobot.createSuperUser }}
 2. Get your Nautobot login admin credentials by running:
 
   echo Username: {{ .Values.nautobot.envVars.superUserName }}

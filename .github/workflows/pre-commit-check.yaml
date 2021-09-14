@@ -27,6 +27,8 @@ jobs:
       env:
         GO111MODULE: "on"
 
+    - run: "echo $PATH; find / -name helm-docs -type f"
+
     - uses: "dorny/paths-filter@v2"
       id: "filter"
       with:
@@ -34,6 +36,7 @@ jobs:
         filters: |
           addedOrModified:
             - added|modified: '**'
+
     # run only if changed files were detected
     - name: "Run against changes"
       uses: "pre-commit/action@v2.0.3"
@@ -41,7 +44,7 @@ jobs:
       with:
         extra_args: "--files ${{ steps.filter.outputs.addedOrModified_files }}"
 
-    # run if no changed files were detected (e.g. workflow_dispatch on master branch)
+    # run if no changed files were detected (e.g. workflow_dispatch on main branch)
     - name: "Run against all files"
       uses: "pre-commit/action@v2.0.3"
       if: "steps.filter.outputs.addedOrModified != 'true'"

@@ -94,7 +94,6 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | commonAnnotations | object | `{}` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.apiVersion | string | `nil` |  |
-| ingress.certManager | bool | `false` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.hostname | string | `"nautobot.local"` |  |
 | ingress.path | string | `"/"` |  |
@@ -117,6 +116,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.envVars.dbPort | int | `5432` |  |
 | nautobot.envVars.dbTimeout | int | `300` |  |
 | nautobot.envVars.dbUser | string | `"nautobot"` |  |
+| nautobot.envVars.extraVars | list | `[]` |  |
 | nautobot.envVars.logLevel | string | `"INFO"` |  |
 | nautobot.envVars.metrics | bool | `true` |  |
 | nautobot.envVars.redisHost | string | `""` |  |

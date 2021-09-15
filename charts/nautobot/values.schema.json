@@ -53,6 +53,7 @@
           "type": "array",
           "items": {
             "type": "object",
+            "additionalProperties": false,
             "required": [
               "name",
               "value"
@@ -292,26 +293,54 @@
   "properties": {
     "autoscaling": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
-        "enabled"
+        "apiVersion",
+        "enabled",
+        "minReplicas",
+        "maxReplicas",
+        "metrics"
       ],
       "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
         "enabled": {
           "type": "boolean"
+        },
+        "minReplicas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxReplicas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         }
       }
     },
     "celeryWorker": {
-      "type": "object",
-      "$ref": "#/$defs/deployment",
-      "required": [
-        "enabled"
-      ],
-      "properties": {
-        "enabled": {
-          "type": "boolean"
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
         }
-      }
+      ]
     },
     "common": {
       "type": "object"
@@ -320,7 +349,64 @@
       "type": "object"
     },
     "ingress": {
-      "type": "object"
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "pathType",
+        "hostname",
+        "path",
+        "annotations",
+        "tls"
+      ],
+      "properties": {
+        "apiVersion": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "pathType": {
+          "type": "string",
+          "pattern": "^(Exact|Prefix|ImplementationSpecific)$"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "tls": {
+          "type": "boolean"
+        },
+        "extraHosts": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "extraPaths": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "extraTls": {
+          "type": "string"
+        },
+        "secrets": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
     },
     "nautobot": {
       "allOf": [
@@ -344,6 +430,7 @@
             },
             "envVars": {
               "type": "object",
+              "additionalProperties": false,
               "required": [
                 "allowedHosts",
                 "dbEngine",
@@ -353,6 +440,7 @@
                 "dbPort",
                 "dbTimeout",
                 "dbUser",
+                "extraVars",
                 "logLevel",
                 "metrics",
                 "redisHost",
@@ -397,6 +485,25 @@
                 },
                 "dbUser": {
                   "type": "string"
+                },
+                "extraVars": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "name",
+                      "value"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "logLevel": {
                   "type": "string",
@@ -521,19 +628,26 @@
       }
     },
     "rqWorker": {
-      "type": "object",
-      "$ref": "#/$defs/deployment",
-      "required": [
-        "enabled"
-      ],
-      "properties": {
-        "enabled": {
-          "type": "boolean"
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
         }
-      }
+      ]
     },
     "service": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "annotations",
         "externalTrafficPolicy",
@@ -549,8 +663,8 @@
         },
         "clusterIP": {
           "type": [
-            "string",
-            "null"
+            "null",
+            "string"
           ],
           "pattern": "^((?:[0-9]{1,3}\\.){3}[0-9]{1,3}|(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4})$",
           "description": "Optional, clusterIP, should match IPv4 or IPv6: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies"
@@ -567,8 +681,8 @@
         },
         "loadBalancerIP": {
           "type": [
-            "string",
-            "null"
+            "null",
+            "string"
           ],
           "pattern": "^((?:[0-9]{1,3}\\.){3}[0-9]{1,3}|(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4})$",
           "description": "Optional, loadBalancerIP, should match IPv4 or IPv6: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies"
@@ -615,7 +729,20 @@
       }
     },
     "serviceAccount": {
-      "type": "object"
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "create",
+        "name"
+      ],
+      "properties": {
+        "create": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
     }
   }
 }

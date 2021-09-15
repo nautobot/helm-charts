@@ -281,7 +281,7 @@ nautobot:
     superUserName: "admin"  # NAUTOBOT_SUPERUSER_NAME
     superUserPassword: ""  # NAUTOBOT_SUPERUSER_PASSWORD
     # extraVars are env vars common to all Nautobot containers (rq worker, celery, and nautobot)
-    # extraVars:  # https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/
+    extraVars: []  # https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/
     #   - name: "NAUTOBOT_BANNER_TOP"
     #     value: "Nautobot Helm Chart"
 
@@ -683,10 +683,6 @@ ingress:
   ## Set to true to enable ingress record generation
   ##
   enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
-  ##
-  certManager: false
 
   ## Ingress Path type
   ##

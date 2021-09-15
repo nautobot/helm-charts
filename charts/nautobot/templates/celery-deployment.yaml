@@ -101,13 +101,9 @@ spec:
           {{- end }}
           {{- if .Values.celeryWorker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.celeryWorker.livenessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.celeryWorker.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.celeryWorker.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.celeryWorker.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.celeryWorker.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Values.celeryWorker.extraVolumeMounts }}

@@ -1,0 +1,748 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$defs": {
+    "deployment": {
+      "type": "object",
+      "required": [
+        "affinity",
+        "args",
+        "command",
+        "containerSecurityContext",
+        "extraEnvVars",
+        "extraVolumeMounts",
+        "extraVolumes",
+        "hostAliases",
+        "initContainers",
+        "lifecycleHooks",
+        "livenessProbe",
+        "nodeAffinityPreset",
+        "nodeSelector",
+        "podAffinityPreset",
+        "podAntiAffinityPreset",
+        "podAnnotations",
+        "podLabels",
+        "podSecurityContext",
+        "priorityClassName",
+        "readinessProbe",
+        "replicaCount",
+        "resources",
+        "sidecars",
+        "tolerations",
+        "updateStrategy"
+      ],
+      "properties": {
+        "affinity": {
+          "type": "object"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "command": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "containerSecurityContext": {
+          "$ref": "#/$defs/securityContext"
+        },
+        "extraEnvVars": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "value"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "extraEnvVarsCM": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "extraEnvVarsSecret": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "extraVolumeMounts": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "extraVolumes": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "hostAliases": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "initContainers": {
+          "type": "object"
+        },
+        "lifecycleHooks": {
+          "type": "object"
+        },
+        "livenessProbe": {
+          "$ref": "#/$defs/probe"
+        },
+        "nodeAffinityPreset": {
+          "type": "object",
+          "required": [
+            "key",
+            "type",
+            "values"
+          ],
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "pattern": "^(soft|hard|)$"
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "nodeSelector": {
+          "type": "object"
+        },
+        "podAffinityPreset": {
+          "type": "string",
+          "pattern": "^(soft|hard|)$"
+        },
+        "podAntiAffinityPreset": {
+          "type": "string",
+          "pattern": "^(soft|hard|)$"
+        },
+        "podAnnotations": {
+          "type": "object"
+        },
+        "podLabels": {
+          "type": "object"
+        },
+        "podSecurityContext": {
+          "$ref": "#/$defs/securityContext"
+        },
+        "priorityClassName": {
+          "type": "string"
+        },
+        "readinessProbe": {
+          "$ref": "#/$defs/probe"
+        },
+        "replicaCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "resources": {
+          "type": "object",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "properties": {
+                "cpu": {
+                  "type": "string"
+                },
+                "memory": {
+                  "type": "string"
+                }
+              }
+            },
+            "requests": {
+              "type": "object",
+              "properties": {
+                "cpu": {
+                  "type": "string"
+                },
+                "memory": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "sidecars": {
+          "type": "object"
+        },
+        "tolerations": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "updateStrategy": {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "pattern": "^(Recreate|RollingUpdate)$"
+            }
+          }
+        }
+      }
+    },
+    "probe": {
+      "type": "object",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "exec": {
+          "type": "object"
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "httpGet": {
+          "type": "object"
+        },
+        "initialDelaySeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "successThreshold": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "tcpSocket": {
+          "type": "object"
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "securityContext": {
+      "type": "object",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "fsGroup": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "runAsGroup": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "runAsUser": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "autoscaling",
+    "celeryWorker",
+    "commonAnnotations",
+    "ingress",
+    "nautobot",
+    "postgresql",
+    "redis",
+    "rqWorker",
+    "service",
+    "serviceAccount"
+  ],
+  "properties": {
+    "autoscaling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "apiVersion",
+        "enabled",
+        "minReplicas",
+        "maxReplicas",
+        "metrics"
+      ],
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "minReplicas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxReplicas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "celeryWorker": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "common": {
+      "type": "object"
+    },
+    "commonAnnotations": {
+      "type": "object"
+    },
+    "ingress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "pathType",
+        "hostname",
+        "path",
+        "annotations",
+        "tls"
+      ],
+      "properties": {
+        "apiVersion": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "pathType": {
+          "type": "string",
+          "pattern": "^(Exact|Prefix|ImplementationSpecific)$"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "tls": {
+          "type": "boolean"
+        },
+        "extraHosts": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "extraPaths": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "extraTls": {
+          "type": "string"
+        },
+        "secrets": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "nautobot": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "type": "object",
+          "required": [
+            "createSuperUser",
+            "debug",
+            "envVars",
+            "image"
+          ],
+          "properties": {
+            "createSuperUser": {
+              "type": "boolean"
+            },
+            "debug": {
+              "type": "boolean"
+            },
+            "envVars": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "allowedHosts",
+                "dbEngine",
+                "dbHost",
+                "dbName",
+                "dbPassword",
+                "dbPort",
+                "dbTimeout",
+                "dbUser",
+                "extraVars",
+                "logLevel",
+                "metrics",
+                "redisHost",
+                "redisPassword",
+                "redisPort",
+                "redisSSL",
+                "redisUsername",
+                "secretKey",
+                "superUserAPIToken",
+                "superUserEmail",
+                "superUserName",
+                "superUserPassword"
+              ],
+              "properties": {
+                "allowedHosts": {
+                  "type": "string"
+                },
+                "dbEngine": {
+                  "type": "string",
+                  "pattern": "^(django\\.db\\.backends\\.postgresql|django\\.db\\.backends\\.mysql)$"
+                },
+                "dbHost": {
+                  "type": "string"
+                },
+                "dbName": {
+                  "type": "string"
+                },
+                "dbPassword": {
+                  "type": "string"
+                },
+                "dbPort": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                "dbTimeout": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "dbUser": {
+                  "type": "string"
+                },
+                "extraVars": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "name",
+                      "value"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "logLevel": {
+                  "type": "string",
+                  "pattern": "^(CRITICAL|ERROR|WARNING|INFO|DEBUG)"
+                },
+                "metrics": {
+                  "type": "boolean"
+                },
+                "redisHost": {
+                  "type": "string"
+                },
+                "redisPassword": {
+                  "type": "string"
+                },
+                "redisPort": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                "redisSSL": {
+                  "type": "boolean"
+                },
+                "redisUsername": {
+                  "type": "string"
+                },
+                "secretKey": {
+                  "type": "string"
+                },
+                "superUserAPIToken": {
+                  "type": "string",
+                  "pattern": "^([0-9A-Za-z]+|)$"
+                },
+                "superUserEmail": {
+                  "type": "string"
+                },
+                "superUserName": {
+                  "type": "string"
+                },
+                "superUserPassword": {
+                  "type": "string"
+                }
+              }
+            },
+            "image": {
+              "type": "object",
+              "required": [
+                "pullPolicy",
+                "pullSecrets",
+                "registry",
+                "repository",
+                "tag"
+              ],
+              "properties": {
+                "pullPolicy": {
+                  "type": "string",
+                  "pattern": "^(Always|Never|IfNotPresent)$"
+                },
+                "pullSecrets": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "postgresql": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "postgresqlPassword"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "postgresqlPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "redis": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "auth"
+      ],
+      "properties": {
+        "auth": {
+          "type": "object",
+          "required": [
+            "enabled",
+            "password"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "rqWorker": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "annotations",
+        "externalTrafficPolicy",
+        "httpsPort",
+        "loadBalancerSourceRanges",
+        "nodePorts",
+        "port",
+        "type"
+      ],
+      "properties": {
+        "annotations": {
+          "type:": "object"
+        },
+        "clusterIP": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "pattern": "^((?:[0-9]{1,3}\\.){3}[0-9]{1,3}|(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4})$",
+          "description": "Optional, clusterIP, should match IPv4 or IPv6: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies"
+        },
+        "externalTrafficPolicy": {
+          "type": "string",
+          "pattern": "^(Cluster|Local)$",
+          "description": "External Traffic Policy: https://kubernetes.io/docs/concepts/services-networking/service/"
+        },
+        "httpsPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "loadBalancerIP": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "pattern": "^((?:[0-9]{1,3}\\.){3}[0-9]{1,3}|(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4})$",
+          "description": "Optional, loadBalancerIP, should match IPv4 or IPv6: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies"
+        },
+        "loadBalancerSourceRanges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nodePorts": {
+          "type": "object",
+          "properties": {
+            "http": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Node Port to use for the http service, the default range is 30000-32767 however this can be changed with --service-node-port-range"
+            },
+            "https": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Node Port to use for the https service, the default range is 30000-32767 however this can be changed with --service-node-port-range"
+            }
+          }
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "type": {
+          "type": "string",
+          "pattern": "^(ExternalName|ClusterIP|NodePort|LoadBalancer)$",
+          "description": "Service Type: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types"
+        }
+      }
+    },
+    "serviceAccount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "create",
+        "name"
+      ],
+      "properties": {
+        "create": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

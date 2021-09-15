@@ -12,18 +12,12 @@ Return the proper nautobot image name
 {{ include "common.images.image" (dict "imageRoot" .Values.nautobot.image "global" .Values.global) }}
 {{- end -}}
 
-{{/*
-Return the proper image name (for the init container volume-permissions image)
-*/}}
-{{- define "nautobot.volumePermissions.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
-{{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "nautobot.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.nautobot.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.nautobot.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -129,7 +123,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- include "nautobot.database.rawPassword" . | b64enc | quote -}}
 {{- end -}}
 
-{{/*}}
+{{/*
 Create a default fully qualified redis name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -156,9 +150,12 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "nautobot.redis.ssl" -}}
   {{- if eq .Values.redis.enabled true -}}
-    {{- printf "%s" "false" }}
-  {{- else -}}
+    {{- printf "%s" "False" }}
+  {{- else if .Values.nautobot.envVars.redisSSL -}}
     {{- .Values.nautobot.envVars.redisSSL -}}
+      {{- printf "%s" "True" }}
+    {{- else -}}
+      {{- printf "%s" "False" }}
   {{- end -}}
 {{- end -}}
 

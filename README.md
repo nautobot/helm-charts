@@ -60,18 +60,16 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md)
 [Apache 2.0 License](./LICENSE.txt)
 
 ## TODO Before Release
-Testing
-Linting / Pre-commit
-GH Actions Publish Release
-GH Actions Update Docs
-Auto create admin account
-document getting started steps
-Enable Monitoring
+
+* Testing
+* document getting started steps
+* Document
+* Enable Monitoring Using Prometheus Operator
 
 ## TODO Later
-Provide method to update nautobot_config.py
-Provide method to update uwsgi.ini
-Automated testing
-Handle Nautobot Media
-Allow adding plugins
-Helm value validation
+
+* Provide method to update nautobot_config.py
+* Provide method to update uwsgi.ini
+* Automated testing
+* Handle Nautobot Media
+* Allow adding plugins

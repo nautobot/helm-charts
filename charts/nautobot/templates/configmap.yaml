@@ -13,39 +13,39 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  NAUTOBOT_ALLOWED_HOSTS: {{ .Values.nautobot.envVars.allowedHosts | quote }}
+  NAUTOBOT_ALLOWED_HOSTS: {{ .Values.nautobot.allowedHosts | quote }}
   {{- if .Values.nautobot.createSuperUser }}
   NAUTOBOT_CREATE_SUPERUSER: "true"
   {{- else }}
   NAUTOBOT_CREATE_SUPERUSER: "false"
   {{- end }}
-  NAUTOBOT_DB_ENGINE: {{ .Values.nautobot.envVars.dbEngine | quote }}
+  NAUTOBOT_DB_ENGINE: {{ .Values.nautobot.dbEngine | quote }}
   NAUTOBOT_DB_HOST: {{ include "nautobot.database.host" . | quote }}
   NAUTOBOT_DB_NAME: {{ include "nautobot.database.dbname" . | quote }}
   NAUTOBOT_DB_PORT: {{ include "nautobot.database.port" . | quote }}
-  NAUTOBOT_DB_TIMEOUT: {{ .Values.nautobot.envVars.dbTimeout | quote }}
+  NAUTOBOT_DB_TIMEOUT: {{ .Values.nautobot.dbTimeout | quote }}
   NAUTOBOT_DB_USER: {{ include "nautobot.database.username" . | quote }}
   {{- if .Values.nautobot.debug }}
   NAUTOBOT_DEBUG: "True"
   {{- else }}
   NAUTOBOT_DEBUG: "False"
   {{- end }}
-  NAUTOBOT_LOG_LEVEL: {{ .Values.nautobot.envVars.logLevel | quote }}
-  {{- if .Values.nautobot.envVars.metrics }}
+  NAUTOBOT_LOG_LEVEL: {{ .Values.nautobot.logLevel | quote }}
+  {{- if .Values.nautobot.metrics }}
   NAUTOBOT_METRICS_ENABLED: "True"
   {{- else }}
   NAUTOBOT_METRICS_ENABLED: "False"
   {{- end }}
   NAUTOBOT_REDIS_HOST: {{ include "nautobot.redis.host" . | quote }}
   NAUTOBOT_REDIS_PORT: {{ include "nautobot.redis.port" . | quote }}
-  NAUTOBOT_REDIS_USERNAME: {{ .Values.nautobot.envVars.redisUsername | quote }}
+  NAUTOBOT_REDIS_USERNAME: {{ .Values.nautobot.redisUsername | quote }}
   NAUTOBOT_REDIS_SSL: {{ include "nautobot.redis.ssl" . | quote }}
   {{- if .Values.nautobot.createSuperUser }}
-  NAUTOBOT_SUPERUSER_EMAIL: {{ .Values.nautobot.envVars.superUserEmail | quote }}
-  NAUTOBOT_SUPERUSER_NAME: {{ .Values.nautobot.envVars.superUserName | quote }}
+  NAUTOBOT_SUPERUSER_EMAIL: {{ .Values.nautobot.superUserEmail | quote }}
+  NAUTOBOT_SUPERUSER_NAME: {{ .Values.nautobot.superUserName | quote }}
   {{- end }}
-{{- if .Values.nautobot.envVars.extraVars }}
-{{- range .Values.nautobot.envVars.extraVars }}
+{{- if .Values.nautobot.extraVars }}
+{{- range .Values.nautobot.extraVars }}
 {{- .name | nindent 2 }}: {{ .value | quote }}
 {{- end }}
 {{- end }}

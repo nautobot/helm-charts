@@ -416,137 +416,85 @@
         {
           "type": "object",
           "required": [
+            "allowedHosts",
             "createSuperUser",
+            "dbEngine",
+            "dbHost",
+            "dbName",
+            "dbPassword",
+            "dbPort",
+            "dbTimeout",
+            "dbUser",
             "debug",
-            "envVars",
-            "image"
+            "extraVars",
+            "image",
+            "logLevel",
+            "metrics",
+            "redisHost",
+            "redisPassword",
+            "redisPort",
+            "redisSSL",
+            "redisUsername",
+            "secretKey",
+            "superUserAPIToken",
+            "superUserEmail",
+            "superUserName",
+            "superUserPassword"
           ],
           "properties": {
+            "allowedHosts": {
+              "type": "string"
+            },
             "createSuperUser": {
               "type": "boolean"
+            },
+            "dbEngine": {
+              "type": "string",
+              "pattern": "^(django\\.db\\.backends\\.postgresql|django\\.db\\.backends\\.mysql)$"
+            },
+            "dbHost": {
+              "type": "string"
+            },
+            "dbName": {
+              "type": "string"
+            },
+            "dbPassword": {
+              "type": "string"
+            },
+            "dbPort": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1,
+              "maximum": 65535
+            },
+            "dbTimeout": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "dbUser": {
+              "type": "string"
             },
             "debug": {
               "type": "boolean"
             },
-            "envVars": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "allowedHosts",
-                "dbEngine",
-                "dbHost",
-                "dbName",
-                "dbPassword",
-                "dbPort",
-                "dbTimeout",
-                "dbUser",
-                "extraVars",
-                "logLevel",
-                "metrics",
-                "redisHost",
-                "redisPassword",
-                "redisPort",
-                "redisSSL",
-                "redisUsername",
-                "secretKey",
-                "superUserAPIToken",
-                "superUserEmail",
-                "superUserName",
-                "superUserPassword"
-              ],
-              "properties": {
-                "allowedHosts": {
-                  "type": "string"
-                },
-                "dbEngine": {
-                  "type": "string",
-                  "pattern": "^(django\\.db\\.backends\\.postgresql|django\\.db\\.backends\\.mysql)$"
-                },
-                "dbHost": {
-                  "type": "string"
-                },
-                "dbName": {
-                  "type": "string"
-                },
-                "dbPassword": {
-                  "type": "string"
-                },
-                "dbPort": {
-                  "type": [
-                    "integer",
-                    "null"
-                  ],
-                  "minimum": 1,
-                  "maximum": 65535
-                },
-                "dbTimeout": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "dbUser": {
-                  "type": "string"
-                },
-                "extraVars": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                      "name",
-                      "value"
-                    ],
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      },
-                      "value": {
-                        "type": "string"
-                      }
-                    }
+            "extraVars": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
                   }
-                },
-                "logLevel": {
-                  "type": "string",
-                  "pattern": "^(CRITICAL|ERROR|WARNING|INFO|DEBUG)"
-                },
-                "metrics": {
-                  "type": "boolean"
-                },
-                "redisHost": {
-                  "type": "string"
-                },
-                "redisPassword": {
-                  "type": "string"
-                },
-                "redisPort": {
-                  "type": [
-                    "integer",
-                    "null"
-                  ],
-                  "minimum": 1,
-                  "maximum": 65535
-                },
-                "redisSSL": {
-                  "type": "boolean"
-                },
-                "redisUsername": {
-                  "type": "string"
-                },
-                "secretKey": {
-                  "type": "string"
-                },
-                "superUserAPIToken": {
-                  "type": "string",
-                  "pattern": "^([0-9A-Za-z]+|)$"
-                },
-                "superUserEmail": {
-                  "type": "string"
-                },
-                "superUserName": {
-                  "type": "string"
-                },
-                "superUserPassword": {
-                  "type": "string"
                 }
               }
             },
@@ -580,6 +528,49 @@
                   "type": "string"
                 }
               }
+            },
+            "logLevel": {
+              "type": "string",
+              "pattern": "^(CRITICAL|ERROR|WARNING|INFO|DEBUG)"
+            },
+            "metrics": {
+              "type": "boolean"
+            },
+            "redisHost": {
+              "type": "string"
+            },
+            "redisPassword": {
+              "type": "string"
+            },
+            "redisPort": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1,
+              "maximum": 65535
+            },
+            "redisSSL": {
+              "type": "boolean"
+            },
+            "redisUsername": {
+              "type": "string"
+            },
+            "secretKey": {
+              "type": "string"
+            },
+            "superUserAPIToken": {
+              "type": "string",
+              "pattern": "^([0-9A-Za-z]+|)$"
+            },
+            "superUserEmail": {
+              "type": "string"
+            },
+            "superUserName": {
+              "type": "string"
+            },
+            "superUserPassword": {
+              "type": "string"
             }
           }
         }

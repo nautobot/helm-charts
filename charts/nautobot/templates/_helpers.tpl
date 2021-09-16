@@ -47,26 +47,26 @@ Compile all warnings into a single message.
 {{- end -}}
 
 {{- define "nautobot.encryptedSecretKey" -}}
-  {{- if not .Values.nautobot.envVars.secretKey -}}
-    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SECRET_KEY" "providedValues" (list "nautobot.envVars.secretKey") "length" 64 "strong" true "context" $) }}
+  {{- if not .Values.nautobot.secretKey -}}
+    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SECRET_KEY" "providedValues" (list "nautobot.secretKey") "length" 64 "strong" true "context" $) }}
   {{- else -}}
-    {{- .Values.nautobot.envVars.secretKey | b64enc | quote -}}
+    {{- .Values.nautobot.secretKey | b64enc | quote -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "nautobot.encryptedSuperUserAPIToken" -}}
-  {{- if not .Values.nautobot.envVars.superUserAPIToken -}}
-    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SUPERUSER_API_TOKEN" "providedValues" (list "nautobot.envVars.superUserAPIToken") "length" 40 "strong" false "context" $) }}
+  {{- if not .Values.nautobot.superUserAPIToken -}}
+    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SUPERUSER_API_TOKEN" "providedValues" (list "nautobot.superUserAPIToken") "length" 40 "strong" false "context" $) }}
   {{- else -}}
-    {{- .Values.nautobot.envVars.superUserAPIToken | b64enc | quote -}}
+    {{- .Values.nautobot.superUserAPIToken | b64enc | quote -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "nautobot.encryptedSuperUserPassword" -}}
-  {{- if not .Values.nautobot.envVars.superUserPassword -}}
-    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SUPERUSER_PASSWORD" "providedValues" (list "nautobot.envVars.superUserPassword") "length" 64 "strong" true "context" $) }}
+  {{- if not .Values.nautobot.superUserPassword -}}
+    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SUPERUSER_PASSWORD" "providedValues" (list "nautobot.superUserPassword") "length" 64 "strong" true "context" $) }}
   {{- else -}}
-    {{- .Values.nautobot.envVars.superUserPassword | b64enc | quote -}}
+    {{- .Values.nautobot.superUserPassword | b64enc | quote -}}
   {{- end -}}
 {{- end -}}
 
@@ -83,7 +83,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.postgresql.enabled true -}}
     {{- template "nautobot.postgresql.fullname" . }}
   {{- else -}}
-    {{- .Values.nautobot.envVars.dbHost -}}
+    {{- .Values.nautobot.dbHost -}}
   {{- end -}}
 {{- end -}}
 
@@ -91,7 +91,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.postgresql.enabled true -}}
     {{- .Values.postgresql.postgresqlDatabase -}}
   {{- else -}}
-    {{- .Values.nautobot.envVars.dbName -}}
+    {{- .Values.nautobot.dbName -}}
   {{- end -}}
 {{- end -}}
 
@@ -99,7 +99,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.postgresql.enabled true -}}
     {{- printf "%s" "5432" -}}
   {{- else -}}
-    {{- .Values.nautobot.envVars.dbPort -}}
+    {{- .Values.nautobot.dbPort -}}
   {{- end -}}
 {{- end -}}
 
@@ -107,7 +107,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.postgresql.enabled true -}}
     {{- .Values.postgresql.postgresqlUsername -}}
   {{- else -}}
-    {{- .Values.nautobot.envVars.dbUser -}}
+    {{- .Values.nautobot.dbUser -}}
   {{- end -}}
 {{- end -}}
 
@@ -115,7 +115,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.postgresql.enabled true -}}
       {{- required "A Postgres Password is required!" .Values.postgresql.postgresqlPassword -}}
   {{- else -}}
-      {{- .Values.nautobot.envVars.dbPassword -}}
+      {{- .Values.nautobot.dbPassword -}}
   {{- end -}}
 {{- end -}}
 
@@ -136,7 +136,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.redis.enabled true -}}
     {{- template "nautobot.redis.fullname" . -}}
   {{- else -}}
-    {{- .Values.nautobot.envVars.redisHost -}}
+    {{- .Values.nautobot.redisHost -}}
   {{- end -}}
 {{- end -}}
 
@@ -144,15 +144,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if eq .Values.redis.enabled true -}}
     {{- printf "%s" "6379" -}}
   {{- else -}}
-    {{- .Values.nautobot.envVars.redisPort -}}
+    {{- .Values.nautobot.redisPort -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "nautobot.redis.ssl" -}}
   {{- if eq .Values.redis.enabled true -}}
     {{- printf "%s" "False" }}
-  {{- else if .Values.nautobot.envVars.redisSSL -}}
-    {{- .Values.nautobot.envVars.redisSSL -}}
+  {{- else if .Values.nautobot.redisSSL -}}
+    {{- .Values.nautobot.redisSSL -}}
       {{- printf "%s" "True" }}
     {{- else -}}
       {{- printf "%s" "False" }}
@@ -160,8 +160,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "nautobot.redis.rawPassword" -}}
-  {{- if and (not .Values.redis.enabled) .Values.nautobot.envVars.redisPassword -}}
-    {{- required "A Redis Password is required!" .Values.nautobot.envVars.redisPassword -}}
+  {{- if and (not .Values.redis.enabled) .Values.nautobot.redisPassword -}}
+    {{- required "A Redis Password is required!" .Values.nautobot.redisPassword -}}
   {{- end -}}
   {{- if and .Values.redis.enabled .Values.redis.auth.enabled -}}
     {{- required "A Redis Password is required!" .Values.redis.auth.password -}}

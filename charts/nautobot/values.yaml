@@ -143,19 +143,15 @@ nautobot:
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param nautobot.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for nautobot nodes
-  ##
+  # -- Name of existing ConfigMap containing extra env vars for Nautobot server pods
   extraEnvVarsCM:  # yamllint disable-line rule:empty-values
-  ## @param nautobot.extraEnvVarsSecret Name of existing Secret containing extra env vars for nautobot nodes
-  ##
+  # -- Name of existing Secret containing extra env vars for Nautobot server pods
   extraEnvVarsSecret:  # yamllint disable-line rule:empty-values
-  ## @param nautobot.extraVolumes Optionally specify extra list of additional volumes for the nautobot pod(s)
-  ##
+  # -- List of additional volumes for the Nautobot server pod
   extraVolumes: []
-  ## @param nautobot.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the nautobot container(s)
-  ##
+  # -- List of additional volumeMounts for the Nautobot containers
   extraVolumeMounts: []
-  ## @param nautobot.sidecars Add additional sidecar containers to the nautobot pod(s)
+  # -- Add additional sidecar containers to the Nautobot server pods
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -166,8 +162,7 @@ nautobot:
   ##         containerPort: 1234
   ##
   sidecars: {}
-  ## @param nautobot.initContainers Add additional init containers to the nautobot pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  # -- [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods
   ## e.g:
   ## initContainers:
   ##  - name: your-image-name
@@ -177,40 +172,73 @@ nautobot:
   ##
   initContainers: {}
 
-  debug: false  # NAUTOBOT_DEBUG
+  ###################################
+  ## Nautobot Application Settings ##
+  ###################################
 
-  # https://nautobot.readthedocs.io/en/stable/configuration/required-settings/
-  allowedHosts: "*"  # NAUTOBOT_ALLOWED_HOSTS space separated list of allowed hosts
+  # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG)
+  debug: false
+
+  # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS)
+  allowedHosts: "*"
+
+  # Nautobot database configuration
   db:
-    engine: "django.db.backends.postgresql"  # NAUTOBOT_DB_ENGINE
-    host: "postgres"  # NAUTOBOT_DB_HOST
-    name: "nautobot"  # NAUTOBOT_DB_NAME
-    password: ""  # NAUTOBOT_DB_PASSWORD defaults to postgresql.postgresqlPassword
-    port: 5432  # NAUTOBOT_DB_PORT
-    timeout: 300  # NAUTOBOT_DB_TIMEOUT
-    user: "nautobot"  # NAUTOBOT_DB_USER
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE)
+    engine: "django.db.backends.postgresql"
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST)
+    host: "postgres"
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME)
+    name: "nautobot"
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database password, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PASSWORD)
+    password: ""
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database port, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PORT)
+    port: 5432
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT)
+    timeout: 300
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER)
+    user: "nautobot"
+
+  # -- Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG`
   logLevel: "INFO"
-  metrics: true  # NAUTOBOT_METRICS_ENABLED Should really use .metrics.enabled instead of this
+  # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED)
+  metrics: true
+
+  # Nautobot Redis configuration
   redis:
-    host: ""  # NAUTOBOT_REDIS_HOST
-    password: ""  # NAUTOBOT_REDIS_PASSWORD
-    port: 6379  # NAUTOBOT_REDIS_PORT
-    ssl: false  # NAUTOBOT_REDIS_SSL
-    username: ""  # NAUTOBOT_REDIS_USERNAME
-  secretKey: ""  # NAUTOBOT_SECRET_KEY
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST)
+    host: ""
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD)
+    password: ""
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT)
+    port: 6379
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis ssl enabled, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_SSL)
+    ssl: false
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME)
+    username: ""
+
+  # [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#secret_key) Nautobot Secret Key (NAUTOBOT_SECRET_KEY)
+  secretKey: ""
   superUser:
-    enabled: true  # NAUTOBOT_CREATE_SUPERUSER
-    apitoken: ""  # NAUTOBOT_SUPERUSER_API_TOKEN
-    email: "admin@example.com"  # NAUTOBOT_SUPERUSER_EMAIL
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser) Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER)
+    enabled: true 
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token) Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN)
+    apitoken: ""
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_email) Configure an email address for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_EMAIL)
+    email: "admin@example.com"
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_name) User name to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME)
     username: "admin"  # NAUTOBOT_SUPERUSER_NAME
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password) Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated
     password: ""  # NAUTOBOT_SUPERUSER_PASSWORD
-  # extraVars are env vars common to all Nautobot containers (rq worker, celery, and nautobot)
+
+  # -- An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`)
+  ## e.g:
+  ## extraVars:
+  ##   - name: "NAUTOBOT_BANNER_TOP"
+  ##     value: "Nautobot Helm Chart"
   extraVars: []  # https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/
-  #   - name: "NAUTOBOT_BANNER_TOP"
-  #     value: "Nautobot Helm Chart"
 
 ## Nautobot RQ Worker
-##
 rqWorker:
   enabled: true
   ## @param worker.replicaCount Number of nautobot replicas to deploy

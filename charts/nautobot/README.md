@@ -136,35 +136,35 @@ $ helm delete my-release
 | ingress.secrets | list | `[]` |  |
 | ingress.tls | bool | `false` |  |
 | nautobot.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot pods assignment |
-| nautobot.allowedHosts | string | `"*"` |  |
+| nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
 | nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |
 | nautobot.command | list | `[]` | Override default Nautobot container command (useful when using custom images) |
 | nautobot.containerSecurityContext | object | `{"enabled":true,"runAsGroup":999,"runAsUser":999}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context |
-| nautobot.db.engine | string | `"django.db.backends.postgresql"` |  |
-| nautobot.db.host | string | `"postgres"` |  |
-| nautobot.db.name | string | `"nautobot"` |  |
-| nautobot.db.password | string | `""` |  |
-| nautobot.db.port | int | `5432` |  |
-| nautobot.db.timeout | int | `300` |  |
-| nautobot.db.user | string | `"nautobot"` |  |
+| nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE) |
+| nautobot.db.host | string | `"postgres"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST) |
+| nautobot.db.name | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME) |
+| nautobot.db.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database password, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PASSWORD) |
+| nautobot.db.port | int | `5432` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database port, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PORT) |
+| nautobot.db.timeout | int | `300` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT) |
+| nautobot.db.user | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER) |
 | nautobot.debug | bool | `false` |  |
 | nautobot.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot server pods |
-| nautobot.extraEnvVarsCM | string | `nil` |  |
-| nautobot.extraEnvVarsSecret | string | `nil` |  |
-| nautobot.extraVars | list | `[]` |  |
-| nautobot.extraVolumeMounts | list | `[]` |  |
-| nautobot.extraVolumes | list | `[]` |  |
+| nautobot.extraEnvVarsCM | string | `nil` | Name of existing ConfigMap containing extra env vars for Nautobot server pods |
+| nautobot.extraEnvVarsSecret | string | `nil` | Name of existing Secret containing extra env vars for Nautobot server pods |
+| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`) |
+| nautobot.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot containers |
+| nautobot.extraVolumes | list | `[]` | List of additional volumes for the Nautobot server pod |
 | nautobot.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases |
 | nautobot.image.pullPolicy | string | `"IfNotPresent"` |  |
 | nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
 | nautobot.image.tag | string | `"1.1.3"` | Nautobot image tag, common to all deployments |
-| nautobot.initContainers | object | `{}` |  |
+| nautobot.initContainers | object | `{}` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods |
 | nautobot.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | nautobot.livenessProbe | object | `{"enabled":true,"failureThreshold":3,"httpGet":{"path":"/health/","port":"http"},"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
-| nautobot.logLevel | string | `"INFO"` |  |
-| nautobot.metrics | bool | `true` |  |
+| nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` |
+| nautobot.metrics | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED) |
 | nautobot.nodeAffinityPreset | object | `{"key":"","type":"","values":[]}` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Node Affinity preset |
 | nautobot.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
 | nautobot.nodeAffinityPreset.type | string | `""` | Nautobot Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
@@ -177,20 +177,20 @@ $ helm delete my-release
 | nautobot.podSecurityContext | object | `{"enabled":true,"fsGroup":999}` | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context |
 | nautobot.priorityClassName | string | `""` | Nautobot pods' priorityClassName |
 | nautobot.readinessProbe | object | `{"enabled":true,"failureThreshold":3,"httpGet":{"path":"/health/","port":"http"},"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot readiness probe |
-| nautobot.redis.host | string | `""` |  |
-| nautobot.redis.password | string | `""` |  |
-| nautobot.redis.port | int | `6379` |  |
-| nautobot.redis.ssl | bool | `false` |  |
-| nautobot.redis.username | string | `""` |  |
+| nautobot.redis.host | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST) |
+| nautobot.redis.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD) |
+| nautobot.redis.port | int | `6379` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT) |
+| nautobot.redis.ssl | bool | `false` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis ssl enabled, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_SSL) |
+| nautobot.redis.username | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME) |
 | nautobot.replicaCount | int | `2` | Number of Nautobot server replicas to deploy |
 | nautobot.resources | object | `{"limits":{"cpu":"2","memory":"2Gi"},"requests":{"cpu":"0.7","memory":"784Mi"}}` | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot resource requests and limits |
 | nautobot.secretKey | string | `""` |  |
-| nautobot.sidecars | object | `{}` |  |
-| nautobot.superUser.apitoken | string | `""` |  |
-| nautobot.superUser.email | string | `"admin@example.com"` |  |
-| nautobot.superUser.enabled | bool | `true` |  |
-| nautobot.superUser.password | string | `""` |  |
-| nautobot.superUser.username | string | `"admin"` |  |
+| nautobot.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot server pods |
+| nautobot.superUser.apitoken | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token) Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN) |
+| nautobot.superUser.email | string | `"admin@example.com"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_email) Configure an email address for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_EMAIL) |
+| nautobot.superUser.enabled | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser) Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER) |
+| nautobot.superUser.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password) Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated |
+| nautobot.superUser.username | string | `"admin"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_name) User name to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME) |
 | nautobot.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot pods assignment |
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type |
 | postgresql.enabled | bool | `true` |  |

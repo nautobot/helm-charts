@@ -31,6 +31,9 @@ Pre-commit is used to run helm tests locally:
 ```shell
 pre-commit run -a
 ```
+
+Pre-commit will also use `helm lint` to validate the schema of the `values.yaml` file based on the [JSON schema](https://json-schema.org/) in `values.schema.json`.  The JSON schema is also validated at runtime when a user attempts to deploy the chart.
+
 ### Helm tests
 
-The Invoke task to execute the tests are then `invoke tests`. This will execute all of the linting and pytest functions on the code.
+Coming soon...

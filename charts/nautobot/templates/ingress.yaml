@@ -10,7 +10,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if (or .Values.ingress.annotations .Values.commonAnnotations) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge .Values.service.annotations .Values.commonAnnotations) "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge .Values.ingress.annotations .Values.commonAnnotations) "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   rules:

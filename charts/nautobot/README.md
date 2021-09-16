@@ -1,21 +1,54 @@
 # nautobot
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 1.1.2](https://img.shields.io/badge/AppVersion-1.1.2-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 1.1.3](https://img.shields.io/badge/AppVersion-1.1.3-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
-
-**Homepage:** <https://github.com/nautobot/nautobot>
-
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| Network to Code | opensource@networktocode.com | https://www.networktocode.com/ |
 
 ## Source Code
 
 * <https://github.com/nautobot/nautobot>
-* <https://github.com/networktocode-llc/helm-charts>
+* <https://github.com/nautobot/helm-charts>
+
+## Prerequisites
+
+* Kubernetes 1.12+
+* Helm 3.1.x
+* PV provisioning support (Required if deploying the [postgresql chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
+
+## Installing the Chart
+
+### Add the Nautobot Helm Repo
+
+```no-highlight
+$ helm repo add nautobot https://nautobot.github.io/helm-charts/
+```
+
+### Install the Nautobot Chart from the Nautobot repo
+
+To install the chart with the release name `my-release` DB and Redis passwords are required:
+
+```no-highlight
+$ helm install my-release nautobot/nautobot --set postgresql.postgresqlPassword="change-me" --set redis.auth.password="change-me"
+```
+
+The command deploys Nautobot; on the Kubernetes cluster in the default configuration. The [Values](#values) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```no-highlight
+$ helm delete my-release
+```
+
+## Common Examples
+
+1. Deploy Nautobot
+2. Use External DB
+3. Enable RQ Workers
+4. Configure Ingress
 
 ## Requirements
 
@@ -91,7 +124,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | celeryWorker.sidecars | object | `{}` |  |
 | celeryWorker.tolerations | list | `[]` |  |
 | celeryWorker.updateStrategy.type | string | `"RollingUpdate"` |  |
-| commonAnnotations | object | `{}` |  |
+| commonAnnotations | object | `{}` | Annotations to be applied to ALL resources created by this chart |
 | ingress.annotations | object | `{}` |  |
 | ingress.apiVersion | string | `nil` |  |
 | ingress.enabled | bool | `false` |  |
@@ -136,20 +169,13 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.extraVolumes | list | `[]` |  |
 | nautobot.hostAliases | list | `[]` |  |
 | nautobot.image.pullPolicy | string | `"IfNotPresent"` |  |
-| nautobot.image.pullSecrets | list | `[]` |  |
-| nautobot.image.registry | string | `"ghcr.io"` |  |
-| nautobot.image.repository | string | `"nautobot/nautobot"` |  |
-| nautobot.image.tag | string | `"1.1.2"` |  |
+| nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) |
+| nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry |
+| nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name |
+| nautobot.image.tag | string | `"1.1.3"` | Nautobot image tag |
 | nautobot.initContainers | object | `{}` |  |
 | nautobot.lifecycleHooks | object | `{}` |  |
-| nautobot.livenessProbe.enabled | bool | `true` |  |
-| nautobot.livenessProbe.failureThreshold | int | `3` |  |
-| nautobot.livenessProbe.httpGet.path | string | `"/health/"` |  |
-| nautobot.livenessProbe.httpGet.port | string | `"http"` |  |
-| nautobot.livenessProbe.initialDelaySeconds | int | `30` |  |
-| nautobot.livenessProbe.periodSeconds | int | `10` |  |
-| nautobot.livenessProbe.successThreshold | int | `1` |  |
-| nautobot.livenessProbe.timeoutSeconds | int | `5` |  |
+| nautobot.livenessProbe | object | `{"enabled":true,"failureThreshold":3,"httpGet":{"path":"/health/","port":"http"},"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
 | nautobot.nodeAffinityPreset.key | string | `""` |  |
 | nautobot.nodeAffinityPreset.type | string | `""` |  |
 | nautobot.nodeAffinityPreset.values | list | `[]` |  |
@@ -161,15 +187,8 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.podSecurityContext.enabled | bool | `true` |  |
 | nautobot.podSecurityContext.fsGroup | int | `999` |  |
 | nautobot.priorityClassName | string | `""` |  |
-| nautobot.readinessProbe.enabled | bool | `true` |  |
-| nautobot.readinessProbe.failureThreshold | int | `3` |  |
-| nautobot.readinessProbe.httpGet.path | string | `"/health/"` |  |
-| nautobot.readinessProbe.httpGet.port | string | `"http"` |  |
-| nautobot.readinessProbe.initialDelaySeconds | int | `30` |  |
-| nautobot.readinessProbe.periodSeconds | int | `10` |  |
-| nautobot.readinessProbe.successThreshold | int | `1` |  |
-| nautobot.readinessProbe.timeoutSeconds | int | `5` |  |
-| nautobot.replicaCount | int | `2` |  |
+| nautobot.readinessProbe | object | `{"enabled":true,"failureThreshold":3,"httpGet":{"path":"/health/","port":"http"},"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot readiness probe |
+| nautobot.replicaCount | int | `2` | Number of Nautobot server replicas to deploy |
 | nautobot.resources.limits.cpu | string | `"2"` |  |
 | nautobot.resources.limits.memory | string | `"2Gi"` |  |
 | nautobot.resources.requests.cpu | string | `"0.7"` |  |
@@ -234,6 +253,15 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | rqWorker.sidecars | object | `{}` |  |
 | rqWorker.tolerations | list | `[]` |  |
 | rqWorker.updateStrategy.type | string | `"RollingUpdate"` |  |
-| service | object | `{"annotations":{},"clusterIP":null,"externalTrafficPolicy":"Cluster","httpsPort":443,"loadBalancerIP":null,"loadBalancerSourceRanges":[],"nodePorts":{"http":null,"https":null},"port":80,"type":"ClusterIP"}` | The Nautobot UI front end service |
+| service.annotations | object | `{}` | Annotations to be applied to the service resource |
+| service.clusterIP | string | `nil` | IP address to use as the clusterIP |
+| service.externalTrafficPolicy | string | `"Cluster"` | Kubernetes externalTrafficPolicy valid values: Cluster or Local |
+| service.httpsPort | int | `443` | Port to expose for Nautobot https access |
+| service.loadBalancerIP | string | `nil` | IP address to use as the loadBalancerIP |
+| service.loadBalancerSourceRanges | list | `[]` | List of allowed CIDRs to access the load balancer default 0.0.0.0/0, cloud provider dependent |
+| service.nodePorts.http | string | `nil` | Node port for Nautobot http choose port in Kubernetes `--service-node-port-range` typically 30000-32767 |
+| service.nodePorts.https | string | `nil` | Node port for Nautobot https choose port in Kubernetes `--service-node-port-range` typically 30000-32767 |
+| service.port | int | `80` | Port to expose for Nautobot http access |
+| service.type | string | `"ClusterIP"` | [Kubernetes service](https://kubernetes.io/docs/concepts/services-networking/service/) type, valid values: ExternalName, ClusterIP, NodePort, or LoadBalancer |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |

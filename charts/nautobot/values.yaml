@@ -1,92 +1,54 @@
 ---
+# -- Annotations to be applied to ALL resources created by this chart
 commonAnnotations: {}
 
-# -- The Nautobot UI front end service
+# Nautobot UI front end service
 service:
-  ## @param service.type nautobot service type
-  ##
+  # -- [Kubernetes service](https://kubernetes.io/docs/concepts/services-networking/service/) type, valid values: ExternalName, ClusterIP, NodePort, or LoadBalancer
   type: "ClusterIP"
-  ## @param service.port nautobot service HTTP port
-  ##
+  # -- Port to expose for Nautobot http access
   port: 80
-  ## @param service.httpsPort nautobot service HTTPS port
-  ##
+  # -- Port to expose for Nautobot https access
   httpsPort: 443
-  ## Node ports to expose
-  ## @param service.nodePorts.http Node port for HTTP
-  ## @param service.nodePorts.https Node port for HTTPS
-  ## NOTE: choose port between <30000-32767>
-  ##
+  # Node ports to expose if service.type is NodePort
   nodePorts:
+    # -- Node port for Nautobot http choose port in Kubernetes `--service-node-port-range` typically 30000-32767
     http:  # yamllint disable-line rule:empty-values
+    # -- Node port for Nautobot https choose port in Kubernetes `--service-node-port-range` typically 30000-32767
     https:  # yamllint disable-line rule:empty-values
-  ## @param service.clusterIP nautobot service Cluster IP
-  ## e.g.:
-  ## clusterIP: None
-  ##
+  # -- IP address to use as the clusterIP
   clusterIP:  # yamllint disable-line rule:empty-values
-  ## @param service.loadBalancerIP nautobot service Load Balancer IP
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-  ##
+  # -- IP address to use as the loadBalancerIP
   loadBalancerIP:  # yamllint disable-line rule:empty-values
-  ## @param service.loadBalancerSourceRanges nautobot service Load Balancer sources
-  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-  ## e.g:
-  ## loadBalancerSourceRanges:
-  ##   - 10.10.10.0/24
-  ##
+  # -- List of allowed CIDRs to access the load balancer default 0.0.0.0/0, cloud provider dependent
   loadBalancerSourceRanges: []
-  ## @param service.externalTrafficPolicy nautobot service external traffic policy
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  ##
+  # -- Kubernetes externalTrafficPolicy valid values: Cluster or Local
   externalTrafficPolicy: "Cluster"
-  ## @param service.annotations Additional custom annotations for nautobot service
-  ##
+  # -- Annotations to be applied to the service resource
   annotations: {}
 
-## @section Nautobot Parameters
-
-## Nautobot Server
-##
+# Nautobot Server
 nautobot:
   ## Nautobot image
-  ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-  ## @param image.registry nautobot image registry
-  ## @param image.repository nautobot image repository
-  ## @param image.tag nautobot image tag (immutable tags are recommended)
-  ## @param image.pullPolicy nautobot image pull policy
-  ## @param image.pullSecrets nautobot image pull secrets
-  ## @param image.debug Enable image debug mode
-  ##
   image:
+    # -- Nautobot image registry
     registry: "ghcr.io"
+    # -- Nautobot image name
     repository: "nautobot/nautobot"
-    tag: "1.1.2"
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
+    # -- Nautobot image tag
+    tag: "1.1.3"
+    # [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/) valid values: Always, Never, or IfNotPresent
     pullPolicy: "IfNotPresent"
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    # -- List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
     ## e.g:
     ## pullSecrets:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param nautobot.replicaCount Number of nautobot replicas to deploy
-  ##
+
+  # -- Number of Nautobot server replicas to deploy
   replicaCount: 2
-  ## Configure extra options for nautobot containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param nautobot.livenessProbe.enabled Enable livenessProbe on nautobot nodes
-  ## @param nautobot.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param nautobot.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param nautobot.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param nautobot.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param nautobot.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
+  # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe
   livenessProbe:
     enabled: true
     httpGet:
@@ -97,13 +59,8 @@ nautobot:
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
-  ## @param nautobot.readinessProbe.enabled Enable readinessProbe on nautobot nodes
-  ## @param nautobot.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param nautobot.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param nautobot.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param nautobot.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param nautobot.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
+
+  # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot readiness probe
   readinessProbe:
     enabled: true
     httpGet:
@@ -115,11 +72,7 @@ nautobot:
     failureThreshold: 3
     successThreshold: 1
 
-  ## nautobot resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param nautobot.resources.limits The resources limits for the nautobot containers
-  ## @param nautobot.resources.requests The requested resources for the nautobot containers
-  ##
+  # -- [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot resource requests and limits
   resources:
     limits:
       cpu: "2"
@@ -127,42 +80,28 @@ nautobot:
     requests:
       cpu: "0.7"
       memory: "784Mi"
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param nautobot.podSecurityContext.enabled Enabled nautobot pods' Security Context
-  ## @param nautobot.podSecurityContext.fsGroup Set nautobot pod's Security Context fsGroup
-  ##
+
+  # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context
   podSecurityContext:
     enabled: true
     fsGroup: 999
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param nautobot.containerSecurityContext.enabled Enabled nautobot containers' Security Context
-  ## @param nautobot.containerSecurityContext.runAsUser Set nautobot containers' Security Context runAsUser
-  ##
+
+  # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context
   containerSecurityContext:
     enabled: true
     runAsUser: 999
     runAsGroup: 999
 
-  ## @param nautobot.command Override default container command (useful when using custom images)
-  ##
+  # -- Override default Nautobot container command (useful when using custom images)
   command: []
-  ## @param nautobot.args Override default container args (useful when using custom images)
-  ##
+  # -- Override default Nautobot container args (useful when using custom images)
   args: []
 
-  ## @param nautobot.hostAliases nautobot pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
+  # -- [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases
   hostAliases: []
-  ## @param nautobot.podLabels Extra labels for nautobot pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
+  # -- [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for nautobot pods
   podLabels: {}
-  ## @param nautobot.podAnnotations Annotations for nautobot pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
+  # -- [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for nautobot pods
   podAnnotations: {}
   ## @param nautobot.podAffinityPreset Pod affinity preset. Ignored if `nautobot.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity

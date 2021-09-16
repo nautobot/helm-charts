@@ -5,11 +5,51 @@
 
 {{ template "chart.description" . }}
 
-{{ template "chart.homepageLine" . }}
-
-{{ template "chart.maintainersSection" . }}
-
 {{ template "chart.sourcesSection" . }}
+
+## Prerequisites
+
+* Kubernetes 1.12+
+* Helm 3.1.x
+* PV provisioning support (Required if deploying the [postgresql chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
+
+## Installing the Chart
+
+### Add the Nautobot Helm Repo
+
+```no-highlight
+$ helm repo add nautobot https://nautobot.github.io/helm-charts/
+```
+
+### Install the Nautobot Chart from the Nautobot repo
+
+To install the chart with the release name `my-release` DB and Redis passwords are required:
+
+```no-highlight
+$ helm install my-release nautobot/nautobot --set postgresql.postgresqlPassword="change-me" --set redis.auth.password="change-me"
+```
+
+The command deploys Nautobot; on the Kubernetes cluster in the default configuration. The [Values](#values) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Configure Nautobot
+
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```no-highlight
+$ helm delete my-release
+```
+
+## Common Examples
+
+1. Deploy Nautobot
+2. Use External DB
+3. Enable RQ Workers
+4. Configure Ingress
 
 {{ template "chart.requirementsSection" . }}
 

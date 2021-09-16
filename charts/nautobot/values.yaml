@@ -4,7 +4,7 @@ commonAnnotations: {}
 
 # Nautobot UI front end service
 service:
-  # -- [Kubernetes service](https://kubernetes.io/docs/concepts/services-networking/service/) type, valid values: ExternalName, ClusterIP, NodePort, or LoadBalancer
+  # -- [Kubernetes service](https://kubernetes.io/docs/concepts/services-networking/service/) type, valid values: `ExternalName`, `ClusterIP`, `NodePort`, or `LoadBalancer`
   type: "ClusterIP"
   # -- Port to expose for Nautobot http access
   port: 80
@@ -22,7 +22,7 @@ service:
   loadBalancerIP:  # yamllint disable-line rule:empty-values
   # -- List of allowed CIDRs to access the load balancer default 0.0.0.0/0, cloud provider dependent
   loadBalancerSourceRanges: []
-  # -- Kubernetes externalTrafficPolicy valid values: Cluster or Local
+  # -- Kubernetes externalTrafficPolicy valid values: `Cluster` or `Local`
   externalTrafficPolicy: "Cluster"
   # -- Annotations to be applied to the service resource
   annotations: {}
@@ -31,15 +31,15 @@ service:
 nautobot:
   ## Nautobot image
   image:
-    # -- Nautobot image registry
+    # -- Nautobot image registry, common to all deployments
     registry: "ghcr.io"
-    # -- Nautobot image name
+    # -- Nautobot image name, common to all deployments
     repository: "nautobot/nautobot"
-    # -- Nautobot image tag
+    # -- Nautobot image tag, common to all deployments
     tag: "1.1.3"
-    # [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/) valid values: Always, Never, or IfNotPresent
+    # [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent`
     pullPolicy: "IfNotPresent"
-    # -- List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+    # -- List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments
     ## e.g:
     ## pullSecrets:
     ##   - myRegistryKeySecretName
@@ -96,66 +96,47 @@ nautobot:
   command: []
   # -- Override default Nautobot container args (useful when using custom images)
   args: []
-
   # -- [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases
   hostAliases: []
   # -- [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for nautobot pods
   podLabels: {}
   # -- [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for nautobot pods
   podAnnotations: {}
-  ## @param nautobot.podAffinityPreset Pod affinity preset. Ignored if `nautobot.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
+  # -- [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard`
   podAffinityPreset: ""
-  ## @param nautobot.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
+  # -- [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard`
   podAntiAffinityPreset: "soft"
-  ## Node nautobot.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
+
+  # -- [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Node Affinity preset
   nodeAffinityPreset:
-    ## @param nautobot.nodeAffinityPreset.type Node affinity preset type. Ignored if `nautobot.affinity` is set. Allowed values: `soft` or `hard`
-    ##
+    # -- Nautobot Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard`
     type: ""
-    ## @param nautobot.nodeAffinityPreset.key Node label key to match. Ignored if `nautobot.affinity` is set
-    ##
+    # -- Node label key to match. Ignored if `nautobot.affinity` is set
     key: ""
-    ## @param nautobot.nodeAffinityPreset.values Node label values to match. Ignored if `nautobot.affinity` is set
+    # -- Node label values to match. Ignored if `nautobot.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param nautobot.affinity Affinity for nautobot pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `nautobot.podAffinityPreset`, `nautobot.podAntiAffinityPreset`, and `nautobot.nodeAffinityPreset` will be ignored when it's set
-  ##
+
+  # -- [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot pods assignment
   affinity: {}
-  ## @param nautobot.nodeSelector Node labels for nautobot pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
+  # -- [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot pods assignment
   nodeSelector: {}
-  ## @param nautobot.tolerations Tolerations for nautobot pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
+  # -- [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot pods assignment
   tolerations: []
-  ## @param nautobot.updateStrategy.type nautobot statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
+
   updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
+    # -- [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type
     type: "RollingUpdate"
-  ## @param nautobot.priorityClassName nautobot pods' priorityClassName
-  ##
+
+  # -- Nautobot pods' priorityClassName
   priorityClassName: ""
-  ## @param nautobot.lifecycleHooks for the nautobot container(s) to automate configuration before or after startup
-  ##
+  # -- lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup
   lifecycleHooks: {}
-  ## @param nautobot.extraEnvVars Array with extra environment variables to add to nautobot nodes
+  # -- Extra Env Vars to set only on the Nautobot server pods
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO

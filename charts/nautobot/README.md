@@ -35,6 +35,8 @@ The command deploys Nautobot; on the Kubernetes cluster in the default configura
 
 > **Tip**: List all releases using `helm list`
 
+## Configure Nautobot
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-release` deployment:
@@ -134,11 +136,9 @@ $ helm delete my-release
 | ingress.secrets | list | `[]` |  |
 | ingress.tls | bool | `false` |  |
 | nautobot.affinity | object | `{}` |  |
-| nautobot.args | list | `[]` |  |
-| nautobot.command | list | `[]` |  |
-| nautobot.containerSecurityContext.enabled | bool | `true` |  |
-| nautobot.containerSecurityContext.runAsGroup | int | `999` |  |
-| nautobot.containerSecurityContext.runAsUser | int | `999` |  |
+| nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |
+| nautobot.command | list | `[]` | Override default Nautobot container command (useful when using custom images) |
+| nautobot.containerSecurityContext | object | `{"enabled":true,"runAsGroup":999,"runAsUser":999}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context |
 | nautobot.createSuperUser | bool | `true` |  |
 | nautobot.debug | bool | `false` |  |
 | nautobot.envVars.allowedHosts | string | `"*"` |  |
@@ -167,32 +167,27 @@ $ helm delete my-release
 | nautobot.extraEnvVarsSecret | string | `nil` |  |
 | nautobot.extraVolumeMounts | list | `[]` |  |
 | nautobot.extraVolumes | list | `[]` |  |
-| nautobot.hostAliases | list | `[]` |  |
+| nautobot.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases |
 | nautobot.image.pullPolicy | string | `"IfNotPresent"` |  |
-| nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) |
-| nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry |
-| nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name |
-| nautobot.image.tag | string | `"1.1.3"` | Nautobot image tag |
+| nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
+| nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
+| nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
+| nautobot.image.tag | string | `"1.1.3"` | Nautobot image tag, common to all deployments |
 | nautobot.initContainers | object | `{}` |  |
 | nautobot.lifecycleHooks | object | `{}` |  |
 | nautobot.livenessProbe | object | `{"enabled":true,"failureThreshold":3,"httpGet":{"path":"/health/","port":"http"},"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
-| nautobot.nodeAffinityPreset.key | string | `""` |  |
-| nautobot.nodeAffinityPreset.type | string | `""` |  |
-| nautobot.nodeAffinityPreset.values | list | `[]` |  |
+| nautobot.nodeAffinityPreset | object | `{"key":"","type":"","values":[]}` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Node Affinity preset |
+| nautobot.nodeAffinityPreset.type | string | `""` | Nautobot Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | nautobot.nodeSelector | object | `{}` |  |
-| nautobot.podAffinityPreset | string | `""` |  |
-| nautobot.podAnnotations | object | `{}` |  |
-| nautobot.podAntiAffinityPreset | string | `"soft"` |  |
-| nautobot.podLabels | object | `{}` |  |
-| nautobot.podSecurityContext.enabled | bool | `true` |  |
-| nautobot.podSecurityContext.fsGroup | int | `999` |  |
+| nautobot.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
+| nautobot.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for nautobot pods |
+| nautobot.podAntiAffinityPreset | string | `"soft"` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
+| nautobot.podLabels | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for nautobot pods |
+| nautobot.podSecurityContext | object | `{"enabled":true,"fsGroup":999}` | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context |
 | nautobot.priorityClassName | string | `""` |  |
 | nautobot.readinessProbe | object | `{"enabled":true,"failureThreshold":3,"httpGet":{"path":"/health/","port":"http"},"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot readiness probe |
 | nautobot.replicaCount | int | `2` | Number of Nautobot server replicas to deploy |
-| nautobot.resources.limits.cpu | string | `"2"` |  |
-| nautobot.resources.limits.memory | string | `"2Gi"` |  |
-| nautobot.resources.requests.cpu | string | `"0.7"` |  |
-| nautobot.resources.requests.memory | string | `"784Mi"` |  |
+| nautobot.resources | object | `{"limits":{"cpu":"2","memory":"2Gi"},"requests":{"cpu":"0.7","memory":"784Mi"}}` | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot resource requests and limits |
 | nautobot.sidecars | object | `{}` |  |
 | nautobot.tolerations | list | `[]` |  |
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` |  |
@@ -255,13 +250,13 @@ $ helm delete my-release
 | rqWorker.updateStrategy.type | string | `"RollingUpdate"` |  |
 | service.annotations | object | `{}` | Annotations to be applied to the service resource |
 | service.clusterIP | string | `nil` | IP address to use as the clusterIP |
-| service.externalTrafficPolicy | string | `"Cluster"` | Kubernetes externalTrafficPolicy valid values: Cluster or Local |
+| service.externalTrafficPolicy | string | `"Cluster"` | Kubernetes externalTrafficPolicy valid values: `Cluster` or `Local` |
 | service.httpsPort | int | `443` | Port to expose for Nautobot https access |
 | service.loadBalancerIP | string | `nil` | IP address to use as the loadBalancerIP |
 | service.loadBalancerSourceRanges | list | `[]` | List of allowed CIDRs to access the load balancer default 0.0.0.0/0, cloud provider dependent |
 | service.nodePorts.http | string | `nil` | Node port for Nautobot http choose port in Kubernetes `--service-node-port-range` typically 30000-32767 |
 | service.nodePorts.https | string | `nil` | Node port for Nautobot https choose port in Kubernetes `--service-node-port-range` typically 30000-32767 |
 | service.port | int | `80` | Port to expose for Nautobot http access |
-| service.type | string | `"ClusterIP"` | [Kubernetes service](https://kubernetes.io/docs/concepts/services-networking/service/) type, valid values: ExternalName, ClusterIP, NodePort, or LoadBalancer |
+| service.type | string | `"ClusterIP"` | [Kubernetes service](https://kubernetes.io/docs/concepts/services-networking/service/) type, valid values: `ExternalName`, `ClusterIP`, `NodePort`, or `LoadBalancer` |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |

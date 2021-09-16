@@ -257,30 +257,33 @@ nautobot:
   ##
   initContainers: {}
 
-  createSuperUser: true  # NAUTOBOT_CREATE_SUPERUSER
   debug: false  # NAUTOBOT_DEBUG
 
   # https://nautobot.readthedocs.io/en/stable/configuration/required-settings/
   allowedHosts: "*"  # NAUTOBOT_ALLOWED_HOSTS space separated list of allowed hosts
-  dbEngine: "django.db.backends.postgresql"  # NAUTOBOT_DB_ENGINE
-  dbHost: "postgres"  # NAUTOBOT_DB_HOST
-  dbName: "nautobot"  # NAUTOBOT_DB_NAME
-  dbPassword: ""  # NAUTOBOT_DB_PASSWORD defaults to postgresql.postgresqlPassword
-  dbPort: 5432  # NAUTOBOT_DB_PORT
-  dbTimeout: 300  # NAUTOBOT_DB_TIMEOUT
-  dbUser: "nautobot"  # NAUTOBOT_DB_USER
+  db:
+    engine: "django.db.backends.postgresql"  # NAUTOBOT_DB_ENGINE
+    host: "postgres"  # NAUTOBOT_DB_HOST
+    name: "nautobot"  # NAUTOBOT_DB_NAME
+    password: ""  # NAUTOBOT_DB_PASSWORD defaults to postgresql.postgresqlPassword
+    port: 5432  # NAUTOBOT_DB_PORT
+    timeout: 300  # NAUTOBOT_DB_TIMEOUT
+    user: "nautobot"  # NAUTOBOT_DB_USER
   logLevel: "INFO"
   metrics: true  # NAUTOBOT_METRICS_ENABLED Should really use .metrics.enabled instead of this
-  redisHost: ""  # NAUTOBOT_REDIS_HOST
-  redisPassword: ""  # NAUTOBOT_REDIS_PASSWORD
-  redisPort: 6379  # NAUTOBOT_REDIS_PORT
-  redisSSL: false  # NAUTOBOT_REDIS_SSL
-  redisUsername: ""  # NAUTOBOT_REDIS_USERNAME
+  redis:
+    host: ""  # NAUTOBOT_REDIS_HOST
+    password: ""  # NAUTOBOT_REDIS_PASSWORD
+    port: 6379  # NAUTOBOT_REDIS_PORT
+    ssl: false  # NAUTOBOT_REDIS_SSL
+    username: ""  # NAUTOBOT_REDIS_USERNAME
   secretKey: ""  # NAUTOBOT_SECRET_KEY
-  superUserAPIToken: ""  # NAUTOBOT_SUPERUSER_API_TOKEN
-  superUserEmail: "admin@example.com"  # NAUTOBOT_SUPERUSER_EMAIL
-  superUserName: "admin"  # NAUTOBOT_SUPERUSER_NAME
-  superUserPassword: ""  # NAUTOBOT_SUPERUSER_PASSWORD
+  superUser:
+    enabled: true  # NAUTOBOT_CREATE_SUPERUSER
+    apitoken: ""  # NAUTOBOT_SUPERUSER_API_TOKEN
+    email: "admin@example.com"  # NAUTOBOT_SUPERUSER_EMAIL
+    username: "admin"  # NAUTOBOT_SUPERUSER_NAME
+    password: ""  # NAUTOBOT_SUPERUSER_PASSWORD
   # extraVars are env vars common to all Nautobot containers (rq worker, celery, and nautobot)
   extraVars: []  # https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/
   #   - name: "NAUTOBOT_BANNER_TOP"

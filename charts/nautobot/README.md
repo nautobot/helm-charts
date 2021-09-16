@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![AppVersion: 1.1.2](https://img.shields.io/badge/AppVersion-1.1.2-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 1.1.2](https://img.shields.io/badge/AppVersion-1.1.2-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -107,14 +107,13 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.containerSecurityContext.enabled | bool | `true` |  |
 | nautobot.containerSecurityContext.runAsGroup | int | `999` |  |
 | nautobot.containerSecurityContext.runAsUser | int | `999` |  |
-| nautobot.createSuperUser | bool | `true` |  |
-| nautobot.dbEngine | string | `"django.db.backends.postgresql"` |  |
-| nautobot.dbHost | string | `"postgres"` |  |
-| nautobot.dbName | string | `"nautobot"` |  |
-| nautobot.dbPassword | string | `""` |  |
-| nautobot.dbPort | int | `5432` |  |
-| nautobot.dbTimeout | int | `300` |  |
-| nautobot.dbUser | string | `"nautobot"` |  |
+| nautobot.db.engine | string | `"django.db.backends.postgresql"` |  |
+| nautobot.db.host | string | `"postgres"` |  |
+| nautobot.db.name | string | `"nautobot"` |  |
+| nautobot.db.password | string | `""` |  |
+| nautobot.db.port | int | `5432` |  |
+| nautobot.db.timeout | int | `300` |  |
+| nautobot.db.user | string | `"nautobot"` |  |
 | nautobot.debug | bool | `false` |  |
 | nautobot.extraEnvVars | list | `[]` |  |
 | nautobot.extraEnvVarsCM | string | `nil` |  |
@@ -159,11 +158,11 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.readinessProbe.periodSeconds | int | `10` |  |
 | nautobot.readinessProbe.successThreshold | int | `1` |  |
 | nautobot.readinessProbe.timeoutSeconds | int | `5` |  |
-| nautobot.redisHost | string | `""` |  |
-| nautobot.redisPassword | string | `""` |  |
-| nautobot.redisPort | int | `6379` |  |
-| nautobot.redisSSL | bool | `false` |  |
-| nautobot.redisUsername | string | `""` |  |
+| nautobot.redis.host | string | `""` |  |
+| nautobot.redis.password | string | `""` |  |
+| nautobot.redis.port | int | `6379` |  |
+| nautobot.redis.ssl | bool | `false` |  |
+| nautobot.redis.username | string | `""` |  |
 | nautobot.replicaCount | int | `2` |  |
 | nautobot.resources.limits.cpu | string | `"2"` |  |
 | nautobot.resources.limits.memory | string | `"2Gi"` |  |
@@ -171,10 +170,11 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.resources.requests.memory | string | `"784Mi"` |  |
 | nautobot.secretKey | string | `""` |  |
 | nautobot.sidecars | object | `{}` |  |
-| nautobot.superUserAPIToken | string | `""` |  |
-| nautobot.superUserEmail | string | `"admin@example.com"` |  |
-| nautobot.superUserName | string | `"admin"` |  |
-| nautobot.superUserPassword | string | `""` |  |
+| nautobot.superUser.apitoken | string | `""` |  |
+| nautobot.superUser.email | string | `"admin@example.com"` |  |
+| nautobot.superUser.enabled | bool | `true` |  |
+| nautobot.superUser.password | string | `""` |  |
+| nautobot.superUser.username | string | `"admin"` |  |
 | nautobot.tolerations | list | `[]` |  |
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` |  |
 | postgresql.enabled | bool | `true` |  |

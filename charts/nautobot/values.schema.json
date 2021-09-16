@@ -417,64 +417,60 @@
           "type": "object",
           "required": [
             "allowedHosts",
-            "createSuperUser",
-            "dbEngine",
-            "dbHost",
-            "dbName",
-            "dbPassword",
-            "dbPort",
-            "dbTimeout",
-            "dbUser",
+            "db",
             "debug",
             "extraVars",
             "image",
             "logLevel",
             "metrics",
-            "redisHost",
-            "redisPassword",
-            "redisPort",
-            "redisSSL",
-            "redisUsername",
+            "redis",
             "secretKey",
-            "superUserAPIToken",
-            "superUserEmail",
-            "superUserName",
-            "superUserPassword"
+            "superUser"
           ],
           "properties": {
             "allowedHosts": {
               "type": "string"
             },
-            "createSuperUser": {
-              "type": "boolean"
-            },
-            "dbEngine": {
-              "type": "string",
-              "pattern": "^(django\\.db\\.backends\\.postgresql|django\\.db\\.backends\\.mysql)$"
-            },
-            "dbHost": {
-              "type": "string"
-            },
-            "dbName": {
-              "type": "string"
-            },
-            "dbPassword": {
-              "type": "string"
-            },
-            "dbPort": {
-              "type": [
-                "integer",
-                "null"
+            "db": {
+              "required": [
+                "engine",
+                "host",
+                "name",
+                "password",
+                "port",
+                "timeout",
+                "user"
               ],
-              "minimum": 1,
-              "maximum": 65535
-            },
-            "dbTimeout": {
-              "type": "integer",
-              "minimum": 0
-            },
-            "dbUser": {
-              "type": "string"
+              "properties": {
+                "engine": {
+                  "type": "string",
+                  "pattern": "^(django\\.db\\.backends\\.postgresql|django\\.db\\.backends\\.mysql)$"
+                },
+                "host": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                "timeout": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "user": {
+                  "type": "string"
+                }
+              }
             },
             "debug": {
               "type": "boolean"
@@ -536,41 +532,66 @@
             "metrics": {
               "type": "boolean"
             },
-            "redisHost": {
-              "type": "string"
-            },
-            "redisPassword": {
-              "type": "string"
-            },
-            "redisPort": {
-              "type": [
-                "integer",
-                "null"
+            "redis": {
+              "required": [
+                "host",
+                "password",
+                "port",
+                "ssl",
+                "username"
               ],
-              "minimum": 1,
-              "maximum": 65535
-            },
-            "redisSSL": {
-              "type": "boolean"
-            },
-            "redisUsername": {
-              "type": "string"
+              "properties": {
+                "host": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                "ssl": {
+                  "type": "boolean"
+                },
+                "username": {
+                  "type": "string"
+                }
+              }
             },
             "secretKey": {
               "type": "string"
             },
-            "superUserAPIToken": {
-              "type": "string",
-              "pattern": "^([0-9A-Za-z]+|)$"
-            },
-            "superUserEmail": {
-              "type": "string"
-            },
-            "superUserName": {
-              "type": "string"
-            },
-            "superUserPassword": {
-              "type": "string"
+            "superUser": {
+              "required": [
+                "apitoken",
+                "email",
+                "enabled",
+                "username",
+                "password"
+              ],
+              "properties": {
+                "apitoken": {
+                  "type": "string",
+                  "pattern": "^([0-9A-Za-z]+|)$"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                }
+              }
             }
           }
         }

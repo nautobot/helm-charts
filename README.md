@@ -73,3 +73,4 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md)
 * Automated testing
 * Handle Nautobot Media
 * Allow adding plugins
+* Add MySQL/MariaDB Support

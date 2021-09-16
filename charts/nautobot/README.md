@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 1.1.3](https://img.shields.io/badge/AppVersion-1.1.3-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 1.1.3](https://img.shields.io/badge/AppVersion-1.1.3-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -135,36 +135,23 @@ $ helm delete my-release
 | ingress.pathType | string | `"ImplementationSpecific"` |  |
 | ingress.secrets | list | `[]` |  |
 | ingress.tls | bool | `false` |  |
-| nautobot.affinity | object | `{}` |  |
+| nautobot.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot pods assignment |
+| nautobot.allowedHosts | string | `"*"` |  |
 | nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |
 | nautobot.command | list | `[]` | Override default Nautobot container command (useful when using custom images) |
 | nautobot.containerSecurityContext | object | `{"enabled":true,"runAsGroup":999,"runAsUser":999}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context |
-| nautobot.createSuperUser | bool | `true` |  |
+| nautobot.db.engine | string | `"django.db.backends.postgresql"` |  |
+| nautobot.db.host | string | `"postgres"` |  |
+| nautobot.db.name | string | `"nautobot"` |  |
+| nautobot.db.password | string | `""` |  |
+| nautobot.db.port | int | `5432` |  |
+| nautobot.db.timeout | int | `300` |  |
+| nautobot.db.user | string | `"nautobot"` |  |
 | nautobot.debug | bool | `false` |  |
-| nautobot.envVars.allowedHosts | string | `"*"` |  |
-| nautobot.envVars.dbEngine | string | `"django.db.backends.postgresql"` |  |
-| nautobot.envVars.dbHost | string | `"postgres"` |  |
-| nautobot.envVars.dbName | string | `"nautobot"` |  |
-| nautobot.envVars.dbPassword | string | `""` |  |
-| nautobot.envVars.dbPort | int | `5432` |  |
-| nautobot.envVars.dbTimeout | int | `300` |  |
-| nautobot.envVars.dbUser | string | `"nautobot"` |  |
-| nautobot.envVars.extraVars | list | `[]` |  |
-| nautobot.envVars.logLevel | string | `"INFO"` |  |
-| nautobot.envVars.metrics | bool | `true` |  |
-| nautobot.envVars.redisHost | string | `""` |  |
-| nautobot.envVars.redisPassword | string | `""` |  |
-| nautobot.envVars.redisPort | int | `6379` |  |
-| nautobot.envVars.redisSSL | bool | `false` |  |
-| nautobot.envVars.redisUsername | string | `""` |  |
-| nautobot.envVars.secretKey | string | `""` |  |
-| nautobot.envVars.superUserAPIToken | string | `""` |  |
-| nautobot.envVars.superUserEmail | string | `"admin@example.com"` |  |
-| nautobot.envVars.superUserName | string | `"admin"` |  |
-| nautobot.envVars.superUserPassword | string | `""` |  |
-| nautobot.extraEnvVars | list | `[]` |  |
+| nautobot.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot server pods |
 | nautobot.extraEnvVarsCM | string | `nil` |  |
 | nautobot.extraEnvVarsSecret | string | `nil` |  |
+| nautobot.extraVars | list | `[]` |  |
 | nautobot.extraVolumeMounts | list | `[]` |  |
 | nautobot.extraVolumes | list | `[]` |  |
 | nautobot.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases |
@@ -174,23 +161,38 @@ $ helm delete my-release
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
 | nautobot.image.tag | string | `"1.1.3"` | Nautobot image tag, common to all deployments |
 | nautobot.initContainers | object | `{}` |  |
-| nautobot.lifecycleHooks | object | `{}` |  |
+| nautobot.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | nautobot.livenessProbe | object | `{"enabled":true,"failureThreshold":3,"httpGet":{"path":"/health/","port":"http"},"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
+| nautobot.logLevel | string | `"INFO"` |  |
+| nautobot.metrics | bool | `true` |  |
 | nautobot.nodeAffinityPreset | object | `{"key":"","type":"","values":[]}` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Node Affinity preset |
+| nautobot.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
 | nautobot.nodeAffinityPreset.type | string | `""` | Nautobot Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
-| nautobot.nodeSelector | object | `{}` |  |
+| nautobot.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
+| nautobot.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot pods assignment |
 | nautobot.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | nautobot.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for nautobot pods |
 | nautobot.podAntiAffinityPreset | string | `"soft"` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | nautobot.podLabels | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for nautobot pods |
 | nautobot.podSecurityContext | object | `{"enabled":true,"fsGroup":999}` | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context |
-| nautobot.priorityClassName | string | `""` |  |
+| nautobot.priorityClassName | string | `""` | Nautobot pods' priorityClassName |
 | nautobot.readinessProbe | object | `{"enabled":true,"failureThreshold":3,"httpGet":{"path":"/health/","port":"http"},"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5}` | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot readiness probe |
+| nautobot.redis.host | string | `""` |  |
+| nautobot.redis.password | string | `""` |  |
+| nautobot.redis.port | int | `6379` |  |
+| nautobot.redis.ssl | bool | `false` |  |
+| nautobot.redis.username | string | `""` |  |
 | nautobot.replicaCount | int | `2` | Number of Nautobot server replicas to deploy |
 | nautobot.resources | object | `{"limits":{"cpu":"2","memory":"2Gi"},"requests":{"cpu":"0.7","memory":"784Mi"}}` | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot resource requests and limits |
+| nautobot.secretKey | string | `""` |  |
 | nautobot.sidecars | object | `{}` |  |
-| nautobot.tolerations | list | `[]` |  |
-| nautobot.updateStrategy.type | string | `"RollingUpdate"` |  |
+| nautobot.superUser.apitoken | string | `""` |  |
+| nautobot.superUser.email | string | `"admin@example.com"` |  |
+| nautobot.superUser.enabled | bool | `true` |  |
+| nautobot.superUser.password | string | `""` |  |
+| nautobot.superUser.username | string | `"admin"` |  |
+| nautobot.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot pods assignment |
+| nautobot.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type |
 | postgresql.enabled | bool | `true` |  |
 | postgresql.postgresqlDatabase | string | `"nautobot"` |  |
 | postgresql.postgresqlPassword | string | `""` |  |

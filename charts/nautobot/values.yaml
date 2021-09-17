@@ -40,11 +40,10 @@ nautobot:
     # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent`
     pullPolicy: "IfNotPresent"
     # -- List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments
-    # e.g:
+    pullSecrets: []
+    # e.g.
     # pullSecrets:
     #   - myRegistryKeySecretName
-    #
-    pullSecrets: []
 
   # -- Number of Nautobot server replicas to deploy
   replicaCount: 2
@@ -120,12 +119,11 @@ nautobot:
     # -- Node label key to match. Ignored if `nautobot.affinity` is set
     key: ""
     # -- Node label values to match. Ignored if `nautobot.affinity` is set
-    # E.g.
+    values: []
+    # e.g.
     # values:
     #   - e2e-az1
     #   - e2e-az2
-    #
-    values: []
 
   # -- [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot pods assignment
   affinity: {}
@@ -143,12 +141,12 @@ nautobot:
   # -- lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup
   lifecycleHooks: {}
   # -- Extra Env Vars to set only on the Nautobot server pods
-  # e.g:
+  extraEnvVars: []
+  # e.g.
   # extraEnvVars:
   #   - name: FOO
   #     value: "bar"
-  #
-  extraEnvVars: []
+
   # -- Name of existing ConfigMap containing extra env vars for Nautobot server pods
   extraEnvVarsCM:  # yamllint disable-line rule:empty-values
   # -- Name of existing Secret containing extra env vars for Nautobot server pods
@@ -158,7 +156,8 @@ nautobot:
   # -- List of additional volumeMounts for the Nautobot containers
   extraVolumeMounts: []
   # -- Add additional sidecar containers to the Nautobot server pods
-  # e.g:
+  sidecars: {}
+  # e.g.
   # sidecars:
   #   - name: your-image-name
   #     image: your-image
@@ -166,21 +165,19 @@ nautobot:
   #     ports:
   #       - name: portname
   #         containerPort: 1234
-  #
-  sidecars: {}
+
   # -- [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods
-  # e.g:
+  initContainers: {}
+  # e.g.
   # initContainers:
   #  - name: your-image-name
   #    image: your-image
   #    imagePullPolicy: Always
   #    command: ['sh', '-c', 'echo "hello world"']
-  #
-  initContainers: {}
 
-  ##################
+  #################################
   # Nautobot Application Settings #
-  ##################
+  #################################
 
   # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG)
   debug: false
@@ -212,15 +209,15 @@ nautobot:
 
   # Nautobot Redis configuration
   redis:
-    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST)
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST)
     host: ""
-    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD)
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD)
     password: ""
-    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT)
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT)
     port: 6379
-    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis ssl enabled, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_SSL)
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis ssl enabled, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_SSL)
     ssl: false
-    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME)
+    # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME)
     username: ""
 
   # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#secret_key) Nautobot Secret Key (NAUTOBOT_SECRET_KEY)
@@ -238,11 +235,11 @@ nautobot:
     password: ""  # NAUTOBOT_SUPERUSER_PASSWORD
 
   # -- An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`)
-  # e.g:
+  extraVars: []  # https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/
+  # e.g.
   # extraVars:
   #   - name: "NAUTOBOT_BANNER_TOP"
   #     value: "Nautobot Helm Chart"
-  extraVars: []  # https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/
 
 # Nautobot RQ Worker
 rqWorker:
@@ -327,12 +324,11 @@ rqWorker:
     # -- Node label key to match. Ignored if `nautobot.affinity` is set
     key: ""
     # -- Node label values to match. Ignored if `nautobot.affinity` is set
-    # E.g.
+    values: []
+    # e.g.
     # values:
     #   - e2e-az1
     #   - e2e-az2
-    #
-    values: []
 
   # -- [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot RQ Worker pods assignment
   affinity: {}
@@ -350,12 +346,12 @@ rqWorker:
   # -- lifecycleHooks for the Nautobot RQ Worker container(s) to automate configuration before or after startup
   lifecycleHooks: {}
   # -- Extra Env Vars to set only on the Nautobot RQ Worker pods
-  # e.g:
+  extraEnvVars: []
+  # e.g.
   # extraEnvVars:
   #   - name: FOO
   #     value: "bar"
-  #
-  extraEnvVars: []
+
   # -- Name of existing ConfigMap containing extra env vars for Nautobot RQ Worker pods
   extraEnvVarsCM:  # yamllint disable-line rule:empty-values
   # -- Name of existing Secret containing extra env vars for Nautobot RQ Worker pods
@@ -365,7 +361,8 @@ rqWorker:
   # -- List of additional volumeMounts for the Nautobot RQ Worker containers
   extraVolumeMounts: []
   # -- Add additional sidecar containers to the Nautobot RQ Worker pods
-  # e.g:
+  sidecars: {}
+  # e.g.
   # sidecars:
   #   - name: your-image-name
   #     image: your-image
@@ -373,18 +370,15 @@ rqWorker:
   #     ports:
   #       - name: portname
   #         containerPort: 1234
-  #
-  sidecars: {}
+
   # -- [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot RQ Worker pods
-  # ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  # e.g:
+  initContainers: {}
+  # e.g.
   # initContainers:
   #  - name: your-image-name
   #    image: your-image
   #    imagePullPolicy: Always
   #    command: ['sh', '-c', 'echo "hello world"']
-  #
-  initContainers: {}
 
 # Nautobot Celery Worker
 celeryWorker:
@@ -475,12 +469,11 @@ celeryWorker:
     #
     key: ""
     # -- Node label values to match. Ignored if `nautobot.affinity` is set
-    # E.g.
+    values: []
+    # e.g.
     # values:
     #   - e2e-az1
     #   - e2e-az2
-    #
-    values: []
 
   # -- [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot Celery Worker pods assignment
   affinity: {}
@@ -498,12 +491,12 @@ celeryWorker:
   # -- lifecycleHooks for the Nautobot Celery Worker container(s) to automate configuration before or after startup
   lifecycleHooks: {}
   # -- Extra Env Vars to set only on the Nautobot Celery Worker pods
-  # e.g:
+  extraEnvVars: []
+  # e.g.
   # extraEnvVars:
   #   - name: FOO
   #     value: "bar"
-  #
-  extraEnvVars: []
+
   # -- Name of existing ConfigMap containing extra env vars for Nautobot Celery Worker pods
   extraEnvVarsCM:  # yamllint disable-line rule:empty-values
   # -- Name of existing Secret containing extra env vars for Nautobot Celery Worker pods
@@ -513,7 +506,8 @@ celeryWorker:
   # -- List of additional volumeMounts for the Nautobot Celery Worker containers
   extraVolumeMounts: []
   # -- Add additional sidecar containers to the Nautobot Celery Worker pods
-  # e.g:
+  sidecars: {}
+  # e.g.
   # sidecars:
   #   - name: your-image-name
   #     image: your-image
@@ -521,24 +515,22 @@ celeryWorker:
   #     ports:
   #       - name: portname
   #         containerPort: 1234
-  #
-  sidecars: {}
+
   # -- [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Worker pods
-  # ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  # e.g:
+  initContainers: {}
+  # e.g.
   # initContainers:
   #  - name: your-image-name
   #    image: your-image
   #    imagePullPolicy: Always
   #    command: ['sh', '-c', 'echo "hello world"']
-  #
-  initContainers: {}
 
 # ServiceAccount configuration
 serviceAccount:
-  # -- Enable creation of a Nautobot Service Account
+  # -- Enable creation of a Kubernetes Service Account for Nautobot
   create: true
-  # -- Name of the Nautobot Service Account
+  # -- Name of the Kubernetes Service Account for Nautobot
+  # @default -- `{release name}`
   name: ""
 
 ingress:
@@ -568,6 +560,8 @@ ingress:
   # -- The list of additional hostnames to be covered with this ingress record.
   # Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   extraHosts: []
+  # e.g.
+  # extraHosts:
   # - name: nautobot.local
   #   path: /
   #
@@ -575,15 +569,18 @@ ingress:
   # -- Any additional arbitrary paths that may need to be added to the ingress under the main host.
   # For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   extraPaths: []
+  # e.g.
+  # extraPaths:
   # - path: /*
   #   backend:
   #     serviceName: ssl-redirect
   #     servicePort: use-annotation
   #
 
-  # -- The tls configuration for additional hostnames to be covered with this ingress record.
-  # see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  # -- [ref](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) The tls configuration for additional hostnames to be covered with this ingress record.
   extraTls: []
+  # e.g.
+  # extraTls:
   # - hosts:
   #     - nautobot.local
   #   secretName: nautobot.local-tls

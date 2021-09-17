@@ -11,7 +11,7 @@
 
 * Kubernetes 1.12+
 * Helm 3.1.x
-* PV provisioning support (Required if deploying the [postgresql chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
+* Persistent Volume (PV) provisioning support (Required if deploying the [postgresql chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
 
 ## Installing the Chart
 
@@ -23,13 +23,13 @@ $ helm repo add nautobot https://nautobot.github.io/helm-charts/
 
 ### Install the Nautobot Chart from the Nautobot repo
 
-To install the chart with the release name `my-release` DB and Redis passwords are required:
+To install the chart with the release name `nautobot-release` (NOTE: the release name is a label completely up to the user) DB and Redis passwords are required:
 
 ```no-highlight
-$ helm install my-release nautobot/nautobot --set postgresql.postgresqlPassword="change-me" --set redis.auth.password="change-me"
+$ helm install nautobot-release nautobot/nautobot --set postgresql.postgresqlPassword="change-me" --set redis.auth.password="change-me"
 ```
 
-The command deploys Nautobot; on the Kubernetes cluster in the default configuration. The [Values](#values) section lists the parameters that can be configured during installation.
+The command deploys Nautobot, on the Kubernetes cluster, in the default configuration. The [Values](#values) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -43,8 +43,8 @@ kubectl get secret nautobot-env -o jsonpath="{.data.NAUTOBOT_SUPERUSER_PASSWORD}
 ## Configure Nautobot
 
 When [deploying a helm chart](https://helm.sh/docs/intro/using_helm/) there are several different methods to apply alternate configuration values.  One option is via the command line using the
-`--set` argument, however, changing multiple variables becomes tedious, a better approach to changing multiple values is to create a yaml file and add the `--values custom_values.yaml` argument.
-The following examples/recommendations demonstrate the usage of a custom yaml file to apply these values.  All of the available options are documented in the [values](#values) section, however,
+`--set` argument, however, changing multiple variables becomes tedious, a better approach to changing multiple values is to create a YAML file and add the `--values custom_values.yaml` argument.
+The following examples/recommendations demonstrate the usage of a custom YAML file to apply these values.  All of the available options are documented in the [values](#values) section, however,
 the Nautobot application-specific values are summarized in the [Nautobot Application Values](#nautobot-application-values) section below.
 
 ### Required Settings
@@ -86,7 +86,7 @@ To utilize an external redis deployment the following values are available for c
 ```yaml
 nautobot:
   redis:
-    host: "reids.example.com"
+    host: "redis.example.com"
     password: "nautobot_redis_user_password"
     port: 6379
     ssl: true
@@ -171,10 +171,10 @@ the `redis` key, any `redis.*` values are passed directly to that chart.
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `my-release` deployment:
+To uninstall/delete the `nautobot-release` deployment:
 
 ```no-highlight
-$ helm delete my-release
+$ helm delete nautobot-release
 ```
 
 {{ template "chart.requirementsSection" . }}

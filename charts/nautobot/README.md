@@ -13,7 +13,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 
 * Kubernetes 1.12+
 * Helm 3.1.x
-* PV provisioning support (Required if deploying the [postgresql chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
+* Persistent Volume (PV) provisioning support (Required if deploying the [postgresql chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
 
 ## Installing the Chart
 
@@ -25,13 +25,13 @@ $ helm repo add nautobot https://nautobot.github.io/helm-charts/
 
 ### Install the Nautobot Chart from the Nautobot repo
 
-To install the chart with the release name `my-release` DB and Redis passwords are required:
+To install the chart with the release name `nautobot-release` (NOTE: the release name is a label completely up to the user) DB and Redis passwords are required:
 
 ```no-highlight
-$ helm install my-release nautobot/nautobot --set postgresql.postgresqlPassword="change-me" --set redis.auth.password="change-me"
+$ helm install nautobot-release nautobot/nautobot --set postgresql.postgresqlPassword="change-me" --set redis.auth.password="change-me"
 ```
 
-The command deploys Nautobot; on the Kubernetes cluster in the default configuration. The [Values](#values) section lists the parameters that can be configured during installation.
+The command deploys Nautobot, on the Kubernetes cluster, in the default configuration. The [Values](#values) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -45,8 +45,8 @@ kubectl get secret nautobot-env -o jsonpath="{.data.NAUTOBOT_SUPERUSER_PASSWORD}
 ## Configure Nautobot
 
 When [deploying a helm chart](https://helm.sh/docs/intro/using_helm/) there are several different methods to apply alternate configuration values.  One option is via the command line using the
-`--set` argument, however, changing multiple variables becomes tedious, a better approach to changing multiple values is to create a yaml file and add the `--values custom_values.yaml` argument.
-The following examples/recommendations demonstrate the usage of a custom yaml file to apply these values.  All of the available options are documented in the [values](#values) section, however,
+`--set` argument, however, changing multiple variables becomes tedious, a better approach to changing multiple values is to create a YAML file and add the `--values custom_values.yaml` argument.
+The following examples/recommendations demonstrate the usage of a custom YAML file to apply these values.  All of the available options are documented in the [values](#values) section, however,
 the Nautobot application-specific values are summarized in the [Nautobot Application Values](#nautobot-application-values) section below.
 
 ### Required Settings
@@ -88,7 +88,7 @@ To utilize an external redis deployment the following values are available for c
 ```yaml
 nautobot:
   redis:
-    host: "reids.example.com"
+    host: "redis.example.com"
     password: "nautobot_redis_user_password"
     port: 6379
     ssl: true
@@ -173,10 +173,10 @@ the `redis` key, any `redis.*` values are passed directly to that chart.
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `my-release` deployment:
+To uninstall/delete the `nautobot-release` deployment:
 
 ```no-highlight
-$ helm delete my-release
+$ helm delete nautobot-release
 ```
 
 ## Requirements
@@ -198,19 +198,19 @@ $ helm delete my-release
 | celeryWorker.command | list | `["nautobot-server","celery","worker","--loglevel","$(NAUTOBOT_LOG_LEVEL)"]` | Override default Nautobot Celery Worker container command (useful when using custom images) |
 | celeryWorker.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context |
 | celeryWorker.enabled | bool | `true` | Enables the Celery Worker for Nautobot |
-| celeryWorker.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot Celery Worker pods e.g: extraEnvVars:   - name: FOO     value: "bar" |
+| celeryWorker.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot Celery Worker pods |
 | celeryWorker.extraEnvVarsCM | string | `nil` | Name of existing ConfigMap containing extra env vars for Nautobot Celery Worker pods |
 | celeryWorker.extraEnvVarsSecret | string | `nil` | Name of existing Secret containing extra env vars for Nautobot Celery Worker pods |
 | celeryWorker.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot Celery Worker containers |
 | celeryWorker.extraVolumes | list | `[]` | List of additional volumes for the Nautobot Celery Worker pod |
 | celeryWorker.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot Celery Worker pods host aliases |
-| celeryWorker.initContainers | object | `{}` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Worker pods ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ e.g: initContainers:  - name: your-image-name    image: your-image    imagePullPolicy: Always    command: ['sh', '-c', 'echo "hello world"'] |
+| celeryWorker.initContainers | object | `{}` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Worker pods |
 | celeryWorker.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot Celery Worker container(s) to automate configuration before or after startup |
 | celeryWorker.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker liveness probe |
 | celeryWorker.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Worker Node Affinity preset |
 | celeryWorker.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
 | celeryWorker.nodeAffinityPreset.type | string | `""` | Nautobot Celery Worker Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
-| celeryWorker.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set E.g. values:   - e2e-az1   - e2e-az2 |
+| celeryWorker.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
 | celeryWorker.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Worker pods assignment |
 | celeryWorker.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Worker Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | celeryWorker.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot Celery Worker pods |
@@ -221,7 +221,7 @@ $ helm delete my-release
 | celeryWorker.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker readiness probe |
 | celeryWorker.replicaCount | int | `2` | Number of Nautobot Celery Workers replicas to deploy |
 | celeryWorker.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot Celery Worker resource requests and limits |
-| celeryWorker.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot Celery Worker pods e.g: sidecars:   - name: your-image-name     image: your-image     imagePullPolicy: Always     ports:       - name: portname         containerPort: 1234 |
+| celeryWorker.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot Celery Worker pods |
 | celeryWorker.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot Celery Worker pods assignment |
 | celeryWorker.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Celery Worker Deployment strategy type |
 | commonAnnotations | object | `{}` | Annotations to be applied to ALL resources created by this chart |
@@ -230,7 +230,7 @@ $ helm delete my-release
 | ingress.enabled | bool | `false` | Enable Ingress resource creation |
 | ingress.extraHosts | list | `[]` | The list of additional hostnames to be covered with this ingress record. Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array |
 | ingress.extraPaths | list | `[]` | Any additional arbitrary paths that may need to be added to the ingress under the main host. For example: The ALB ingress controller requires a special rule for handling SSL redirection. |
-| ingress.extraTls | list | `[]` | The tls configuration for additional hostnames to be covered with this ingress record. see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls |
+| ingress.extraTls | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) The tls configuration for additional hostnames to be covered with this ingress record. |
 | ingress.hostname | string | `"nautobot.local"` | Ingress Hostname |
 | ingress.path | string | `"/"` | The Path to Nautobot. You may need to set this to '/*' in order to use this with ALB ingress controllers. |
 | ingress.pathType | string | `"ImplementationSpecific"` | Ingress resource pathType valid values `ImplementationSpecific`, `Exact`, or `Prefix` |
@@ -248,19 +248,19 @@ $ helm delete my-release
 | nautobot.db.timeout | int | `300` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT) |
 | nautobot.db.user | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER) |
 | nautobot.debug | bool | `false` |  |
-| nautobot.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot server pods e.g: extraEnvVars:   - name: FOO     value: "bar" |
+| nautobot.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot server pods |
 | nautobot.extraEnvVarsCM | string | `nil` | Name of existing ConfigMap containing extra env vars for Nautobot server pods |
 | nautobot.extraEnvVarsSecret | string | `nil` | Name of existing Secret containing extra env vars for Nautobot server pods |
-| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`) e.g: extraVars:   - name: "NAUTOBOT_BANNER_TOP"     value: "Nautobot Helm Chart" |
+| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`) |
 | nautobot.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot containers |
 | nautobot.extraVolumes | list | `[]` | List of additional volumes for the Nautobot server pod |
 | nautobot.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases |
 | nautobot.image.pullPolicy | string | `"IfNotPresent"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent` |
-| nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments e.g: pullSecrets:   - myRegistryKeySecretName |
+| nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
 | nautobot.image.tag | string | `"1.1.3"` | Nautobot image tag, common to all deployments |
-| nautobot.initContainers | object | `{}` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods e.g: initContainers:  - name: your-image-name    image: your-image    imagePullPolicy: Always    command: ['sh', '-c', 'echo "hello world"'] |
+| nautobot.initContainers | object | `{}` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods |
 | nautobot.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | nautobot.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
 | nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` |
@@ -268,7 +268,7 @@ $ helm delete my-release
 | nautobot.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Node Affinity preset |
 | nautobot.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
 | nautobot.nodeAffinityPreset.type | string | `""` | Nautobot Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
-| nautobot.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set E.g. values:   - e2e-az1   - e2e-az2 |
+| nautobot.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
 | nautobot.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot pods assignment |
 | nautobot.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | nautobot.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot pods |
@@ -277,15 +277,15 @@ $ helm delete my-release
 | nautobot.podSecurityContext | object | See values.yaml | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context |
 | nautobot.priorityClassName | string | `""` | Nautobot pods' priorityClassName |
 | nautobot.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot readiness probe |
-| nautobot.redis.host | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST) |
-| nautobot.redis.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD) |
-| nautobot.redis.port | int | `6379` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT) |
-| nautobot.redis.ssl | bool | `false` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis ssl enabled, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_SSL) |
-| nautobot.redis.username | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME) |
+| nautobot.redis.host | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST) |
+| nautobot.redis.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD) |
+| nautobot.redis.port | int | `6379` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT) |
+| nautobot.redis.ssl | bool | `false` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis ssl enabled, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_SSL) |
+| nautobot.redis.username | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME) |
 | nautobot.replicaCount | int | `2` | Number of Nautobot server replicas to deploy |
 | nautobot.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot resource requests and limits |
 | nautobot.secretKey | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#secret_key) Nautobot Secret Key (NAUTOBOT_SECRET_KEY) |
-| nautobot.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot server pods e.g: sidecars:   - name: your-image-name     image: your-image     imagePullPolicy: Always     ports:       - name: portname         containerPort: 1234 |
+| nautobot.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot server pods |
 | nautobot.superUser.apitoken | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token) Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN) |
 | nautobot.superUser.email | string | `"admin@example.com"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_email) Configure an email address for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_EMAIL) |
 | nautobot.superUser.enabled | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser) Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER) |
@@ -305,19 +305,19 @@ $ helm delete my-release
 | rqWorker.command | list | `["nautobot-server","rqworker"]` | Override default Nautobot RQ Worker container command (useful when using custom images) |
 | rqWorker.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context |
 | rqWorker.enabled | bool | `false` | Enables the RQ Worker for Nautobot |
-| rqWorker.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot RQ Worker pods e.g: extraEnvVars:   - name: FOO     value: "bar" |
+| rqWorker.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot RQ Worker pods |
 | rqWorker.extraEnvVarsCM | string | `nil` | Name of existing ConfigMap containing extra env vars for Nautobot RQ Worker pods |
 | rqWorker.extraEnvVarsSecret | string | `nil` | Name of existing Secret containing extra env vars for Nautobot RQ Worker pods |
 | rqWorker.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot RQ Worker containers |
 | rqWorker.extraVolumes | list | `[]` | List of additional volumes for the Nautobot RQ Worker pod |
 | rqWorker.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot RQ Worker pods host aliases |
-| rqWorker.initContainers | object | `{}` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot RQ Worker pods ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ e.g: initContainers:  - name: your-image-name    image: your-image    imagePullPolicy: Always    command: ['sh', '-c', 'echo "hello world"'] |
+| rqWorker.initContainers | object | `{}` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot RQ Worker pods |
 | rqWorker.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot RQ Worker container(s) to automate configuration before or after startup |
 | rqWorker.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot RQ Worker liveness probe |
 | rqWorker.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot RQ Worker Node Affinity preset |
 | rqWorker.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
 | rqWorker.nodeAffinityPreset.type | string | `""` | Nautobot RQ Worker Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
-| rqWorker.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set E.g. values:   - e2e-az1   - e2e-az2 |
+| rqWorker.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
 | rqWorker.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot RQ Worker pods assignment |
 | rqWorker.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot RQ Worker Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | rqWorker.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot RQ Worker pods |
@@ -328,7 +328,7 @@ $ helm delete my-release
 | rqWorker.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot RQ Worker readiness probe |
 | rqWorker.replicaCount | int | `2` | Number of Nautobot RQ Workers replicas to deploy |
 | rqWorker.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot RQ Worker resource requests and limits |
-| rqWorker.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot RQ Worker pods e.g: sidecars:   - name: your-image-name     image: your-image     imagePullPolicy: Always     ports:       - name: portname         containerPort: 1234 |
+| rqWorker.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot RQ Worker pods |
 | rqWorker.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot RQ Worker pods assignment |
 | rqWorker.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot RQ Worker Deployment strategy type |
 | service.annotations | object | `{}` | Annotations to be applied to the service resource |
@@ -341,5 +341,5 @@ $ helm delete my-release
 | service.nodePorts.https | string | `nil` | Node port for Nautobot https choose port in Kubernetes `--service-node-port-range` typically 30000-32767 |
 | service.port | int | `80` | Port to expose for Nautobot http access |
 | service.type | string | `"ClusterIP"` | [ref](https://kubernetes.io/docs/concepts/services-networking/service/) Kubernetes service type, valid values: `ExternalName`, `ClusterIP`, `NodePort`, or `LoadBalancer` |
-| serviceAccount.create | bool | `true` | Enable creation of a Nautobot Service Account |
-| serviceAccount.name | string | `""` | Name of the Nautobot Service Account |
+| serviceAccount.create | bool | `true` | Enable creation of a Kubernetes Service Account for Nautobot |
+| serviceAccount.name | string | `{release name}` | Name of the Kubernetes Service Account for Nautobot |

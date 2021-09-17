@@ -247,7 +247,7 @@ $ helm delete nautobot-release
 | nautobot.db.port | int | `5432` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database port, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PORT) |
 | nautobot.db.timeout | int | `300` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT) |
 | nautobot.db.user | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER) |
-| nautobot.debug | bool | `false` |  |
+| nautobot.debug | bool | `false` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG) |
 | nautobot.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot server pods |
 | nautobot.extraEnvVarsCM | string | `nil` | Name of existing ConfigMap containing extra env vars for Nautobot server pods |
 | nautobot.extraEnvVarsSecret | string | `nil` | Name of existing Secret containing extra env vars for Nautobot server pods |

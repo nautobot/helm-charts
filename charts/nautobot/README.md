@@ -195,7 +195,7 @@ $ helm delete nautobot-release
 | autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler (beta) |
 | celeryWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot Celery Worker pods assignment |
 | celeryWorker.args | list | `[]` | Override default Nautobot Celery Worker container args (useful when using custom images) |
-| celeryWorker.command | list | `["nautobot-server","celery","worker","--loglevel","$(NAUTOBOT_LOG_LEVEL)"]` | Override default Nautobot Celery Worker container command (useful when using custom images) |
+| celeryWorker.command | list | See values.yaml | Override default Nautobot Celery Worker container command (useful when using custom images) |
 | celeryWorker.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context |
 | celeryWorker.enabled | bool | `true` | Enables the Celery Worker for Nautobot |
 | celeryWorker.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot Celery Worker pods |
@@ -302,7 +302,7 @@ $ helm delete nautobot-release
 | redis.enabled | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) all other `redis.*` parameters will be passed directly to that chart |
 | rqWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot RQ Worker pods assignment |
 | rqWorker.args | list | `[]` | Override default Nautobot RQ Worker container args (useful when using custom images) |
-| rqWorker.command | list | `["nautobot-server","rqworker"]` | Override default Nautobot RQ Worker container command (useful when using custom images) |
+| rqWorker.command | list | See values.yaml | Override default Nautobot RQ Worker container command (useful when using custom images) |
 | rqWorker.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context |
 | rqWorker.enabled | bool | `false` | Enables the RQ Worker for Nautobot |
 | rqWorker.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot RQ Worker pods |
@@ -342,4 +342,4 @@ $ helm delete nautobot-release
 | service.port | int | `80` | Port to expose for Nautobot http access |
 | service.type | string | `"ClusterIP"` | [ref](https://kubernetes.io/docs/concepts/services-networking/service/) Kubernetes service type, valid values: `ExternalName`, `ClusterIP`, `NodePort`, or `LoadBalancer` |
 | serviceAccount.create | bool | `true` | Enable creation of a Kubernetes Service Account for Nautobot |
-| serviceAccount.name | string | `{release name}` | Name of the Kubernetes Service Account for Nautobot |
+| serviceAccount.name | string | `$release_name` | Name of the Kubernetes Service Account for Nautobot |

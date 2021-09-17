@@ -299,6 +299,7 @@ rqWorker:
     runAsUser: 999
 
   # -- Override default Nautobot RQ Worker container command (useful when using custom images)
+  # @default -- See values.yaml
   command:
     - "nautobot-server"
     - "rqworker"
@@ -440,6 +441,7 @@ celeryWorker:
     runAsUser: 999
 
   # -- Override default Nautobot Celery Worker container command (useful when using custom images)
+  # @default -- See values.yaml
   command:
     - "nautobot-server"
     - "celery"
@@ -530,7 +532,7 @@ serviceAccount:
   # -- Enable creation of a Kubernetes Service Account for Nautobot
   create: true
   # -- Name of the Kubernetes Service Account for Nautobot
-  # @default -- `{release name}`
+  # @default -- `$release_name`
   name: ""
 
 ingress:

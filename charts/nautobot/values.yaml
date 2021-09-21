@@ -255,7 +255,7 @@ nautobot:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   debug: false  # NAUTOBOT_DEBUG
 
@@ -475,7 +475,7 @@ rqWorker:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
 ## Nautobot Celery Worker
 ##
@@ -668,7 +668,7 @@ celeryWorker:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
 ## @section Other Parameters
 

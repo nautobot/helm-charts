@@ -52,7 +52,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | celeryWorker.extraVolumeMounts | list | `[]` |  |
 | celeryWorker.extraVolumes | list | `[]` |  |
 | celeryWorker.hostAliases | list | `[]` |  |
-| celeryWorker.initContainers | object | `{}` |  |
+| celeryWorker.initContainers | list | `[]` |  |
 | celeryWorker.lifecycleHooks | object | `{}` |  |
 | celeryWorker.livenessProbe.enabled | bool | `true` |  |
 | celeryWorker.livenessProbe.exec.command[0] | string | `"bash"` |  |
@@ -127,7 +127,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | nautobot.image.registry | string | `"ghcr.io"` |  |
 | nautobot.image.repository | string | `"nautobot/nautobot"` |  |
 | nautobot.image.tag | string | `"1.1.2"` |  |
-| nautobot.initContainers | object | `{}` |  |
+| nautobot.initContainers | list | `[]` |  |
 | nautobot.lifecycleHooks | object | `{}` |  |
 | nautobot.livenessProbe.enabled | bool | `true` |  |
 | nautobot.livenessProbe.failureThreshold | int | `3` |  |
@@ -197,7 +197,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 | rqWorker.extraVolumeMounts | list | `[]` |  |
 | rqWorker.extraVolumes | list | `[]` |  |
 | rqWorker.hostAliases | list | `[]` |  |
-| rqWorker.initContainers | object | `{}` |  |
+| rqWorker.initContainers | list | `[]` |  |
 | rqWorker.lifecycleHooks | object | `{}` |  |
 | rqWorker.livenessProbe.enabled | bool | `true` |  |
 | rqWorker.livenessProbe.exec.command[0] | string | `"nautobot-server"` |  |

@@ -99,7 +99,10 @@
           }
         },
         "initContainers": {
-          "type": "object"
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
         "lifecycleHooks": {
           "type": "object"

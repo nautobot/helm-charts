@@ -204,7 +204,7 @@ $ helm delete nautobot-release
 | celeryWorker.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot Celery Worker containers |
 | celeryWorker.extraVolumes | list | `[]` | List of additional volumes for the Nautobot Celery Worker pod |
 | celeryWorker.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot Celery Worker pods host aliases |
-| celeryWorker.initContainers | object | `{}` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Worker pods |
+| celeryWorker.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Worker pods |
 | celeryWorker.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot Celery Worker container(s) to automate configuration before or after startup |
 | celeryWorker.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker liveness probe |
 | celeryWorker.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Worker Node Affinity preset |
@@ -260,7 +260,7 @@ $ helm delete nautobot-release
 | nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
 | nautobot.image.tag | string | `"1.1.3"` | Nautobot image tag, common to all deployments |
-| nautobot.initContainers | object | `{}` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods |
+| nautobot.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods |
 | nautobot.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | nautobot.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
 | nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` |
@@ -311,7 +311,7 @@ $ helm delete nautobot-release
 | rqWorker.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot RQ Worker containers |
 | rqWorker.extraVolumes | list | `[]` | List of additional volumes for the Nautobot RQ Worker pod |
 | rqWorker.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot RQ Worker pods host aliases |
-| rqWorker.initContainers | object | `{}` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot RQ Worker pods |
+| rqWorker.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot RQ Worker pods |
 | rqWorker.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot RQ Worker container(s) to automate configuration before or after startup |
 | rqWorker.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot RQ Worker liveness probe |
 | rqWorker.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot RQ Worker Node Affinity preset |

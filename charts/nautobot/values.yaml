@@ -167,18 +167,19 @@ nautobot:
   #         containerPort: 1234
 
   # -- [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods
-  initContainers: {}
-  # e.g.
-  # initContainers:
-  #  - name: your-image-name
-  #    image: your-image
-  #    imagePullPolicy: Always
-  #    command: ['sh', '-c', 'echo "hello world"']
+  initContainers: []
+  ## @param nautobot.initContainers Add additional init containers to the nautobot pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
 
   #################################
   # Nautobot Application Settings #
   #################################
-
   # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG)
   debug: false
 
@@ -373,7 +374,7 @@ rqWorker:
   #         containerPort: 1234
 
   # -- [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot RQ Worker pods
-  initContainers: {}
+  initContainers: []
   # e.g.
   # initContainers:
   #  - name: your-image-name
@@ -519,7 +520,7 @@ celeryWorker:
   #         containerPort: 1234
 
   # -- [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Worker pods
-  initContainers: {}
+  initContainers: []
   # e.g.
   # initContainers:
   #  - name: your-image-name

@@ -356,6 +356,9 @@
       "additionalProperties": false,
       "required": [
         "enabled",
+        "extraHosts",
+        "extraPaths",
+        "extraTls",
         "pathType",
         "hostname",
         "path",
@@ -401,9 +404,6 @@
           }
         },
         "extraTls": {
-          "type": "string"
-        },
-        "secrets": {
           "type": "array",
           "items": {
             "type": "object"

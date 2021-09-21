@@ -20,7 +20,7 @@ The following dependencies are required for development, their installation is o
 * [Kubernetes](https://kubernetes.io/)/[Minikube](https://minikube.sigs.k8s.io/docs/start/) Obviously for testing you will need a Kubernetes cluster, any cluster will do, for local development minikube is suggested as the official Kubernetes
 * [Helm 3](https://helm.sh/docs/intro/install/)
 * [Pre-commit](https://pre-commit.com/)
-* [Helm Docs](https://github.com/norwoodj/helm-docs)
+* [Helm Docs](https://github.com/norwoodj/helm-docs) >= v1.6.0
 
 ## Running tests locally
 

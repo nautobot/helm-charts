@@ -2,14 +2,6 @@
 
 **WARNING** This repo is still in alpha state!
 
-**NOTE!!** Due to the nature of the Nautobot GitHub organization and Private repositories, GitHub pages is unavailable.  Therefore the helm repo is not available directly.  This will be fixed when we go public, for now:
-
-```
-git clone git@github.com:nautobot/helm-charts.git
-cd helm-charts/charts
-helm install nautobot nautobot
-```
-
 # Nautobot Helm Charts
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 <!-- [![All Contributors]()](#contributors-) -->
@@ -58,20 +50,3 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md)
 ## License
 
 [Apache 2.0 License](./LICENSE.txt)
-
-## TODO Before Release
-
-* Testing
-* document getting started steps
-* Document
-* Enable Monitoring Using Prometheus Operator
-
-## TODO Later
-
-* Provide method to update nautobot_config.py
-* Provide method to update uwsgi.ini
-* Automated testing
-* Handle Nautobot Media
-* Allow adding plugins
-* Add MySQL/MariaDB Support
-* Add DB Backup/Restore

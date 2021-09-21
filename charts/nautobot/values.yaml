@@ -168,8 +168,6 @@ nautobot:
 
   # -- [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods
   initContainers: []
-  ## @param nautobot.initContainers Add additional init containers to the nautobot pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
   ##  - name: your-image-name

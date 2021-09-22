@@ -429,7 +429,8 @@
             "metrics",
             "redis",
             "secretKey",
-            "superUser"
+            "superUser",
+            "uWSGIini"
           ],
           "properties": {
             "allowedHosts": {
@@ -599,6 +600,9 @@
                   "type": "string"
                 }
               }
+            },
+            "uWSGIini": {
+              "type": "string"
             }
           }
         }

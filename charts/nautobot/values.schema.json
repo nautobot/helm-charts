@@ -420,6 +420,7 @@
           "type": "object",
           "required": [
             "allowedHosts",
+            "config",
             "db",
             "debug",
             "extraVars",
@@ -432,6 +433,9 @@
           ],
           "properties": {
             "allowedHosts": {
+              "type": "string"
+            },
+            "config": {
               "type": "string"
             },
             "db": {

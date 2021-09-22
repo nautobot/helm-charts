@@ -105,8 +105,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nautobot.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if .Values.nautobot.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- if (include "nautobot.extraVolumeMounts" .) }}
+          {{- include "common.tplvalues.render" (dict "value" (include "nautobot.extraVolumeMounts" .) "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - name: "https"
@@ -116,7 +116,7 @@ spec:
         {{- if .Values.nautobot.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.nautobot.extraVolumes }}
+      {{- if (include "nautobot.extraVolumes" .) }}
       volumes:
-        {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" (include "nautobot.extraVolumes" .) "context" $) | nindent 8 }}
       {{- end }}

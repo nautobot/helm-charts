@@ -178,6 +178,8 @@ nautobot:
   #################################
   # Nautobot Application Settings #
   #################################
+  # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire nautobot_config.py with this value
+  config: ""
   # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG)
   debug: false
 
@@ -232,6 +234,9 @@ nautobot:
     username: "admin"  # NAUTOBOT_SUPERUSER_NAME
     # -- [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password) Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated
     password: ""  # NAUTOBOT_SUPERUSER_PASSWORD
+
+  # -- [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire uwsgi.ini with this value
+  uWSGIini: ""
 
   # -- An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`)
   extraVars: []  # https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/
@@ -613,6 +618,8 @@ postgresql:
 redis:
   # -- Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) all other `redis.*` parameters will be passed directly to that chart
   enabled: true
+  # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis Architecture valid values: `standalone` or `replication`
+  architecture: "standalone"
   auth:
     # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Enable password authentication
     enabled: true

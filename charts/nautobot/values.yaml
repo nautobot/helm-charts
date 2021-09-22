@@ -178,7 +178,7 @@ nautobot:
   #################################
   # Nautobot Application Settings #
   #################################
-  # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire nautobot_config.py with this value
+  # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value
   config: ""
   # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG)
   debug: false
@@ -235,7 +235,7 @@ nautobot:
     # -- [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password) Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated
     password: ""  # NAUTOBOT_SUPERUSER_PASSWORD
 
-  # -- [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire uwsgi.ini with this value
+  # -- [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value
   uWSGIini: ""
 
   # -- An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`)

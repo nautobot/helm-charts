@@ -154,7 +154,7 @@ redis:
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
-| nautobot.config | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire nautobot_config.py with this value |
+| nautobot.config | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value |
 | nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE) |
 | nautobot.db.host | string | `"postgres"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST) |
 | nautobot.db.name | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME) |
@@ -177,7 +177,7 @@ redis:
 | nautobot.superUser.enabled | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser) Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER) |
 | nautobot.superUser.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password) Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated |
 | nautobot.superUser.username | string | `"admin"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_name) User name to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME) |
-| nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire uwsgi.ini with this value |
+| nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value |
 
 ## Configuring PostgreSQL
 
@@ -257,7 +257,7 @@ $ helm delete nautobot-release
 | nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
 | nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |
 | nautobot.command | list | `[]` | Override default Nautobot container command (useful when using custom images) |
-| nautobot.config | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire nautobot_config.py with this value |
+| nautobot.config | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value |
 | nautobot.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context |
 | nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE) |
 | nautobot.db.host | string | `"postgres"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST) |
@@ -311,7 +311,7 @@ $ helm delete nautobot-release
 | nautobot.superUser.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password) Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated |
 | nautobot.superUser.username | string | `"admin"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_name) User name to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME) |
 | nautobot.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot pods assignment |
-| nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire uwsgi.ini with this value |
+| nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value |
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type |
 | postgresql.enabled | bool | `true` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) all other `postgresql.*` parameters will be passed directly to that chart |
 | postgresql.postgresqlDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name |

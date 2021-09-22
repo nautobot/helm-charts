@@ -408,6 +408,9 @@
           "items": {
             "type": "object"
           }
+        },
+        "secretName": {
+          "type": "string"
         }
       }
     },

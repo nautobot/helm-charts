@@ -11,6 +11,7 @@ repos:
       - id: "check-merge-conflict"
       - id: "check-case-conflict"
       - id: "check-json"
+      - id: "check-yaml"
       - id: "pretty-format-json"
         args:
           - "--autofix"

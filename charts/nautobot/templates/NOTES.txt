@@ -39,6 +39,7 @@
 
 {{- end }}
 {{- if .Values.nautobot.superUser.enabled }}
+
 2. Get your Nautobot login admin credentials by running:
 
   echo Username: {{ .Values.nautobot.superUser.username }}
@@ -63,5 +64,3 @@ host. To configure Nautobot to use and external database host:
 
 
 {{- include "common.warnings.rollingTag" .Values.nautobot.image }}
-
-# TODO Check for Secret_key, postgres/redis password should be defined

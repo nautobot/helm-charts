@@ -130,7 +130,21 @@ rqWorker:
 
 ### Ingress
 
-TODO: Ingress Example
+To enable ingress, the following values are available for configuration:
+
+```yaml
+ingress:
+  enabled: true
+  hostname: nautobot.example.com
+  tls: true
+  secretName: myingress-cert
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+```
+
+The Helm chart supports configuring annotations for your ingress provider if needed. The annotations provided above are an example for the Traefik ingress provider.
+
 
 ### Custom `nautobot_config.py`
 

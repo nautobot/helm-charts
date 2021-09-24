@@ -12,7 +12,7 @@
 <!-- [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/nautobot&style=for-the-badge)](https://artifacthub.io/packages/search?repo=nautobot) -->
 
 
-This repo is intented to house helm charts for the Nautobot project.  (Yes, today that is only the Nautobot chart, but we are ready for more)  Each chart in this repo uses [helm-docs](https://github.com/norwoodj/helm-docs) to generate the README.md for the individual charts.
+This repo is intented to house [Helm](https://helm.sh/) charts for the Nautobot project, today there is one Nautobot chart but we are ready for more if the need arises.  Helm is the unofficial package manager for Kubernetes, it provides a simple way for users to deploy applications to Kubernetes without defining custom Kubernetes manifests.  This allows users of all experience levels to deploy applications the way the developers intend for them to be deployed.  Helm is capable of also providing restrictions and tests to validate the deployment configuration.
 
 ## Usage
 
@@ -41,7 +41,7 @@ helm install nautobot nautobot/nautobot
 
 ## Support
 
-* **Documentation**: Eventually we may have additional documentation on [Read the Docs](https://readthedocs.org/), for now we just have the READMEs.
+* **Documentation**: See the [Nautobot chart README](./charts/nautobot/README.md).
 * **Slack**: checkout the **#nautobot** channel on the [Network to Code slack](https://networktocode.slack.com/)!
 
 ## Contributing

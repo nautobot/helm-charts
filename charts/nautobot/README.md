@@ -108,7 +108,20 @@ rqWorker:
 
 ### Ingress
 
-TODO: Ingress Example
+To enable ingress, the following values are available for configuration:
+
+```yaml
+ingress:
+  enabled: true
+  hostname: nautobot.example.com
+  tls: true
+  secretName: myingress-cert
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+```
+
+The Helm chart supports configuring annotations for your ingress provider if needed. The annotations provided above are an example for the Traefik ingress provider.
 
 ### Custom `nautobot_config.py`
 
@@ -252,7 +265,8 @@ $ helm delete nautobot-release
 | ingress.hostname | string | `"nautobot.local"` | Ingress Hostname |
 | ingress.path | string | `"/"` | The Path to Nautobot. You may need to set this to '/*' in order to use this with ALB ingress controllers. |
 | ingress.pathType | string | `"ImplementationSpecific"` | Ingress resource pathType valid values `ImplementationSpecific`, `Exact`, or `Prefix` |
-| ingress.tls | bool | `false` | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter TLS certificates will be retrieved from a TLS secret with name: `.Values.ingress.hostname-tls` |
+| ingress.secretName | string | `"nautobot-tls"` | The name of the secret to use for the TLS certificate |
+| ingress.tls | bool | `false` | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter |
 | nautobot.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot pods assignment |
 | nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
 | nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |

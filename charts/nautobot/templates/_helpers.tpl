@@ -177,7 +177,7 @@ Create a list of dictionaries for extra volumes/volumemounts, if nautobot.config
 nautobot/celeryWorker/rqWorker
 */}}
 {{- define "nautobot.extraVolumes" -}}
-  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini .Values.nautobot.plugins) -}}
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.nautobot.extraVolumes) "context" $) -}}
   {{- else -}}
@@ -186,7 +186,7 @@ nautobot/celeryWorker/rqWorker
 {{- end -}}
 
 {{- define "celeryWorker.extraVolumes" -}}
-  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini .Values.nautobot.plugins) -}}
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.celeryWorker.extraVolumes) "context" $) -}}
   {{- else -}}
@@ -195,7 +195,7 @@ nautobot/celeryWorker/rqWorker
 {{- end -}}
 
 {{- define "rqWorker.extraVolumes" -}}
-  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini .Values.nautobot.plugins) -}}
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.rqWorker.extraVolumes) "context" $) -}}
   {{- else -}}
@@ -206,12 +206,21 @@ nautobot/celeryWorker/rqWorker
 {{- define "nautobot.extraVolumeMounts" -}}
   {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
   {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
-  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+  {{- $pluginRequirements := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/plugins/requirements.txt" "subPath" "requirements.txt") -}}
+  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini .Values.nautobot.plugins) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $pluginRequirements) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+  {{- else if (and .Values.nautobot.config .Values.nautobot.plugins) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $pluginRequirements) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+  {{- else if (and .Values.nautobot.uWSGIini .Values.nautobot.plugins) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $pluginRequirements) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+  {{- else if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.config -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.uWSGIini -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.plugins -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $pluginRequirements) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- else -}}
     {{- .Values.nautobot.extraVolumeMounts -}}
   {{- end -}}
@@ -220,12 +229,21 @@ nautobot/celeryWorker/rqWorker
 {{- define "celeryWorker.extraVolumeMounts" -}}
   {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
   {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
-  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+  {{- $pluginRequirements := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/plugins/requirements.txt" "subPath" "requirements.txt") -}}
+  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini .Values.nautobot.plugins) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $pluginRequirements) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if (and .Values.nautobot.config .Values.nautobot.plugins) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $pluginRequirements) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if (and .Values.nautobot.uWSGIini .Values.nautobot.plugins) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $pluginRequirements) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.config -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.uWSGIini -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.plugins -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $pluginRequirements) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- else -}}
     {{- .Values.celeryWorker.extraVolumeMounts -}}
   {{- end -}}
@@ -234,12 +252,21 @@ nautobot/celeryWorker/rqWorker
 {{- define "rqWorker.extraVolumeMounts" -}}
   {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
   {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
-  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+  {{- $pluginRequirements := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/plugins/requirements.txt" "subPath" "requirements.txt") -}}
+  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini .Values.nautobot.plugins) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $pluginRequirements) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if (and .Values.nautobot.config .Values.nautobot.plugins) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $pluginRequirements) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if (and .Values.nautobot.uWSGIini .Values.nautobot.plugins) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $pluginRequirements) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.config -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.uWSGIini -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.plugins -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $pluginRequirements) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- else -}}
     {{- .Values.rqWorker.extraVolumeMounts -}}
   {{- end -}}

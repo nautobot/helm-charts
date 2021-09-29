@@ -72,8 +72,8 @@ entries:
     name: nautobot
     sources:
     - https://github.com/nautobot/nautobot
-    - https://github.com/networktocode-llc/helm-charts
+    - https://github.com/nautobot/helm-charts
     urls:
-    - https://networktocode-llc.github.io/helm-charts/nautobot-0.1.0.tgz
+    - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
 generated: "2021-09-29T14:54:47.627847395Z"

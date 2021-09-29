@@ -49,3 +49,28 @@ data:
 {{- .name | nindent 2 }}: {{ .value | quote }}
 {{- end }}
 {{- end }}
+{{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-config
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: nautobot
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- if .Values.nautobot.config }}
+  nautobot_config.py: |
+    {{- .Values.nautobot.config | nindent 4 }}
+  {{- end }}
+  {{- if .Values.nautobot.uWSGIini }}
+  uwsgi.ini: |
+    {{- .Values.nautobot.uWSGIini | nindent 4 }}
+  {{- end }}
+{{- end }}

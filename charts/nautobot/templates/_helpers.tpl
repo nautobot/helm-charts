@@ -171,3 +171,76 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.redis.encryptedPassword" -}}
   {{- include "nautobot.redis.rawPassword" . | b64enc | quote -}}
 {{- end -}}
+
+{{/*
+Create a list of dictionaries for extra volumes/volumemounts, if nautobot.config is set prepend it to the list for
+nautobot/celeryWorker/rqWorker
+*/}}
+{{- define "nautobot.extraVolumes" -}}
+  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+    {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.nautobot.extraVolumes) "context" $) -}}
+  {{- else -}}
+    {{- .Values.nautobot.extraVolumes -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "celeryWorker.extraVolumes" -}}
+  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+    {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.celeryWorker.extraVolumes) "context" $) -}}
+  {{- else -}}
+    {{- .Values.celeryWorker.extraVolumes -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "rqWorker.extraVolumes" -}}
+  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+    {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.rqWorker.extraVolumes) "context" $) -}}
+  {{- else -}}
+    {{- .Values.rqWorker.extraVolumes -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "nautobot.extraVolumeMounts" -}}
+  {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
+  {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
+  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.config -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.uWSGIini -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+  {{- else -}}
+    {{- .Values.nautobot.extraVolumeMounts -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "celeryWorker.extraVolumeMounts" -}}
+  {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
+  {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
+  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.config -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.uWSGIini -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+  {{- else -}}
+    {{- .Values.celeryWorker.extraVolumeMounts -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "rqWorker.extraVolumeMounts" -}}
+  {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
+  {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
+  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.config -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.uWSGIini -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+  {{- else -}}
+    {{- .Values.rqWorker.extraVolumeMounts -}}
+  {{- end -}}
+{{- end -}}

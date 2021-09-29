@@ -408,6 +408,9 @@
           "items": {
             "type": "object"
           }
+        },
+        "secretName": {
+          "type": "string"
         }
       }
     },
@@ -420,6 +423,7 @@
           "type": "object",
           "required": [
             "allowedHosts",
+            "config",
             "db",
             "debug",
             "extraVars",
@@ -428,10 +432,14 @@
             "metrics",
             "redis",
             "secretKey",
-            "superUser"
+            "superUser",
+            "uWSGIini"
           ],
           "properties": {
             "allowedHosts": {
+              "type": "string"
+            },
+            "config": {
               "type": "string"
             },
             "db": {
@@ -595,6 +603,9 @@
                   "type": "string"
                 }
               }
+            },
+            "uWSGIini": {
+              "type": "string"
             }
           }
         }

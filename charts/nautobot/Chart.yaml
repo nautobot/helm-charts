@@ -3,6 +3,7 @@ annotations:
   category: "Infrastructure"
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/license: Apache-2.0
+  artifacthub.io/prerelease: "true"
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/

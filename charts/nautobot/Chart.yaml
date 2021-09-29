@@ -40,4 +40,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "0.3.0"
+version: "0.3.1"

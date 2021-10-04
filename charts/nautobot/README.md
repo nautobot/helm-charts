@@ -78,7 +78,7 @@ the Nautobot application-specific values are summarized in the [Nautobot Applica
 The following settings are the bare minimum required values to to deploy this chart:
 
 ```yaml
-postgres:
+postgresql:
   postgresqlPassword: "change-me"
 redis:
   auth:
@@ -101,7 +101,7 @@ nautobot:
     port: 5432
     timeout: 300
     user: "nautobot_db_username"
-postgres:
+postgresql:
   enabled: false
 ```
 
@@ -177,7 +177,7 @@ nautobot:
   extraVars:
     - name: "NAUTOBOT_BANNER_TOP"
       value: "Production"
-postgres:
+postgresql:
   enabled: true  # Consider utilizing an external HA database rather than the built-in database
   postgresqlPassword: "change-me"
 redis:

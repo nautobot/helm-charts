@@ -78,7 +78,7 @@ the Nautobot application-specific values are summarized in the [Nautobot Applica
 The following settings are the bare minimum required values to to deploy this chart:
 
 ```yaml
-postgres:
+postgresql:
   postgresqlPassword: "change-me"
 redis:
   auth:
@@ -101,7 +101,7 @@ nautobot:
     port: 5432
     timeout: 300
     user: "nautobot_db_username"
-postgres:
+postgresql:
   enabled: false
 ```
 
@@ -177,7 +177,7 @@ nautobot:
   extraVars:
     - name: "NAUTOBOT_BANNER_TOP"
       value: "Production"
-postgres:
+postgresql:
   enabled: true  # Consider utilizing an external HA database rather than the built-in database
   postgresqlPassword: "change-me"
 redis:
@@ -295,7 +295,7 @@ $ helm delete nautobot
 | nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
 | nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |
 | nautobot.command | list | `[]` | Override default Nautobot container command (useful when using custom images) |
-| nautobot.config | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value |
+| nautobot.config | string | `""` |  |
 | nautobot.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context |
 | nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE) |
 | nautobot.db.host | string | `"postgres"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST) |

@@ -38,7 +38,6 @@ for example:
 helm install nautobot nautobot/nautobot
 ```
 
-[![asciicast](https://asciinema.org/a/AAbR4JdDqo6iW2zLfeW3BUBGk.png)](https://asciinema.org/a/AAbR4JdDqo6iW2zLfeW3BUBGk)
 ## Support
 
 * **Documentation**: See the [Nautobot chart README](./charts/nautobot/README.md).

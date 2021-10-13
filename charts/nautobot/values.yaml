@@ -551,7 +551,7 @@ ingress:
   enabled: false
 
   # -- Ingress resource pathType valid values `ImplementationSpecific`, `Exact`, or `Prefix`
-  pathType: "ImplementationSpecific"
+  pathType: "Prefix"
 
   # -- Override API Version (automatically detected if not set)
   apiVersion:  # yamllint disable-line rule:empty-values
@@ -577,8 +577,10 @@ ingress:
   extraHosts: []
   # e.g.
   # extraHosts:
-  # - name: nautobot.local
+  # - name: nautobot2.local
   #   path: /
+  #   pathType: "Prefix"
+  #   extraPaths: []
   #
 
   # -- Any additional arbitrary paths that may need to be added to the ingress under the main host.
@@ -588,8 +590,10 @@ ingress:
   # extraPaths:
   # - path: /*
   #   backend:
-  #     serviceName: ssl-redirect
-  #     servicePort: use-annotation
+  #     service:
+  #       name: ssl-redirect
+  #       port:
+  #         name: use-annotation
   #
 
   # -- [ref](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) The tls configuration for additional hostnames to be covered with this ingress record.

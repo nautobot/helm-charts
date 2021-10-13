@@ -89,12 +89,16 @@ spec:
             - secretRef:
                 name: {{ include "common.names.fullname" . }}-env
             {{- if .Values.celeryWorker.extraEnvVarsCM }}
+            {{- range .Values.celeryWorker.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.celeryWorker.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
             {{- end }}
             {{- if .Values.celeryWorker.extraEnvVarsSecret }}
+            {{- range .Values.celeryWorker.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.celeryWorker.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
             {{- end }}
           {{- if .Values.celeryWorker.resources }}
           resources: {{- toYaml .Values.celeryWorker.resources | nindent 12 }}

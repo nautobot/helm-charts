@@ -69,16 +69,16 @@
           }
         },
         "extraEnvVarsCM": {
-          "type": [
-            "null",
-            "string"
-          ]
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "extraEnvVarsSecret": {
-          "type": [
-            "null",
-            "string"
-          ]
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "extraVolumeMounts": {
           "type": "array",

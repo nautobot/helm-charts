@@ -88,12 +88,16 @@ spec:
             - secretRef:
                 name: {{ include "common.names.fullname" . }}-env
             {{- if .Values.nautobot.extraEnvVarsCM }}
+            {{- range .Values.nautobot.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.nautobot.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
             {{- end }}
             {{- if .Values.nautobot.extraEnvVarsSecret }}
+            {{- range .Values.nautobot.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.nautobot.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
             {{- end }}
           {{- if .Values.nautobot.resources }}
           resources: {{- toYaml .Values.nautobot.resources | nindent 12 }}

@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![AppVersion: 1.1.3](https://img.shields.io/badge/AppVersion-1.1.3-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![AppVersion: 1.1.4](https://img.shields.io/badge/AppVersion-1.1.4-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -254,8 +254,8 @@ $ helm delete nautobot
 | celeryWorker.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context |
 | celeryWorker.enabled | bool | `true` | Enables the Celery Worker for Nautobot |
 | celeryWorker.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot Celery Worker pods |
-| celeryWorker.extraEnvVarsCM | string | `nil` | Name of existing ConfigMap containing extra env vars for Nautobot Celery Worker pods |
-| celeryWorker.extraEnvVarsSecret | string | `nil` | Name of existing Secret containing extra env vars for Nautobot Celery Worker pods |
+| celeryWorker.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot Celery Worker pods |
+| celeryWorker.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot Celery Worker pods |
 | celeryWorker.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot Celery Worker containers |
 | celeryWorker.extraVolumes | list | `[]` | List of additional volumes for the Nautobot Celery Worker pod |
 | celeryWorker.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot Celery Worker pods host aliases |
@@ -306,8 +306,8 @@ $ helm delete nautobot
 | nautobot.db.user | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER) |
 | nautobot.debug | bool | `false` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG) |
 | nautobot.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot server pods |
-| nautobot.extraEnvVarsCM | string | `nil` | Name of existing ConfigMap containing extra env vars for Nautobot server pods |
-| nautobot.extraEnvVarsSecret | string | `nil` | Name of existing Secret containing extra env vars for Nautobot server pods |
+| nautobot.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot server pods |
+| nautobot.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot server pods |
 | nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`) |
 | nautobot.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot containers |
 | nautobot.extraVolumes | list | `[]` | List of additional volumes for the Nautobot server pod |
@@ -316,7 +316,7 @@ $ helm delete nautobot
 | nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
-| nautobot.image.tag | string | `"1.1.3"` | Nautobot image tag, common to all deployments |
+| nautobot.image.tag | string | `"1.1.4"` | Nautobot image tag, common to all deployments |
 | nautobot.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods |
 | nautobot.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | nautobot.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
@@ -365,8 +365,8 @@ $ helm delete nautobot
 | rqWorker.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context |
 | rqWorker.enabled | bool | `false` | Enables the RQ Worker for Nautobot |
 | rqWorker.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot RQ Worker pods |
-| rqWorker.extraEnvVarsCM | string | `nil` | Name of existing ConfigMap containing extra env vars for Nautobot RQ Worker pods |
-| rqWorker.extraEnvVarsSecret | string | `nil` | Name of existing Secret containing extra env vars for Nautobot RQ Worker pods |
+| rqWorker.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot RQ Worker pods |
+| rqWorker.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot RQ Worker pods |
 | rqWorker.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot RQ Worker containers |
 | rqWorker.extraVolumes | list | `[]` | List of additional volumes for the Nautobot RQ Worker pod |
 | rqWorker.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot RQ Worker pods host aliases |

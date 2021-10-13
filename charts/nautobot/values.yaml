@@ -47,6 +47,9 @@ nautobot:
 
   # -- Number of Nautobot server replicas to deploy
   replicaCount: 2
+  # -- [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain
+  revisionHistoryLimit: 3
+
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe
   # @default -- See values.yaml
   livenessProbe:
@@ -251,6 +254,8 @@ rqWorker:
   enabled: false
   # -- Number of Nautobot RQ Workers replicas to deploy
   replicaCount: 2
+  # -- [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain
+  revisionHistoryLimit: 3
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot RQ Worker liveness probe
   # @default -- See values.yaml
@@ -391,6 +396,8 @@ celeryWorker:
   enabled: true
   # -- Number of Nautobot Celery Workers replicas to deploy
   replicaCount: 2
+  # -- [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain
+  revisionHistoryLimit: 3
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker liveness probe
   # @default -- See values.yaml

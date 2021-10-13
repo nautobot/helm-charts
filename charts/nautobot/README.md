@@ -276,6 +276,7 @@ $ helm delete nautobot
 | celeryWorker.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker readiness probe |
 | celeryWorker.replicaCount | int | `2` | Number of Nautobot Celery Workers replicas to deploy |
 | celeryWorker.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot Celery Worker resource requests and limits |
+| celeryWorker.revisionHistoryLimit | int | `3` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain |
 | celeryWorker.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot Celery Worker pods |
 | celeryWorker.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot Celery Worker pods assignment |
 | celeryWorker.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Celery Worker Deployment strategy type |
@@ -341,6 +342,7 @@ $ helm delete nautobot
 | nautobot.redis.username | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME) |
 | nautobot.replicaCount | int | `2` | Number of Nautobot server replicas to deploy |
 | nautobot.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot resource requests and limits |
+| nautobot.revisionHistoryLimit | int | `3` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain |
 | nautobot.secretKey | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#secret_key) Nautobot Secret Key (NAUTOBOT_SECRET_KEY) |
 | nautobot.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot server pods |
 | nautobot.superUser.apitoken | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token) Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN) |
@@ -387,6 +389,7 @@ $ helm delete nautobot
 | rqWorker.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot RQ Worker readiness probe |
 | rqWorker.replicaCount | int | `2` | Number of Nautobot RQ Workers replicas to deploy |
 | rqWorker.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot RQ Worker resource requests and limits |
+| rqWorker.revisionHistoryLimit | int | `3` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain |
 | rqWorker.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot RQ Worker pods |
 | rqWorker.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot RQ Worker pods assignment |
 | rqWorker.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot RQ Worker Deployment strategy type |

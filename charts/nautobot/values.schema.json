@@ -163,6 +163,10 @@
           "type": "integer",
           "minimum": 1
         },
+        "revisionHistoryLimit": {
+          "type": "integer",
+          "minimum": 1
+        },
         "resources": {
           "type": "object",
           "properties": {
@@ -394,7 +398,26 @@
         "extraHosts": {
           "type": "array",
           "items": {
-            "type": "object"
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "extraPaths": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "pathType": {
+                "type": "string",
+                "pattern": "^(Exact|Prefix|ImplementationSpecific)$"
+              }
+            }
           }
         },
         "extraPaths": {

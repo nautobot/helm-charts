@@ -32,6 +32,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
+      revisionHistoryLimit: {{ .Values.rqWorker.revisionHistoryLimit | int }}
       {{- if .Values.serviceAccount.name }}
       serviceAccountName: {{ template "nautobot.serviceAccountName" . }}
       {{- end }}
@@ -113,11 +114,6 @@ spec:
           {{- if (include "celeryWorker.extraVolumeMounts" .) }}
           {{- include "common.tplvalues.render" (dict "value" (include "celeryWorker.extraVolumeMounts" .) "context" $) | nindent 12 }}
           {{- end }}
-          ports:
-            - name: "https"
-              containerPort: 8443
-            - name: "http"
-              containerPort: 8080
         {{- if .Values.celeryWorker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.celeryWorker.sidecars "context" $) | nindent 8 }}
         {{- end }}

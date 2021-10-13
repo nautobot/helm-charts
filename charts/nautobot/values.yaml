@@ -433,10 +433,10 @@ celeryWorker:
   # @default -- See values.yaml
   resources:
     limits:
-      cpu: "1"
+      cpu: "2"
       memory: "1Gi"
     requests:
-      cpu: ".1"
+      cpu: ".9"
       memory: "512Mi"
 
   # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Pods Security Context

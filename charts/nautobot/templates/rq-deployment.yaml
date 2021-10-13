@@ -114,11 +114,6 @@ spec:
           {{- if (include "rqWorker.extraVolumeMounts" .) }}
           {{- include "common.tplvalues.render" (dict "value" (include "rqWorker.extraVolumeMounts" .) "context" $) | nindent 12 }}
           {{- end }}
-          ports:
-            - name: "https"
-              containerPort: 8443
-            - name: "http"
-              containerPort: 8080
         {{- if .Values.rqWorker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.rqWorker.sidecars "context" $) | nindent 8 }}
         {{- end }}

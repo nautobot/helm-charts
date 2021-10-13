@@ -15,6 +15,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.rqWorker.replicaCount }}
+  revisionHistoryLimit: {{ .Values.rqWorker.revisionHistoryLimit | int }}
   {{- if .Values.rqWorker.updateStrategy }}
   strategy: {{- toYaml .Values.rqWorker.updateStrategy | nindent 4 }}
   {{- end }}
@@ -32,7 +33,6 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.rqWorker.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      revisionHistoryLimit: {{ .Values.rqWorker.revisionHistoryLimit | int }}
       {{- if .Values.serviceAccount.name }}
       serviceAccountName: {{ template "nautobot.serviceAccountName" . }}
       {{- end }}

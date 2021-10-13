@@ -89,12 +89,16 @@ spec:
             - secretRef:
                 name: {{ include "common.names.fullname" . }}-env
             {{- if .Values.rqWorker.extraEnvVarsCM }}
+            {{- range .Values.rqWorker.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.rqWorker.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
             {{- end }}
             {{- if .Values.rqWorker.extraEnvVarsSecret }}
+            {{- range .Values.rqWorker.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.rqWorker.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
             {{- end }}
           {{- if .Values.rqWorker.resources }}
           resources: {{- toYaml .Values.rqWorker.resources | nindent 12 }}

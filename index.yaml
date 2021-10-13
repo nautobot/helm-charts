@@ -13,6 +13,52 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.1.4
+    created: "2021-10-13T21:37:32.420666643Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 14.X.X
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Nautobot is a Network Source of Truth and Network Automation Platform.
+    digest: d2fdfa0b9b51be98352453188d164e9bab63a20b2738440cdcd9b5bc26a57081
+    home: https://github.com/nautobot/nautobot
+    icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
+    keywords:
+    - DCIM
+    - IPAM
+    - SOT
+    maintainers:
+    - email: opensource@networktocode.com
+      name: Network to Code
+      url: https://www.networktocode.com/
+    name: nautobot
+    sources:
+    - https://github.com/nautobot/nautobot
+    - https://github.com/nautobot/helm-charts
+    urls:
+    - https://nautobot.github.io/helm-charts/nautobot-0.3.4.tgz
+    version: 0.3.4
+  - annotations:
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Nautobot Documentation
+          url: https://nautobot.readthedocs.io/en/stable/
+        - name: Nautobot
+          url: https://github.com/nautobot/nautobot
+      artifacthub.io/prerelease: "true"
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.1.4
     created: "2021-10-13T21:27:32.290129355Z"
     dependencies:
     - condition: redis.enabled
@@ -214,4 +260,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2021-10-13T21:27:32.272591416Z"
+generated: "2021-10-13T21:37:32.402494125Z"

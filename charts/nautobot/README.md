@@ -286,10 +286,10 @@ $ helm delete nautobot
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
-| autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler (beta) |
 | celeryWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot Celery Worker pods assignment |
 | celeryWorker.args | list | `[]` | Override default Nautobot Celery Worker container args (useful when using custom images) |
+| celeryWorker.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
+| celeryWorker.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for the Celery Worker (beta) |
 | celeryWorker.command | list | See values.yaml | Override default Nautobot Celery Worker container command (useful when using custom images) |
 | celeryWorker.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context |
 | celeryWorker.enabled | bool | `true` | Enables the Celery Worker for Nautobot |
@@ -345,6 +345,8 @@ $ helm delete nautobot
 | nautobot.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot pods assignment |
 | nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
 | nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |
+| nautobot.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
+| nautobot.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for Nautobot (beta) |
 | nautobot.command | list | `[]` | Override default Nautobot container command (useful when using custom images) |
 | nautobot.config | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value |
 | nautobot.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context |
@@ -413,6 +415,8 @@ $ helm delete nautobot
 | redis.enabled | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) all other `redis.*` parameters will be passed directly to that chart |
 | rqWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot RQ Worker pods assignment |
 | rqWorker.args | list | `[]` | Override default Nautobot RQ Worker container args (useful when using custom images) |
+| rqWorker.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
+| rqWorker.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for the RQ Worker (beta) |
 | rqWorker.command | list | See values.yaml | Override default Nautobot RQ Worker container command (useful when using custom images) |
 | rqWorker.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context |
 | rqWorker.enabled | bool | `false` | Enables the RQ Worker for Nautobot |

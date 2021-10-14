@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![AppVersion: 1.1.4](https://img.shields.io/badge/AppVersion-1.1.4-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![AppVersion: 1.1.4](https://img.shields.io/badge/AppVersion-1.1.4-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -332,6 +332,16 @@ $ helm delete nautobot
 | ingress.pathType | string | `"Prefix"` | Ingress resource pathType valid values `ImplementationSpecific`, `Exact`, or `Prefix` |
 | ingress.secretName | string | `"nautobot-tls"` | The name of the secret to use for the TLS certificate |
 | ingress.tls | bool | `false` | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter |
+| metrics.capacityMetrics.enabled | bool | `false` | Enable serviceMonitor for [Nautobot Capacity Metrics](https://github.com/nautobot/nautobot-plugin-capacity-metrics) (Requires custom image) |
+| metrics.capacityMetrics.interval | string | `"5m"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval for Nautobot Capacity Metrics serviceMonitor |
+| metrics.capacityMetrics.labels | object | `{}` | Additional labels for the  for Nautobot Capacity Metrics serviceMonitor Object |
+| metrics.capacityMetrics.scrapeTimeout | string | `"1m"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape timeout for Nautobot Capacity Metrics serviceMonitor |
+| metrics.enabled | bool | `false` | Enable and configure a Prometheus [serviceMonitor](https://prometheus-operator.dev/docs/operator/design/#servicemonitor) (requires the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator)) |
+| metrics.prometheusRule | object | See values.yaml | Enable and configure Prometheus Rules. |
+| metrics.prometheusRule.rules | list | See [alerting rules documentation](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) | Configure additional rules for the chart. |
+| metrics.serviceMonitor.interval | string | `"1m"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval |
+| metrics.serviceMonitor.labels | object | `{}` | Additional labels for the serviceMonitor Object |
+| metrics.serviceMonitor.scrapeTimeout | string | `"30s"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape timeout |
 | nautobot.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot pods assignment |
 | nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
 | nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |

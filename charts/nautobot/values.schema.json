@@ -437,6 +437,78 @@
         }
       }
     },
+    "metrics": {
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "capacityMetrics",
+        "enabled",
+        "prometheusRule",
+        "serviceMonitor"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "capacityMetrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "interval": {
+              "type": "string"
+            },
+            "scrapeTimeout": {
+              "type": "string"
+            },
+            "labels": {
+              "type": "object"
+            }
+          }
+        },
+        "prometheusRule": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "labels": {
+              "type": "object"
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "serviceMonitor": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "interval": {
+              "type": "string"
+            },
+            "scrapeTimeout": {
+              "type": "string"
+            },
+            "labels": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
     "nautobot": {
       "allOf": [
         {

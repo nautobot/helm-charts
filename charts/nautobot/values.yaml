@@ -618,6 +618,46 @@ autoscaling:
         name: "cpu"
         targetAverageUtilization: 80
 
+metrics:
+  # -- Enable and configure a Prometheus [serviceMonitor](https://prometheus-operator.dev/docs/operator/design/#servicemonitor) (requires the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator))
+  enabled: false
+
+  capacityMetrics:
+    # -- Enable serviceMonitor for [Nautobot Capacity Metrics](https://github.com/nautobot/nautobot-plugin-capacity-metrics) (Requires custom image)
+    enabled: false
+    # -- [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval for Nautobot Capacity Metrics serviceMonitor
+    interval: "5m"
+    # -- [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape timeout for Nautobot Capacity Metrics serviceMonitor
+    scrapeTimeout: "1m"
+    # -- Additional labels for the  for Nautobot Capacity Metrics serviceMonitor Object
+    labels: {}
+
+  serviceMonitor:
+    # -- [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval
+    interval: "1m"
+    # -- [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape timeout
+    scrapeTimeout: "30s"
+    # -- Additional labels for the serviceMonitor Object
+    labels: {}
+
+  # -- Enable and configure Prometheus Rules.
+  # @default -- See values.yaml
+  prometheusRule:
+    enabled: false
+    labels: {}
+    # -- Configure additional rules for the chart.
+    # @default -- See [alerting rules documentation](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
+    rules: []
+    # - alert: "NautobotAbsent"
+    #   annotations:
+    #     description: "Nautobot has disappeared from Prometheus service discovery."
+    #     summary: "Nautobot is down."
+    #   expr: |
+    #     absent(up{job=~".*nautobot.*"} == 1)
+    #   for: "5m"
+    #   labels:
+    #     severity: "critical"
+
 postgresql:
   # -- Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) all other `postgresql.*` parameters will be passed directly to that chart
   enabled: true

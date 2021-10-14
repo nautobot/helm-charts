@@ -114,6 +114,11 @@ spec:
           {{- if (include "rqWorker.extraVolumeMounts" .) }}
           {{- include "common.tplvalues.render" (dict "value" (include "rqWorker.extraVolumeMounts" .) "context" $) | nindent 12 }}
           {{- end }}
+          {{- if and .Values.metrics.enabled .Values.metrics.capacityMetrics.enabled }}
+          ports:
+            - name: "http"
+              containerPort: 8001
+          {{- end }}
         {{- if .Values.rqWorker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.rqWorker.sidecars "context" $) | nindent 8 }}
         {{- end }}

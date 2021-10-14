@@ -14,7 +14,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.rqWorker.autoscaling.enabled }}
   replicas: {{ .Values.rqWorker.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: {{ .Values.rqWorker.revisionHistoryLimit | int }}
   {{- if .Values.rqWorker.updateStrategy }}
   strategy: {{- toYaml .Values.rqWorker.updateStrategy | nindent 4 }}
@@ -113,6 +115,11 @@ spec:
           volumeMounts:
           {{- if (include "rqWorker.extraVolumeMounts" .) }}
           {{- include "common.tplvalues.render" (dict "value" (include "rqWorker.extraVolumeMounts" .) "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if and .Values.metrics.enabled .Values.metrics.capacityMetrics.enabled }}
+          ports:
+            - name: "http"
+              containerPort: 8001
           {{- end }}
         {{- if .Values.rqWorker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.rqWorker.sidecars "context" $) | nindent 8 }}

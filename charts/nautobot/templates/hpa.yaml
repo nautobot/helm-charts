@@ -1,18 +1,69 @@
+{{- if .Values.nautobot.autoscaling.enabled }}
 ---
-{{- if .Values.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "nautobot.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "nautobot.labels" . | nindent 4 }}
+    app.kubernetes.io/component: nautobot
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "nautobot.fullname" . }}
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+    name: {{ include "common.names.fullname" . }}
+  minReplicas: {{ .Values.nautobot.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.nautobot.autoscaling.maxReplicas }}
   metrics:
-    {{- .Values.autoscaling.metrics | nindent 4 }}
+    {{- toYaml .Values.nautobot.autoscaling.metrics | nindent 4 }}
+  behavior:
+    {{- toYaml .Values.nautobot.autoscaling.behavior | nindent 4 }}
+{{- end }}
+{{- if .Values.celeryWorker.autoscaling.enabled }}
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}-celery-worker
+  labels:
+    app.kubernetes.io/component: nautobot-celery-worker
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "common.names.fullname" . }}-celery-worker
+  minReplicas: {{ .Values.celeryWorker.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.celeryWorker.autoscaling.maxReplicas }}
+  metrics:
+    {{- toYaml .Values.celeryWorker.autoscaling.metrics | nindent 4 }}
+  behavior:
+    {{- toYaml .Values.celeryWorker.autoscaling.behavior | nindent 4 }}
+{{- end }}
+{{- if and .Values.rqWorker.enabled .Values.rqWorker.autoscaling.enabled }}
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}-rq-worker
+  labels:
+    app.kubernetes.io/component: nautobot-rq-worker
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "common.names.fullname" . }}-rq-worker
+  minReplicas: {{ .Values.rqWorker.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.rqWorker.autoscaling.maxReplicas }}
+  metrics:
+    {{- toYaml .Values.rqWorker.autoscaling.metrics | nindent 4 }}
+  behavior:
+    {{- toYaml .Values.rqWorker.autoscaling.behavior | nindent 4 }}
 {{- end }}

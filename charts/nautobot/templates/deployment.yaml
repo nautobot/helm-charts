@@ -13,7 +13,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.nautobot.autoscaling.enabled }}
   replicas: {{ .Values.nautobot.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: {{ .Values.nautobot.revisionHistoryLimit | int }}
   {{- if .Values.nautobot.updateStrategy }}
   strategy: {{- toYaml .Values.nautobot.updateStrategy | nindent 4 }}

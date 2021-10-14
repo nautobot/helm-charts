@@ -1,0 +1,74 @@
+---
+{{- if .Values.metrics.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels:
+    app.kubernetes.io/component: nautobot
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- with .Values.metrics.serviceMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: nautobot
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+  endpoints:
+    - port: http
+      {{- with .Values.metrics.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+    {{- if and .Values.metrics.enabled .Values.metrics.capacityMetrics.enabled }}
+    - port: http
+      {{- with .Values.metrics.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+      path: "/api/plugins/capacity-metrics/rq-metrics"
+    - port: http
+      {{- with .Values.metrics.capacityMetrics.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.metrics.capacityMetrics.scrapeTimeout }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+      path: "/api/plugins/capacity-metrics/app-metrics"
+    {{- end }}
+{{- end }}
+{{- if and .Values.metrics.enabled .Values.metrics.capacityMetrics.enabled .Values.rqWorker.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "common.names.fullname" . }}-rq-worker
+  labels:
+    app.kubernetes.io/component: nautobot-rq-worker
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- with .Values.metrics.capacityMetrics.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: nautobot-rq-worker
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+  podMetricsEndpoints:
+    - port: http
+      {{- with .Values.metrics.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+{{- end }}

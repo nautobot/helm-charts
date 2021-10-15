@@ -46,6 +46,11 @@ helm install nautobot nautobot/nautobot
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md)
+
+## Releases
+
+See the [Release Checklist](./docs/release-checklist.md)
+
 ## License
 
 [Apache 2.0 License](./LICENSE.txt)

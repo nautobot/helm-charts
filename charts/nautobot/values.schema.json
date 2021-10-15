@@ -6,6 +6,7 @@
       "required": [
         "affinity",
         "args",
+        "autoscaling",
         "command",
         "containerSecurityContext",
         "extraEnvVars",
@@ -38,6 +39,39 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        },
+        "autoscaling": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "behavior",
+            "enabled",
+            "minReplicas",
+            "maxReplicas",
+            "metrics"
+          ],
+          "properties": {
+            "behavior": {
+              "type": "object"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "minReplicas": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxReplicas": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
           }
         },
         "command": {
@@ -163,6 +197,10 @@
           "type": "integer",
           "minimum": 1
         },
+        "revisionHistoryLimit": {
+          "type": "integer",
+          "minimum": 1
+        },
         "resources": {
           "type": "object",
           "properties": {
@@ -282,7 +320,6 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "autoscaling",
     "celeryWorker",
     "commonAnnotations",
     "ingress",
@@ -294,39 +331,6 @@
     "serviceAccount"
   ],
   "properties": {
-    "autoscaling": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "apiVersion",
-        "enabled",
-        "minReplicas",
-        "maxReplicas",
-        "metrics"
-      ],
-      "properties": {
-        "apiVersion": {
-          "type": "string"
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "minReplicas": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "maxReplicas": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "metrics": {
-          "type": "array",
-          "items": {
-            "type": "object"
-          }
-        }
-      }
-    },
     "celeryWorker": {
       "allOf": [
         {
@@ -394,7 +398,26 @@
         "extraHosts": {
           "type": "array",
           "items": {
-            "type": "object"
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "extraPaths": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "pathType": {
+                "type": "string",
+                "pattern": "^(Exact|Prefix|ImplementationSpecific)$"
+              }
+            }
           }
         },
         "extraPaths": {
@@ -411,6 +434,78 @@
         },
         "secretName": {
           "type": "string"
+        }
+      }
+    },
+    "metrics": {
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "capacityMetrics",
+        "enabled",
+        "prometheusRule",
+        "serviceMonitor"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "capacityMetrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "interval": {
+              "type": "string"
+            },
+            "scrapeTimeout": {
+              "type": "string"
+            },
+            "labels": {
+              "type": "object"
+            }
+          }
+        },
+        "prometheusRule": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "labels": {
+              "type": "object"
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "serviceMonitor": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "interval": {
+              "type": "string"
+            },
+            "scrapeTimeout": {
+              "type": "string"
+            },
+            "labels": {
+              "type": "object"
+            }
+          }
         }
       }
     },

@@ -47,6 +47,9 @@ nautobot:
 
   # -- Number of Nautobot server replicas to deploy
   replicaCount: 2
+  # -- [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain
+  revisionHistoryLimit: 3
+
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe
   # @default -- See values.yaml
   livenessProbe:
@@ -175,6 +178,34 @@ nautobot:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
 
+  # -- [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler
+  # @default -- See values.yaml
+  autoscaling:
+    # -- Add an horizontal pod autoscaler for Nautobot (beta)
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 5
+    metrics:
+      - type: "Resource"
+        resource:
+          name: "cpu"
+          target:
+            type: "Utilization"
+            averageUtilization: 150
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 60
+        policies:
+          - type: "Pods"
+            value: 1
+            periodSeconds: 180
+      scaleUp:
+        stabilizationWindowSeconds: 60
+        policies:
+          - type: "Pods"
+            value: 2
+            periodSeconds: 15
+
   #################################
   # Nautobot Application Settings #
   #################################
@@ -251,6 +282,8 @@ rqWorker:
   enabled: false
   # -- Number of Nautobot RQ Workers replicas to deploy
   replicaCount: 2
+  # -- [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain
+  revisionHistoryLimit: 3
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot RQ Worker liveness probe
   # @default -- See values.yaml
@@ -385,12 +418,30 @@ rqWorker:
   #    imagePullPolicy: Always
   #    command: ['sh', '-c', 'echo "hello world"']
 
+  # -- [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler
+  # @default -- See values.yaml
+  autoscaling:
+    # -- Add an horizontal pod autoscaler for the RQ Worker (beta)
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 5
+    metrics:
+      - type: "Resource"
+        resource:
+          name: "cpu"
+          target:
+            type: "Utilization"
+            averageUtilization: 50
+    behavior: {}
+
 # Nautobot Celery Worker
 celeryWorker:
   # -- Enables the Celery Worker for Nautobot
   enabled: true
   # -- Number of Nautobot Celery Workers replicas to deploy
   replicaCount: 2
+  # -- [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain
+  revisionHistoryLimit: 3
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker liveness probe
   # @default -- See values.yaml
@@ -426,10 +477,10 @@ celeryWorker:
   # @default -- See values.yaml
   resources:
     limits:
-      cpu: "1"
+      cpu: "2"
       memory: "1Gi"
     requests:
-      cpu: ".1"
+      cpu: ".9"
       memory: "512Mi"
 
   # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Pods Security Context
@@ -531,6 +582,34 @@ celeryWorker:
   #    imagePullPolicy: Always
   #    command: ['sh', '-c', 'echo "hello world"']
 
+  # -- [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler
+  # @default -- See values.yaml
+  autoscaling:
+    # -- Add an horizontal pod autoscaler for the Celery Worker (beta)
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 5
+    metrics:
+      - type: "Resource"
+        resource:
+          name: "cpu"
+          target:
+            type: "Utilization"
+            averageUtilization: 50
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 60
+        policies:
+          - type: "Pods"
+            value: 1
+            periodSeconds: 180
+      scaleUp:
+        stabilizationWindowSeconds: 60
+        policies:
+          - type: "Pods"
+            value: 2
+            periodSeconds: 15
+
 # ServiceAccount configuration
 serviceAccount:
   # -- Enable creation of a Kubernetes Service Account for Nautobot
@@ -544,7 +623,7 @@ ingress:
   enabled: false
 
   # -- Ingress resource pathType valid values `ImplementationSpecific`, `Exact`, or `Prefix`
-  pathType: "ImplementationSpecific"
+  pathType: "Prefix"
 
   # -- Override API Version (automatically detected if not set)
   apiVersion:  # yamllint disable-line rule:empty-values
@@ -570,8 +649,10 @@ ingress:
   extraHosts: []
   # e.g.
   # extraHosts:
-  # - name: nautobot.local
+  # - name: nautobot2.local
   #   path: /
+  #   pathType: "Prefix"
+  #   extraPaths: []
   #
 
   # -- Any additional arbitrary paths that may need to be added to the ingress under the main host.
@@ -581,8 +662,10 @@ ingress:
   # extraPaths:
   # - path: /*
   #   backend:
-  #     serviceName: ssl-redirect
-  #     servicePort: use-annotation
+  #     service:
+  #       name: ssl-redirect
+  #       port:
+  #         name: use-annotation
   #
 
   # -- [ref](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) The tls configuration for additional hostnames to be covered with this ingress record.
@@ -593,19 +676,45 @@ ingress:
   #     - nautobot.local
   #   secretName: nautobot.local-tls
 
-# -- [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler
-# @default -- See values.yaml
-autoscaling:
-  # -- Add an horizontal pod autoscaler (beta)
+metrics:
+  # -- Enable and configure a Prometheus [serviceMonitor](https://prometheus-operator.dev/docs/operator/design/#servicemonitor) (requires the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator))
   enabled: false
-  apiVersion: "autoscaling/v2beta2"
-  minReplicas: 2
-  maxReplicas: 5
-  metrics:
-    - type: "Resource"
-      resource:
-        name: "cpu"
-        targetAverageUtilization: 80
+
+  capacityMetrics:
+    # -- Enable serviceMonitor for [Nautobot Capacity Metrics](https://github.com/nautobot/nautobot-plugin-capacity-metrics) (Requires custom image)
+    enabled: false
+    # -- [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval for Nautobot Capacity Metrics serviceMonitor
+    interval: "5m"
+    # -- [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape timeout for Nautobot Capacity Metrics serviceMonitor
+    scrapeTimeout: "1m"
+    # -- Additional labels for the  for Nautobot Capacity Metrics serviceMonitor Object
+    labels: {}
+
+  serviceMonitor:
+    # -- [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval
+    interval: "1m"
+    # -- [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape timeout
+    scrapeTimeout: "30s"
+    # -- Additional labels for the serviceMonitor Object
+    labels: {}
+
+  # -- Enable and configure Prometheus Rules.
+  # @default -- See values.yaml
+  prometheusRule:
+    enabled: false
+    labels: {}
+    # -- Configure additional rules for the chart.
+    # @default -- See [alerting rules documentation](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
+    rules: []
+    # - alert: "NautobotAbsent"
+    #   annotations:
+    #     description: "Nautobot has disappeared from Prometheus service discovery."
+    #     summary: "Nautobot is down."
+    #   expr: |
+    #     absent(up{job=~".*nautobot.*"} == 1)
+    #   for: "5m"
+    #   labels:
+    #     severity: "critical"
 
 postgresql:
   # -- Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) all other `postgresql.*` parameters will be passed directly to that chart

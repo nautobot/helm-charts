@@ -31,7 +31,7 @@ data:
   NAUTOBOT_DEBUG: "False"
   {{- end }}
   NAUTOBOT_LOG_LEVEL: {{ .Values.nautobot.logLevel | quote }}
-  {{- if .Values.nautobot.metrics }}
+  {{- if or .Values.nautobot.metrics .Values.metrics.enabled }}
   NAUTOBOT_METRICS_ENABLED: "True"
   {{- else }}
   NAUTOBOT_METRICS_ENABLED: "False"

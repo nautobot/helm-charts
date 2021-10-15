@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![AppVersion: 1.1.4](https://img.shields.io/badge/AppVersion-1.1.4-informational?style=flat-square)
+![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![AppVersion: 1.1.4](https://img.shields.io/badge/AppVersion-1.1.4-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -280,7 +280,7 @@ $ helm delete nautobot
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | common | 1.x.x |
 | https://charts.bitnami.com/bitnami | postgresql | 10.x.x |
-| https://charts.bitnami.com/bitnami | redis | 14.X.X |
+| https://charts.bitnami.com/bitnami | redis | 15.X.X |
 
 ## Values
 
@@ -323,6 +323,7 @@ $ helm delete nautobot
 | commonAnnotations | object | `{}` | Annotations to be applied to ALL resources created by this chart |
 | ingress.annotations | object | `{}` | Ingress annotations defined as key:value pairs, see the documentation for your specific Ingress provider for more details |
 | ingress.apiVersion | string | `nil` | Override API Version (automatically detected if not set) |
+| ingress.backendProtocol | string | `"https"` | The backend protocol to for the Ingress to communicate with the Nautobot containers, valid values: http, and https |
 | ingress.enabled | bool | `false` | Enable Ingress resource creation |
 | ingress.extraHosts | list | `[]` | The list of additional hostnames to be covered with this ingress record. Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array |
 | ingress.extraPaths | list | `[]` | Any additional arbitrary paths that may need to be added to the ingress under the main host. For example: The ALB ingress controller requires a special rule for handling SSL redirection. |

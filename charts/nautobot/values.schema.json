@@ -323,6 +323,7 @@
     "celeryWorker",
     "commonAnnotations",
     "ingress",
+    "metrics",
     "nautobot",
     "postgresql",
     "redis",
@@ -359,6 +360,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "backendProtocol",
         "enabled",
         "extraHosts",
         "extraPaths",
@@ -375,6 +377,10 @@
             "null",
             "string"
           ]
+        },
+        "backendProtocol": {
+          "type": "string",
+          "pattern": "^(http|https)$"
         },
         "enabled": {
           "type": "boolean"
@@ -401,17 +407,21 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-              "name": {
-                "type": "string"
-              },
-              "path": {
-                "type": "string"
+              "backendProtocol": {
+                "type": "string",
+                "pattern": "^(http|https)$"
               },
               "extraPaths": {
                 "type": "array",
                 "items": {
                   "type": "object"
                 }
+              },
+              "hostname": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
               },
               "pathType": {
                 "type": "string",

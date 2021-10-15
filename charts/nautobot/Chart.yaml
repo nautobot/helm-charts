@@ -9,13 +9,20 @@ annotations:
       url: https://nautobot.readthedocs.io/en/stable/
     - name: Nautobot
       url: https://github.com/nautobot/nautobot
+  artifacthub.io/screenshots: |
+    - title: Main Page
+      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot1.png
+    - title: Rack Elevation
+      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot2.png
+    - title: Prefix hierarchy
+      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
 apiVersion: "v2"
 appVersion: "1.1.4"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
     repository: "https://charts.bitnami.com/bitnami"
-    version: "14.X.X"
+    version: "15.X.X"
   - condition: "postgresql.enabled"
     name: "postgresql"
     repository: "https://charts.bitnami.com/bitnami"
@@ -41,4 +48,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "0.4.0"
+version: "0.4.1"

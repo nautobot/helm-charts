@@ -638,6 +638,9 @@ ingress:
   # -- Ingress annotations defined as key:value pairs, see the documentation for your specific Ingress provider for more details
   annotations: {}
 
+  # -- The backend protocol to for the Ingress to communicate with the Nautobot containers, valid values: http, and https
+  backendProtocol: "https"
+
   # -- Enable TLS configuration for the hostname defined at `ingress.hostname` parameter
   tls: false
 
@@ -649,10 +652,11 @@ ingress:
   extraHosts: []
   # e.g.
   # extraHosts:
-  # - name: nautobot2.local
+  # - hostname: nautobot2.local
   #   path: /
   #   pathType: "Prefix"
   #   extraPaths: []
+  #   backendProtocol: "https"
   #
 
   # -- Any additional arbitrary paths that may need to be added to the ingress under the main host.

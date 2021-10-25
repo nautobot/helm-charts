@@ -23,3 +23,5 @@
 .vscode/
 # README template
 README.md.gotmpl
+# Linter Values
+linter_values.yaml

@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![AppVersion: 1.1.4](https://img.shields.io/badge/AppVersion-1.1.4-informational?style=flat-square)
+![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![AppVersion: 1.1.4](https://img.shields.io/badge/AppVersion-1.1.4-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -203,6 +203,29 @@ To replace the entire `uwsgi.ini` file with a custom file use the `nautobot.uWSG
 $ helm install nautobot nautobot/nautobot -f ./my_values.yaml --set-file nautobot.uWSGIini=./path/to/uwsgi.ini
 ```
 
+### Prometheus Operator Metrics
+
+If you have the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator) installed the following values can be used to deploy `ServiceMonitor` resources:
+
+```yaml
+metrics:
+  enabled: true
+  prometheusRule:
+    enabled: true
+
+postgresql:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+redis:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+```
+
 ### Recommended Production Values
 
 When deploying this chart in production, it is recommended to set or at least be aware of the following values:
@@ -226,7 +249,7 @@ redis:
     password: "change-me"
 ```
 
-### Nautobot Application Values
+## Nautobot Application Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -265,6 +288,26 @@ the `postgresql` key, any `postgresql.*` values are passed directly to that char
 
 The Nautobot helm chart uses the [Bitnami Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) as a [subchart](https://helm.sh/docs/chart_template_guide/subcharts_and_globals/).  To configure PostgreSQL use
 the `redis` key, any `redis.*` values are passed directly to that chart.
+
+## Known Issues
+
+### Invalidate Redis Cache
+
+Running `nautobot-server invalidate all` will invalidate the Redis for Nautobot.  If Redis is deployed as part of this chart you will run into an error:
+
+```no-highlight
+redis.exceptions.ResponseError: unknown command `FLUSHDB`, with args beginning with:
+```
+
+This is because by default the `FLUSHDB` command is disabled in the Bitnami Redis chart.  To enable this use the following values:
+
+```yaml
+redis:
+  master:
+    disableCommands: []
+  slave:
+    disableCommands: []
+```
 
 ## Uninstalling the Chart
 

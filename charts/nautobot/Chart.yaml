@@ -3,7 +3,7 @@ annotations:
   category: "Infrastructure"
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/license: "Apache-2.0"
-  artifacthub.io/prerelease: "true"
+  artifacthub.io/prerelease: "false"
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -48,4 +48,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "0.5.0"
+version: "1.0.0"

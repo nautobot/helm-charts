@@ -1,7 +1,3 @@
-# Notice
-
-**WARNING** This repo is still in alpha state!
-
 # Nautobot Helm Charts
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 <!-- [![All Contributors]()](#contributors-) -->

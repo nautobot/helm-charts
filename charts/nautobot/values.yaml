@@ -79,12 +79,12 @@ nautobot:
   # -- [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot resource requests and limits
   # @default -- See values.yaml
   resources:
-    limits:
-      cpu: "2"
-      memory: "2Gi"
     requests:
-      cpu: "0.7"
-      memory: "784Mi"
+      cpu: "600m"
+      memory: "8704M"
+    limits:
+      cpu: "100m"
+      memory: "1280M"
 
   # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context
   # @default -- See values.yaml
@@ -221,6 +221,10 @@ nautobot:
   db:
     # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE)
     engine: "django.db.backends.postgresql"
+    # -- Name of existing secret to use for Database passwords
+    existingSecret: ""
+    # -- Password key to be retrieved from existing secret
+    existingSecretPasswordKey: "NAUTOBOT_DB_PASSWORD"
     # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST)
     host: "postgres"
     # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME)
@@ -241,6 +245,10 @@ nautobot:
 
   # Nautobot Redis configuration
   redis:
+    # -- Name of existing secret to use for Redis passwords
+    existingSecret: ""
+    # -- Password key to be retrieved from existing secret
+    existingSecretPasswordKey: "NAUTOBOT_REDIS_PASSWORD"
     # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST)
     host: ""
     # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD)
@@ -316,12 +324,12 @@ rqWorker:
   # -- [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot RQ Worker resource requests and limits
   # @default -- See values.yaml
   resources:
-    limits:
-      cpu: "1"
-      memory: "1Gi"
     requests:
       cpu: ".1"
       memory: "256Mi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
 
   # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Pods Security Context
   # @default -- See values.yaml
@@ -476,12 +484,12 @@ celeryWorker:
   # -- [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot Celery Worker resource requests and limits
   # @default -- See values.yaml
   resources:
-    limits:
-      cpu: "2"
-      memory: "1Gi"
     requests:
-      cpu: ".9"
-      memory: "512Mi"
+      cpu: "400m"
+      memory: "1G"
+    limits:
+      cpu: "3328m"
+      memory: "6656M"
 
   # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Pods Security Context
   # @default -- See values.yaml

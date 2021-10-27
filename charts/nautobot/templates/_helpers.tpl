@@ -111,11 +111,45 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{/*
+  Return the decoded database password.  If postgres is enabled check the existing secret passed to postgres.
+  If not check the existing secret passed to Nautobot.  Either the "postgresql-password" or the existingSecretPasswordKey key is used
+*/}}
 {{- define "nautobot.database.rawPassword" -}}
   {{- if eq .Values.postgresql.enabled true -}}
-      {{- required "A Postgres Password is required!" .Values.postgresql.postgresqlPassword -}}
+      {{- if .Values.postgresql.existingSecret -}}
+        {{- $password := "" -}}
+        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.postgresql.existingSecret) -}}
+        {{- if $secret -}}
+          {{- if index $secret.data "postgresql-password" -}}
+            {{- $password = index $secret.data "postgresql-password" -}}
+          {{- else -}}
+            {{- fail (printf "Key 'postgresql-password' not found in secret %s" .Values.postgresql.existingSecret) -}}
+          {{- end -}}
+        {{- else -}}
+          {{- fail (printf "Existing secret %s not found!" .Values.postgresql.existingSecret) -}}
+        {{- end -}}
+        {{- $password | b64dec -}}
+      {{- else -}}
+        {{- required "A Postgres Password is required!" .Values.postgresql.postgresqlPassword -}}
+      {{- end -}}
   {{- else -}}
-      {{- .Values.nautobot.db.password -}}
+    {{- if .Values.nautobot.db.existingSecret -}}
+      {{- $password := "" -}}
+      {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.nautobot.db.existingSecret) -}}
+      {{- if $secret -}}
+        {{- if index $secret.data .Values.nautobot.db.existingSecretPasswordKey -}}
+          {{- $password = index $secret.data .Values.nautobot.db.existingSecretPasswordKey -}}
+        {{- else -}}
+          {{- fail (printf "Key '%s' not found in secret %s" .Values.nautobot.db.existingSecretPasswordKey .Values.nautobot.db.existingSecret) -}}
+        {{- end -}}
+      {{- else -}}
+        {{- fail (printf "Existing secret %s not found!" .Values.nautobot.db.existingSecret) -}}
+      {{- end -}}
+      {{- $password | b64dec -}}
+    {{- else -}}
+      {{- required "A Database Password is required!" .Values.nautobot.db.password -}}
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 
@@ -158,12 +192,45 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{/*
+  Return the decoded redis password.  If redis is enabled check the existing secret passed to redis.
+  If not check the existing secret passed to Nautobot.  The existingSecretPasswordKey key is used to lookup the password
+*/}}
 {{- define "nautobot.redis.rawPassword" -}}
-  {{- if and (not .Values.redis.enabled) .Values.nautobot.redis.password -}}
-    {{- required "A Redis Password is required!" .Values.nautobot.redis.password -}}
-  {{- end -}}
-  {{- if and .Values.redis.enabled .Values.redis.auth.enabled -}}
-    {{- required "A Redis Password is required!" .Values.redis.auth.password -}}
+  {{- if eq .Values.redis.enabled true -}}
+      {{- if .Values.redis.auth.existingSecret -}}
+        {{- $password := "" -}}
+        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.redis.auth.existingSecret) -}}
+        {{- if $secret -}}
+          {{- if index $secret.data .Values.redis.auth.existingSecretPasswordKey -}}
+            {{- $password = index $secret.data .Values.redis.auth.existingSecretPasswordKey -}}
+          {{- else -}}
+            {{- fail (printf "Key '%s' not found in secret %s" .Values.redis.auth.existingSecretPasswordKey .Values.redis.auth.existingSecret) -}}
+          {{- end -}}
+        {{- else -}}
+          {{- fail (printf "Existing secret %s not found!" .Values.redis.auth.existingSecret) -}}
+        {{- end -}}
+        {{- $password | b64dec -}}
+      {{- else -}}
+        {{- required "A Redis Password is required!" .Values.redis.auth.password -}}
+      {{- end -}}
+  {{- else -}}
+    {{- if .Values.nautobot.redis.existingSecret -}}
+      {{- $password := "" -}}
+      {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.nautobot.redis.existingSecret) -}}
+      {{- if $secret -}}
+        {{- if index $secret.data .Values.nautobot.redis.existingSecretPasswordKey -}}
+          {{- $password = index $secret.data .Values.nautobot.redis.existingSecretPasswordKey -}}
+        {{- else -}}
+          {{- fail (printf "Key '%s' not found in secret %s" .Values.nautobot.redis.existingSecretPasswordKey .Values.nautobot.redis.existingSecret) -}}
+        {{- end -}}
+      {{- else -}}
+        {{- fail (printf "Existing secret %s not found!" .Values.nautobot.redis.existingSecret) -}}
+      {{- end -}}
+      {{- $password | b64dec -}}
+    {{- else -}}
+      {{- required "A Redis Password is required!" .Values.nautobot.redis.password -}}
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 

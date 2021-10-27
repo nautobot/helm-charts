@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![AppVersion: 1.1.4](https://img.shields.io/badge/AppVersion-1.1.4-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![AppVersion: 1.1.4](https://img.shields.io/badge/AppVersion-1.1.4-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -120,6 +120,44 @@ nautobot:
 redis:
   enabled: false
 ```
+
+### Existing Secrets
+
+If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy Postgres and Redis with this chart use:
+
+1. Create a secret with both PostgreSQL and Redis passwords:
+
+```no-highlight
+kubectl create secret generic my-secret --from-literal=postgresql-password=change-me --from-literal=NAUTOBOT_REDIS_PASSWORD=change-me
+```
+
+2. Use the following values to install the helm chart:
+
+```yaml
+postgresql:
+  existingSecret: "my-secret"
+redis:
+  auth:
+    existingSecret: "my-secret"
+    existingSecretPasswordKey: "NAUTOBOT_REDIS_PASSWORD"
+```
+
+If you are using external PostgreSQL and Redis servers you can use the following values:
+
+```yaml
+nautobot:
+  db:
+    existingSecret: "my-secret"
+    existingSecretPasswordKey: "postgresql-password"
+  redis:
+    existingSecret: "my-secret"
+postgresql:
+  enabled: false
+redis:
+  enabled: false
+```
+
+You can use various combinations of `existingSecret` and `existingSecretPasswordKey` options depending on the existing secrets you have deployed.  (NOTE: The Bitnami PostgreSQL chart does require the key name to be "postgresql-password")
 
 ### RQ Workers
 
@@ -256,6 +294,8 @@ redis:
 | nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
 | nautobot.config | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value |
 | nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE) |
+| nautobot.db.existingSecret | string | `""` | Name of existing secret to use for Database passwords |
+| nautobot.db.existingSecretPasswordKey | string | `"NAUTOBOT_DB_PASSWORD"` | Password key to be retrieved from existing secret |
 | nautobot.db.host | string | `"postgres"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST) |
 | nautobot.db.name | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME) |
 | nautobot.db.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database password, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PASSWORD) |
@@ -266,6 +306,8 @@ redis:
 | nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`) |
 | nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` |
 | nautobot.metrics | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED) |
+| nautobot.redis.existingSecret | string | `""` | Name of existing secret to use for Redis passwords |
+| nautobot.redis.existingSecretPasswordKey | string | `"NAUTOBOT_REDIS_PASSWORD"` | Password key to be retrieved from existing secret |
 | nautobot.redis.host | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST) |
 | nautobot.redis.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD) |
 | nautobot.redis.port | int | `6379` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT) |
@@ -395,6 +437,8 @@ $ helm delete nautobot
 | nautobot.config | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value |
 | nautobot.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context |
 | nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE) |
+| nautobot.db.existingSecret | string | `""` | Name of existing secret to use for Database passwords |
+| nautobot.db.existingSecretPasswordKey | string | `"NAUTOBOT_DB_PASSWORD"` | Password key to be retrieved from existing secret |
 | nautobot.db.host | string | `"postgres"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST) |
 | nautobot.db.name | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME) |
 | nautobot.db.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database password, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PASSWORD) |
@@ -431,6 +475,8 @@ $ helm delete nautobot
 | nautobot.podSecurityContext | object | See values.yaml | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context |
 | nautobot.priorityClassName | string | `""` | Nautobot pods' priorityClassName |
 | nautobot.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot readiness probe |
+| nautobot.redis.existingSecret | string | `""` | Name of existing secret to use for Redis passwords |
+| nautobot.redis.existingSecretPasswordKey | string | `"NAUTOBOT_REDIS_PASSWORD"` | Password key to be retrieved from existing secret |
 | nautobot.redis.host | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST) |
 | nautobot.redis.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD) |
 | nautobot.redis.port | int | `6379` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT) |

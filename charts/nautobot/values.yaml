@@ -80,11 +80,11 @@ nautobot:
   # @default -- See values.yaml
   resources:
     requests:
-      cpu: "600m"
-      memory: "8704M"
-    limits:
       cpu: "100m"
       memory: "1280M"
+    limits:
+      cpu: "600m"
+      memory: "8704M"
 
   # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context
   # @default -- See values.yaml

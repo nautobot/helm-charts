@@ -183,9 +183,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "nautobot.redis.ssl" -}}
-  {{- if eq .Values.redis.enabled true -}}
-    {{- printf "%s" "False" }}
-  {{- else if .Values.nautobot.redis.ssl -}}
+  {{- if .Values.nautobot.redis.ssl -}}
     {{- printf "%s" "True" }}
   {{- else -}}
     {{- printf "%s" "False" }}

@@ -4,6 +4,65 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: fixed
+          description: Integrated Redis chart makes SSL always false
+          links:
+            - name: Github Issue
+              url: https://github.com/nautobot/helm-charts/issues/50
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Nautobot Documentation
+          url: https://nautobot.readthedocs.io/en/stable/
+        - name: Nautobot
+          url: https://github.com/nautobot/nautobot
+      artifacthub.io/prerelease: "false"
+      artifacthub.io/screenshots: |
+        - title: Main Page
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot1.png
+        - title: Rack Elevation
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot2.png
+        - title: Prefix hierarchy
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.1.4
+    created: "2021-11-03T14:59:13.09865118Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.X.X
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Nautobot is a Network Source of Truth and Network Automation Platform.
+    digest: cc943a3232acdf3589e3fe25b5b66600082954d1a9cb321f4cea57d1e78f4124
+    home: https://github.com/nautobot/nautobot
+    icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
+    keywords:
+    - DCIM
+    - IPAM
+    - SOT
+    maintainers:
+    - email: opensource@networktocode.com
+      name: Network to Code
+      url: https://www.networktocode.com/
+    name: nautobot
+    sources:
+    - https://github.com/nautobot/nautobot
+    - https://github.com/nautobot/helm-charts
+    urls:
+    - https://nautobot.github.io/helm-charts/nautobot-1.0.2.tgz
+    version: 1.0.2
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: fixed
           description: Nautobot resources request/limit switched in values.yaml
           links:
             - name: Github Issue
@@ -524,4 +583,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2021-10-28T15:43:41.723977321Z"
+generated: "2021-11-03T14:59:13.080574634Z"

@@ -5,9 +5,8 @@
   },
   "postUpgradeTasks": {
     "commands": [
-      "pip install pre-commit",
       "GO111MODULE=on go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest",
-      "pre-commit run -av"
+      "helm-docs"
     ]
   }
 }

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 <!--- Renovate --->
+- Update ghcr.io/nautobot/nautobot Docker tag to v1.1.5
 ### Added
 - [#56](https://github.com/nautobot/helm-charts/issues/56) - Added Artifact Hub images annotation for image scanning on Artifact Hub.
 

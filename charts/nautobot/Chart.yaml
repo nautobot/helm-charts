@@ -20,11 +20,13 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Integrated Redis chart makes SSL always false
+    - kind: added
+      description: Added Artifact Hub images annotation for security scanning.
       links:
+        - name: Artifact Hub documentation
+          url: https://artifacthub.io/docs/topics/annotations/helm/
         - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/50
+          url: https://github.com/nautobot/helm-charts/issues/56
 apiVersion: "v2"
 appVersion: "1.1.4"
 dependencies:

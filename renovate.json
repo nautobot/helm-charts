@@ -5,11 +5,15 @@
   },
   "postUpgradeTasks": {
     "commands": [
+      "pip install yq",
+      "NEW_VER=$(yq -r .nautobot.image.tag charts/nautobot/values.yaml) sed -i \"s@appVersion: \\\".*\\\"@appVersion: \\\"${NEW_VER}\\\"@\" charts/nautobot/Chart.yaml",
+      "NEW_VER=$(yq -r .nautobot.image.tag charts/nautobot/values.yaml) sed -i \"s@nautobot/nautobot:.*@nautobot/nautobot:${NEW_VER}@\" charts/nautobot/Chart.yaml",
       "GO111MODULE=on go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest",
       "$HOME/go/bin/helm-docs"
     ],
     "fileFilters": [
-      "**/README.md"
+      "**/README.md",
+      "**/Chart.yaml"
     ]
   }
 }

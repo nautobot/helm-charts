@@ -9,7 +9,7 @@
       "$HOME/go/bin/helm-docs"
     ],
     "fileFilters": [
-      "**/README.MD"
+      "**/README.md"
     ]
   }
 }

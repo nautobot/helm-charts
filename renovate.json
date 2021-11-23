@@ -6,7 +6,7 @@
   "postUpgradeTasks": {
     "commands": [
       "GO111MODULE=on go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest",
-      "helm-docs"
+      "/go/bin/helm-docs"
     ]
   }
 }

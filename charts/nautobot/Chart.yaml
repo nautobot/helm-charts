@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.1.4
+      image: ghcr.io/nautobot/nautobot:
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -28,7 +28,7 @@ annotations:
         - name: Github Issue
           url: https://github.com/nautobot/helm-charts/issues/56
 apiVersion: "v2"
-appVersion: "1.1.4"
+appVersion: ""
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

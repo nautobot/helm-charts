@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!--- Renovate --->
 - Update ghcr.io/nautobot/nautobot Docker tag to v1.1.5
 ### Added
+- [#46](https://github.com/nautobot/helm-charts/issues/46) - Added documentation to enable PostgreSQL and Redis TLS.
 - [#56](https://github.com/nautobot/helm-charts/issues/56) - Added Artifact Hub images annotation for image scanning on Artifact Hub.
 - [#58](https://github.com/nautobot/helm-charts/issues/58) - Added annotations to the ServiceAccount.
 

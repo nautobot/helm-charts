@@ -30,7 +30,7 @@ Update the `version` and `appVersion` (and the image tag in the `artifacthub.io/
 
 ### Check the dependencies
 
-Check the chart dependencies in `Chart.yaml` to ensure we are using the latest.
+Check the chart dependencies in `Chart.yaml` to ensure we are using the latest.  On minor or major releases use `helm dependency update charts/nautobot` to update the helm dependencies.
 
 ### Update the README
 

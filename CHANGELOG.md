@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update ghcr.io/nautobot/nautobot Docker tag to v1.1.5
 ### Added
 - [#56](https://github.com/nautobot/helm-charts/issues/56) - Added Artifact Hub images annotation for image scanning on Artifact Hub.
+- [#58](https://github.com/nautobot/helm-charts/issues/58) - Added annotations to the ServiceAccount.
 
 ## 1.0.2 - 2021-11-03
 ### Fixed

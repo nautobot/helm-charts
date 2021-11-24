@@ -547,5 +547,6 @@ $ helm delete nautobot
 | service.nodePorts.https | string | `nil` | Node port for Nautobot https choose port in Kubernetes `--service-node-port-range` typically 30000-32767 |
 | service.port | int | `80` | Port to expose for Nautobot http access |
 | service.type | string | `"ClusterIP"` | [ref](https://kubernetes.io/docs/concepts/services-networking/service/) Kubernetes service type, valid values: `ExternalName`, `ClusterIP`, `NodePort`, or `LoadBalancer` |
+| serviceAccount.annotations | object | `{}` | Service account annotations |
 | serviceAccount.create | bool | `true` | Enable creation of a Kubernetes Service Account for Nautobot |
 | serviceAccount.name | string | `$release_name` | Name of the Kubernetes Service Account for Nautobot |

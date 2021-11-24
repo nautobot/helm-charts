@@ -625,6 +625,8 @@ serviceAccount:
   # -- Name of the Kubernetes Service Account for Nautobot
   # @default -- `$release_name`
   name: ""
+  # -- Service account annotations
+  annotations: {}
 
 ingress:
   # -- Enable Ingress resource creation

@@ -179,6 +179,9 @@
           "pattern": "^(soft|hard|)$"
         },
         "podAnnotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
           "type": "object"
         },
         "podLabels": {
@@ -354,6 +357,9 @@
       "type": "object"
     },
     "commonAnnotations": {
+      "additionalProperties": {
+        "type": "string"
+      },
       "type": "object"
     },
     "ingress": {
@@ -396,6 +402,9 @@
           "type": "string"
         },
         "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
           "type": "object"
         },
         "tls": {
@@ -808,6 +817,9 @@
       ],
       "properties": {
         "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
           "type:": "object"
         },
         "clusterIP": {
@@ -881,10 +893,17 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "annotations",
         "create",
         "name"
       ],
       "properties": {
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type:": "object"
+        },
         "create": {
           "type": "boolean"
         },

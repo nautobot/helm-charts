@@ -21,6 +21,11 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: added
+      description: Added backup and restore procedures
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/16
+    - kind: added
       description: Added documentation to enable PostgreSQL and Redis TLS
       links:
         - name: Github Issue

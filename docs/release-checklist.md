@@ -26,11 +26,11 @@ Ensure that continuous integration testing on the `develop` branch is completing
 
 ### Bump the Version
 
-Update the `version` and `appVersion` in the corresponding `Chart.yaml` file.  Be sure to set the annotation `artifacthub.io/prerelease: "true"` if the chart is a pre-release version.
+Update the `version` and `appVersion` (and the image tag in the `artifacthub.io/images` annotation) in the corresponding `Chart.yaml` file.  Be sure to set the annotation `artifacthub.io/prerelease: "true"` if the chart is a pre-release version.
 
 ### Check the dependencies
 
-Check the chart dependencies in `Chart.yaml` to ensure we are using the latest.
+Check the chart dependencies in `Chart.yaml` to ensure we are using the latest.  On minor or major releases use `helm dependency update charts/nautobot` to update the helm dependencies.
 
 ### Update the README
 
@@ -43,6 +43,7 @@ Artifact hub provides several [annotations](https://artifacthub.io/docs/topics/a
 * `artifacthub.io/containsSecurityUpdates`
 * `artifacthub.io/prerelease`
 * `artifacthub.io/changes`
+* `artifacthub.io/images`
 
 ### Update the Changelog
 

@@ -4,6 +4,9 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/license: "Apache-2.0"
   artifacthub.io/prerelease: "false"
+  artifacthub.io/images: |
+    - name: nautobot
+      image: ghcr.io/nautobot/nautobot:1.1.5
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -17,13 +20,32 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Integrated Redis chart makes SSL always false
+    - kind: added
+      description: Added backup and restore procedures
       links:
         - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/50
+          url: https://github.com/nautobot/helm-charts/issues/16
+    - kind: added
+      description: Added documentation to enable PostgreSQL and Redis TLS
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/46
+    - kind: added
+      description: Added annotations for the serviceaccount
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/58
+    - kind: changed
+      description: Update ghcr.io/nautobot/nautobot Docker tag to v1.1.5
+    - kind: added
+      description: Added Artifact Hub images annotation for security scanning.
+      links:
+        - name: Artifact Hub documentation
+          url: https://artifacthub.io/docs/topics/annotations/helm/
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/56
 apiVersion: "v2"
-appVersion: "1.1.4"
+appVersion: "1.1.5"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
@@ -54,4 +76,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "1.0.2"
+version: "1.0.3"

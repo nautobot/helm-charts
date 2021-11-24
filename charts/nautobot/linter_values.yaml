@@ -18,3 +18,9 @@ metrics:
     enabled: true
   prometheusRule:
     enabled: true
+
+commonAnnotations:
+  annotateeverything: "everywhere"
+serviceAccount:
+  annotations:
+    saannotation: "only_the_sa"

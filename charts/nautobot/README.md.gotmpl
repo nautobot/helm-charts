@@ -123,7 +123,7 @@ postgresql:
 This will autogenerate certificates for use with Postgres.  Unfortunately, to force Nautobot to use Postgres over SSL a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
 
 ```python
-DATABASES["default"][OPTIONS] = {"sslmode": "require"}
+DATABASES["default"]["OPTIONS"] = {"sslmode": "require"}
 ```
 
 ### External Redis
@@ -158,6 +158,15 @@ nautobot:
       secret:
         secretName: "nautobot-redis-crt"
 
+celeryBeat:
+  extraVolumeMounts:
+    - mountPath: "/opt/nautobot/redis"
+      name: "redis-tls"
+  extraVolumes:
+    - name: "redis-tls"
+      secret:
+        secretName: "nautobot-redis-crt"
+
 celeryWorker:
   replicaCount: 1
   resources: {}
@@ -168,6 +177,7 @@ celeryWorker:
     - name: "redis-tls"
       secret:
         secretName: "nautobot-redis-crt"
+
 redis:
   tls:
     enabled: true
@@ -182,24 +192,27 @@ redis:
 This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
 
 ```python
+import ssl
+DATABASES["default"]["OPTIONS"] = {"sslmode": "require"}
 CACHES["default"]["OPTIONS"]["CONNECTION_POOL_KWARGS"] = {
-    "ssl_cert_reqs": "required",
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
     "ssl_ca_certs": "/opt/nautobot/redis/ca.crt",
     "ssl_certfile": "/opt/nautobot/redis/tls.crt",
     "ssl_keyfile": "/opt/nautobot/redis/tls.key",
 }
 CELERY_REDIS_BACKEND_USE_SSL = {
-    "ssl_cert_reqs": "required",
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
     "ssl_ca_certs": "/opt/nautobot/redis/ca.crt",
     "ssl_certfile": "/opt/nautobot/redis/tls.crt",
     "ssl_keyfile": "/opt/nautobot/redis/tls.key",
 }
+CELERY_BROKER_USE_SSL = CELERY_REDIS_BACKEND_USE_SSL
 CACHEOPS_REDIS = {
     "host": os.getenv("NAUTOBOT_REDIS_HOST", "localhost"),
     "port": int(os.getenv("NAUTOBOT_REDIS_PORT", 6379)),
     "password": os.getenv("NAUTOBOT_REDIS_PASSWORD", ""),
     "ssl": True,
-    "ssl_cert_reqs": "required",
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
     "ssl_ca_certs": "/opt/nautobot/redis/ca.crt",
     "ssl_certfile": "/opt/nautobot/redis/tls.crt",
     "ssl_keyfile": "/opt/nautobot/redis/tls.key",

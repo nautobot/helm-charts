@@ -6,7 +6,6 @@
       "required": [
         "affinity",
         "args",
-        "autoscaling",
         "command",
         "containerSecurityContext",
         "extraEnvVars",
@@ -25,7 +24,6 @@
         "podSecurityContext",
         "priorityClassName",
         "readinessProbe",
-        "replicaCount",
         "resources",
         "sidecars",
         "tolerations",
@@ -323,6 +321,7 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "celeryBeat",
     "celeryWorker",
     "commonAnnotations",
     "ingress",
@@ -335,7 +334,7 @@
     "serviceAccount"
   ],
   "properties": {
-    "celeryWorker": {
+    "celeryBeat": {
       "allOf": [
         {
           "$ref": "#/$defs/deployment"
@@ -344,6 +343,26 @@
           "type": "object",
           "required": [
             "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "celeryWorker": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "type": "object",
+          "required": [
+            "autoscaling",
+            "enabled",
+            "replicaCount"
           ],
           "properties": {
             "enabled": {
@@ -545,6 +564,7 @@
             "logLevel",
             "metrics",
             "redis",
+            "replicaCount",
             "secretKey",
             "superUser",
             "uWSGIini"
@@ -793,7 +813,9 @@
         {
           "type": "object",
           "required": [
-            "enabled"
+            "autoscaling",
+            "enabled",
+            "replicaCount"
           ],
           "properties": {
             "enabled": {

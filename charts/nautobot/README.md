@@ -13,7 +13,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 
 * Kubernetes 1.12+
 * Helm 3.1.x
-* Persistent Volume (PV) provisioning support (Required if deploying the [postgresql chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
+* Persistent Volume (PV) provisioning support (Required if deploying the [PostgreSQL chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
 
 ## Installing the Chart
 
@@ -75,7 +75,7 @@ the Nautobot application-specific values are summarized in the [Nautobot Applica
 
 ### Required Settings
 
-The following settings are the bare minimum required values to to deploy this chart:
+The following settings are the bare minimum required values to deploy this chart:
 
 ```yaml
 postgresql:
@@ -191,7 +191,7 @@ redis:
     # certCAFilename: "ca.crt"
 ```
 
-This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
+This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot, a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
 
 ```python
 import ssl
@@ -221,7 +221,7 @@ CACHEOPS_REDIS = {
 }
 ```
 
-The secret name will change based on your Helm release name.  It is also possible and likely more secure to generate your own certificates and secrets, doing so is beyond the scope of this documentation however is described in the additional resources listed below.
+The secret name will change based on your Helm release name.  It is also possible and likely more secure to generate your own certificates and secrets, doing so is beyond the scope of this documentation, however, is described in the additional resources listed below.
 
 #### Additional Resources
 
@@ -231,7 +231,7 @@ The secret name will change based on your Helm release name.  It is also possibl
 
 ### Existing Secrets
 
-If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart use:
+If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart:
 
 1. Create a secret with both PostgreSQL and Redis passwords:
 
@@ -491,7 +491,7 @@ In addition please make sure to note ALL values used to deploy this helm chart:
 helm get values -o yaml nautobot > nautobot.values.yaml
 ```
 
-As with any backup procedure these steps should be validated in your environment before relying on them in production.
+As with any backup procedure, these steps should be validated in your environment before relying on them in production.
 
 ## Restore Nautobot from Backup
 

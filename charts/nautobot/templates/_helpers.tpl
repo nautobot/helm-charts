@@ -79,9 +79,29 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{- define "nautobot.mariadb.fullname" -}}
+{{- $name := default "mariadb" .Values.mariadb.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "nautobot.database.engine" -}}
+  {{- if (and .Values.postgresql.enabled .Values.mariadb.enabled ) -}}
+    {{- fail (printf "Both PostgreSQL and MariaDB can't be enabled at the same time.") -}}
+  {{- end -}}
+  {{- if .Values.postgresql.enabled -}}
+    django.db.backends.postgresql
+  {{- else if .Values.mariadb.enabled -}}
+    django.db.backends.mysql
+  {{- else -}}
+    {{- .Values.nautobot.db.engine -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "nautobot.database.host" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- template "nautobot.postgresql.fullname" . }}
+  {{- else if eq .Values.mariadb.enabled true -}}
+    {{- template "nautobot.mariadb.fullname" . }}
   {{- else -}}
     {{- .Values.nautobot.db.host -}}
   {{- end -}}
@@ -90,6 +110,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.database.dbname" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- .Values.postgresql.postgresqlDatabase -}}
+  {{- else if eq .Values.mariadb.enabled true -}}
+    {{- .Values.mariadb.auth.database -}}
   {{- else -}}
     {{- .Values.nautobot.db.name -}}
   {{- end -}}
@@ -98,6 +120,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.database.port" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- printf "%s" "5432" -}}
+  {{- else if eq .Values.mariadb.enabled true -}}
+    {{- printf "%s" "3306" -}}
   {{- else -}}
     {{- .Values.nautobot.db.port -}}
   {{- end -}}
@@ -106,6 +130,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.database.username" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- .Values.postgresql.postgresqlUsername -}}
+  {{- else if eq .Values.mariadb.enabled true -}}
+    {{- .Values.mariadb.auth.username -}}
   {{- else -}}
     {{- .Values.nautobot.db.user -}}
   {{- end -}}
@@ -132,6 +158,23 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
         {{- $password | b64dec -}}
       {{- else -}}
         {{- required "A Postgres Password is required!" .Values.postgresql.postgresqlPassword -}}
+      {{- end -}}
+  {{- else if eq .Values.mariadb.enabled true -}}
+      {{- if .Values.mariadb.auth.existingSecret -}}
+        {{- $password := "" -}}
+        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.mariadb.auth.existingSecret) -}}
+        {{- if $secret -}}
+          {{- if index $secret.data "mariadb-password" -}}
+            {{- $password = index $secret.data "mariadb-password" -}}
+          {{- else -}}
+            {{- fail (printf "Key 'mariadb-password' not found in secret %s" .Values.mariadb.auth.existingSecret) -}}
+          {{- end -}}
+        {{- else -}}
+          {{- fail (printf "Existing secret %s not found!" .Values.mariadb.auth.existingSecret) -}}
+        {{- end -}}
+        {{- $password | b64dec -}}
+      {{- else -}}
+        {{- required "A MariaDB Password is required!" .Values.mariadb.auth.password -}}
       {{- end -}}
   {{- else -}}
     {{- if .Values.nautobot.db.existingSecret -}}

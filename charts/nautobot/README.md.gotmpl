@@ -105,7 +105,7 @@ postgresql:
 
 ### PostgreSQL TLS
 
-To enable TLS within the deployment of Nautobot and the embedded [Bitnami PostgreSQL subchart](https://github.com/bitnami/charts/tree/master/bitnami/redis) set the following helm values:
+To enable TLS within the deployment of Nautobot and the embedded [Bitnami PostgreSQL subchart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) set the following helm values:
 
 ```yaml
 postgresql:
@@ -264,6 +264,29 @@ redis:
 ```
 
 You can use various combinations of `existingSecret` and `existingSecretPasswordKey` options depending on the existing secrets you have deployed.  (NOTE: The Bitnami PostgreSQL chart does require the key name to be "postgresql-password")
+
+## MySQL Support
+
+MySQL support was added in Nautobot 1.1.0 and is optionally supported with this helm chart.  This support is provided by the [Bitnami MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart.  To enable MariaDB use the following values:
+
+```yaml
+postgresql:
+  enabled: false
+mariadb:
+  enabled: true
+  auth:
+    password: "change-me"
+```
+
+MariaDB supports an existing secret as well:
+
+```yaml
+mariadb:
+  auth:
+    existingSecret: "my-secret"
+```
+
+Use existing secret for password details (auth.rootPassword, auth.password, auth.replicationPassword will be ignored and picked up from this secret). The secret has to contain the keys mariadb-root-password, mariadb-replication-password and mariadb-password
 
 ### RQ Workers
 

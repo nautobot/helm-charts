@@ -20,6 +20,16 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
+    - kind: added
+      description: MySQL Support
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/15
+    - kind: changed
+      description: Updated Redis with TLS documentation
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/57
     - kind: changed
       description: Bumping sub-chart dependencies
     - kind: changed
@@ -41,6 +51,10 @@ dependencies:
     version: "15.X.X"
   - condition: "postgresql.enabled"
     name: "postgresql"
+    repository: "https://charts.bitnami.com/bitnami"
+    version: "10.x.x"
+  - condition: "mariadb.enabled"
+    name: "mariadb"
     repository: "https://charts.bitnami.com/bitnami"
     version: "10.x.x"
   - name: "common"

@@ -1,10 +1,10 @@
 # Contributing
 
-This section describes how to install Nautobot *helm-charts* for development, how to run tests, and make sure you are a good contributor.
+This section describes how to install Nautobot *helm-charts* for development, how to run tests and make sure you are a good contributor.
 
 ## Branches
 
-- `main` - Reserved for current release
+- `main` - Reserved for the current release
 - `develop` - Ready to release code, bases for new PRs
 - `gh-pages` - Reserved to host the chart repository using GitHub Pages
 - `<feature>` - Individual feature branches, should be PR'd to `develop`.
@@ -30,19 +30,19 @@ The following dependencies are required for development, their installation is o
 $ pre-commit run -av
 ```
 
-In some cases, such as documentation updates pre-commit will actually make the docs changes for you so it's possible to run the command above 1 time, it will fail because an update was necessary, but on subsequent runs it will succeed.
+In some cases, such as documentation updates pre-commit will actually make the docs changes for you so it's possible to run the command above 1 time, it will fail because an update was necessary, but on subsequent runs, it will succeed.
 
 Before pushing any code the pre-commit tests should all pass locally, these tests will again be run by the CI process and will prevent CI from succeeding.
 
 ### Linting
 
-Pre-commit runs several [built-in hooks](https://pre-commit.com/hooks.html) for linting linting tasks such as:
+Pre-commit runs several [built-in hooks](https://pre-commit.com/hooks.html) for linting tasks such as:
 
 * `check-case-conflict` - Check for files that would conflict in case-insensitive filesystems.
 * `check-json` - This hook checks json files for parseable syntax.
 * `check-yaml` - This hook checks yaml files for parseable syntax.
 * `check-merge-conflict` - Check for files that contain merge conflict strings.
-* `end-of-file-fixer` - Ensures that a file is either empty, or ends with one newline.
+* `end-of-file-fixer` - Ensures that a file is either empty or ends with one newline.
 * `fix-byte-order-marker` - removes UTF-8 byte order marker.
 * `mixed-line-ending` - Replaces or checks mixed line ending.
 * `pretty-format-json` - This hook sets a standard for formatting JSON files.
@@ -50,7 +50,7 @@ Pre-commit runs several [built-in hooks](https://pre-commit.com/hooks.html) for 
 
 Some other [generic linting from Lucas-C](https://github.com/Lucas-C/pre-commit-hooks):
 
-* `remove-crlf` - Removes carriage return followed by line feed to keep all files in Unix style format.
+* `remove-crlf` - Removes carriage return followed by a line feed to keep all files in Unix style format.
 * `remove-tabs` - Removes tabs to keep all spacing using standard spaces.
 
 Project specific linting includes:

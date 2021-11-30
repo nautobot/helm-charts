@@ -325,6 +325,7 @@
     "celeryWorker",
     "commonAnnotations",
     "ingress",
+    "mariadb",
     "metrics",
     "nautobot",
     "postgresql",
@@ -472,6 +473,41 @@
         },
         "secretName": {
           "type": "string"
+        }
+      }
+    },
+    "mariadb": {
+      "type": "object",
+      "required": [
+        "auth",
+        "enabled"
+      ],
+      "properties": {
+        "auth": {
+          "type": "object",
+          "required": [
+            "database",
+            "password",
+            "rootPassword",
+            "username"
+          ],
+          "properties": {
+            "database": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "rootPassword": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
+          }
+        },
+        "enabled": {
+          "type": "boolean"
         }
       }
     },

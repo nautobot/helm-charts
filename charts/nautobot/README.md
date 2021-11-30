@@ -13,7 +13,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 
 * Kubernetes 1.12+
 * Helm 3.1.x
-* Persistent Volume (PV) provisioning support (Required if deploying the [postgresql chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
+* Persistent Volume (PV) provisioning support (Required if deploying the [PostgreSQL chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
 
 ## Installing the Chart
 
@@ -75,7 +75,7 @@ the Nautobot application-specific values are summarized in the [Nautobot Applica
 
 ### Required Settings
 
-The following settings are the bare minimum required values to to deploy this chart:
+The following settings are the bare minimum required values to deploy this chart:
 
 ```yaml
 postgresql:
@@ -107,7 +107,7 @@ postgresql:
 
 ### PostgreSQL TLS
 
-To enable TLS within the deployment of Nautobot and the embedded [Bitnami PostgreSQL subchart](https://github.com/bitnami/charts/tree/master/bitnami/redis) set the following helm values:
+To enable TLS within the deployment of Nautobot and the embedded [Bitnami PostgreSQL subchart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) set the following helm values:
 
 ```yaml
 postgresql:
@@ -191,7 +191,7 @@ redis:
     # certCAFilename: "ca.crt"
 ```
 
-This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
+This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot, a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
 
 ```python
 import ssl
@@ -221,7 +221,7 @@ CACHEOPS_REDIS = {
 }
 ```
 
-The secret name will change based on your Helm release name.  It is also possible and likely more secure to generate your own certificates and secrets, doing so is beyond the scope of this documentation however is described in the additional resources listed below.
+The secret name will change based on your Helm release name.  It is also possible and likely more secure to generate your own certificates and secrets, doing so is beyond the scope of this documentation, however, is described in the additional resources listed below.
 
 #### Additional Resources
 
@@ -231,7 +231,7 @@ The secret name will change based on your Helm release name.  It is also possibl
 
 ### Existing Secrets
 
-If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart use:
+If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart:
 
 1. Create a secret with both PostgreSQL and Redis passwords:
 
@@ -266,6 +266,29 @@ redis:
 ```
 
 You can use various combinations of `existingSecret` and `existingSecretPasswordKey` options depending on the existing secrets you have deployed.  (NOTE: The Bitnami PostgreSQL chart does require the key name to be "postgresql-password")
+
+### MySQL Support
+
+MySQL support was added in Nautobot 1.1.0 and is optionally supported with this helm chart.  This support is provided by the [Bitnami MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart.  To enable MariaDB use the following values:
+
+```yaml
+postgresql:
+  enabled: false
+mariadb:
+  enabled: true
+  auth:
+    password: "change-me"
+```
+
+MariaDB supports an existing secret as well:
+
+```yaml
+mariadb:
+  auth:
+    existingSecret: "my-secret"
+```
+
+Use existing secret for password details (auth.rootPassword, auth.password, auth.replicationPassword will be ignored and picked up from this secret). The secret has to contain the keys mariadb-root-password, mariadb-replication-password and mariadb-password
 
 ### RQ Workers
 
@@ -468,7 +491,7 @@ In addition please make sure to note ALL values used to deploy this helm chart:
 helm get values -o yaml nautobot > nautobot.values.yaml
 ```
 
-As with any backup procedure these steps should be validated in your environment before relying on them in production.
+As with any backup procedure, these steps should be validated in your environment before relying on them in production.
 
 ## Restore Nautobot from Backup
 
@@ -521,6 +544,7 @@ $ helm delete nautobot
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | common | 1.x.x |
+| https://charts.bitnami.com/bitnami | mariadb | 10.x.x |
 | https://charts.bitnami.com/bitnami | postgresql | 10.x.x |
 | https://charts.bitnami.com/bitnami | redis | 15.X.X |
 
@@ -606,6 +630,11 @@ $ helm delete nautobot
 | ingress.pathType | string | `"Prefix"` | Ingress resource pathType valid values `ImplementationSpecific`, `Exact`, or `Prefix` |
 | ingress.secretName | string | `"nautobot-tls"` | The name of the secret to use for the TLS certificate |
 | ingress.tls | bool | `false` | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter |
+| mariadb.auth.database | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB database name |
+| mariadb.auth.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB user password |
+| mariadb.auth.rootPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB root user password |
+| mariadb.auth.username | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB username |
+| mariadb.enabled | bool | `false` | Enable deployment of the [Bitnami mariadb](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart, all other `redis.*` parameters will be passed directly to that chart |
 | metrics.capacityMetrics.enabled | bool | `false` | Enable serviceMonitor for [Nautobot Capacity Metrics](https://github.com/nautobot/nautobot-plugin-capacity-metrics) (Requires custom image) |
 | metrics.capacityMetrics.interval | string | `"5m"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval for Nautobot Capacity Metrics serviceMonitor |
 | metrics.capacityMetrics.labels | object | `{}` | Additional labels for the  for Nautobot Capacity Metrics serviceMonitor Object |
@@ -683,14 +712,14 @@ $ helm delete nautobot
 | nautobot.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot pods assignment |
 | nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value |
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type |
-| postgresql.enabled | bool | `true` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) all other `postgresql.*` parameters will be passed directly to that chart |
+| postgresql.enabled | bool | `true` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart |
 | postgresql.postgresqlDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name |
 | postgresql.postgresqlPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password |
 | postgresql.postgresqlUsername | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username |
 | redis.architecture | string | `"standalone"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis Architecture valid values: `standalone` or `replication` |
 | redis.auth.enabled | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Enable password authentication |
 | redis.auth.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis password |
-| redis.enabled | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) all other `redis.*` parameters will be passed directly to that chart |
+| redis.enabled | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart |
 | rqWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot RQ Worker pods assignment |
 | rqWorker.args | list | `[]` | Override default Nautobot RQ Worker container args (useful when using custom images) |
 | rqWorker.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |

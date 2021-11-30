@@ -878,7 +878,7 @@ metrics:
     #     severity: "critical"
 
 postgresql:
-  # -- Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) all other `postgresql.*` parameters will be passed directly to that chart
+  # -- Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart
   enabled: true
   # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username
   postgresqlUsername: "nautobot"
@@ -888,7 +888,7 @@ postgresql:
   postgresqlPassword: ""
 
 redis:
-  # -- Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) all other `redis.*` parameters will be passed directly to that chart
+  # -- Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart
   enabled: true
   # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis Architecture valid values: `standalone` or `replication`
   architecture: "standalone"
@@ -897,3 +897,16 @@ redis:
     enabled: true
     # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis password
     password: ""
+
+mariadb:
+  # -- Enable deployment of the [Bitnami mariadb](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart, all other `redis.*` parameters will be passed directly to that chart
+  enabled: false
+  auth:
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB database name
+    database: "nautobot"
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB username
+    username: "nautobot"
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB user password
+    password: ""
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB root user password
+    rootPassword: ""

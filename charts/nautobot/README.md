@@ -229,6 +229,58 @@ The secret name will change based on your Helm release name.  It is also possibl
 * [Bitnami Redis Helm Chart Administration - Enabling TLS](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/)
 * [Bitnami Redis Helm Chart Readme - Using TLS](https://github.com/bitnami/charts/tree/master/bitnami/redis#securing-traffic-using-tls)
 
+### Redis Sentinel
+
+Redis Sentinel provides a highly available redis implementation.  To enable Sentinel with the [Bitnami Redis subchart](https://github.com/bitnami/charts/tree/master/bitnami/redis) set the following helm values:
+
+```yaml
+redis:
+  architecture: "replication"
+  sentinel:
+    enabled: true
+    masterSet: nautobot
+```
+
+Nautobot requires some additional configuration via a [custom `nautobot_config.py`](#custom-nautobot_configpy) with following values set in `nautobot_config.py`:
+
+```python
+DJANGO_REDIS_CONNECTION_FACTORY = "django_redis.pool.SentinelConnectionFactory"
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://nautobot/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.SentinelClient",
+            "SENTINELS": [(os.getenv("NAUTOBOT_REDIS_HOST"), 26379)],
+            "PASSWORD": os.getenv("NAUTOBOT_REDIS_PASSWORD"),
+            "SENTINEL_KWARGS": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
+            "CONNECTION_POOL_CLASS": "redis.sentinel.SentinelConnectionPool",
+        },
+    },
+}
+
+CACHEOPS_REDIS = False
+CACHEOPS_SENTINEL = {
+    "locations": [(os.getenv("NAUTOBOT_REDIS_HOST"), 26379)],
+    "service_name": "nautobot",
+    "socket_timeout": 10,
+    "db": 1,
+    "sentinel_kwargs": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
+    "password": os.getenv("NAUTOBOT_REDIS_PASSWORD"),
+}
+CELERY_BROKER_URL = (
+    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_HOST')}:26379"
+)
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    "master_name": "nautobot",
+    "sentinel_kwargs": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
+}
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = CELERY_BROKER_TRANSPORT_OPTIONS
+```
+
+See the [Nautobot caching documentation](https://nautobot.readthedocs.io/en/stable/additional-features/caching/#using-redis-sentinel) for more information on configuring Nautobot with Sentinel.
+
 ### Existing Secrets
 
 If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart:

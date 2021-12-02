@@ -231,7 +231,7 @@ The secret name will change based on your Helm release name.  It is also possibl
 
 ### Redis Sentinel
 
-Redis Sentinel provides a highly available redis implementation.  To enable Sentinel with the [Bitnami Redis subchart](https://github.com/bitnami/charts/tree/master/bitnami/redis) set the following helm values:
+Redis Sentinel provides a highly available Redis implementation.  To enable Sentinel with the [Bitnami Redis subchart](https://github.com/bitnami/charts/tree/master/bitnami/redis) set the following helm values:
 
 ```yaml
 redis:
@@ -241,7 +241,7 @@ redis:
     masterSet: nautobot
 ```
 
-Nautobot requires some additional configuration via a [custom `nautobot_config.py`](#custom-nautobot_configpy) with following values set in `nautobot_config.py`:
+Nautobot requires some additional configuration via a [custom `nautobot_config.py`](#custom-nautobot_configpy) with the following values set in `nautobot_config.py`:
 
 ```python
 DJANGO_REDIS_CONNECTION_FACTORY = "django_redis.pool.SentinelConnectionFactory"

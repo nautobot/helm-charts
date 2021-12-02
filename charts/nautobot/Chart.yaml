@@ -21,6 +21,11 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: added
+      description: Redis Sentinel Documentation
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/35
+    - kind: added
       description: MySQL Support
       links:
         - name: Github Issue

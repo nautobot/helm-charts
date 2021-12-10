@@ -21,7 +21,7 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: changed
-      description: {{{prTitle}}}
+      description: Update ghcr.io/nautobot/nautobot Docker tag to v1.1.6
     - kind: added
       description: Added backup and restore procedures
       links:

@@ -1,6 +1,16 @@
 ---
 rqWorker:
   enabled: true
+  autoscaling:
+    enabled: true
+
+nautobot:
+  autoscaling:
+    enabled: true
+
+celeryWorker:
+  autoscaling:
+    enabled: true
 
 postgresql:
   enabled: false

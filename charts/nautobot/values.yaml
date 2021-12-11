@@ -95,7 +95,9 @@ nautobot:
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context
   # @default -- See values.yaml
   containerSecurityContext:
+    allowPrivilegeEscalation: false
     enabled: true
+    readOnlyRootFilesystem: true
     runAsUser: 999
     runAsGroup: 999
 
@@ -340,7 +342,9 @@ rqWorker:
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context
   # @default -- See values.yaml
   containerSecurityContext:
+    allowPrivilegeEscalation: false
     enabled: true
+    readOnlyRootFilesystem: true
     runAsUser: 999
 
   # -- Override default Nautobot RQ Worker container command (useful when using custom images)
@@ -500,7 +504,9 @@ celeryWorker:
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context
   # @default -- See values.yaml
   containerSecurityContext:
+    allowPrivilegeEscalation: false
     enabled: true
+    readOnlyRootFilesystem: true
     runAsUser: 999
 
   # -- Override default Nautobot Celery Worker container command (useful when using custom images)
@@ -674,7 +680,9 @@ celeryBeat:
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Beat Container Security Context
   # @default -- See values.yaml
   containerSecurityContext:
+    allowPrivilegeEscalation: false
     enabled: true
+    readOnlyRootFilesystem: true
     runAsUser: 999
 
   # -- Override default Nautobot Celery Beat container command (useful when using custom images)
@@ -886,6 +894,9 @@ postgresql:
   postgresqlDatabase: "nautobot"
   # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password
   postgresqlPassword: ""
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
 
 redis:
   # -- Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart
@@ -897,6 +908,16 @@ redis:
     enabled: true
     # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis password
     password: ""
+  master:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+  replica:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+  serviceAccount:
+    automountServiceAccountToken: false
 
 mariadb:
   # -- Enable deployment of the [Bitnami mariadb](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart, all other `redis.*` parameters will be passed directly to that chart
@@ -910,3 +931,15 @@ mariadb:
     password: ""
     # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB root user password
     rootPassword: ""
+  metrics:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+  primary:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+  secondary:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true

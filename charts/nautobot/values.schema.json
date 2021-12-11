@@ -299,12 +299,18 @@
       ],
       "properties": {
         "properties": {
+          "allowPrivilegeEscalation": {
+            "type": "boolean"
+          },
           "enabled": {
             "type": "boolean"
           },
           "fsGroup": {
             "type": "integer",
             "minimum": 1
+          },
+          "readOnlyRootFilesystem": {
+            "type": "boolean"
           },
           "runAsGroup": {
             "type": "integer",

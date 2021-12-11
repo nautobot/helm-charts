@@ -687,6 +687,12 @@ $ helm delete nautobot
 | mariadb.auth.rootPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB root user password |
 | mariadb.auth.username | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB username |
 | mariadb.enabled | bool | `false` | Enable deployment of the [Bitnami mariadb](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart, all other `redis.*` parameters will be passed directly to that chart |
+| mariadb.metrics.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| mariadb.metrics.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| mariadb.primary.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| mariadb.primary.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| mariadb.secondary.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| mariadb.secondary.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
 | metrics.capacityMetrics.enabled | bool | `false` | Enable serviceMonitor for [Nautobot Capacity Metrics](https://github.com/nautobot/nautobot-plugin-capacity-metrics) (Requires custom image) |
 | metrics.capacityMetrics.interval | string | `"5m"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval for Nautobot Capacity Metrics serviceMonitor |
 | metrics.capacityMetrics.labels | object | `{}` | Additional labels for the  for Nautobot Capacity Metrics serviceMonitor Object |
@@ -764,6 +770,8 @@ $ helm delete nautobot
 | nautobot.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot pods assignment |
 | nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value |
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type |
+| postgresql.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresql.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
 | postgresql.enabled | bool | `true` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart |
 | postgresql.postgresqlDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name |
 | postgresql.postgresqlPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password |
@@ -772,6 +780,11 @@ $ helm delete nautobot
 | redis.auth.enabled | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Enable password authentication |
 | redis.auth.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis password |
 | redis.enabled | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart |
+| redis.master.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| redis.master.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| redis.replica.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| redis.replica.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| redis.serviceAccount.automountServiceAccountToken | bool | `false` |  |
 | rqWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot RQ Worker pods assignment |
 | rqWorker.args | list | `[]` | Override default Nautobot RQ Worker container args (useful when using custom images) |
 | rqWorker.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |

@@ -18,7 +18,14 @@ spec:
       image: busybox
       command: ['wget']
       args: ['{{ include "common.names.fullname" . }}:{{ .Values.service.port }}']
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
       securityContext:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
   restartPolicy: Never
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault

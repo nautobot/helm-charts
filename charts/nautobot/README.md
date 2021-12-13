@@ -691,8 +691,10 @@ $ helm delete nautobot
 | mariadb.metrics.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
 | mariadb.primary.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | mariadb.primary.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| mariadb.primary.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | mariadb.secondary.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | mariadb.secondary.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| mariadb.secondary.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | metrics.capacityMetrics.enabled | bool | `false` | Enable serviceMonitor for [Nautobot Capacity Metrics](https://github.com/nautobot/nautobot-plugin-capacity-metrics) (Requires custom image) |
 | metrics.capacityMetrics.interval | string | `"5m"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval for Nautobot Capacity Metrics serviceMonitor |
 | metrics.capacityMetrics.labels | object | `{}` | Additional labels for the  for Nautobot Capacity Metrics serviceMonitor Object |
@@ -776,14 +778,17 @@ $ helm delete nautobot
 | postgresql.postgresqlDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name |
 | postgresql.postgresqlPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password |
 | postgresql.postgresqlUsername | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username |
+| postgresql.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | redis.architecture | string | `"standalone"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis Architecture valid values: `standalone` or `replication` |
 | redis.auth.enabled | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Enable password authentication |
 | redis.auth.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis password |
 | redis.enabled | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart |
 | redis.master.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | redis.master.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| redis.master.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | redis.replica.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | redis.replica.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| redis.replica.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | redis.serviceAccount.automountServiceAccountToken | bool | `false` |  |
 | rqWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot RQ Worker pods assignment |
 | rqWorker.args | list | `[]` | Override default Nautobot RQ Worker container args (useful when using custom images) |

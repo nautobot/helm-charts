@@ -13,8 +13,7 @@ celeryWorker:
     enabled: true
 
 postgresql:
-  enabled: true
-  postgresqlPassword: "change-me"
+  enabled: false
 redis:
   auth:
     password: "change-me"
@@ -37,6 +36,6 @@ serviceAccount:
     saannotation: "only_the_sa"
 
 mariadb:
-  enabled: false
+  enabled: true
   auth:
     password: "change-me"

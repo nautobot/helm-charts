@@ -92,7 +92,7 @@ nautobot:
     enabled: true
     fsGroup: 999
     seccompProfile:
-      type: RuntimeDefault
+      type: "RuntimeDefault"
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context
   # @default -- See values.yaml
@@ -341,7 +341,7 @@ rqWorker:
     enabled: true
     fsGroup: 999
     seccompProfile:
-      type: RuntimeDefault
+      type: "RuntimeDefault"
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context
   # @default -- See values.yaml
@@ -505,7 +505,7 @@ celeryWorker:
     enabled: true
     fsGroup: 999
     seccompProfile:
-      type: RuntimeDefault
+      type: "RuntimeDefault"
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context
   # @default -- See values.yaml
@@ -683,7 +683,7 @@ celeryBeat:
     enabled: true
     fsGroup: 999
     seccompProfile:
-      type: RuntimeDefault
+      type: "RuntimeDefault"
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Beat Container Security Context
   # @default -- See values.yaml
@@ -904,7 +904,7 @@ postgresql:
   postgresqlPassword: ""
   securityContext:
     seccompProfile:
-        type: RuntimeDefault
+      type: "RuntimeDefault"
   containerSecurityContext:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
@@ -925,14 +925,14 @@ redis:
       readOnlyRootFilesystem: true
     podSecurityContext:
       seccompProfile:
-        type: RuntimeDefault
+        type: "RuntimeDefault"
   replica:
     containerSecurityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
     podSecurityContext:
       seccompProfile:
-        type: RuntimeDefault
+        type: "RuntimeDefault"
   serviceAccount:
     automountServiceAccountToken: false
 
@@ -958,11 +958,11 @@ mariadb:
       readOnlyRootFilesystem: true
     podSecurityContext:
       seccompProfile:
-        type: RuntimeDefault
+        type: "RuntimeDefault"
   secondary:
     containerSecurityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
     podSecurityContext:
       seccompProfile:
-        type: RuntimeDefault
+        type: "RuntimeDefault"

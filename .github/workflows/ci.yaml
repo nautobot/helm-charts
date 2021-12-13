@@ -1,0 +1,79 @@
+---
+name: "CI"
+
+on:  # yamllint disable-line rule:truthy
+  workflow_dispatch:  # yamllint disable-line rule:empty-values
+  pull_request:  # yamllint disable-line rule:empty-values
+
+concurrency:
+  group: "${{ github.head_ref }}-ci"
+  cancel-in-progress: true
+
+jobs:
+  pre-commit-check:
+    name: "Run pre-commit checks"
+    runs-on: "ubuntu-20.04"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+        with:
+          fetch-depth: 0
+
+      - name: "Setup Go"
+        uses: "actions/setup-go@v2"
+
+      - name: "Install helm-docs"
+        run: "go get github.com/norwoodj/helm-docs/cmd/helm-docs"
+        env:
+          GO111MODULE: "on"
+
+      - run: "echo $HOME/go/bin >> $GITHUB_PATH"
+
+      - uses: "dorny/paths-filter@v2"
+        id: "filter"
+        with:
+          list-files: "shell"
+          filters: |
+            addedOrModified:
+              - added|modified: '**'
+
+      # run only if changed files were detected
+      - name: "Run against changes"
+        uses: "pre-commit/action@v2.0.3"
+        if: "steps.filter.outputs.addedOrModified == 'true'"
+        with:
+          extra_args: "--files ${{ steps.filter.outputs.addedOrModified_files }}"
+
+      # run if no changed files were detected (e.g. workflow_dispatch on main branch)
+      - name: "Run against all files"
+        uses: "pre-commit/action@v2.0.3"
+        if: "steps.filter.outputs.addedOrModified != 'true'"
+        with:
+          extra_args: "--all-files"
+
+  snyk-security-check:
+    name: "Snyk Security Scanning"
+    runs-on: "ubuntu-20.04"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+      - uses: "azure/setup-helm@v1"
+      - run: "helm template -f charts/nautobot/linter_values.yaml charts/nautobot --output-dir=./test-postgres"
+      - name: "Run Snyk to check template files for security issues"
+        # Snyk can be used to break the build when it detects security issues.
+        # In this case we want to upload the issues to GitHub Code Scanning
+        continue-on-error: true
+        uses: "snyk/actions/iac@master"
+        env:
+          # In order to use the Snyk Action you will need to have a Snyk API token.
+          # More details in https://github.com/snyk/actions#getting-your-snyk-token
+          SNYK_TOKEN: "${{ secrets.SNYK_TOKEN }}"
+        with:
+          # Add the path to the configuration file that you would like to test.
+          # For example `deployment.yaml` for a Kubernetes deployment manifest
+          # or `main.tf` for a Terraform configuration file
+          file: "./test-postgres"
+      - name: "Upload result to GitHub Code Scanning"
+        uses: "github/codeql-action/upload-sarif@v1"
+        with:
+          sarif_file: "snyk.sarif"

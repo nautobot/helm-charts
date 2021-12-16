@@ -49,7 +49,7 @@ data:
 {{- .name | nindent 2 }}: {{ .value | quote }}
 {{- end }}
 {{- end }}
-{{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) }}
+{{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini .Values.nautobot.plugins) }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -72,5 +72,11 @@ data:
   {{- if .Values.nautobot.uWSGIini }}
   uwsgi.ini: |
     {{- .Values.nautobot.uWSGIini | nindent 4 }}
+  {{- end }}
+  {{- if .Values.nautobot.plugins }}
+  requirements.txt: |
+    {{- range .Values.nautobot.plugins }}
+    {{- .name | nindent 4}}{{- if .version }}=={{.version}}{{- end}}
+    {{- end}}
   {{- end }}
 {{- end }}

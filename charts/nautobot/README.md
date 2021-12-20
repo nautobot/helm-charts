@@ -602,6 +602,17 @@ export POSTGRES_PASSWORD=$(kubectl get secret --namespace nautobot nautobot-post
 echo $POSTGRES_PASSWORD | kubectl exec -itn default statefulset.apps/nautobot-postgresql -- psql -U nautobot -f /tmp/backup.sql
 ```
 
+## Upgrading
+
+### 1.0.x to 1.1.x
+
+Following the normal helm upgrade procedures is sufficient for upgrading during this release:
+
+```no-highlight
+helm repo update nautobot
+helm upgrade nautobot nautobot/nautobot -f nautobot.values.yaml
+```
+
 ## Known Issues
 
 ### Invalidate Redis Cache

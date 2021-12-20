@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.1.6
+      image: ghcr.io/nautobot/nautobot:1.2.1
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -20,6 +20,8 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
+    - kind: changed
+      description: {{{prTitle}}}
     - kind: changed
       description: Update ghcr.io/nautobot/nautobot Docker tag to v1.1.6
     - kind: added
@@ -47,7 +49,7 @@ annotations:
         - name: Github Issue
           url: https://github.com/nautobot/helm-charts/issues/56
 apiVersion: "v2"
-appVersion: "1.1.6"
+appVersion: "1.2.1"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

@@ -507,7 +507,7 @@ redis:
     password: "change-me"
 ```
 
-[PostgreSQL HA](#postgresql-ha) and [Redis Sentinel](#redis-sentinel) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.
+[PostgreSQL HA](#posgresql-high-availability) and [Redis Sentinel](#redis-sentinel) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.
 
 ## Nautobot Application Values
 

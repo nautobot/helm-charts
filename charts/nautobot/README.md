@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 1.0.4](https://img.shields.io/badge/Version-1.0.4-informational?style=flat-square) ![AppVersion: 1.1.6](https://img.shields.io/badge/AppVersion-1.1.6-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![AppVersion: 1.2.1](https://img.shields.io/badge/AppVersion-1.2.1-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -13,7 +13,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 
 * Kubernetes 1.12+
 * Helm 3.1.x
-* Persistent Volume (PV) provisioning support (Required if deploying the [postgresql chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
+* Persistent Volume (PV) provisioning support (Required if deploying the [PostgreSQL chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
 
 ## Installing the Chart
 
@@ -75,7 +75,7 @@ the Nautobot application-specific values are summarized in the [Nautobot Applica
 
 ### Required Settings
 
-The following settings are the bare minimum required values to to deploy this chart:
+The following settings are the bare minimum required values to deploy this chart:
 
 ```yaml
 postgresql:
@@ -107,7 +107,7 @@ postgresql:
 
 ### PostgreSQL TLS
 
-To enable TLS within the deployment of Nautobot and the embedded [Bitnami PostgreSQL subchart](https://github.com/bitnami/charts/tree/master/bitnami/redis) set the following helm values:
+To enable TLS within the deployment of Nautobot and the embedded [Bitnami PostgreSQL subchart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) set the following helm values:
 
 ```yaml
 postgresql:
@@ -125,7 +125,7 @@ postgresql:
 This will autogenerate certificates for use with Postgres.  Unfortunately, to force Nautobot to use Postgres over SSL a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
 
 ```python
-DATABASES["default"][OPTIONS] = {"sslmode": "require"}
+DATABASES["default"]["OPTIONS"] = {"sslmode": "require"}
 ```
 
 ### External Redis
@@ -160,6 +160,15 @@ nautobot:
       secret:
         secretName: "nautobot-redis-crt"
 
+celeryBeat:
+  extraVolumeMounts:
+    - mountPath: "/opt/nautobot/redis"
+      name: "redis-tls"
+  extraVolumes:
+    - name: "redis-tls"
+      secret:
+        secretName: "nautobot-redis-crt"
+
 celeryWorker:
   replicaCount: 1
   resources: {}
@@ -170,6 +179,7 @@ celeryWorker:
     - name: "redis-tls"
       secret:
         secretName: "nautobot-redis-crt"
+
 redis:
   tls:
     enabled: true
@@ -181,34 +191,37 @@ redis:
     # certCAFilename: "ca.crt"
 ```
 
-This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
+This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot, a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
 
 ```python
+import ssl
+DATABASES["default"]["OPTIONS"] = {"sslmode": "require"}
 CACHES["default"]["OPTIONS"]["CONNECTION_POOL_KWARGS"] = {
-    "ssl_cert_reqs": "required",
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
     "ssl_ca_certs": "/opt/nautobot/redis/ca.crt",
     "ssl_certfile": "/opt/nautobot/redis/tls.crt",
     "ssl_keyfile": "/opt/nautobot/redis/tls.key",
 }
 CELERY_REDIS_BACKEND_USE_SSL = {
-    "ssl_cert_reqs": "required",
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
     "ssl_ca_certs": "/opt/nautobot/redis/ca.crt",
     "ssl_certfile": "/opt/nautobot/redis/tls.crt",
     "ssl_keyfile": "/opt/nautobot/redis/tls.key",
 }
+CELERY_BROKER_USE_SSL = CELERY_REDIS_BACKEND_USE_SSL
 CACHEOPS_REDIS = {
     "host": os.getenv("NAUTOBOT_REDIS_HOST", "localhost"),
     "port": int(os.getenv("NAUTOBOT_REDIS_PORT", 6379)),
     "password": os.getenv("NAUTOBOT_REDIS_PASSWORD", ""),
     "ssl": True,
-    "ssl_cert_reqs": "required",
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
     "ssl_ca_certs": "/opt/nautobot/redis/ca.crt",
     "ssl_certfile": "/opt/nautobot/redis/tls.crt",
     "ssl_keyfile": "/opt/nautobot/redis/tls.key",
 }
 ```
 
-The secret name will change based on your Helm release name.  It is also possible and likely more secure to generate your own certificates and secrets, doing so is beyond the scope of this documentation however is described in the additional resources listed below.
+The secret name will change based on your Helm release name.  It is also possible and likely more secure to generate your own certificates and secrets, doing so is beyond the scope of this documentation, however, is described in the additional resources listed below.
 
 #### Additional Resources
 
@@ -216,9 +229,63 @@ The secret name will change based on your Helm release name.  It is also possibl
 * [Bitnami Redis Helm Chart Administration - Enabling TLS](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/)
 * [Bitnami Redis Helm Chart Readme - Using TLS](https://github.com/bitnami/charts/tree/master/bitnami/redis#securing-traffic-using-tls)
 
+### Redis Sentinel
+
+Redis Sentinel provides a highly available Redis implementation.  To enable Sentinel with the [Bitnami Redis subchart](https://github.com/bitnami/charts/tree/master/bitnami/redis) set the following helm values:
+
+```yaml
+redis:
+  architecture: "replication"
+  sentinel:
+    enabled: true
+    masterSet: nautobot
+```
+
+Nautobot requires some additional configuration via a [custom `nautobot_config.py`](#custom-nautobot_configpy) with the following values set in `nautobot_config.py`:
+
+```python
+DJANGO_REDIS_CONNECTION_FACTORY = "django_redis.pool.SentinelConnectionFactory"
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://nautobot/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.SentinelClient",
+            "SENTINELS": [(os.getenv("NAUTOBOT_REDIS_HOST"), 26379)],
+            "PASSWORD": os.getenv("NAUTOBOT_REDIS_PASSWORD"),
+            "SENTINEL_KWARGS": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
+            "CONNECTION_POOL_CLASS": "redis.sentinel.SentinelConnectionPool",
+        },
+    },
+}
+
+CACHEOPS_REDIS = False
+CACHEOPS_SENTINEL = {
+    "locations": [(os.getenv("NAUTOBOT_REDIS_HOST"), 26379)],
+    "service_name": "nautobot",
+    "socket_timeout": 10,
+    "db": 1,
+    "sentinel_kwargs": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
+    "password": os.getenv("NAUTOBOT_REDIS_PASSWORD"),
+}
+CELERY_BROKER_URL = (
+    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_HOST')}:26379"
+)
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    "master_name": "nautobot",
+    "sentinel_kwargs": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
+}
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = CELERY_BROKER_TRANSPORT_OPTIONS
+```
+
+See the [Nautobot caching documentation](https://nautobot.readthedocs.io/en/stable/additional-features/caching/#using-redis-sentinel) for more information on configuring Nautobot with Sentinel.
+
+This helm chart's support for Redis Sentinel is still in an early alpha/beta phase you should use this feature cautiously.
+
 ### Existing Secrets
 
-If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart use:
+If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart:
 
 1. Create a secret with both PostgreSQL and Redis passwords:
 
@@ -253,6 +320,64 @@ redis:
 ```
 
 You can use various combinations of `existingSecret` and `existingSecretPasswordKey` options depending on the existing secrets you have deployed.  (NOTE: The Bitnami PostgreSQL chart does require the key name to be "postgresql-password")
+
+### MySQL Support
+
+MySQL support was added in Nautobot 1.1.0 and is optionally supported with this helm chart.  This support is provided by the [Bitnami MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart.  To enable MariaDB use the following values:
+
+```yaml
+postgresql:
+  enabled: false
+mariadb:
+  enabled: true
+  auth:
+    password: "change-me"
+```
+
+MariaDB supports an existing secret as well:
+
+```yaml
+mariadb:
+  auth:
+    existingSecret: "my-secret"
+```
+
+Use existing secret for password details (auth.rootPassword, auth.password, auth.replicationPassword will be ignored and picked up from this secret). The secret has to contain the keys mariadb-root-password, mariadb-replication-password and mariadb-password
+
+### PosgreSQL High Availability
+
+This chart supports the deployment of PostgreSQL in a Highly Available (HA) fasion as provided by the Bitnami [PostgreSQL-HA](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart.  To enable HA PostgreSQL use the following values:
+
+```yaml
+postgresql:
+  enabled: false
+postgresqlha:
+  enabled: true
+  postgresql:
+    password: "change-me"
+    repmgrPassword: "change-me"
+    postgresPassword: "change-me"
+  pgpool:
+    adminPassword: "change-me"
+```
+
+It is important to note all 4 passwords as they will be required during an upgrade.  PostgreSQL supports existing secrets as well when configured with the following values:
+
+```yaml
+postgresqlha:
+  postgresql:
+    existingSecret: "my-secret"
+  pgpool:
+    existingSecret: "my-secret"
+```
+
+This secret can be created with:
+
+```no-highlight
+kubectl create secret generic my-secret --from-literal=admin-password=change-me --from-literal=postgresql-password=change-me --from-literal=postgresql-postgres-password=change-me --from-literal=repmgr-password=change-me
+```
+
+This helm chart's support for PosgreSQL HA is still in an early alpha/beta phase you should use this feature cautiously.
 
 ### RQ Workers
 
@@ -382,6 +507,8 @@ redis:
     password: "change-me"
 ```
 
+[PostgreSQL HA](#posgresql-high-availability) and [Redis Sentinel](#redis-sentinel) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.
+
 ## Nautobot Application Values
 
 | Key | Type | Default | Description |
@@ -455,7 +582,7 @@ In addition please make sure to note ALL values used to deploy this helm chart:
 helm get values -o yaml nautobot > nautobot.values.yaml
 ```
 
-As with any backup procedure these steps should be validated in your environment before relying on them in production.
+As with any backup procedure, these steps should be validated in your environment before relying on them in production.
 
 ## Restore Nautobot from Backup
 
@@ -473,6 +600,17 @@ Upload the backup and restore:
 kubectl cp backup.sql nautobot-postgresql-0:/tmp
 export POSTGRES_PASSWORD=$(kubectl get secret --namespace nautobot nautobot-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 echo $POSTGRES_PASSWORD | kubectl exec -itn default statefulset.apps/nautobot-postgresql -- psql -U nautobot -f /tmp/backup.sql
+```
+
+## Upgrading
+
+### 1.0.x to 1.1.x
+
+Following the normal helm upgrade procedures is sufficient for upgrading during this release:
+
+```no-highlight
+helm repo update nautobot
+helm upgrade nautobot nautobot/nautobot -f nautobot.values.yaml
 ```
 
 ## Known Issues
@@ -508,13 +646,46 @@ $ helm delete nautobot
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | common | 1.x.x |
+| https://charts.bitnami.com/bitnami | mariadb | 10.x.x |
 | https://charts.bitnami.com/bitnami | postgresql | 10.x.x |
+| https://charts.bitnami.com/bitnami | postgresqlha(postgresql-ha) | 8.x.x |
 | https://charts.bitnami.com/bitnami | redis | 15.X.X |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| celeryBeat.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot Celery Beat pods assignment |
+| celeryBeat.args | list | `[]` | Override default Nautobot Celery Beat container args (useful when using custom images) |
+| celeryBeat.command | list | See values.yaml | Override default Nautobot Celery Beat container command (useful when using custom images) |
+| celeryBeat.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Beat Container Security Context |
+| celeryBeat.enabled | bool | `true` | Enables the Celery Beat (scheduled jobs) for Nautobot |
+| celeryBeat.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot Celery Beat pods |
+| celeryBeat.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot Celery Beat pods |
+| celeryBeat.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot Celery Beat pods |
+| celeryBeat.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot Celery Beat containers |
+| celeryBeat.extraVolumes | list | `[]` | List of additional volumes for the Nautobot Celery Beat pod |
+| celeryBeat.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot Celery Beat pods host aliases |
+| celeryBeat.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Beat pods |
+| celeryBeat.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot Celery Beat container(s) to automate configuration before or after startup |
+| celeryBeat.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Beat liveness probe |
+| celeryBeat.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Beat Node Affinity preset |
+| celeryBeat.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
+| celeryBeat.nodeAffinityPreset.type | string | `""` | Nautobot Celery Beat Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
+| celeryBeat.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
+| celeryBeat.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Beat pods assignment |
+| celeryBeat.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Beat Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
+| celeryBeat.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot Celery Beat pods |
+| celeryBeat.podAntiAffinityPreset | string | `"soft"` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Beat Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
+| celeryBeat.podLabels | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for Nautobot Celery Beat pods |
+| celeryBeat.podSecurityContext | object | See values.yaml | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Beat Pods Security Context |
+| celeryBeat.priorityClassName | string | `""` | Nautobot Celery Beat pods' priorityClassName |
+| celeryBeat.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Beat readiness probe |
+| celeryBeat.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot Celery Beat resource requests and limits |
+| celeryBeat.revisionHistoryLimit | int | `3` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain |
+| celeryBeat.sidecars | object | `{}` | Add additional sidecar containers to the Nautobot Celery Beat pods |
+| celeryBeat.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot Celery Beat pods assignment |
+| celeryBeat.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Celery Beat Deployment strategy type |
 | celeryWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot Celery Worker pods assignment |
 | celeryWorker.args | list | `[]` | Override default Nautobot Celery Worker container args (useful when using custom images) |
 | celeryWorker.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
@@ -562,6 +733,31 @@ $ helm delete nautobot
 | ingress.pathType | string | `"Prefix"` | Ingress resource pathType valid values `ImplementationSpecific`, `Exact`, or `Prefix` |
 | ingress.secretName | string | `"nautobot-tls"` | The name of the secret to use for the TLS certificate |
 | ingress.tls | bool | `false` | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter |
+| mariadb.auth.database | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB database name |
+| mariadb.auth.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB user password |
+| mariadb.auth.rootPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB root user password |
+| mariadb.auth.username | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB username |
+| mariadb.enabled | bool | `false` | Enable deployment of the [Bitnami mariadb](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart, all other `redis.*` parameters will be passed directly to that chart |
+| mariadb.image.pullPolicy | string | `"Always"` |  |
+| mariadb.metrics.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| mariadb.metrics.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| mariadb.metrics.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| mariadb.primary.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| mariadb.primary.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| mariadb.primary.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
+| mariadb.primary.extraEnvVars[0].name | string | `"MARIADB_CHARACTER_SET"` |  |
+| mariadb.primary.extraEnvVars[0].value | string | `"utf8mb4"` |  |
+| mariadb.primary.extraEnvVars[1].name | string | `"MARIADB_COLLATE"` |  |
+| mariadb.primary.extraEnvVars[1].value | string | `"utf8mb4_bin"` |  |
+| mariadb.primary.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| mariadb.secondary.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| mariadb.secondary.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| mariadb.secondary.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
+| mariadb.secondary.extraEnvVars[0].name | string | `"MARIADB_CHARACTER_SET"` |  |
+| mariadb.secondary.extraEnvVars[0].value | string | `"utf8mb4"` |  |
+| mariadb.secondary.extraEnvVars[1].name | string | `"MARIADB_COLLATE"` |  |
+| mariadb.secondary.extraEnvVars[1].value | string | `"utf8mb4_bin"` |  |
+| mariadb.secondary.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | metrics.capacityMetrics.enabled | bool | `false` | Enable serviceMonitor for [Nautobot Capacity Metrics](https://github.com/nautobot/nautobot-plugin-capacity-metrics) (Requires custom image) |
 | metrics.capacityMetrics.interval | string | `"5m"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval for Nautobot Capacity Metrics serviceMonitor |
 | metrics.capacityMetrics.labels | object | `{}` | Additional labels for the  for Nautobot Capacity Metrics serviceMonitor Object |
@@ -597,11 +793,11 @@ $ helm delete nautobot
 | nautobot.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot containers |
 | nautobot.extraVolumes | list | `[]` | List of additional volumes for the Nautobot server pod |
 | nautobot.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases |
-| nautobot.image.pullPolicy | string | `"IfNotPresent"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent` |
+| nautobot.image.pullPolicy | string | `"Always"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent` |
 | nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
-| nautobot.image.tag | string | `"1.1.6"` | Nautobot image tag, common to all deployments |
+| nautobot.image.tag | string | `"1.2.1"` | Nautobot image tag, common to all deployments |
 | nautobot.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods |
 | nautobot.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | nautobot.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
@@ -639,14 +835,58 @@ $ helm delete nautobot
 | nautobot.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot pods assignment |
 | nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value |
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type |
-| postgresql.enabled | bool | `true` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) all other `postgresql.*` parameters will be passed directly to that chart |
+| postgresql.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresql.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| postgresql.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
+| postgresql.enabled | bool | `true` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart |
+| postgresql.image.pullPolicy | string | `"Always"` |  |
 | postgresql.postgresqlDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name |
 | postgresql.postgresqlPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password |
 | postgresql.postgresqlUsername | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username |
+| postgresql.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| postgresqlha.enabled | bool | `false` | Enable deployment of the [Bitnami postgresql-ha](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart, all other `postgresql-ha.*` parameters will be passed directly to that chart |
+| postgresqlha.image.pullPolicy | string | `"Always"` |  |
+| postgresqlha.metrics.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresqlha.metrics.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| postgresqlha.metrics.securityContext.readOnlyRootFilesystem | bool | `true` |  |
+| postgresqlha.metrics.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| postgresqlha.metricsImage.pullPolicy | string | `"Always"` |  |
+| postgresqlha.pgpool.adminPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Pgpool Admin password |
+| postgresqlha.pgpool.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresqlha.pgpool.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| postgresqlha.pgpool.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
+| postgresqlha.pgpool.containerSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| postgresqlha.pgpool.pdb.create | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Enable a Pod Distribution Budget for Pgpool |
+| postgresqlha.pgpool.replicaCount | int | `2` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) The number of replicas to deploy |
+| postgresqlha.pgpool.srCheckDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Name of the database to perform streaming replication checks |
+| postgresqlha.pgpool.updateStrategy | object | See values.yaml | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Strategy used to replace old Pgpool Pods by new ones |
+| postgresqlha.pgpoolImage.pullPolicy | string | `"Always"` |  |
+| postgresqlha.postgresql.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresqlha.postgresql.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| postgresqlha.postgresql.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
+| postgresqlha.postgresql.containerSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| postgresqlha.postgresql.database | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL database name |
+| postgresqlha.postgresql.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL user password |
+| postgresqlha.postgresql.pdb.create | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) Enable a Pod Distribution Budget for Postgres |
+| postgresqlha.postgresql.postgresPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL postgres user password |
+| postgresqlha.postgresql.repmgrPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL Repmgr password |
+| postgresqlha.postgresql.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| postgresqlha.postgresql.username | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL username |
+| postgresqlha.postgresqlImage.pullPolicy | string | `"Always"` |  |
 | redis.architecture | string | `"standalone"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis Architecture valid values: `standalone` or `replication` |
 | redis.auth.enabled | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Enable password authentication |
 | redis.auth.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis password |
-| redis.enabled | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) all other `redis.*` parameters will be passed directly to that chart |
+| redis.enabled | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart |
+| redis.image.pullPolicy | string | `"Always"` |  |
+| redis.master.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| redis.master.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| redis.master.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| redis.master.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| redis.replica.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| redis.replica.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| redis.replica.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| redis.replica.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| redis.serviceAccount.automountServiceAccountToken | bool | `false` |  |
 | rqWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot RQ Worker pods assignment |
 | rqWorker.args | list | `[]` | Override default Nautobot RQ Worker container args (useful when using custom images) |
 | rqWorker.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |

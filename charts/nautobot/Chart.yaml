@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.1.6
+      image: ghcr.io/nautobot/nautobot:1.2.1
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -20,34 +20,47 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
+    - kind: added
+      description: Security Scanning & Remediations for medium/high findings
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/87
+    - kind: added
+      description: PostgreSQL High Availability Support
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/35
     - kind: changed
-      description: Update ghcr.io/nautobot/nautobot Docker tag to v1.1.6
+      description: Update ghcr.io/nautobot/nautobot Docker tag to v1.2.1
     - kind: added
-      description: Added backup and restore procedures
+      description: Redis Sentinel Documentation
       links:
         - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/16
+          url: https://github.com/nautobot/helm-charts/issues/35
     - kind: added
-      description: Added documentation to enable PostgreSQL and Redis TLS
+      description: MySQL Support
       links:
         - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/46
-    - kind: added
-      description: Added annotations for the serviceaccount
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/58
+          url: https://github.com/nautobot/helm-charts/issues/15
     - kind: changed
-      description: Update ghcr.io/nautobot/nautobot Docker tag to v1.1.5
-    - kind: added
-      description: Added Artifact Hub images annotation for security scanning.
+      description: Updated Redis with TLS documentation
       links:
-        - name: Artifact Hub documentation
-          url: https://artifacthub.io/docs/topics/annotations/helm/
         - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/56
+          url: https://github.com/nautobot/helm-charts/issues/57
+    - kind: changed
+      description: Bumping sub-chart dependencies
+    - kind: changed
+      description: Upgraded Nautobot to 1.2.1
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/47
+    - kind: added
+      description: Added Celery Beat for Nautobot 1.2 support
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/47
 apiVersion: "v2"
-appVersion: "1.1.6"
+appVersion: "1.2.1"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
@@ -55,6 +68,15 @@ dependencies:
     version: "15.X.X"
   - condition: "postgresql.enabled"
     name: "postgresql"
+    repository: "https://charts.bitnami.com/bitnami"
+    version: "10.x.x"
+  - condition: "postgresqlha.enabled"
+    name: "postgresql-ha"
+    repository: "https://charts.bitnami.com/bitnami"
+    version: "8.x.x"
+    alias: "postgresqlha"
+  - condition: "mariadb.enabled"
+    name: "mariadb"
     repository: "https://charts.bitnami.com/bitnami"
     version: "10.x.x"
   - name: "common"
@@ -78,4 +100,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "1.0.4"
+version: "1.1.0"

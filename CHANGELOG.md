@@ -8,6 +8,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 <!--- Renovate --->
 
+## 1.1.0 - 2021-12-20
+### Added
+- Security scanning provided by Snyk and Kubescan to CI process
+- Security remediations for most findings from security scanners, notably:
+
+```yaml
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+```
+
+was added to nearly all containers.
+- PostgreSQL High Availability support
+- Redis Sentinel Support
+- MySQL Support
+- Support for scheduled jobs with Nautobot 1.2
+
+### Changed
+- Updated to Nautobot 1.2.1
+- Improved Redis TLS documentation
+- Upgraded sub-chart dependencies
+
 ## 1.0.4 - 2021-12-10
 ### Changed
 - Update ghcr.io/nautobot/nautobot Docker tag to v1.1.6

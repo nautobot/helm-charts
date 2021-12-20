@@ -6,7 +6,6 @@
       "required": [
         "affinity",
         "args",
-        "autoscaling",
         "command",
         "containerSecurityContext",
         "extraEnvVars",
@@ -25,7 +24,6 @@
         "podSecurityContext",
         "priorityClassName",
         "readinessProbe",
-        "replicaCount",
         "resources",
         "sidecars",
         "tolerations",
@@ -301,12 +299,29 @@
       ],
       "properties": {
         "properties": {
+          "allowPrivilegeEscalation": {
+            "type": "boolean"
+          },
+          "capabilities": {
+            "type": "object",
+            "properties": {
+              "add": {
+                "type": "array"
+              },
+              "drop": {
+                "type": "array"
+              }
+            }
+          },
           "enabled": {
             "type": "boolean"
           },
           "fsGroup": {
             "type": "integer",
             "minimum": 1
+          },
+          "readOnlyRootFilesystem": {
+            "type": "boolean"
           },
           "runAsGroup": {
             "type": "integer",
@@ -315,6 +330,9 @@
           "runAsUser": {
             "type": "integer",
             "minimum": 1
+          },
+          "seccompProfile": {
+            "type": "object"
           }
         }
       }
@@ -323,19 +341,22 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "celeryBeat",
     "celeryWorker",
     "commonAnnotations",
     "ingress",
+    "mariadb",
     "metrics",
     "nautobot",
     "postgresql",
+    "postgresqlha",
     "redis",
     "rqWorker",
     "service",
     "serviceAccount"
   ],
   "properties": {
-    "celeryWorker": {
+    "celeryBeat": {
       "allOf": [
         {
           "$ref": "#/$defs/deployment"
@@ -344,6 +365,26 @@
           "type": "object",
           "required": [
             "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "celeryWorker": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "type": "object",
+          "required": [
+            "autoscaling",
+            "enabled",
+            "replicaCount"
           ],
           "properties": {
             "enabled": {
@@ -456,6 +497,41 @@
         }
       }
     },
+    "mariadb": {
+      "type": "object",
+      "required": [
+        "auth",
+        "enabled"
+      ],
+      "properties": {
+        "auth": {
+          "type": "object",
+          "required": [
+            "database",
+            "password",
+            "rootPassword",
+            "username"
+          ],
+          "properties": {
+            "database": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "rootPassword": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
+          }
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
     "metrics": {
       "additionalProperties": false,
       "type": "object",
@@ -545,6 +621,7 @@
             "logLevel",
             "metrics",
             "redis",
+            "replicaCount",
             "secretKey",
             "superUser",
             "uWSGIini"
@@ -758,6 +835,52 @@
         }
       }
     },
+    "postgresql-ha": {
+      "type": "object"
+    },
+    "postgresqlha": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "pgpool",
+        "postgresql"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "pgpool": {
+          "type": "object",
+          "required": [
+            "adminPassword"
+          ],
+          "properties": {
+            "adminPassword": {
+              "type": "string"
+            }
+          }
+        },
+        "postgresql": {
+          "type": "object",
+          "required": [
+            "password",
+            "postgresPassword",
+            "repmgrPassword"
+          ],
+          "properties": {
+            "password": {
+              "type": "string"
+            },
+            "postgresPassword": {
+              "type": "string"
+            },
+            "repmgrPassword": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "redis": {
       "type": "object",
       "required": [
@@ -793,7 +916,9 @@
         {
           "type": "object",
           "required": [
-            "enabled"
+            "autoscaling",
+            "enabled",
+            "replicaCount"
           ],
           "properties": {
             "enabled": {

@@ -79,9 +79,38 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{- define "nautobot.mariadb.fullname" -}}
+{{- $name := default "mariadb" .Values.mariadb.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "nautobot.postgresqlha.fullname" -}}
+{{- $name := default "postgresqlha-pgpool" .Values.postgresqlha.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "nautobot.database.engine" -}}
+  {{- if (and (or .Values.postgresql.enabled .Values.postgresqlha.enabled) .Values.mariadb.enabled ) -}}
+    {{- fail (printf "Both PostgreSQL and MariaDB can't be enabled at the same time.") -}}
+  {{- else if (and .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
+    {{- fail (printf "Both PostgreSQL and PostgreSQL-HA can't be enabled at the same time.") -}}
+  {{- end -}}
+  {{- if (or .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
+    django.db.backends.postgresql
+  {{- else if .Values.mariadb.enabled -}}
+    django.db.backends.mysql
+  {{- else -}}
+    {{- .Values.nautobot.db.engine -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "nautobot.database.host" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- template "nautobot.postgresql.fullname" . }}
+  {{- else if eq .Values.postgresqlha.enabled true -}}
+    {{- template "nautobot.postgresqlha.fullname" . }}
+  {{- else if eq .Values.mariadb.enabled true -}}
+    {{- template "nautobot.mariadb.fullname" . }}
   {{- else -}}
     {{- .Values.nautobot.db.host -}}
   {{- end -}}
@@ -90,14 +119,20 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.database.dbname" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- .Values.postgresql.postgresqlDatabase -}}
+  {{- else if eq .Values.postgresqlha.enabled true -}}
+    {{- .Values.postgresqlha.postgresql.database -}}
+  {{- else if eq .Values.mariadb.enabled true -}}
+    {{- .Values.mariadb.auth.database -}}
   {{- else -}}
     {{- .Values.nautobot.db.name -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "nautobot.database.port" -}}
-  {{- if eq .Values.postgresql.enabled true -}}
+  {{- if (or .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
     {{- printf "%s" "5432" -}}
+  {{- else if .Values.mariadb.enabled -}}
+    {{- printf "%s" "3306" -}}
   {{- else -}}
     {{- .Values.nautobot.db.port -}}
   {{- end -}}
@@ -106,6 +141,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.database.username" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- .Values.postgresql.postgresqlUsername -}}
+  {{- else if eq .Values.postgresqlha.enabled true -}}
+    {{- .Values.postgresqlha.postgresql.username -}}
+  {{- else if eq .Values.mariadb.enabled true -}}
+    {{- .Values.mariadb.auth.username -}}
   {{- else -}}
     {{- .Values.nautobot.db.user -}}
   {{- end -}}
@@ -132,6 +171,40 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
         {{- $password | b64dec -}}
       {{- else -}}
         {{- required "A Postgres Password is required!" .Values.postgresql.postgresqlPassword -}}
+      {{- end -}}
+  {{- else if eq .Values.postgresqlha.enabled true -}}
+      {{- if .Values.postgresqlha.postgresql.existingSecret -}}
+        {{- $password := "" -}}
+        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.postgresqlha.postgresql.existingSecret) -}}
+        {{- if $secret -}}
+          {{- if index $secret.data "postgresql-password" -}}
+            {{- $password = index $secret.data "postgresql-password" -}}
+          {{- else -}}
+            {{- fail (printf "Key 'postgresql-password' not found in secret %s" .Values.postgresqlha.postgresql.existingSecret) -}}
+          {{- end -}}
+        {{- else -}}
+          {{- fail (printf "Existing secret %s not found!" .Values.postgresqlha.postgresql.existingSecret) -}}
+        {{- end -}}
+        {{- $password | b64dec -}}
+      {{- else -}}
+        {{- required "A Postgres Password is required!" .Values.postgresqlha.postgresql.password -}}
+      {{- end -}}
+  {{- else if eq .Values.mariadb.enabled true -}}
+      {{- if .Values.mariadb.auth.existingSecret -}}
+        {{- $password := "" -}}
+        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.mariadb.auth.existingSecret) -}}
+        {{- if $secret -}}
+          {{- if index $secret.data "mariadb-password" -}}
+            {{- $password = index $secret.data "mariadb-password" -}}
+          {{- else -}}
+            {{- fail (printf "Key 'mariadb-password' not found in secret %s" .Values.mariadb.auth.existingSecret) -}}
+          {{- end -}}
+        {{- else -}}
+          {{- fail (printf "Existing secret %s not found!" .Values.mariadb.auth.existingSecret) -}}
+        {{- end -}}
+        {{- $password | b64dec -}}
+      {{- else -}}
+        {{- required "A MariaDB Password is required!" .Values.mariadb.auth.password -}}
       {{- end -}}
   {{- else -}}
     {{- if .Values.nautobot.db.existingSecret -}}
@@ -163,7 +236,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "nautobot.redis.fullname" -}}
 {{- $name := default "redis" .Values.redis.nameOverride -}}
-{{- printf "%s-%s-master" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-headless" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "nautobot.redis.host" -}}
@@ -238,73 +311,104 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{/*
 Create a list of dictionaries for extra volumes/volumemounts, if nautobot.config is set prepend it to the list for
-nautobot/celeryWorker/rqWorker
+nautobot/celeryBeat/celeryWorker/rqWorker
 */}}
 {{- define "nautobot.extraVolumes" -}}
+  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
   {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.nautobot.extraVolumes) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.nautobot.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- .Values.nautobot.extraVolumes -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "celeryWorker.extraVolumes" -}}
+  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
   {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.celeryWorker.extraVolumes) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.celeryWorker.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- .Values.celeryWorker.extraVolumes -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "celeryBeat.extraVolumes" -}}
+  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
+  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+    {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.celeryBeat.extraVolumes) "context" $) -}}
+  {{- else -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "rqWorker.extraVolumes" -}}
+  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
   {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.rqWorker.extraVolumes) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.rqWorker.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- .Values.rqWorker.extraVolumes -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "nautobot.extraVolumeMounts" -}}
+  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
   {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
   {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
   {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- else -}}
-    {{- .Values.nautobot.extraVolumeMounts -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "celeryWorker.extraVolumeMounts" -}}
+  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
   {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
   {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
   {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- else -}}
-    {{- .Values.celeryWorker.extraVolumeMounts -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "celeryBeat.extraVolumeMounts" -}}
+  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
+  {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
+  {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
+  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.config -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
+  {{- else if .Values.nautobot.uWSGIini -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
+  {{- else -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "rqWorker.extraVolumeMounts" -}}
+  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
   {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
   {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
   {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- else -}}
-    {{- .Values.rqWorker.extraVolumeMounts -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}

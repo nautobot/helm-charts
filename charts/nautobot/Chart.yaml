@@ -3,10 +3,10 @@ annotations:
   category: "Infrastructure"
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/license: "Apache-2.0"
-  artifacthub.io/prerelease: "true"
+  artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.2.0-beta.1
+      image: ghcr.io/nautobot/nautobot:1.2.1
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -20,8 +20,18 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
+    - kind: added
+      description: Security Scanning & Remediations for medium/high findings
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/87
+    - kind: added
+      description: PostgreSQL High Availability Support
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/35
     - kind: changed
-      description: Update ghcr.io/nautobot/nautobot Docker tag to v1.1.6
+      description: Update ghcr.io/nautobot/nautobot Docker tag to v1.2.1
     - kind: added
       description: Redis Sentinel Documentation
       links:
@@ -40,7 +50,7 @@ annotations:
     - kind: changed
       description: Bumping sub-chart dependencies
     - kind: changed
-      description: Upgraded Nautobot to 1.2.0
+      description: Upgraded Nautobot to 1.2.1
       links:
         - name: Github Issue
           url: https://github.com/nautobot/helm-charts/issues/47

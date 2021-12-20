@@ -36,9 +36,9 @@ nautobot:
     # -- Nautobot image name, common to all deployments
     repository: "nautobot/nautobot"
     # -- Nautobot image tag, common to all deployments
-    tag: "1.1.6"
+    tag: "1.2.1"
     # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent`
-    pullPolicy: "IfNotPresent"
+    pullPolicy: "Always"
     # -- List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments
     pullSecrets: []
     # e.g.
@@ -91,13 +91,20 @@ nautobot:
   podSecurityContext:
     enabled: true
     fsGroup: 999
+    seccompProfile:
+      type: "RuntimeDefault"
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context
   # @default -- See values.yaml
   containerSecurityContext:
+    allowPrivilegeEscalation: false
     enabled: true
+    readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
     runAsUser: 999
     runAsGroup: 999
+    capabilities:
+      drop:
+        - "ALL"
 
   # -- Override default Nautobot container command (useful when using custom images)
   command: []
@@ -336,12 +343,19 @@ rqWorker:
   podSecurityContext:
     enabled: true
     fsGroup: 999
+    seccompProfile:
+      type: "RuntimeDefault"
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context
   # @default -- See values.yaml
   containerSecurityContext:
+    allowPrivilegeEscalation: false
     enabled: true
+    readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
     runAsUser: 999
+    capabilities:
+      drop:
+        - "ALL"
 
   # -- Override default Nautobot RQ Worker container command (useful when using custom images)
   # @default -- See values.yaml
@@ -496,12 +510,19 @@ celeryWorker:
   podSecurityContext:
     enabled: true
     fsGroup: 999
+    seccompProfile:
+      type: "RuntimeDefault"
 
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context
   # @default -- See values.yaml
   containerSecurityContext:
+    allowPrivilegeEscalation: false
     enabled: true
+    readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
     runAsUser: 999
+    capabilities:
+      drop:
+        - "ALL"
 
   # -- Override default Nautobot Celery Worker container command (useful when using custom images)
   # @default -- See values.yaml
@@ -618,6 +639,160 @@ celeryWorker:
             value: 2
             periodSeconds: 15
 
+# Nautobot Celery Beat
+celeryBeat:
+  # -- Enables the Celery Beat (scheduled jobs) for Nautobot
+  enabled: true
+  # -- [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain
+  revisionHistoryLimit: 3
+
+  # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Beat liveness probe
+  # @default -- See values.yaml
+  livenessProbe:
+    enabled: false
+    exec:
+      command:
+        - "bash"
+        - "-c"
+        - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
+    initialDelaySeconds: 30
+    periodSeconds: 60
+    timeoutSeconds: 10
+    failureThreshold: 3
+    successThreshold: 1
+
+  # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Beat readiness probe
+  # @default -- See values.yaml
+  readinessProbe:
+    enabled: false
+    exec:
+      command:
+        - "bash"
+        - "-c"
+        - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
+    initialDelaySeconds: 30
+    periodSeconds: 60
+    timeoutSeconds: 10
+    failureThreshold: 3
+    successThreshold: 1
+
+  # -- [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot Celery Beat resource requests and limits
+  # @default -- See values.yaml
+  resources:
+    requests:
+      cpu: "400m"
+      memory: "1G"
+    limits:
+      cpu: "3328m"
+      memory: "6656M"
+
+  # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Beat Pods Security Context
+  # @default -- See values.yaml
+  podSecurityContext:
+    enabled: true
+    fsGroup: 999
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Beat Container Security Context
+  # @default -- See values.yaml
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    enabled: true
+    readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
+    runAsUser: 999
+    capabilities:
+      drop:
+        - "ALL"
+
+  # -- Override default Nautobot Celery Beat container command (useful when using custom images)
+  # @default -- See values.yaml
+  command:
+    - "nautobot-server"
+    - "celery"
+    - "beat"
+    - "--loglevel"
+    - "$(NAUTOBOT_LOG_LEVEL)"
+
+  # -- Override default Nautobot Celery Beat container args (useful when using custom images)
+  args: []
+  # -- [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot Celery Beat pods host aliases
+  hostAliases: []
+  # -- [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for Nautobot Celery Beat pods
+  podLabels: {}
+  # -- [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot Celery Beat pods
+  podAnnotations: {}
+  # -- [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Beat Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard`
+  podAffinityPreset: ""
+  # -- [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Beat Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard`
+  podAntiAffinityPreset: "soft"
+
+  # -- [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Beat Node Affinity preset
+  # @default -- See values.yaml
+  nodeAffinityPreset:
+    # -- Nautobot Celery Beat Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard`
+    type: ""
+    # -- Node label key to match. Ignored if `nautobot.affinity` is set
+    #
+    key: ""
+    # -- Node label values to match. Ignored if `nautobot.affinity` is set
+    values: []
+    # e.g.
+    # values:
+    #   - e2e-az1
+    #   - e2e-az2
+
+  # -- [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot Celery Beat pods assignment
+  affinity: {}
+  # -- [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Beat pods assignment
+  nodeSelector: {}
+  # -- [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot Celery Beat pods assignment
+  tolerations: []
+
+  updateStrategy:
+    # -- [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Celery Beat Deployment strategy type
+    type: "RollingUpdate"
+
+  # -- Nautobot Celery Beat pods' priorityClassName
+  priorityClassName: ""
+  # -- lifecycleHooks for the Nautobot Celery Beat container(s) to automate configuration before or after startup
+  lifecycleHooks: {}
+  # -- Extra Env Vars to set only on the Nautobot Celery Beat pods
+  extraEnvVars: []
+  # e.g.
+  # extraEnvVars:
+  #   - name: FOO
+  #     value: "bar"
+
+  # -- List of names of existing ConfigMaps containing extra env vars for Nautobot Celery Beat pods
+  extraEnvVarsCM: []
+  # -- List of names of existing Secrets containing extra env vars for Nautobot Celery Beat pods
+  extraEnvVarsSecret: []
+  # -- List of additional volumes for the Nautobot Celery Beat pod
+  extraVolumes: []
+  # -- List of additional volumeMounts for the Nautobot Celery Beat containers
+  extraVolumeMounts: []
+  # -- Add additional sidecar containers to the Nautobot Celery Beat pods
+  sidecars: {}
+  # e.g.
+  # sidecars:
+  #   - name: your-image-name
+  #     image: your-image
+  #     imagePullPolicy: Always
+  #     ports:
+  #       - name: portname
+  #         containerPort: 1234
+
+  # -- [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Beat pods
+  initContainers: []
+  # e.g.
+  # initContainers:
+  #  - name: your-image-name
+  #    image: your-image
+  #    imagePullPolicy: Always
+  #    command: ['sh', '-c', 'echo "hello world"']
+
+
 # ServiceAccount configuration
 serviceAccount:
   # -- Enable creation of a Kubernetes Service Account for Nautobot
@@ -731,17 +906,28 @@ metrics:
     #     severity: "critical"
 
 postgresql:
-  # -- Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) all other `postgresql.*` parameters will be passed directly to that chart
+  # -- Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart
   enabled: true
+  image:
+    pullPolicy: "Always"
   # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username
   postgresqlUsername: "nautobot"
   # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name
   postgresqlDatabase: "nautobot"
   # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password
   postgresqlPassword: ""
+  securityContext:
+    seccompProfile:
+      type: "RuntimeDefault"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false  # Must be set to false
+    capabilities:
+      drop:
+        - "ALL"
 
 redis:
-  # -- Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) all other `redis.*` parameters will be passed directly to that chart
+  # -- Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart
   enabled: true
   # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis Architecture valid values: `standalone` or `replication`
   architecture: "standalone"
@@ -750,3 +936,150 @@ redis:
     enabled: true
     # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis password
     password: ""
+  image:
+    pullPolicy: "Always"
+  master:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - "ALL"
+    podSecurityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+  replica:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - "ALL"
+    podSecurityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+  serviceAccount:
+    automountServiceAccountToken: false
+
+mariadb:
+  # -- Enable deployment of the [Bitnami mariadb](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart, all other `redis.*` parameters will be passed directly to that chart
+  enabled: false
+  auth:
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB database name
+    database: "nautobot"
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB username
+    username: "nautobot"
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB user password
+    password: ""
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB root user password
+    rootPassword: ""
+  image:
+    pullPolicy: "Always"
+  metrics:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - "ALL"
+  primary:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: false  # Must be set to false
+      capabilities:
+        drop:
+          - "ALL"
+    podSecurityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+    extraEnvVars:
+      - name: "MARIADB_CHARACTER_SET"
+        value: "utf8mb4"
+      - name: "MARIADB_COLLATE"
+        value: "utf8mb4_bin"
+  secondary:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: false  # Must be set to false
+      capabilities:
+        drop:
+          - "ALL"
+    podSecurityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+    extraEnvVars:
+      - name: "MARIADB_CHARACTER_SET"
+        value: "utf8mb4"
+      - name: "MARIADB_COLLATE"
+        value: "utf8mb4_bin"
+
+postgresqlha:
+  # -- Enable deployment of the [Bitnami postgresql-ha](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart, all other `postgresql-ha.*` parameters will be passed directly to that chart
+  enabled: false
+  image:
+    pullPolicy: "Always"
+  postgresql:
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL database name
+    database: "nautobot"
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL postgres user password
+    postgresPassword: ""
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL Repmgr password
+    repmgrPassword: ""
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL username
+    username: "nautobot"
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL user password
+    password: ""
+    pdb:
+      # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) Enable a Pod Distribution Budget for Postgres
+      create: true
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: false  # Must be set to false
+      seccompProfile:
+        type: "RuntimeDefault"
+      capabilities:
+        drop:
+          - "ALL"
+  postgresqlImage:
+    pullPolicy: "Always"
+  metrics:
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      seccompProfile:
+        type: "RuntimeDefault"
+      capabilities:
+        drop:
+          - "ALL"
+  metricsImage:
+    pullPolicy: "Always"
+  pgpool:
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Pgpool Admin password
+    adminPassword: ""
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Name of the database to perform streaming replication checks
+    srCheckDatabase: "nautobot"
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) The number of replicas to deploy
+    replicaCount: 2
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Strategy used to replace old Pgpool Pods by new ones
+    # @default -- See values.yaml
+    updateStrategy:
+      type: "RollingUpdate"
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+    pdb:
+      # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Enable a Pod Distribution Budget for Pgpool
+      create: true
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: false  # Must be set to false
+      seccompProfile:
+        type: "RuntimeDefault"
+      capabilities:
+        drop:
+          - "ALL"
+  pgpoolImage:
+    pullPolicy: "Always"

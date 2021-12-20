@@ -11,7 +11,7 @@
 
 * Kubernetes 1.12+
 * Helm 3.1.x
-* Persistent Volume (PV) provisioning support (Required if deploying the [postgresql chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
+* Persistent Volume (PV) provisioning support (Required if deploying the [PostgreSQL chart](https://artifacthub.io/packages/helm/bitnami/postgresql))
 
 ## Installing the Chart
 
@@ -73,7 +73,7 @@ the Nautobot application-specific values are summarized in the [Nautobot Applica
 
 ### Required Settings
 
-The following settings are the bare minimum required values to to deploy this chart:
+The following settings are the bare minimum required values to deploy this chart:
 
 ```yaml
 postgresql:
@@ -105,7 +105,7 @@ postgresql:
 
 ### PostgreSQL TLS
 
-To enable TLS within the deployment of Nautobot and the embedded [Bitnami PostgreSQL subchart](https://github.com/bitnami/charts/tree/master/bitnami/redis) set the following helm values:
+To enable TLS within the deployment of Nautobot and the embedded [Bitnami PostgreSQL subchart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) set the following helm values:
 
 ```yaml
 postgresql:
@@ -123,7 +123,7 @@ postgresql:
 This will autogenerate certificates for use with Postgres.  Unfortunately, to force Nautobot to use Postgres over SSL a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
 
 ```python
-DATABASES["default"][OPTIONS] = {"sslmode": "require"}
+DATABASES["default"]["OPTIONS"] = {"sslmode": "require"}
 ```
 
 ### External Redis
@@ -158,6 +158,15 @@ nautobot:
       secret:
         secretName: "nautobot-redis-crt"
 
+celeryBeat:
+  extraVolumeMounts:
+    - mountPath: "/opt/nautobot/redis"
+      name: "redis-tls"
+  extraVolumes:
+    - name: "redis-tls"
+      secret:
+        secretName: "nautobot-redis-crt"
+
 celeryWorker:
   replicaCount: 1
   resources: {}
@@ -168,6 +177,7 @@ celeryWorker:
     - name: "redis-tls"
       secret:
         secretName: "nautobot-redis-crt"
+
 redis:
   tls:
     enabled: true
@@ -179,34 +189,37 @@ redis:
     # certCAFilename: "ca.crt"
 ```
 
-This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
+This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot, a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
 
 ```python
+import ssl
+DATABASES["default"]["OPTIONS"] = {"sslmode": "require"}
 CACHES["default"]["OPTIONS"]["CONNECTION_POOL_KWARGS"] = {
-    "ssl_cert_reqs": "required",
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
     "ssl_ca_certs": "/opt/nautobot/redis/ca.crt",
     "ssl_certfile": "/opt/nautobot/redis/tls.crt",
     "ssl_keyfile": "/opt/nautobot/redis/tls.key",
 }
 CELERY_REDIS_BACKEND_USE_SSL = {
-    "ssl_cert_reqs": "required",
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
     "ssl_ca_certs": "/opt/nautobot/redis/ca.crt",
     "ssl_certfile": "/opt/nautobot/redis/tls.crt",
     "ssl_keyfile": "/opt/nautobot/redis/tls.key",
 }
+CELERY_BROKER_USE_SSL = CELERY_REDIS_BACKEND_USE_SSL
 CACHEOPS_REDIS = {
     "host": os.getenv("NAUTOBOT_REDIS_HOST", "localhost"),
     "port": int(os.getenv("NAUTOBOT_REDIS_PORT", 6379)),
     "password": os.getenv("NAUTOBOT_REDIS_PASSWORD", ""),
     "ssl": True,
-    "ssl_cert_reqs": "required",
+    "ssl_cert_reqs": ssl.CERT_REQUIRED,
     "ssl_ca_certs": "/opt/nautobot/redis/ca.crt",
     "ssl_certfile": "/opt/nautobot/redis/tls.crt",
     "ssl_keyfile": "/opt/nautobot/redis/tls.key",
 }
 ```
 
-The secret name will change based on your Helm release name.  It is also possible and likely more secure to generate your own certificates and secrets, doing so is beyond the scope of this documentation however is described in the additional resources listed below.
+The secret name will change based on your Helm release name.  It is also possible and likely more secure to generate your own certificates and secrets, doing so is beyond the scope of this documentation, however, is described in the additional resources listed below.
 
 #### Additional Resources
 
@@ -214,9 +227,63 @@ The secret name will change based on your Helm release name.  It is also possibl
 * [Bitnami Redis Helm Chart Administration - Enabling TLS](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/)
 * [Bitnami Redis Helm Chart Readme - Using TLS](https://github.com/bitnami/charts/tree/master/bitnami/redis#securing-traffic-using-tls)
 
+### Redis Sentinel
+
+Redis Sentinel provides a highly available Redis implementation.  To enable Sentinel with the [Bitnami Redis subchart](https://github.com/bitnami/charts/tree/master/bitnami/redis) set the following helm values:
+
+```yaml
+redis:
+  architecture: "replication"
+  sentinel:
+    enabled: true
+    masterSet: nautobot
+```
+
+Nautobot requires some additional configuration via a [custom `nautobot_config.py`](#custom-nautobot_configpy) with the following values set in `nautobot_config.py`:
+
+```python
+DJANGO_REDIS_CONNECTION_FACTORY = "django_redis.pool.SentinelConnectionFactory"
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://nautobot/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.SentinelClient",
+            "SENTINELS": [(os.getenv("NAUTOBOT_REDIS_HOST"), 26379)],
+            "PASSWORD": os.getenv("NAUTOBOT_REDIS_PASSWORD"),
+            "SENTINEL_KWARGS": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
+            "CONNECTION_POOL_CLASS": "redis.sentinel.SentinelConnectionPool",
+        },
+    },
+}
+
+CACHEOPS_REDIS = False
+CACHEOPS_SENTINEL = {
+    "locations": [(os.getenv("NAUTOBOT_REDIS_HOST"), 26379)],
+    "service_name": "nautobot",
+    "socket_timeout": 10,
+    "db": 1,
+    "sentinel_kwargs": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
+    "password": os.getenv("NAUTOBOT_REDIS_PASSWORD"),
+}
+CELERY_BROKER_URL = (
+    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_HOST')}:26379"
+)
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    "master_name": "nautobot",
+    "sentinel_kwargs": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
+}
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = CELERY_BROKER_TRANSPORT_OPTIONS
+```
+
+See the [Nautobot caching documentation](https://nautobot.readthedocs.io/en/stable/additional-features/caching/#using-redis-sentinel) for more information on configuring Nautobot with Sentinel.
+
+This helm chart's support for Redis Sentinel is still in an early alpha/beta phase you should use this feature cautiously.
+
 ### Existing Secrets
 
-If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart use:
+If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart:
 
 1. Create a secret with both PostgreSQL and Redis passwords:
 
@@ -251,6 +318,64 @@ redis:
 ```
 
 You can use various combinations of `existingSecret` and `existingSecretPasswordKey` options depending on the existing secrets you have deployed.  (NOTE: The Bitnami PostgreSQL chart does require the key name to be "postgresql-password")
+
+### MySQL Support
+
+MySQL support was added in Nautobot 1.1.0 and is optionally supported with this helm chart.  This support is provided by the [Bitnami MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart.  To enable MariaDB use the following values:
+
+```yaml
+postgresql:
+  enabled: false
+mariadb:
+  enabled: true
+  auth:
+    password: "change-me"
+```
+
+MariaDB supports an existing secret as well:
+
+```yaml
+mariadb:
+  auth:
+    existingSecret: "my-secret"
+```
+
+Use existing secret for password details (auth.rootPassword, auth.password, auth.replicationPassword will be ignored and picked up from this secret). The secret has to contain the keys mariadb-root-password, mariadb-replication-password and mariadb-password
+
+### PosgreSQL High Availability
+
+This chart supports the deployment of PostgreSQL in a Highly Available (HA) fasion as provided by the Bitnami [PostgreSQL-HA](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart.  To enable HA PostgreSQL use the following values:
+
+```yaml
+postgresql:
+  enabled: false
+postgresqlha:
+  enabled: true
+  postgresql:
+    password: "change-me"
+    repmgrPassword: "change-me"
+    postgresPassword: "change-me"
+  pgpool:
+    adminPassword: "change-me"
+```
+
+It is important to note all 4 passwords as they will be required during an upgrade.  PostgreSQL supports existing secrets as well when configured with the following values:
+
+```yaml
+postgresqlha:
+  postgresql:
+    existingSecret: "my-secret"
+  pgpool:
+    existingSecret: "my-secret"
+```
+
+This secret can be created with:
+
+```no-highlight
+kubectl create secret generic my-secret --from-literal=admin-password=change-me --from-literal=postgresql-password=change-me --from-literal=postgresql-postgres-password=change-me --from-literal=repmgr-password=change-me
+```
+
+This helm chart's support for PosgreSQL HA is still in an early alpha/beta phase you should use this feature cautiously.
 
 ### RQ Workers
 
@@ -382,6 +507,8 @@ redis:
     password: "change-me"
 ```
 
+[PostgreSQL HA](#posgresql-high-availability) and [Redis Sentinel](#redis-sentinel) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.
+
 ## Nautobot Application Values
 
 | Key | Type | Default | Description |
@@ -455,7 +582,7 @@ In addition please make sure to note ALL values used to deploy this helm chart:
 helm get values -o yaml nautobot > nautobot.values.yaml
 ```
 
-As with any backup procedure these steps should be validated in your environment before relying on them in production.
+As with any backup procedure, these steps should be validated in your environment before relying on them in production.
 
 ## Restore Nautobot from Backup
 
@@ -473,6 +600,17 @@ Upload the backup and restore:
 kubectl cp backup.sql nautobot-postgresql-0:/tmp
 export POSTGRES_PASSWORD=$(kubectl get secret --namespace nautobot nautobot-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 echo $POSTGRES_PASSWORD | kubectl exec -itn default statefulset.apps/nautobot-postgresql -- psql -U nautobot -f /tmp/backup.sql
+```
+
+## Upgrading
+
+### 1.0.x to 1.1.x
+
+Following the normal helm upgrade procedures is sufficient for upgrading during this release:
+
+```no-highlight
+helm repo update nautobot
+helm upgrade nautobot nautobot/nautobot -f nautobot.values.yaml
 ```
 
 ## Known Issues

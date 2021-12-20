@@ -1,19 +1,10 @@
 ---
 rqWorker:
   enabled: true
-  autoscaling:
-    enabled: true
-
-nautobot:
-  autoscaling:
-    enabled: true
-
-celeryWorker:
-  autoscaling:
-    enabled: true
 
 postgresql:
-  postgresqlPassword: "change-me"
+  enabled: false
+
 redis:
   auth:
     password: "change-me"
@@ -34,3 +25,15 @@ commonAnnotations:
 serviceAccount:
   annotations:
     saannotation: "only_the_sa"
+
+mariadb:
+  enabled: false
+
+postgresqlha:
+  postgresql:
+    password: "change-me"
+  enabled: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true

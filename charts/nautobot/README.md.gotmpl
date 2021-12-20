@@ -279,6 +279,8 @@ CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = CELERY_BROKER_TRANSPORT_OPTIONS
 
 See the [Nautobot caching documentation](https://nautobot.readthedocs.io/en/stable/additional-features/caching/#using-redis-sentinel) for more information on configuring Nautobot with Sentinel.
 
+This helm chart's support for Redis Sentinel is still in an early alpha/beta phase you should use this feature cautiously.
+
 ### Existing Secrets
 
 If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart:
@@ -339,6 +341,41 @@ mariadb:
 ```
 
 Use existing secret for password details (auth.rootPassword, auth.password, auth.replicationPassword will be ignored and picked up from this secret). The secret has to contain the keys mariadb-root-password, mariadb-replication-password and mariadb-password
+
+### PosgreSQL High Availability
+
+This chart supports the deployment of PostgreSQL in a Highly Available (HA) fasion as provided by the Bitnami [PostgreSQL-HA](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart.  To enable HA PostgreSQL use the following values:
+
+```yaml
+postgresql:
+  enabled: false
+postgresqlha:
+  enabled: true
+  postgresql:
+    password: "change-me"
+    repmgrPassword: "change-me"
+    postgresPassword: "change-me"
+  pgpool:
+    adminPassword: "change-me"
+```
+
+It is important to note all 4 passwords as they will be required during an upgrade.  PostgreSQL supports existing secrets as well when configured with the following values:
+
+```yaml
+postgresqlha:
+  postgresql:
+    existingSecret: "my-secret"
+  pgpool:
+    existingSecret: "my-secret"
+```
+
+This secret can be created with:
+
+```no-highlight
+kubectl create secret generic my-secret --from-literal=admin-password=change-me --from-literal=postgresql-password=change-me --from-literal=postgresql-postgres-password=change-me --from-literal=repmgr-password=change-me
+```
+
+This helm chart's support for PosgreSQL HA is still in an early alpha/beta phase you should use this feature cautiously.
 
 ### RQ Workers
 
@@ -469,6 +506,8 @@ redis:
   auth:
     password: "change-me"
 ```
+
+[PostgreSQL HA](#posgresql-high-availability) and [Redis Sentinel](#redis-sentinel) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.
 
 ## Nautobot Application Values
 

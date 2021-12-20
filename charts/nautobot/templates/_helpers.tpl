@@ -84,11 +84,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{- define "nautobot.postgresqlha.fullname" -}}
+{{- $name := default "postgresqlha-pgpool" .Values.postgresqlha.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{- define "nautobot.database.engine" -}}
-  {{- if (and .Values.postgresql.enabled .Values.mariadb.enabled ) -}}
+  {{- if (and (or .Values.postgresql.enabled .Values.postgresqlha.enabled) .Values.mariadb.enabled ) -}}
     {{- fail (printf "Both PostgreSQL and MariaDB can't be enabled at the same time.") -}}
+  {{- else if (and .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
+    {{- fail (printf "Both PostgreSQL and PostgreSQL-HA can't be enabled at the same time.") -}}
   {{- end -}}
-  {{- if .Values.postgresql.enabled -}}
+  {{- if (or .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
     django.db.backends.postgresql
   {{- else if .Values.mariadb.enabled -}}
     django.db.backends.mysql
@@ -100,6 +107,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.database.host" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- template "nautobot.postgresql.fullname" . }}
+  {{- else if eq .Values.postgresqlha.enabled true -}}
+    {{- template "nautobot.postgresqlha.fullname" . }}
   {{- else if eq .Values.mariadb.enabled true -}}
     {{- template "nautobot.mariadb.fullname" . }}
   {{- else -}}
@@ -110,6 +119,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.database.dbname" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- .Values.postgresql.postgresqlDatabase -}}
+  {{- else if eq .Values.postgresqlha.enabled true -}}
+    {{- .Values.postgresqlha.postgresql.database -}}
   {{- else if eq .Values.mariadb.enabled true -}}
     {{- .Values.mariadb.auth.database -}}
   {{- else -}}
@@ -118,9 +129,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "nautobot.database.port" -}}
-  {{- if eq .Values.postgresql.enabled true -}}
+  {{- if (or .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
     {{- printf "%s" "5432" -}}
-  {{- else if eq .Values.mariadb.enabled true -}}
+  {{- else if .Values.mariadb.enabled -}}
     {{- printf "%s" "3306" -}}
   {{- else -}}
     {{- .Values.nautobot.db.port -}}
@@ -130,6 +141,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.database.username" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- .Values.postgresql.postgresqlUsername -}}
+  {{- else if eq .Values.postgresqlha.enabled true -}}
+    {{- .Values.postgresqlha.postgresql.username -}}
   {{- else if eq .Values.mariadb.enabled true -}}
     {{- .Values.mariadb.auth.username -}}
   {{- else -}}
@@ -158,6 +171,23 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
         {{- $password | b64dec -}}
       {{- else -}}
         {{- required "A Postgres Password is required!" .Values.postgresql.postgresqlPassword -}}
+      {{- end -}}
+  {{- else if eq .Values.postgresqlha.enabled true -}}
+      {{- if .Values.postgresqlha.postgresql.existingSecret -}}
+        {{- $password := "" -}}
+        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.postgresqlha.postgresql.existingSecret) -}}
+        {{- if $secret -}}
+          {{- if index $secret.data "postgresql-password" -}}
+            {{- $password = index $secret.data "postgresql-password" -}}
+          {{- else -}}
+            {{- fail (printf "Key 'postgresql-password' not found in secret %s" .Values.postgresqlha.postgresql.existingSecret) -}}
+          {{- end -}}
+        {{- else -}}
+          {{- fail (printf "Existing secret %s not found!" .Values.postgresqlha.postgresql.existingSecret) -}}
+        {{- end -}}
+        {{- $password | b64dec -}}
+      {{- else -}}
+        {{- required "A Postgres Password is required!" .Values.postgresqlha.postgresql.password -}}
       {{- end -}}
   {{- else if eq .Values.mariadb.enabled true -}}
       {{- if .Values.mariadb.auth.existingSecret -}}

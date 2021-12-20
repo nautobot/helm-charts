@@ -1,0 +1,39 @@
+---
+rqWorker:
+  enabled: true
+
+postgresql:
+  enabled: false
+
+redis:
+  auth:
+    password: "change-me"
+
+ingress:
+  enabled: true
+  path: "/*"
+
+metrics:
+  enabled: true
+  capacityMetrics:
+    enabled: true
+  prometheusRule:
+    enabled: true
+
+commonAnnotations:
+  annotateeverything: "everywhere"
+serviceAccount:
+  annotations:
+    saannotation: "only_the_sa"
+
+mariadb:
+  enabled: false
+
+postgresqlha:
+  postgresql:
+    password: "change-me"
+  enabled: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true

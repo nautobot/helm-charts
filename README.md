@@ -5,7 +5,7 @@
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge)](https://github.com/pre-commit/pre-commit)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/nautobot&style=for-the-badge)](https://artifacthub.io/packages/search?repo=nautobot)
-<!-- [![renovate](https://img.shields.io/badge/renovate-enabled-brightgreen?style=for-the-badge&logo=data:image/svg+xml;base64,)](https://github.com/renovatebot/renovate) -->
+[![renovate](https://img.shields.io/badge/renovate-enabled-brightgreen?style=for-the-badge&logo=data:image/svg+xml;base64,)](https://github.com/renovatebot/renovate)
 
 This repo is intended to house [Helm](https://helm.sh/) charts for the Nautobot project, today there is one Nautobot chart but we are ready for more if the need arises.  Helm is the unofficial package manager for Kubernetes, it provides a simple way for users to deploy applications to Kubernetes without defining custom Kubernetes manifests.  This allows users of all experience levels to deploy applications the way the developers intend for them to be deployed.  Helm is capable of also providing restrictions and tests to validate the deployment configuration.
 

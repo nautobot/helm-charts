@@ -302,6 +302,17 @@
           "allowPrivilegeEscalation": {
             "type": "boolean"
           },
+          "capabilities": {
+            "type": "object",
+            "properties": {
+              "add": {
+                "type": "array"
+              },
+              "drop": {
+                "type": "array"
+              }
+            }
+          },
           "enabled": {
             "type": "boolean"
           },

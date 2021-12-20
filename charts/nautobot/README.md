@@ -727,9 +727,12 @@ $ helm delete nautobot
 | mariadb.auth.rootPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB root user password |
 | mariadb.auth.username | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters) MariaDB username |
 | mariadb.enabled | bool | `false` | Enable deployment of the [Bitnami mariadb](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart, all other `redis.*` parameters will be passed directly to that chart |
+| mariadb.image.pullPolicy | string | `"Always"` |  |
 | mariadb.metrics.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| mariadb.metrics.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | mariadb.metrics.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
 | mariadb.primary.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| mariadb.primary.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | mariadb.primary.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
 | mariadb.primary.extraEnvVars[0].name | string | `"MARIADB_CHARACTER_SET"` |  |
 | mariadb.primary.extraEnvVars[0].value | string | `"utf8mb4"` |  |
@@ -737,6 +740,7 @@ $ helm delete nautobot
 | mariadb.primary.extraEnvVars[1].value | string | `"utf8mb4_bin"` |  |
 | mariadb.primary.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | mariadb.secondary.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| mariadb.secondary.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | mariadb.secondary.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
 | mariadb.secondary.extraEnvVars[0].name | string | `"MARIADB_CHARACTER_SET"` |  |
 | mariadb.secondary.extraEnvVars[0].value | string | `"utf8mb4"` |  |
@@ -778,7 +782,7 @@ $ helm delete nautobot
 | nautobot.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot containers |
 | nautobot.extraVolumes | list | `[]` | List of additional volumes for the Nautobot server pod |
 | nautobot.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases |
-| nautobot.image.pullPolicy | string | `"IfNotPresent"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent` |
+| nautobot.image.pullPolicy | string | `"Always"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent` |
 | nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
@@ -821,25 +825,33 @@ $ helm delete nautobot
 | nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value |
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type |
 | postgresql.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresql.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | postgresql.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
 | postgresql.enabled | bool | `true` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart |
+| postgresql.image.pullPolicy | string | `"Always"` |  |
 | postgresql.postgresqlDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name |
 | postgresql.postgresqlPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password |
 | postgresql.postgresqlUsername | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username |
 | postgresql.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | postgresqlha.enabled | bool | `false` | Enable deployment of the [Bitnami postgresql-ha](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart, all other `postgresql-ha.*` parameters will be passed directly to that chart |
+| postgresqlha.image.pullPolicy | string | `"Always"` |  |
 | postgresqlha.metrics.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresqlha.metrics.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | postgresqlha.metrics.securityContext.readOnlyRootFilesystem | bool | `true` |  |
 | postgresqlha.metrics.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| postgresqlha.metricsImage.pullPolicy | string | `"Always"` |  |
 | postgresqlha.pgpool.adminPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Pgpool Admin password |
 | postgresqlha.pgpool.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresqlha.pgpool.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | postgresqlha.pgpool.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
 | postgresqlha.pgpool.containerSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | postgresqlha.pgpool.pdb.create | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Enable a Pod Distribution Budget for Pgpool |
 | postgresqlha.pgpool.replicaCount | int | `2` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) The number of replicas to deploy |
 | postgresqlha.pgpool.srCheckDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Name of the database to perform streaming replication checks |
 | postgresqlha.pgpool.updateStrategy | object | See values.yaml | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Strategy used to replace old Pgpool Pods by new ones |
+| postgresqlha.pgpoolImage.pullPolicy | string | `"Always"` |  |
 | postgresqlha.postgresql.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresqlha.postgresql.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | postgresqlha.postgresql.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
 | postgresqlha.postgresql.containerSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | postgresqlha.postgresql.database | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL database name |
@@ -849,14 +861,18 @@ $ helm delete nautobot
 | postgresqlha.postgresql.repmgrPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL Repmgr password |
 | postgresqlha.postgresql.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | postgresqlha.postgresql.username | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL username |
+| postgresqlha.postgresqlImage.pullPolicy | string | `"Always"` |  |
 | redis.architecture | string | `"standalone"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis Architecture valid values: `standalone` or `replication` |
 | redis.auth.enabled | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Enable password authentication |
 | redis.auth.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis password |
 | redis.enabled | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart |
+| redis.image.pullPolicy | string | `"Always"` |  |
 | redis.master.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| redis.master.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | redis.master.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
 | redis.master.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | redis.replica.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| redis.replica.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | redis.replica.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
 | redis.replica.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | redis.serviceAccount.automountServiceAccountToken | bool | `false` |  |

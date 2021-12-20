@@ -29,3 +29,7 @@ spec:
   securityContext:
     seccompProfile:
       type: RuntimeDefault
+    runAsNonRoot: true
+    capabilities:
+      drop:
+        - "ALL"

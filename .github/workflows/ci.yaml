@@ -82,7 +82,7 @@ jobs:
           sarif_file: "snyk.sarif"
 
   kubescape-security-check:
-    name: "Snyk Security Scanning"
+    name: "Kubescape Security Scanning"
     runs-on: "ubuntu-20.04"
     steps:
       - name: "Checkout"

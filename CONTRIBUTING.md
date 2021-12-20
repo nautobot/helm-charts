@@ -64,6 +64,15 @@ To run a single check from the above list run:
 $ pre-commit run -av {check name}
 ```
 
+### Security Scanning
+
+For security scanning we utilize both:
+
+* [Kubescape](https://github.com/armosec/kubescape)
+* [Snyk](https://snyk.io/)
+
+These tools can be run locally and are also run as part of the CI pipeline to validate the security posture of the helm charts.
+
 ### Helm tests
 
 Coming soon...

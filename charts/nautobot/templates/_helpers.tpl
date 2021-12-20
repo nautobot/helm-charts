@@ -314,93 +314,101 @@ Create a list of dictionaries for extra volumes/volumemounts, if nautobot.config
 nautobot/celeryBeat/celeryWorker/rqWorker
 */}}
 {{- define "nautobot.extraVolumes" -}}
+  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
   {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.nautobot.extraVolumes) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.nautobot.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- .Values.nautobot.extraVolumes -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "celeryWorker.extraVolumes" -}}
+  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
   {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.celeryWorker.extraVolumes) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.celeryWorker.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- .Values.celeryWorker.extraVolumes -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "celeryBeat.extraVolumes" -}}
+  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
   {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.celeryBeat.extraVolumes) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.celeryBeat.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- .Values.celeryBeat.extraVolumes -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "rqWorker.extraVolumes" -}}
+  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
   {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) .Values.rqWorker.extraVolumes) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.rqWorker.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- .Values.rqWorker.extraVolumes -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "nautobot.extraVolumeMounts" -}}
+  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
   {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
   {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
   {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- else -}}
-    {{- .Values.nautobot.extraVolumeMounts -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "celeryWorker.extraVolumeMounts" -}}
+  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
   {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
   {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
   {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- else -}}
-    {{- .Values.celeryWorker.extraVolumeMounts -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "celeryBeat.extraVolumeMounts" -}}
+  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
   {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
   {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
   {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
   {{- else -}}
-    {{- .Values.celeryBeat.extraVolumeMounts -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "rqWorker.extraVolumeMounts" -}}
+  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
   {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
   {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
   {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- else -}}
-    {{- .Values.rqWorker.extraVolumeMounts -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
   {{- end -}}
 {{- end -}}

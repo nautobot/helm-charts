@@ -16,6 +16,21 @@ spec:
   containers:
     - name: wget
       image: busybox
+      imagePullPolicy: "Always"
       command: ['wget']
       args: ['{{ include "common.names.fullname" . }}:{{ .Values.service.port }}']
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+            - "ALL"
   restartPolicy: Never
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+    runAsNonRoot: true

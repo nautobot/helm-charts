@@ -299,12 +299,29 @@
       ],
       "properties": {
         "properties": {
+          "allowPrivilegeEscalation": {
+            "type": "boolean"
+          },
+          "capabilities": {
+            "type": "object",
+            "properties": {
+              "add": {
+                "type": "array"
+              },
+              "drop": {
+                "type": "array"
+              }
+            }
+          },
           "enabled": {
             "type": "boolean"
           },
           "fsGroup": {
             "type": "integer",
             "minimum": 1
+          },
+          "readOnlyRootFilesystem": {
+            "type": "boolean"
           },
           "runAsGroup": {
             "type": "integer",
@@ -313,6 +330,9 @@
           "runAsUser": {
             "type": "integer",
             "minimum": 1
+          },
+          "seccompProfile": {
+            "type": "object"
           }
         }
       }

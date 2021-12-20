@@ -99,7 +99,7 @@ nautobot:
   containerSecurityContext:
     allowPrivilegeEscalation: false
     enabled: true
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
     runAsUser: 999
     runAsGroup: 999
 
@@ -348,7 +348,7 @@ rqWorker:
   containerSecurityContext:
     allowPrivilegeEscalation: false
     enabled: true
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
     runAsUser: 999
 
   # -- Override default Nautobot RQ Worker container command (useful when using custom images)
@@ -512,7 +512,7 @@ celeryWorker:
   containerSecurityContext:
     allowPrivilegeEscalation: false
     enabled: true
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
     runAsUser: 999
 
   # -- Override default Nautobot Celery Worker container command (useful when using custom images)
@@ -690,7 +690,7 @@ celeryBeat:
   containerSecurityContext:
     allowPrivilegeEscalation: false
     enabled: true
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
     runAsUser: 999
 
   # -- Override default Nautobot Celery Beat container command (useful when using custom images)
@@ -907,7 +907,7 @@ postgresql:
       type: "RuntimeDefault"
   containerSecurityContext:
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false  # Must be set to false
 
 redis:
   # -- Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart
@@ -955,17 +955,27 @@ mariadb:
   primary:
     containerSecurityContext:
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
+      readOnlyRootFilesystem: false  # Must be set to false
     podSecurityContext:
       seccompProfile:
         type: "RuntimeDefault"
+    extraEnvVars:
+      - name: "MARIADB_CHARACTER_SET"
+        value: "utf8mb4"
+      - name: "MARIADB_COLLATE"
+        value: "utf8mb4_bin"
   secondary:
     containerSecurityContext:
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
+      readOnlyRootFilesystem: false  # Must be set to false
     podSecurityContext:
       seccompProfile:
         type: "RuntimeDefault"
+    extraEnvVars:
+      - name: "MARIADB_CHARACTER_SET"
+        value: "utf8mb4"
+      - name: "MARIADB_COLLATE"
+        value: "utf8mb4_bin"
 
 postgresqlha:
   # -- Enable deployment of the [Bitnami postgresql-ha](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart, all other `postgresql-ha.*` parameters will be passed directly to that chart
@@ -984,6 +994,20 @@ postgresqlha:
     pdb:
       # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) Enable a Pod Distribution Budget for Postgres
       create: true
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: false  # Must be set to false
+      seccompProfile:
+        type: "RuntimeDefault"
+  metrics:
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      seccompProfile:
+        type: "RuntimeDefault"
   pgpool:
     # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Pgpool Admin password
     adminPassword: ""
@@ -1001,3 +1025,8 @@ postgresqlha:
     pdb:
       # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Enable a Pod Distribution Budget for Pgpool
       create: true
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: false  # Must be set to false
+      seccompProfile:
+        type: "RuntimeDefault"

@@ -1,0 +1,72 @@
+[
+  {
+    "name": "ignore-immutable-container-filesystem",
+    "policyType": "postureExceptionPolicy",
+    "actions": [
+      "alertOnly"
+    ],
+    "resources": [
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "Deployment"
+        }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "StatefulSet"
+        }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "Pod"
+        }
+      }
+    ],
+    "posturePolicies": [
+      {
+        "frameworkName": "ArmoBest",
+        "ruleName": "immutable-container-filesystem"
+      },
+      {
+        "frameworkName": "NSA",
+        "ruleName": "immutable-container-filesystem"
+      },
+      {
+        "frameworkName": "ArmoBest",
+        "ruleName": "ingress-and-egress-blocked"
+      },
+      {
+        "frameworkName": "NSA",
+        "ruleName": "ingress-and-egress-blocked"
+      }
+    ]
+  },
+  {
+    "name": "ignore-resource-policies",
+    "policyType": "postureExceptionPolicy",
+    "actions": [
+      "alertOnly"
+    ],
+    "resources": [
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "StatefulSet"
+        }
+      }
+    ],
+    "posturePolicies": [
+      {
+        "frameworkName": "ArmoBest",
+        "ruleName": "resource-policies"
+      },
+      {
+        "frameworkName": "NSA",
+        "ruleName": "resource-policies"
+      }
+    ]
+  }
+]

@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![AppVersion: 1.2.0](https://img.shields.io/badge/AppVersion-1.2.0-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![AppVersion: 1.2.1](https://img.shields.io/badge/AppVersion-1.2.1-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -281,6 +281,8 @@ CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = CELERY_BROKER_TRANSPORT_OPTIONS
 
 See the [Nautobot caching documentation](https://nautobot.readthedocs.io/en/stable/additional-features/caching/#using-redis-sentinel) for more information on configuring Nautobot with Sentinel.
 
+This helm chart's support for Redis Sentinel is still in an early alpha/beta phase you should use this feature cautiously.
+
 ### Existing Secrets
 
 If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart:
@@ -341,6 +343,41 @@ mariadb:
 ```
 
 Use existing secret for password details (auth.rootPassword, auth.password, auth.replicationPassword will be ignored and picked up from this secret). The secret has to contain the keys mariadb-root-password, mariadb-replication-password and mariadb-password
+
+### PosgreSQL High Availability
+
+This chart supports the deployment of PostgreSQL in a Highly Available (HA) fasion as provided by the Bitnami [PostgreSQL-HA](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart.  To enable HA PostgreSQL use the following values:
+
+```yaml
+postgresql:
+  enabled: false
+postgresqlha:
+  enabled: true
+  postgresql:
+    password: "change-me"
+    repmgrPassword: "change-me"
+    postgresPassword: "change-me"
+  pgpool:
+    adminPassword: "change-me"
+```
+
+It is important to note all 4 passwords as they will be required during an upgrade.  PostgreSQL supports existing secrets as well when configured with the following values:
+
+```yaml
+postgresqlha:
+  postgresql:
+    existingSecret: "my-secret"
+  pgpool:
+    existingSecret: "my-secret"
+```
+
+This secret can be created with:
+
+```no-highlight
+kubectl create secret generic my-secret --from-literal=admin-password=change-me --from-literal=postgresql-password=change-me --from-literal=postgresql-postgres-password=change-me --from-literal=repmgr-password=change-me
+```
+
+This helm chart's support for PosgreSQL HA is still in an early alpha/beta phase you should use this feature cautiously.
 
 ### RQ Workers
 
@@ -470,6 +507,8 @@ redis:
     password: "change-me"
 ```
 
+[PostgreSQL HA](#postgresql-ha) and [Redis Sentinel](#redis-sentinel) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.
+
 ## Nautobot Application Values
 
 | Key | Type | Default | Description |
@@ -598,6 +637,7 @@ $ helm delete nautobot
 | https://charts.bitnami.com/bitnami | common | 1.x.x |
 | https://charts.bitnami.com/bitnami | mariadb | 10.x.x |
 | https://charts.bitnami.com/bitnami | postgresql | 10.x.x |
+| https://charts.bitnami.com/bitnami | postgresqlha(postgresql-ha) | 8.x.x |
 | https://charts.bitnami.com/bitnami | redis | 15.X.X |
 
 ## Values
@@ -726,7 +766,7 @@ $ helm delete nautobot
 | nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
-| nautobot.image.tag | string | `"1.2.0-beta.1"` | Nautobot image tag, common to all deployments |
+| nautobot.image.tag | string | `"1.2.1"` | Nautobot image tag, common to all deployments |
 | nautobot.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods |
 | nautobot.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | nautobot.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
@@ -768,6 +808,18 @@ $ helm delete nautobot
 | postgresql.postgresqlDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name |
 | postgresql.postgresqlPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password |
 | postgresql.postgresqlUsername | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username |
+| postgresqlha.enabled | bool | `false` | Enable deployment of the [Bitnami postgresql-ha](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart, all other `postgresql-ha.*` parameters will be passed directly to that chart |
+| postgresqlha.pgpool.adminPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Pgpool Admin password |
+| postgresqlha.pgpool.pdb.create | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Enable a Pod Distribution Budget for Pgpool |
+| postgresqlha.pgpool.replicaCount | int | `2` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) The number of replicas to deploy |
+| postgresqlha.pgpool.srCheckDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Name of the database to perform streaming replication checks |
+| postgresqlha.pgpool.updateStrategy | object | See values.yaml | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Strategy used to replace old Pgpool Pods by new ones |
+| postgresqlha.postgresql.database | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL database name |
+| postgresqlha.postgresql.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL user password |
+| postgresqlha.postgresql.pdb.create | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) Enable a Pod Distribution Budget for Postgres |
+| postgresqlha.postgresql.postgresPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL postgres user password |
+| postgresqlha.postgresql.repmgrPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL Repmgr password |
+| postgresqlha.postgresql.username | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL username |
 | redis.architecture | string | `"standalone"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis Architecture valid values: `standalone` or `replication` |
 | redis.auth.enabled | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Enable password authentication |
 | redis.auth.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis password |

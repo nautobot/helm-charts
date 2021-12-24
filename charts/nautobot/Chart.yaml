@@ -20,6 +20,8 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
+    - kind: changed
+      description: {{{prTitle}}}
     - kind: added
       description: Security Scanning & Remediations for medium/high findings
       links:

@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.2.1
+      image: ghcr.io/nautobot/nautobot:1.2.2
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -20,6 +20,8 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
+    - kind: changed
+      description: {{{prTitle}}}
     - kind: added
       description: Security Scanning & Remediations for medium/high findings
       links:
@@ -60,7 +62,7 @@ annotations:
         - name: Github Issue
           url: https://github.com/nautobot/helm-charts/issues/47
 apiVersion: "v2"
-appVersion: "1.2.1"
+appVersion: "1.2.2"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

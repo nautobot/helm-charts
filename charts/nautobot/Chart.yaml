@@ -24,6 +24,14 @@ annotations:
       description: Update pre-commit hook pre-commit/pre-commit-hooks to v4.1.0
     - kind: changed
       description: Update Nautobot version to 1.2.2
+    - kind: changed
+      description: Upgraded Mariadb subchart from 10.1.1 to 10.2.0
+    - kind: changed
+      description: Upgraded PostgreSQL subchart from 10.13.14 to 10.14.0
+    - kind: changed
+      description: Upgraded PostgreSQL-HA subchart from 8.1.2 to 8.1.3
+    - kind: changed
+      description: Upgraded Redis subchart from 15.6.7 to 15.6.10
     # - kind: changed
     #   description: Updated Redis with TLS documentation
     #   links:

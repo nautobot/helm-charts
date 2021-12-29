@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.2.1
+      image: ghcr.io/nautobot/nautobot:1.2.2
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -22,8 +22,15 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Update pre-commit hook pre-commit/pre-commit-hooks to v4.1.0
+    - kind: changed
+      description: Update Nautobot version to 1.2.2
+    # - kind: changed
+    #   description: Updated Redis with TLS documentation
+    #   links:
+    #     - name: Github Issue
+    #       url: https://github.com/nautobot/helm-charts/issues/57
 apiVersion: "v2"
-appVersion: "1.2.1"
+appVersion: "1.2.2"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

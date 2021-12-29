@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.2.1
+      image: ghcr.io/nautobot/nautobot:1.2.2
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -20,47 +20,25 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
-    - kind: added
-      description: Security Scanning & Remediations for medium/high findings
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/87
-    - kind: added
-      description: PostgreSQL High Availability Support
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/35
     - kind: changed
-      description: Update ghcr.io/nautobot/nautobot Docker tag to v1.2.1
-    - kind: added
-      description: Redis Sentinel Documentation
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/35
-    - kind: added
-      description: MySQL Support
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/15
+      description: Update pre-commit hook pre-commit/pre-commit-hooks to v4.1.0
     - kind: changed
-      description: Updated Redis with TLS documentation
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/57
+      description: Update Nautobot version to 1.2.2
     - kind: changed
-      description: Bumping sub-chart dependencies
+      description: Upgraded Mariadb subchart from 10.1.1 to 10.2.0
     - kind: changed
-      description: Upgraded Nautobot to 1.2.1
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/47
-    - kind: added
-      description: Added Celery Beat for Nautobot 1.2 support
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/47
+      description: Upgraded PostgreSQL subchart from 10.13.14 to 10.14.0
+    - kind: changed
+      description: Upgraded PostgreSQL-HA subchart from 8.1.2 to 8.1.3
+    - kind: changed
+      description: Upgraded Redis subchart from 15.6.7 to 15.6.10
+    # - kind: changed
+    #   description: Updated Redis with TLS documentation
+    #   links:
+    #     - name: Github Issue
+    #       url: https://github.com/nautobot/helm-charts/issues/57
 apiVersion: "v2"
-appVersion: "1.2.1"
+appVersion: "1.2.2"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
@@ -100,4 +78,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "1.1.0"
+version: "1.1.1"

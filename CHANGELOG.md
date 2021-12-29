@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 <!--- Renovate --->
 
+## 1.1.1 - 2021-12-29
+- Update pre-commit hook pre-commit/pre-commit-hooks to v4.1.0
+- Update Nautobot version to 1.2.2
+- Upgraded Mariadb subchart from 10.1.1 to 10.2.0
+- Upgraded PostgreSQL subchart from 10.13.14 to 10.14.0
+- Upgraded PostgreSQL-HA subchart from 8.1.2 to 8.1.3
+- Upgraded Redis subchart from 15.6.7 to 15.6.10
+
 ## 1.1.0 - 2021-12-20
 ### Added
 - Security scanning provided by Snyk and Kubescan to CI process

@@ -21,46 +21,7 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: changed
-      description: {{{prTitle}}}
-    - kind: added
-      description: Security Scanning & Remediations for medium/high findings
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/87
-    - kind: added
-      description: PostgreSQL High Availability Support
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/35
-    - kind: changed
-      description: Update ghcr.io/nautobot/nautobot Docker tag to v1.2.1
-    - kind: added
-      description: Redis Sentinel Documentation
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/35
-    - kind: added
-      description: MySQL Support
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/15
-    - kind: changed
-      description: Updated Redis with TLS documentation
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/57
-    - kind: changed
-      description: Bumping sub-chart dependencies
-    - kind: changed
-      description: Upgraded Nautobot to 1.2.1
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/47
-    - kind: added
-      description: Added Celery Beat for Nautobot 1.2 support
-      links:
-        - name: Github Issue
-          url: https://github.com/nautobot/helm-charts/issues/47
+      description: Update pre-commit hook pre-commit/pre-commit-hooks to v4.1.0
 apiVersion: "v2"
 appVersion: "1.2.1"
 dependencies:
@@ -102,4 +63,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "1.1.0"
+version: "1.1.1"

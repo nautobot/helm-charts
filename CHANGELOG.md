@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 <!--- Renovate --->
-- {{{prTitle}}}
+- Update pre-commit hook pre-commit/pre-commit-hooks to v4.1.0
 
 ## 1.1.0 - 2021-12-20
 ### Added

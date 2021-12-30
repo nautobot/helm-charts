@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 <!--- Renovate --->
 
+## 1.1.2 - 2021-12-30
+### Fixed
+- [105](https://github.com/nautobot/helm-charts/issues/105) - Tests fail with `runAsNonRoot: true`
+
 ## 1.1.1 - 2021-12-29
 - Update pre-commit hook pre-commit/pre-commit-hooks to v4.1.0
 - Update Nautobot version to 1.2.2

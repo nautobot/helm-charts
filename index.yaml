@@ -4,7 +4,7 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: fixed
-          description: Tests fail with `runAsNonRoot: true`
+          description: Tests fail with runAsNonRoot set to true
           links:
             - name: Github Issue
               url: https://github.com/nautobot/helm-charts/issues/105
@@ -29,7 +29,7 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.2.2
-    created: "2021-12-30T16:26:38.077892367Z"
+    created: "2021-12-30T17:44:20.374039374Z"
     dependencies:
     - condition: redis.enabled
       name: redis
@@ -54,7 +54,7 @@ entries:
       - bitnami-common
       version: 1.x.x
     description: Nautobot is a Network Source of Truth and Network Automation Platform.
-    digest: 70401e7e8a257794bb1b3df34fc4474d90942ce233a4e5c1bb8b8fdf5fdc7870
+    digest: c3c54ccfdccd91e4b3e2981b0990ba99c94f525062d4a662286ddf6b4c0213b8
     home: https://github.com/nautobot/nautobot
     icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
     keywords:
@@ -1006,4 +1006,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2021-12-30T16:26:38.053207967Z"
+generated: "2021-12-30T17:44:20.348437512Z"

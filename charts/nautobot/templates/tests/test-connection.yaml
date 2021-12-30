@@ -18,7 +18,7 @@ spec:
       image: busybox
       imagePullPolicy: "Always"
       command: ['wget']
-      args: ['{{ include "common.names.fullname" . }}:{{ .Values.service.port }}']
+      args: ['-O', '/dev/null', '{{ include "common.names.fullname" . }}:{{ .Values.service.port }}']
       resources:
         limits:
           memory: "128Mi"
@@ -26,6 +26,7 @@ spec:
       securityContext:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
+        runAsUser: 10000
         capabilities:
           drop:
             - "ALL"

@@ -21,7 +21,7 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: fixed
-      description: Tests fail with `runAsNonRoot: true`
+      description: Tests fail with runAsNonRoot set to true
       links:
         - name: Github Issue
           url: https://github.com/nautobot/helm-charts/issues/105

@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - [CVE-2021-23727](https://github.com/advisories/GHSA-q4xr-rc97-m4xx) see [Nautobot #1238](https://github.com/nautobot/nautobot/issues/1238) for additional details
   - Update Nautobot version to 1.2.3
-  - Update Python version to 3.9
+  - Update Python version to 3.7
 
 ### Changed
 - Upgraded Mariadb subchart from 10.2.0 to 10.3.0

@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 <!--- Renovate --->
 
+## 1.1.3 - 2022-01-07
+### Security
+- [CVE-2021-23727](https://github.com/advisories/GHSA-q4xr-rc97-m4xx) see [Nautobot #1238](https://github.com/nautobot/nautobot/issues/1238) for additional details
+  - Update Nautobot version to 1.2.3
+  - Update Python version to 3.7
+
+### Changed
+- Upgraded Mariadb subchart from 10.2.0 to 10.3.0
+- Upgraded PostgreSQL subchart from 10.14.0 to 10.15.1
+- Upgraded PostgreSQL-HA subchart from 8.1.3 to 8.2.1
+- Upgraded Redis subchart from 15.6.10 to 15.7.1
+
 ## 1.1.2 - 2021-12-30
 ### Fixed
 - [105](https://github.com/nautobot/helm-charts/issues/105) - Tests fail with `runAsNonRoot: true`

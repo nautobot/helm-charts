@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 <!--- Renovate --->
 
+## 1.1.4 - 2022-01-13
+### Security
+- [CVE-2022-22815](https://github.com/advisories/GHSA-xrcv-f9gm-v42c)
+- [CVE-2022-22816](https://github.com/advisories/GHSA-xrcv-f9gm-v42c)
+- [CVE-2022-22817](https://github.com/advisories/GHSA-8vj2-vxx3-667w)
+  - Update Nautobot version to 1.2.4
+  - Update Python version to 3.9
+
 ## 1.1.3 - 2022-01-07
 ### Security
 - [CVE-2021-23727](https://github.com/advisories/GHSA-q4xr-rc97-m4xx) see [Nautobot #1238](https://github.com/nautobot/nautobot/issues/1238) for additional details

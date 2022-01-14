@@ -10,7 +10,7 @@ entries:
       artifacthub.io/containsSecurityUpdates: "true"
       artifacthub.io/images: |
         - name: nautobot
-          image: ghcr.io/nautobot/nautobot:1.2.2
+          image: ghcr.io/nautobot/nautobot:1.2.4
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
         - name: Nautobot Documentation
@@ -88,7 +88,7 @@ entries:
       artifacthub.io/containsSecurityUpdates: "true"
       artifacthub.io/images: |
         - name: nautobot
-          image: ghcr.io/nautobot/nautobot:1.2.2
+          image: ghcr.io/nautobot/nautobot:1.2.3
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
         - name: Nautobot Documentation

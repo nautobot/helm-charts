@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.2.4
+      image: ghcr.io/nautobot/nautobot:1.2.4-py3.9
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -21,11 +21,13 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: changed
+      description: {{{prTitle}}}
+    - kind: changed
       description: Update Nautobot version to 1.2.4
     - kind: changed
       description: Update Default Python version to 3.9
 apiVersion: "v2"
-appVersion: "1.2.4"
+appVersion: "1.2.4-py3.9"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

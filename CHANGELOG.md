@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!--- Renovate --->
 - Upgraded Mariadb subchart from 10.3.0 to 10.3.1
 - Upgraded PostgreSQL subchart from 10.15.1 to 10.16.1
-- Upgraded PostgreSQL-HA subchart from 8.2.1 to 8.2.4
-- Upgraded Redis subchart from 15.7.1 to 16.0.0
+- Upgraded PostgreSQL-HA subchart from 8.2.1 to 8.2.6
+- Upgraded Redis subchart from 15.7.1 to 16.0.1
+- Upgraded Bitnami common subchart from 1.10.3 to 1.10.4
 
 ## 1.1.4 - 2022-01-13
 ### Security

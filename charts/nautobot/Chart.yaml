@@ -1,12 +1,12 @@
 ---
 annotations:
   category: "Infrastructure"
-  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/license: "Apache-2.0"
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.2.4
+      image: ghcr.io/nautobot/nautobot:1.2.4-py3.9
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -21,16 +21,22 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: changed
-      description: Update Nautobot version to 1.2.4
+      description: Upgraded Mariadb subchart from 10.3.0 to 10.3.1
     - kind: changed
-      description: Update Default Python version to 3.9
+      description: Upgraded PostgreSQL subchart from 10.15.1 to 10.16.1
+    - kind: changed
+      description: Upgraded PostgreSQL-HA subchart from 8.2.1 to 8.2.6
+    - kind: changed
+      description: Upgraded Redis subchart from 15.7.1 to 16.0.1
+    - kind: changed
+      description: Upgraded Bitnami common subchart from 1.10.3 to 1.10.4
 apiVersion: "v2"
 appVersion: "1.2.4"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
     repository: "https://charts.bitnami.com/bitnami"
-    version: "15.X.X"
+    version: "16.x.x"
   - condition: "postgresql.enabled"
     name: "postgresql"
     repository: "https://charts.bitnami.com/bitnami"
@@ -65,4 +71,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "1.1.4"
+version: "1.1.5"

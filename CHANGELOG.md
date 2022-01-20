@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 <!--- Renovate --->
+
+## 1.1.5 - 2022-01-20
+### Changed
 - Upgraded Mariadb subchart from 10.3.0 to 10.3.1
 - Upgraded PostgreSQL subchart from 10.15.1 to 10.16.1
 - Upgraded PostgreSQL-HA subchart from 8.2.1 to 8.2.6

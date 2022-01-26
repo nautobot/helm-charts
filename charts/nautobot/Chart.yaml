@@ -23,7 +23,7 @@ annotations:
     - kind: changed
       description: Celery Beat container name now nautobot-celery-beat
     - kind: added
-      description: Added PodDistributionBudget capability for Nautobot and Nautobot Worker
+      description: Added PodDisruptionBudget capability for Nautobot and Nautobot Worker
       links:
         - name: Github Issue
           url: https://github.com/nautobot/helm-charts/issues/120

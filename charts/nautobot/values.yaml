@@ -94,6 +94,13 @@ nautobot:
     seccompProfile:
       type: "RuntimeDefault"
 
+  # -- [ref](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) Nautobot Pod Distribution Budget
+  # @default -- See values.yaml
+  pdb:
+    create: false
+    minAvailable: 1
+    # maxUnavailable: 1
+
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context
   # @default -- See values.yaml
   containerSecurityContext:
@@ -513,6 +520,13 @@ celeryWorker:
     seccompProfile:
       type: "RuntimeDefault"
 
+  # -- [ref](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) Nautobot Pod Distribution Budget
+  # @default -- See values.yaml
+  pdb:
+    create: false
+    minAvailable: 1
+    # maxUnavailable: 1
+
   # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context
   # @default -- See values.yaml
   containerSecurityContext:
@@ -680,8 +694,8 @@ celeryBeat:
   # @default -- See values.yaml
   resources:
     requests:
-      cpu: "400m"
-      memory: "1G"
+      cpu: "5m"
+      memory: "256M"
     limits:
       cpu: "3328m"
       memory: "6656M"

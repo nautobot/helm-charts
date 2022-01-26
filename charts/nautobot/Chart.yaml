@@ -21,15 +21,18 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: changed
-      description: Upgraded Mariadb subchart from 10.3.0 to 10.3.1
+      description: Celery Beat container name now nautobot-celery-beat
+    - kind: added
+      description: Added PodDistributionBudget capability for Nautobot and Nautobot Worker
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/120
     - kind: changed
-      description: Upgraded PostgreSQL subchart from 10.15.1 to 10.16.1
+      description: Upgraded Mariadb subchart from 10.3.1 to 10.3.2
     - kind: changed
-      description: Upgraded PostgreSQL-HA subchart from 8.2.1 to 8.2.6
+      description: Upgraded PostgreSQL subchart from 10.16.1 to 10.16.2
     - kind: changed
-      description: Upgraded Redis subchart from 15.7.1 to 16.0.1
-    - kind: changed
-      description: Upgraded Bitnami common subchart from 1.10.3 to 1.10.4
+      description: Upgraded Redis subchart from 16.0.1 to 16.2.0
 apiVersion: "v2"
 appVersion: "1.2.4"
 dependencies:
@@ -71,4 +74,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "1.1.5"
+version: "1.2.0"

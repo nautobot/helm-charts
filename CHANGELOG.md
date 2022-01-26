@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 <!--- Renovate --->
 
+## 1.2.0 - 2022-01-26
+### Added
+- PodDistributionBudget capability for Nautobot and Nautobot Worker
+
+### Changed
+- Celery Beat container name now nautobot-celery-beat
+- Upgraded Mariadb subchart from 10.3.1 to 10.3.2
+- Upgraded PostgreSQL subchart from 10.16.1 to 10.16.2
+- Upgraded Redis subchart from 16.0.1 to 16.2.0
+
 ## 1.1.5 - 2022-01-20
 ### Changed
 - Upgraded Mariadb subchart from 10.3.0 to 10.3.1

@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 1.1.5](https://img.shields.io/badge/Version-1.1.5-informational?style=flat-square) ![AppVersion: 1.2.4](https://img.shields.io/badge/AppVersion-1.2.4-informational?style=flat-square)
+![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![AppVersion: 1.2.4](https://img.shields.io/badge/AppVersion-1.2.4-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -629,7 +629,7 @@ This is because by default the `FLUSHDB` command is disabled in the Bitnami Redi
 redis:
   master:
     disableCommands: []
-  slave:
+  replica:
     disableCommands: []
 ```
 
@@ -707,6 +707,7 @@ $ helm delete nautobot
 | celeryWorker.nodeAffinityPreset.type | string | `""` | Nautobot Celery Worker Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | celeryWorker.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
 | celeryWorker.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Worker pods assignment |
+| celeryWorker.pdb | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) Nautobot Pod Distribution Budget |
 | celeryWorker.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Worker Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | celeryWorker.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot Celery Worker pods |
 | celeryWorker.podAntiAffinityPreset | string | `"soft"` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Worker Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
@@ -808,6 +809,7 @@ $ helm delete nautobot
 | nautobot.nodeAffinityPreset.type | string | `""` | Nautobot Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | nautobot.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
 | nautobot.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot pods assignment |
+| nautobot.pdb | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) Nautobot Pod Distribution Budget |
 | nautobot.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | nautobot.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot pods |
 | nautobot.podAntiAffinityPreset | string | `"soft"` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |

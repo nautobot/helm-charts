@@ -168,6 +168,27 @@
         "nodeSelector": {
           "type": "object"
         },
+        "pdb": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "create",
+            "minAvailable"
+          ],
+          "properties": {
+            "create": {
+              "type": "boolean"
+            },
+            "maxUnavailable": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "minAvailable": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
         "podAffinityPreset": {
           "type": "string",
           "pattern": "^(soft|hard|)$"

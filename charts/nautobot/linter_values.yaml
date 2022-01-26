@@ -7,10 +7,14 @@ rqWorker:
 nautobot:
   autoscaling:
     enabled: true
+  pdb:
+    create: true
 
 celeryWorker:
   autoscaling:
     enabled: true
+  pdb:
+    create: true
 
 postgresql:
   postgresqlPassword: "change-me"

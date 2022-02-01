@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 <!--- Renovate --->
+* Update pre-commit hook Lucas-C/pre-commit-hooks to v1.1.11
+* Upgraded Bitnami common subchart from 1.10.4 to 1.11.0
+* Upgraded PostgreSQL-HA subchart from 8.2.6 to 8.2.8
+* Upgraded Redis subchart from 16.2.0 to 16.3.0
+
+### Fixed
+* [123](https://github.com/nautobot/helm-charts/issues/123) - Redis headless service name fails in non-sentinel environments with RO replicas
 
 ## 1.2.0 - 2022-01-26
 ### Added

@@ -15,7 +15,7 @@ metadata:
 spec:
   containers:
     - name: wget
-      image: busybox
+      image: "docker.io/library/busybox"
       imagePullPolicy: "Always"
       command: ['wget']
       args: ['-O', '/dev/null', '{{ include "common.names.fullname" . }}:{{ .Values.service.port }}']

@@ -972,6 +972,16 @@ redis:
     podSecurityContext:
       seccompProfile:
         type: "RuntimeDefault"
+  sentinel:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - "ALL"
+    podSecurityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
   serviceAccount:
     automountServiceAccountToken: false
 

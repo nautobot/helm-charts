@@ -54,7 +54,43 @@
       {
         "designatorType": "Attributes",
         "attributes": {
-          "kind": "StatefulSet"
+          "kind": "StatefulSet",
+          "name": "release-name-mariadb"
+        }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "StatefulSet",
+          "name": "release-name-postgresql"
+        }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "StatefulSet",
+          "name": "release-name-postgresqlha-postgresql"
+        }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "StatefulSet",
+          "name": "release-name-redis-master"
+        }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "StatefulSet",
+          "name": "release-name-redis-node"
+        }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "Deployment",
+          "name": "release-name-postgresqlha-pgpool"
         }
       }
     ],
@@ -66,6 +102,57 @@
       {
         "frameworkName": "NSA",
         "ruleName": "resource-policies"
+      }
+    ]
+  },
+  {
+    "name": "ignore-credentials-false-positive",
+    "policyType": "postureExceptionPolicy",
+    "actions": [
+      "alertOnly"
+    ],
+    "resources": [
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "StatefulSet",
+          "name": "release-name-redis-master"
+        }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "StatefulSet",
+          "name": "release-name-redis-node"
+        }
+      }
+    ],
+    "posturePolicies": [
+      {
+        "frameworkName": "NSA",
+        "ruleName": "rule-credentials-in-env-var"
+      }
+    ]
+  },
+  {
+    "name": "ignore-automount-service-account-false-positive",
+    "policyType": "postureExceptionPolicy",
+    "actions": [
+      "alertOnly"
+    ],
+    "resources": [
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "StatefulSet",
+          "name": "release-name-mariadb"
+        }
+      }
+    ],
+    "posturePolicies": [
+      {
+        "frameworkName": "NSA",
+        "ruleName": "automount-service-account"
       }
     ]
   }

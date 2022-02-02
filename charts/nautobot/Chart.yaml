@@ -28,6 +28,10 @@ annotations:
         - name: Github Issue
           url: https://github.com/nautobot/helm-charts/issues/123
     - kind: changed
+      description: Updated Kubescape scanning, fixing kubescape findings from Sentinel
+    - kind: changed
+      description: Added Markdownlint to pre-commit
+    - kind: changed
       description: Upgraded Bitnami common subchart from 1.10.4 to 1.11.0
     - kind: changed
       description: Upgraded PostgreSQL-HA subchart from 8.2.6 to 8.2.8

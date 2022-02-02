@@ -4,10 +4,10 @@ This section describes how to install Nautobot *helm-charts* for development, ho
 
 ## Branches
 
-- `main` - Reserved for the current release
-- `develop` - Ready to release code, bases for new PRs
-- `gh-pages` - Reserved to host the chart repository using GitHub Pages
-- `<feature>` - Individual feature branches, should be PR'd to `develop`.
+* `main` - Reserved for the current release
+* `develop` - Ready to release code, bases for new PRs
+* `gh-pages` - Reserved to host the chart repository using GitHub Pages
+* `<feature>` - Individual feature branches, should be PR'd to `develop`.
 
 ## Versioning
 
@@ -27,7 +27,7 @@ The following dependencies are required for development, their installation is o
 [Pre-commit](https://pre-commit.com/) is used heavily by this project to speed up and standardize development.  Pre-commit will perform linting, docs updates, and testing for you.  To run all checks/tests run:
 
 ```no-highlight
-$ pre-commit run -av
+pre-commit run -av
 ```
 
 In some cases, such as documentation updates pre-commit will actually make the docs changes for you so it's possible to run the command above 1 time, it will fail because an update was necessary, but on subsequent runs, it will succeed.
@@ -61,7 +61,7 @@ Project specific linting includes:
 To run a single check from the above list run:
 
 ```no-highlight
-$ pre-commit run -av {check name}
+pre-commit run -av {check name}
 ```
 
 ### Security Scanning
@@ -86,11 +86,11 @@ Pre-commit runs [`helm-docs`](https://github.com/norwoodj/helm-docs), this uses 
 To update the README.md files for a chart you can run `helm-docs` directly or use pre-commit:
 
 ```no-highlight
-$ helm-docs
+helm-docs
 ```
 
 or
 
 ```no-highlight
-$ pre-commit run -av helm-docs
+pre-commit run -av helm-docs
 ```

@@ -1,0 +1,19 @@
+{
+  "default": true,
+  "MD007": {
+    "indent": 4
+  },
+  "MD013": {
+    "line_length": 99999
+  },
+  "MD024": false,
+  "MD025": false,
+  "MD026": {
+    "punctuation": ".,;:\u3002\uff0c\uff1b\uff1a"
+  },
+  "MD029": {
+    "style": "ordered"
+  },
+  "MD033": false,
+  "MD034": false
+}

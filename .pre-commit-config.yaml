@@ -22,6 +22,11 @@ repos:
       - id: "remove-crlf"
       - id: "remove-tabs"
 
+  - repo: "https://github.com/jumanjihouse/pre-commit-hooks.git"
+    rev: "2.1.5"
+    hooks:
+      - id: "markdownlint"
+
   - repo: "https://github.com/gruntwork-io/pre-commit"
     rev: "v0.1.17"  # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
     hooks:

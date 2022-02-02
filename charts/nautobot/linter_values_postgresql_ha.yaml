@@ -6,6 +6,10 @@ postgresql:
   enabled: false
 
 redis:
+  architecture: "replication"
+  sentinel:
+    enabled: true
+    masterSet: "nautobot"
   auth:
     password: "change-me"
 

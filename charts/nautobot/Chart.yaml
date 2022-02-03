@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.2.4-py3.9
+      image: ghcr.io/nautobot/nautobot:1.2.5-py3.9
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -21,6 +21,8 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: changed
+      description: Update Nautobot version to 1.2.5
+    - kind: changed
       description: Update pre-commit hook Lucas-C/pre-commit-hooks to v1.1.11
     - kind: fixed
       description: Redis headless service name fails in non-sentinel environments with RO replicas
@@ -32,13 +34,13 @@ annotations:
     - kind: changed
       description: Added Markdownlint to pre-commit
     - kind: changed
-      description: Upgraded Bitnami common subchart from 1.10.4 to 1.11.0
+      description: Upgraded Bitnami common subchart from 1.10.4 to 1.11.1
     - kind: changed
       description: Upgraded PostgreSQL-HA subchart from 8.2.6 to 8.2.8
     - kind: changed
       description: Upgraded Redis subchart from 16.2.0 to 16.3.0
 apiVersion: "v2"
-appVersion: "1.2.4"
+appVersion: "1.2.5"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

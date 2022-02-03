@@ -11,11 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * <!--- Renovate --->
 
-## 1.2.1 - 2022-02-02
+## 1.2.2 - 2022-02-03
 
 ### Changed
 
 * Update Nautobot version to 1.2.5
+
+## 1.2.1 - 2022-02-02
+
+### Changed
+
+* ~~Update Nautobot version to 1.2.5~~
 * Update pre-commit hook Lucas-C/pre-commit-hooks to v1.1.11
 * Updated Kubescape scanning, fixing kubescape findings from Sentinel
 * Added Markdownlint to pre-commit

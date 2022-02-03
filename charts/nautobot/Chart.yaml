@@ -21,6 +21,8 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: changed
+      description: {{{prTitle}}}
+    - kind: changed
       description: Update Nautobot version to 1.2.5
     - kind: changed
       description: Update pre-commit hook Lucas-C/pre-commit-hooks to v1.1.11
@@ -40,7 +42,7 @@ annotations:
     - kind: changed
       description: Upgraded Redis subchart from 16.2.0 to 16.3.0
 apiVersion: "v2"
-appVersion: "1.2.5"
+appVersion: "1.2.5-py3.9"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

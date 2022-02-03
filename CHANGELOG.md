@@ -10,10 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * <!--- Renovate --->
+
+## 1.2.1 - 2022-02-02
+
+### Changed
+
+* Update Nautobot version to 1.2.5
 * Update pre-commit hook Lucas-C/pre-commit-hooks to v1.1.11
 * Updated Kubescape scanning, fixing kubescape findings from Sentinel
 * Added Markdownlint to pre-commit
-* Upgraded Bitnami common subchart from 1.10.4 to 1.11.0
+* Upgraded Bitnami common subchart from 1.10.4 to 1.11.1
 * Upgraded PostgreSQL-HA subchart from 8.2.6 to 8.2.8
 * Upgraded Redis subchart from 16.2.0 to 16.3.0
 

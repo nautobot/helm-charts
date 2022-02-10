@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 1.2.2](https://img.shields.io/badge/Version-1.2.2-informational?style=flat-square) ![AppVersion: 1.2.5](https://img.shields.io/badge/AppVersion-1.2.5-informational?style=flat-square)
+![Version: 1.2.3](https://img.shields.io/badge/Version-1.2.3-informational?style=flat-square) ![AppVersion: 1.2.5](https://img.shields.io/badge/AppVersion-1.2.5-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -730,6 +730,7 @@ helm delete nautobot
 | ingress.extraPaths | list | `[]` | Any additional arbitrary paths that may need to be added to the ingress under the main host. For example: The ALB ingress controller requires a special rule for handling SSL redirection. |
 | ingress.extraTls | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) The tls configuration for additional hostnames to be covered with this ingress record. |
 | ingress.hostname | string | `"nautobot.local"` | Ingress Hostname |
+| ingress.ingressClassName | string | `""` | Ingress Class Name |
 | ingress.path | string | `"/"` | The Path to Nautobot. You may need to set this to '/*' in order to use this with ALB ingress controllers. |
 | ingress.pathType | string | `"Prefix"` | Ingress resource pathType valid values `ImplementationSpecific`, `Exact`, or `Prefix` |
 | ingress.secretName | string | `"nautobot-tls"` | The name of the secret to use for the TLS certificate |

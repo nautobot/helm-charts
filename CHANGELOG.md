@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * <!--- Renovate --->
 
+## 1.2.3 - 2022-02-10
+
+### Added
+
+* [134](https://github.com/nautobot/helm-charts/issues/134) - Added support for the ingressClassName in the ingress component
+
+### Changed
+
+* Upgraded PostgreSQL-HA subchart from 8.2.8 to 8.3.1
+* Upgraded Redis subchart from 16.3.0 to 16.4.0
+
 ## 1.2.2 - 2022-02-03
 
 ### Changed

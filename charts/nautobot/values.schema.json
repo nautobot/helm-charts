@@ -433,6 +433,7 @@
         "extraHosts",
         "extraPaths",
         "extraTls",
+        "ingressClassName",
         "pathType",
         "hostname",
         "path",
@@ -446,30 +447,17 @@
             "string"
           ]
         },
-        "backendProtocol": {
-          "type": "string",
-          "pattern": "^(http|https)$"
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "pathType": {
-          "type": "string",
-          "pattern": "^(Exact|Prefix|ImplementationSpecific)$"
-        },
-        "hostname": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        },
         "annotations": {
           "additionalProperties": {
             "type": "string"
           },
           "type": "object"
         },
-        "tls": {
+        "backendProtocol": {
+          "type": "string",
+          "pattern": "^(http|https)$"
+        },
+        "enabled": {
           "type": "boolean"
         },
         "extraHosts": {
@@ -513,8 +501,24 @@
             "type": "object"
           }
         },
+        "hostname": {
+          "type": "string"
+        },
+        "ingressClassName": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "pathType": {
+          "type": "string",
+          "pattern": "^(Exact|Prefix|ImplementationSpecific)$"
+        },
         "secretName": {
           "type": "string"
+        },
+        "tls": {
+          "type": "boolean"
         }
       }
     },

@@ -24,6 +24,7 @@ redis:
 
 ingress:
   enabled: true
+  ingressClassName: "nginx"
   path: "/*"
 
 metrics:

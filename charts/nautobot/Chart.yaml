@@ -20,8 +20,15 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
+    - kind: added
+      description: Added Support for ingressClassName
+      links:
+        - name: Github Issue
+          url: https://github.com/nautobot/helm-charts/issues/134
     - kind: changed
-      description: Update Nautobot version to 1.2.5
+      description: Upgraded PostgreSQL-HA subchart from 8.2.8 to 8.3.1
+    - kind: changed
+      description: Upgraded Redis subchart from 16.3.0 to 16.4.0
 apiVersion: "v2"
 appVersion: "1.2.5"
 dependencies:
@@ -63,4 +70,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "1.2.2"
+version: "1.2.3"

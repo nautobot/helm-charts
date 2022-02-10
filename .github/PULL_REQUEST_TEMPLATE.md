@@ -10,7 +10,9 @@
     Please make sure this PR updates the CHANGELOG.md at the root of the repo and the corresponding
     Chart.yaml artifacthub.io/changes annotation.
 -->
+
 ### Fixes: #<ISSUE NUMBER GOES HERE>
+
 <!--
     Please include a summary of the proposed changes below.
 -->

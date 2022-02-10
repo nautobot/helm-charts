@@ -830,6 +830,9 @@ ingress:
   # -- Ingress Hostname
   hostname: "nautobot.local"
 
+  # -- Ingress Class Name
+  ingressClassName: ""
+
   # -- The Path to Nautobot. You may need to set this to '/*' in order to use this
   # with ALB ingress controllers.
   path: "/"

@@ -33,3 +33,10 @@ the value is `no` and not sensitive.
 *Reference:* [https://hub.armo.cloud/docs/c-0034](https://hub.armo.cloud/docs/c-0034)
 
 The service account used by the `mariadb` StatefulSet is `mariadb` and has the `automountServiceAccountToken` set to false.  This is a false finding.
+
+## Allowed Registries
+
+*Name:* ignore-default-registries
+*Reference:* [https://hub.armo.cloud/docs/c-0078](https://hub.armo.cloud/docs/c-0078)
+
+Some of these containers are hosted on docker.io

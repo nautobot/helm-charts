@@ -155,5 +155,41 @@
         "ruleName": "automount-service-account"
       }
     ]
+  },
+  {
+    "name": "ignore-default-registries",
+    "policyType": "postureExceptionPolicy",
+    "actions": [
+      "alertOnly"
+    ],
+    "resources": [
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "Pod",
+          "name": "release-name-nautobot-test-connection"
+        }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "Deployment",
+          "name": "release-name-.*"
+        }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "StatefulSet",
+          "name": "release-name-.*"
+        }
+      }
+    ],
+    "posturePolicies": [
+      {
+        "frameworkName": "ArmoBest",
+        "ruleName": "container-image-repository"
+      }
+    ]
   }
 ]

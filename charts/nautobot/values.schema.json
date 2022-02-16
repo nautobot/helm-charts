@@ -251,7 +251,7 @@
           }
         },
         "sidecars": {
-          "type": "object"
+          "type": "array"
         },
         "tolerations": {
           "type": "array",

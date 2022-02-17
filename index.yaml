@@ -3,6 +3,77 @@ entries:
   nautobot:
   - annotations:
       artifacthub.io/changes: |
+        - kind: added
+          description: extraPorts for the Nautobot service, useful for sidecars
+          links:
+            - name: Github Issue
+              url: https://github.com/nautobot/helm-charts/issues/141
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: nautobot
+          image: ghcr.io/nautobot/nautobot:1.2.5-py3.9
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Nautobot Documentation
+          url: https://nautobot.readthedocs.io/en/stable/
+        - name: Nautobot
+          url: https://github.com/nautobot/nautobot
+      artifacthub.io/prerelease: "false"
+      artifacthub.io/screenshots: |
+        - title: Main Page
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot1.png
+        - title: Rack Elevation
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot2.png
+        - title: Prefix hierarchy
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.2.5
+    created: "2022-02-17T21:54:50.896669443Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    - alias: postgresqlha
+      condition: postgresqlha.enabled
+      name: postgresql-ha
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Nautobot is a Network Source of Truth and Network Automation Platform.
+    digest: 0911f228de8dd56a9aa01f0b3750b938b57c3845877295c634ee1a8a06d4b8ae
+    home: https://github.com/nautobot/nautobot
+    icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
+    keywords:
+    - DCIM
+    - IPAM
+    - SOT
+    maintainers:
+    - email: opensource@networktocode.com
+      name: Network to Code
+      url: https://www.networktocode.com/
+    name: nautobot
+    sources:
+    - https://github.com/nautobot/nautobot
+    - https://github.com/nautobot/helm-charts
+    urls:
+    - https://nautobot.github.io/helm-charts/nautobot-1.3.0.tgz
+    version: 1.3.0
+  - annotations:
+      artifacthub.io/changes: |
         - kind: fixed
           description: Sidecars are the wrong data type in the schema
           links:
@@ -1608,4 +1679,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-17T16:19:06.323236448Z"
+generated: "2022-02-17T21:54:50.870812034Z"

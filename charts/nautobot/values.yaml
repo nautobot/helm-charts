@@ -26,6 +26,8 @@ service:
   externalTrafficPolicy: "Cluster"
   # -- Annotations to be applied to the service resource
   annotations: {}
+  # -- Extra ports to expose in the nautobot service (normally used with the `sidecars` value)
+  extraPorts: []
 
 # Nautobot Server
 nautobot:

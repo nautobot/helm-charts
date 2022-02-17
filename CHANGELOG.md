@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * <!--- Renovate --->
 
+## 1.3.0 - 2022-02-17
+
+### Added
+
+* [141](https://github.com/nautobot/helm-charts/issues/141) - Added extraPorts for the Nautobot service, useful for sidecars
+
 ## 1.2.4 - 2022-02-17
 
 ### Fixed

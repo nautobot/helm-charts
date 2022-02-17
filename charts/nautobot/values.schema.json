@@ -959,6 +959,7 @@
       "required": [
         "annotations",
         "externalTrafficPolicy",
+        "extraPorts",
         "httpsPort",
         "loadBalancerSourceRanges",
         "nodePorts",
@@ -984,6 +985,13 @@
           "type": "string",
           "pattern": "^(Cluster|Local)$",
           "description": "External Traffic Policy: https://kubernetes.io/docs/concepts/services-networking/service/"
+        },
+        "extraPorts": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Extra ports to expose in the nautobot service (normally used with the `sidecars` value)"
         },
         "httpsPort": {
           "type": "integer",

@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 1.2.4](https://img.shields.io/badge/Version-1.2.4-informational?style=flat-square) ![AppVersion: 1.2.5](https://img.shields.io/badge/AppVersion-1.2.5-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![AppVersion: 1.2.5](https://img.shields.io/badge/AppVersion-1.2.5-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -931,6 +931,7 @@ helm delete nautobot
 | service.annotations | object | `{}` | Annotations to be applied to the service resource |
 | service.clusterIP | string | `nil` | IP address to use as the clusterIP |
 | service.externalTrafficPolicy | string | `"Cluster"` | Kubernetes externalTrafficPolicy valid values: `Cluster` or `Local` |
+| service.extraPorts | list | `[]` | Extra ports to expose in the nautobot service (normally used with the `sidecars` value) |
 | service.httpsPort | int | `443` | Port to expose for Nautobot https access |
 | service.loadBalancerIP | string | `nil` | IP address to use as the loadBalancerIP |
 | service.loadBalancerSourceRanges | list | `[]` | List of allowed CIDRs to access the load balancer default 0.0.0.0/0, cloud provider dependent |

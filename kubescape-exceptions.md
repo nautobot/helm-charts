@@ -33,3 +33,17 @@ the value is `no` and not sensitive.
 *Reference:* [https://hub.armo.cloud/docs/c-0034](https://hub.armo.cloud/docs/c-0034)
 
 The service account used by the `mariadb` StatefulSet is `mariadb` and has the `automountServiceAccountToken` set to false.  This is a false finding.
+
+## Allowed Registries
+
+*Name:* ignore-default-registries
+*Reference:* [https://hub.armo.cloud/docs/c-0078](https://hub.armo.cloud/docs/c-0078)
+
+Some of these containers are hosted on docker.io
+
+## Pods in default namespace
+
+*Name:* ignore-no-namespace
+*Reference:* [https://hub.armo.cloud/docs/c-0061](https://hub.armo.cloud/docs/c-0061)
+
+This is an artifact of using helm to generate the template manifests which are passed to kubescape.  The issue here is helm uses the k8s api to specify a namespace for the manifests outside of the manifests themselves.  There is a lengthy discussion on this [here](https://github.com/helm/helm/issues/5465).

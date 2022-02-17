@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * <!--- Renovate --->
 
+### Fixed
+
+* [138](https://github.com/nautobot/helm-charts/issues/138) - Fixed the schema datatype for pod sidecars
+
 ## 1.2.3 - 2022-02-10
 
 ### Added

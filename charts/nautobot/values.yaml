@@ -173,7 +173,7 @@ nautobot:
   # -- List of additional volumeMounts for the Nautobot containers
   extraVolumeMounts: []
   # -- Add additional sidecar containers to the Nautobot server pods
-  sidecars: {}
+  sidecars: []
   # e.g.
   # sidecars:
   #   - name: your-image-name
@@ -428,7 +428,7 @@ rqWorker:
   # -- List of additional volumeMounts for the Nautobot RQ Worker containers
   extraVolumeMounts: []
   # -- Add additional sidecar containers to the Nautobot RQ Worker pods
-  sidecars: {}
+  sidecars: []
   # e.g.
   # sidecars:
   #   - name: your-image-name
@@ -606,7 +606,7 @@ celeryWorker:
   # -- List of additional volumeMounts for the Nautobot Celery Worker containers
   extraVolumeMounts: []
   # -- Add additional sidecar containers to the Nautobot Celery Worker pods
-  sidecars: {}
+  sidecars: []
   # e.g.
   # sidecars:
   #   - name: your-image-name
@@ -787,7 +787,7 @@ celeryBeat:
   # -- List of additional volumeMounts for the Nautobot Celery Beat containers
   extraVolumeMounts: []
   # -- Add additional sidecar containers to the Nautobot Celery Beat pods
-  sidecars: {}
+  sidecars: []
   # e.g.
   # sidecars:
   #   - name: your-image-name

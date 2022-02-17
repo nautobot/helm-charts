@@ -40,3 +40,10 @@ The service account used by the `mariadb` StatefulSet is `mariadb` and has the `
 *Reference:* [https://hub.armo.cloud/docs/c-0078](https://hub.armo.cloud/docs/c-0078)
 
 Some of these containers are hosted on docker.io
+
+## Pods in default namespace
+
+*Name:* ignore-no-namespace
+*Reference:* [https://hub.armo.cloud/docs/c-0061](https://hub.armo.cloud/docs/c-0061)
+
+This is an artifact of using helm to generate the template manifests which are passed to kubescape.  The issue here is helm uses the k8s api to specify a namespace for the manifests outside of the manifests themselves.  There is a lengthy discussion on this [here](https://github.com/helm/helm/issues/5465).

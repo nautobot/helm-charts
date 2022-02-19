@@ -20,13 +20,15 @@ annotations:
     - title: Prefix hierarchy
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
+    - kind: changed
+      description: {{{prTitle}}}
     - kind: added
       description: extraPorts for the Nautobot service, useful for sidecars
       links:
         - name: Github Issue
           url: https://github.com/nautobot/helm-charts/issues/141
 apiVersion: "v2"
-appVersion: "1.2.5"
+appVersion: "1.2.5-py3.9"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

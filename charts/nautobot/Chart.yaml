@@ -21,13 +21,15 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: changed
+      description: {{{prTitle}}}
+    - kind: changed
       description: Nautobot Version 1.2.7
     - kind: changed
       description: Upgraded Mariadb subchart from 10.3.2 to 10.3.6
     - kind: changed
       description: Upgraded PostgreSQL-HA subchart from 8.3.1 to 8.4.4
 apiVersion: "v2"
-appVersion: "1.2.7"
+appVersion: "1.2.7-py3.9"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

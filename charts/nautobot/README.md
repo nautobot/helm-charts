@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 1.3.1](https://img.shields.io/badge/Version-1.3.1-informational?style=flat-square) ![AppVersion: 1.2.7](https://img.shields.io/badge/AppVersion-1.2.7-informational?style=flat-square)
+![Version: 1.3.1](https://img.shields.io/badge/Version-1.3.1-informational?style=flat-square) ![AppVersion: 1.2.7-py3.9](https://img.shields.io/badge/AppVersion-1.2.7--py3.9-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 

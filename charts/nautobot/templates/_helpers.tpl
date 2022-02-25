@@ -323,7 +323,7 @@ nautobot/celeryBeat/celeryWorker/rqWorker
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.nautobot.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.nautobot.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.nautobot.extraVolumes) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
@@ -333,7 +333,7 @@ nautobot/celeryBeat/celeryWorker/rqWorker
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.celeryWorker.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.celeryWorker.extraVolumes) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
@@ -343,7 +343,7 @@ nautobot/celeryBeat/celeryWorker/rqWorker
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.celeryBeat.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.celeryBeat.extraVolumes) "context" $) -}}
   {{- end -}}
 {{- end -}}
 
@@ -353,7 +353,7 @@ nautobot/celeryBeat/celeryWorker/rqWorker
     {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
     {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.rqWorker.extraVolumes) "context" $) -}}
   {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
+    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.rqWorker.extraVolumes) "context" $) -}}
   {{- end -}}
 {{- end -}}
 

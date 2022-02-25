@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* [148](https://github.com/nautobot/helm-charts/issues/141) - extraVolumeMounts being added as Volumes as well as VolumeMounts
+* [148](https://github.com/nautobot/helm-charts/issues/148) - extraVolumeMounts being added as Volumes as well as VolumeMounts
 
 ## 1.3.1 - 2022-02-22
 

@@ -9,10 +9,36 @@ nautobot:
     enabled: true
   pdb:
     create: true
+  extraVolumeMounts:
+    - name: "gmail-auth"
+      mountPath: "/opt/nautobot/circuit-maintenance-secrets"
+      readOnly: true
+  extraVolumes:
+    - name: "gmail-auth"
+      secret:
+        secretName: "nautobot-gmail-auth"
+
+celeryBeat:
+  extraVolumeMounts:
+    - name: "gmail-auth"
+      mountPath: "/opt/nautobot/circuit-maintenance-secrets"
+      readOnly: true
+  extraVolumes:
+    - name: "gmail-auth"
+      secret:
+        secretName: "nautobot-gmail-auth"
 
 celeryWorker:
   autoscaling:
     enabled: true
+  extraVolumeMounts:
+    - name: "gmail-auth"
+      mountPath: "/opt/nautobot/circuit-maintenance-secrets"
+      readOnly: true
+  extraVolumes:
+    - name: "gmail-auth"
+      secret:
+        secretName: "nautobot-gmail-auth"
   pdb:
     create: true
 

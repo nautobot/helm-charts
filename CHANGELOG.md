@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * <!--- Renovate --->
 
+## 1.3.4 - 2022-03-14
+
+### Changed
+
+* Nautobot Version 1.2.9
+
 ## 1.3.3 - 2022-03-08
 
 ### Changed

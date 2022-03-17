@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * <!--- Renovate --->
 
+## 1.3.5 - 2022-03-17
+
+### Fixed
+
+* Fixed Redis sentinel read-only root volumes are no longer supported.
+
+### Changed
+
+* Upgraded Bitnami common subchart from 1.11.3 to 1.12.0
+* Upgraded Mariadb subchart from 10.3.7 to 10.4.1
+* Upgraded PostgreSQL-HA subchart from 8.5.3 to 8.6.3
+* Upgraded Redis subchart from 16.5.0 to 16.5.4
+
 ## 1.3.4 - 2022-03-14
 
 ### Changed

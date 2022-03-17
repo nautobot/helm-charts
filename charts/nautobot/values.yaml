@@ -980,7 +980,7 @@ redis:
   sentinel:
     containerSecurityContext:
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
+      readOnlyRootFilesystem: false
       capabilities:
         drop:
           - "ALL"

@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 1.3.4](https://img.shields.io/badge/Version-1.3.4-informational?style=flat-square) ![AppVersion: 1.2.9](https://img.shields.io/badge/AppVersion-1.2.9-informational?style=flat-square)
+![Version: 1.3.5](https://img.shields.io/badge/Version-1.3.5-informational?style=flat-square) ![AppVersion: 1.2.9](https://img.shields.io/badge/AppVersion-1.2.9-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -891,7 +891,7 @@ helm delete nautobot
 | redis.replica.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | redis.sentinel.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | redis.sentinel.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
-| redis.sentinel.containerSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| redis.sentinel.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
 | redis.sentinel.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | redis.serviceAccount.automountServiceAccountToken | bool | `false` |  |
 | rqWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot RQ Worker pods assignment |

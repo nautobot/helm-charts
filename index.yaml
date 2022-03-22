@@ -3,6 +3,74 @@ entries:
   nautobot:
   - annotations:
       artifacthub.io/changes: |
+        - kind: changed
+          description: Upgraded Nautobot from 1.2.9 to 1.2.10
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: nautobot
+          image: ghcr.io/nautobot/nautobot:1.2.10-py3.9
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Nautobot Documentation
+          url: https://nautobot.readthedocs.io/en/stable/
+        - name: Nautobot
+          url: https://github.com/nautobot/nautobot
+      artifacthub.io/prerelease: "false"
+      artifacthub.io/screenshots: |
+        - title: Main Page
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot1.png
+        - title: Rack Elevation
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot2.png
+        - title: Prefix hierarchy
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.2.10
+    created: "2022-03-22T13:29:34.662423644Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    - alias: postgresqlha
+      condition: postgresqlha.enabled
+      name: postgresql-ha
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Nautobot is a Network Source of Truth and Network Automation Platform.
+    digest: 8f1d77b09c79ff473460a9a2b16aac45ed57ec051affb378c16fec37df4c11e1
+    home: https://github.com/nautobot/nautobot
+    icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
+    keywords:
+    - DCIM
+    - IPAM
+    - SOT
+    maintainers:
+    - email: opensource@networktocode.com
+      name: Network to Code
+      url: https://www.networktocode.com/
+    name: nautobot
+    sources:
+    - https://github.com/nautobot/nautobot
+    - https://github.com/nautobot/helm-charts
+    urls:
+    - https://nautobot.github.io/helm-charts/nautobot-1.3.6.tgz
+    version: 1.3.6
+  - annotations:
+      artifacthub.io/changes: |
         - kind: fixed
           description: Fixed Redis sentinel read-only root volumes are no longer supported.
         - kind: changed
@@ -2042,4 +2110,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2022-03-17T19:18:11.728263684Z"
+generated: "2022-03-22T13:29:34.637859226Z"

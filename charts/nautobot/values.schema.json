@@ -372,7 +372,6 @@
     "postgresql",
     "postgresqlha",
     "redis",
-    "rqWorker",
     "service",
     "serviceAccount"
   ],
@@ -932,26 +931,6 @@
           "type": "boolean"
         }
       }
-    },
-    "rqWorker": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/deployment"
-        },
-        {
-          "type": "object",
-          "required": [
-            "autoscaling",
-            "enabled",
-            "replicaCount"
-          ],
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          }
-        }
-      ]
     },
     "service": {
       "type": "object",

@@ -62,6 +62,65 @@ spec:
       securityContext: {{- omit .Values.nautobot.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
+        # This init container will run post_upgrade which initializes/upgrades the DB as well as collects static files
+        # It also copies the self-sigened ssl certs for nginx if nginx is used
+        - name: nautobot-init
+          image: {{ template "nautobot.image" . }}
+          imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
+          {{- if .Values.nautobot.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.nautobot.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.nautobot.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          args:
+            - "cp"
+            - "/opt/nautobot/nautobot.*"
+            - "/tmp"
+          env:
+            {{- if .Values.nautobot.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "common.names.fullname" . }}-env
+            - secretRef:
+                name: {{ include "common.names.fullname" . }}-env
+            {{- if .Values.nautobot.extraEnvVarsCM }}
+            {{- range .Values.nautobot.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.nautobot.extraEnvVarsSecret }}
+            {{- range .Values.nautobot.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
+            {{- end }}
+          {{- if .Values.nautobot.resources }}
+          resources: {{- toYaml .Values.nautobot.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: "nautobot-static"
+              mountPath: "/opt/nautobot/static"
+            - name: "git-repos"
+              mountPath: "/opt/nautobot/git"
+            - name: "nautobot-config"
+              mountPath: "/opt/nautobot/uwsgi.ini"
+              subPath: "uwsgi.ini"
+            {{- if .Values.nautobot.nginx.enabled }}
+            - name: "nautobot-certs"
+              mountPath: "/tmp"
+            {{- end }}
+            {{- if .Values.nautobot.config }}
+            - name: "nautobot-config"
+              mountPath: "/opt/nautobot/nautobot_config.py"
+              subPath: "nautobot_config.py"
+            {{- end }}
+            {{- if .Values.nautobot.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.nautobot.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -112,18 +171,100 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nautobot.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if (include "nautobot.extraVolumeMounts" .) }}
-          {{- include "common.tplvalues.render" (dict "value" (include "nautobot.extraVolumeMounts" .) "context" $) | nindent 12 }}
-          {{- end }}
+            - name: "nautobot-static"
+              mountPath: "/opt/nautobot/static"
+            - name: "git-repos"
+              mountPath: "/opt/nautobot/git"
+            - name: "nautobot-config"
+              mountPath: "/opt/nautobot/uwsgi.ini"
+              subPath: "uwsgi.ini"
+            {{- if .Values.nautobot.config }}
+            - name: "nautobot-config"
+              mountPath: "/opt/nautobot/nautobot_config.py"
+              subPath: "nautobot_config.py"
+            {{- end }}
+            {{- if .Values.nautobot.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.nautobot.nginx.enabled }}
           ports:
             - name: "https"
               containerPort: 8443
             - name: "http"
               containerPort: 8080
+          {{ end }}
+        {{- if .Values.nautobot.nginx.enabled }}
+        - name: nginx
+          image: {{ template "nautobot.nginx.image" . }}
+          imagePullPolicy: {{ .Values.nautobot.nginx.image.pullPolicy }}
+          {{- if .Values.nautobot.nginx.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.nginx.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.nautobot.nginx.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.nautobot.nginx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.nautobot.nginx.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.nginx.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.nautobot.nginx.extraEnvVarsCM }}
+            {{- range .Values.nautobot.nginx.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.nautobot.nginx.extraEnvVarsSecret }}
+            {{- range .Values.nautobot.nginx.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
+            {{- end }}
+          {{- if .Values.nautobot.nginx.resources }}
+          resources: {{- toYaml .Values.nautobot.nginx.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.nautobot.nginx.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nautobot.nginx.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.nautobot.nginx.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nautobot.nginx.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: "nginx-config"
+              mountPath: "/opt/nautobot/static"
+              readOnly: true
+            - name: "nautobot-static"
+              mountPath: "/opt/nautobot/static"
+              readOnly: true
+            - name: "nautobot-certs"
+              mountPath: "/opt/nautobot_certs"
+              readOnly: true
+          ports:
+            - name: "https"
+              containerPort: 8443
+            - name: "http"
+              containerPort: 8080
+        {{- end }}
         {{- if .Values.nautobot.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if (include "nautobot.extraVolumes" .) }}
       volumes:
-        {{- include "common.tplvalues.render" (dict "value" (include "nautobot.extraVolumes" .) "context" $) | nindent 8 }}
-      {{- end }}
+        - name: "nautobot-static"
+          emptyDir: {}
+        - name: "git-repos"
+          emptyDir: {}
+        - name: "nautobot-config"
+          configMap:
+            name: {{ include "common.names.fullname" . }}-config
+        {{- if .Values.nautobot.nginx.enabled }}
+        - name: "nginx-config"
+          configMap:
+            name: {{ include "common.names.fullname" . }}-nginx-config
+        {{- end }}
+        {{- if .Values.nautobot.nginx.enabled }}
+        - name: "nautobot-certs"
+          emptyDir: {}
+        {{- end }}
+        {{- if .Values.nautobot.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

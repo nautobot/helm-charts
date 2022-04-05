@@ -377,15 +377,6 @@ kubectl create secret generic my-secret --from-literal=admin-password=change-me 
 
 This helm chart's support for PosgreSQL HA is still in an early alpha/beta phase you should use this feature cautiously.
 
-### RQ Workers
-
-In Nautobot 1.1.0 the [RQ worker was deprecated](https://nautobot.readthedocs.io/en/stable/release-notes/version-1.1/#background-tasks-now-use-celery-223) by the Celery worker, there are some use cases where the RQ worker may still be necessary.  To enable it:
-
-```yaml
-rqWorker:
-  enabled: true
-```
-
 ### Ingress
 
 To enable ingress, the following values are available for configuration:
@@ -525,7 +516,7 @@ redis:
 | nautobot.db.timeout | int | `300` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT) |
 | nautobot.db.user | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER) |
 | nautobot.debug | bool | `false` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG) |
-| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`) |
+| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker`) |
 | nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` |
 | nautobot.metrics | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED) |
 | nautobot.redis.existingSecret | string | `""` | Name of existing secret to use for Redis passwords |

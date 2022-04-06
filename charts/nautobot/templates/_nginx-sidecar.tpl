@@ -25,8 +25,8 @@ server {
 }
 
 server {
-    listen 8080 http2 default_server;
-    listen [::]:8080 http2 default_server;
+    listen 8080 default_server;
+    listen [::]:8080 default_server;
 
     server_name _;
 

@@ -12,6 +12,10 @@ Return the proper nautobot image name
 {{ include "common.images.image" (dict "imageRoot" .Values.nautobot.image "global" .Values.global) }}
 {{- end -}}
 
+{{- define "nautobot.nginx.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.nautobot.nginx.image "global" .Values.global) }}
+{{- end -}}
+
 
 {{/*
 Return the proper Docker Image Registry Secret Names

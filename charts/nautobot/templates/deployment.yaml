@@ -63,7 +63,6 @@ spec:
       {{- end }}
       initContainers:
         # This init container will run post_upgrade which initializes/upgrades the DB as well as collects static files
-        # It also copies the self-sigened ssl certs for nginx if nginx is used
         - name: nautobot-init
           image: {{ template "nautobot.image" . }}
           imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
@@ -74,9 +73,8 @@ spec:
           securityContext: {{- omit .Values.nautobot.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           args:
-            - "cp"
-            - "/opt/nautobot/nautobot.*"
-            - "/tmp"
+            - "echo"
+            - "Nautobot Initialization Done"
           env:
             {{- if .Values.nautobot.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.extraEnvVars "context" $) | nindent 12 }}
@@ -111,7 +109,7 @@ spec:
               subPath: "uwsgi.ini"
             {{- if .Values.nautobot.nginx.enabled }}
             - name: "nautobot-certs"
-              mountPath: "/tmp"
+              mountPath: "/opt/certs"
             {{- end }}
             {{- if .Values.nautobot.config }}
             - name: "nautobot-config"
@@ -121,6 +119,50 @@ spec:
             {{- if .Values.nautobot.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- if .Values.nautobot.nginx.enabled }}
+        # This container is used to copy the self-signed SSL certs from the Nautobot pod to the nginx pod and changes the permission
+        - name: nautobot-certs
+          image: {{ template "nautobot.image" . }}
+          imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
+          {{- if .Values.nautobot.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - "/bin/bash"
+          args:
+            - "-c"
+            - "cp /opt/nautobot/nautobot.* /opt/certs && chmod g+r /opt/certs/nautobot.* && ls -l /opt/certs/*"
+          env:
+            {{- if .Values.nautobot.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "common.names.fullname" . }}-env
+            - secretRef:
+                name: {{ include "common.names.fullname" . }}-env
+            {{- if .Values.nautobot.extraEnvVarsCM }}
+            {{- range .Values.nautobot.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.nautobot.extraEnvVarsSecret }}
+            {{- range .Values.nautobot.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
+            {{- end }}
+          {{- if .Values.nautobot.resources }}
+          resources: {{- toYaml .Values.nautobot.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: "nautobot-certs"
+              mountPath: "/opt/certs"
+            {{- if .Values.nautobot.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- end }}
         {{- if .Values.nautobot.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -186,13 +228,16 @@ spec:
             {{- if .Values.nautobot.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-          {{- if not .Values.nautobot.nginx.enabled }}
           ports:
+            {{- if not .Values.nautobot.nginx.enabled }}
             - name: "https"
               containerPort: 8443
             - name: "http"
               containerPort: 8080
-          {{ end }}
+            {{ else }}
+            - name: "http"
+              containerPort: 8003
+            {{ end }}
         {{- if .Values.nautobot.nginx.enabled }}
         - name: nginx
           image: {{ template "nautobot.nginx.image" . }}
@@ -231,7 +276,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: "nginx-config"
-              mountPath: "/opt/nautobot/static"
+              mountPath: "/etc/nginx/conf.d"
               readOnly: true
             - name: "nautobot-static"
               mountPath: "/opt/nautobot/static"

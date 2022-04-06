@@ -4,7 +4,7 @@
 {{- if and .Values.nautobot.nginx.enabled }}
 socket = 127.0.0.1:8001
 ; Listen on localhost 8003 for readiness checks
-http = 127.0.0.1:8003
+http = 0.0.0.0:8003
 {{ else }}
 http = 0.0.0.0:8080
 https = 0.0.0.0:8443,/opt/nautobot/nautobot.crt,/opt/nautobot/nautobot.key
@@ -55,7 +55,7 @@ http-keepalive = 1
 
 ; Number of uWSGI workers to spawn. This should typically be 2n+1, where n is the number of CPU cores present. Default 3 as n will be >= 1
 processes = 3
-
+threads = 4
 ; set the socket listen queue size, in production the suggested value is 1024, however RHEL based kernels have a max of 128 by default
 ; you may need to increase the somaxconn parameter in your kernel
 listen = 128

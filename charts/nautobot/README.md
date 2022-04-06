@@ -796,17 +796,17 @@ helm delete nautobot
 | nautobot.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
 | nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` |
 | nautobot.metrics | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED) |
+| nautobot.nginx.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context |
 | nautobot.nginx.enabled | bool | `false` | Enable an nginx sidecar to proxy Nautobot traffic (can be useful for large deployments) |
-| nautobot.nginx.image.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context |
-| nautobot.nginx.image.extraEnvVars | list | `[]` | Extra Env Vars to set only on the NGINX containers |
-| nautobot.nginx.image.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for the NGINX containers |
-| nautobot.nginx.image.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for the NGINX containers |
-| nautobot.nginx.image.lifecycleHooks | object | `{}` | lifecycleHooks for the NGINX container(s) to automate configuration before or after startup |
+| nautobot.nginx.extraEnvVars | list | `[]` | Extra Env Vars to set only on the NGINX containers |
+| nautobot.nginx.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for the NGINX containers |
+| nautobot.nginx.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for the NGINX containers |
 | nautobot.nginx.image.pullPolicy | string | `"Always"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent` |
 | nautobot.nginx.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.nginx.image.registry | string | `"docker.io"` | NGINX image registry |
-| nautobot.nginx.image.repository | string | `"nginx"` | NGINX image name |
+| nautobot.nginx.image.repository | string | `"nginxinc/nginx-unprivileged"` | NGINX image name |
 | nautobot.nginx.image.tag | string | `"1.21"` | NGINX image tag |
+| nautobot.nginx.lifecycleHooks | object | `{}` | lifecycleHooks for the NGINX container(s) to automate configuration before or after startup |
 | nautobot.nginx.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) NGINX liveness probe |
 | nautobot.nginx.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) NGINX readiness probe |
 | nautobot.nginx.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) NGINX resource requests and limits |

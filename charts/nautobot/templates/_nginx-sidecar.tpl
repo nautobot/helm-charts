@@ -45,12 +45,10 @@ server {
         uwsgi_param X-Forwarded-Proto $http_x_forwarded_proto;
     }
 }
-{{- if .Values.metrics.enabled -}}
 server {
     listen 8002;
     location / {
         stub_status;
     }
 }
-{{ end }}
 {{ end }}

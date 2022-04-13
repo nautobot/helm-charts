@@ -59,7 +59,7 @@ nautobot:
     httpGet:
       path: "/api/"
       port: "http"
-    initialDelaySeconds: 2
+    initialDelaySeconds: 3
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
@@ -72,7 +72,7 @@ nautobot:
     httpGet:
       path: "/health/"
       port: "http"
-    initialDelaySeconds: 2
+    initialDelaySeconds: 3
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
@@ -237,6 +237,68 @@ nautobot:
   # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS)
   allowedHosts: "*"
 
+  # Enable a separate deployment specifically for API requests
+  apiEndpoint:
+    enabled: false
+    # -- [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler
+    # @default -- See values.yaml
+    autoscaling:
+      # -- Add an horizontal pod autoscaler for Nautobot-API (beta)
+      enabled: false
+      minReplicas: 2
+      maxReplicas: 5
+      metrics:
+        - type: "Resource"
+          resource:
+            name: "cpu"
+            target:
+              type: "Utilization"
+              averageUtilization: 150
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: "Pods"
+              value: 1
+              periodSeconds: 180
+        scaleUp:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: "Pods"
+              value: 2
+              periodSeconds: 15
+
+  # Enable a separate deployment specifically for GraphQL requests
+  graphqlEndpoint:
+    enabled: false
+    # -- [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler
+    # @default -- See values.yaml
+    autoscaling:
+      # -- Add an horizontal pod autoscaler for Nautobot-GraphQL (beta)
+      enabled: false
+      minReplicas: 2
+      maxReplicas: 5
+      metrics:
+        - type: "Resource"
+          resource:
+            name: "cpu"
+            target:
+              type: "Utilization"
+              averageUtilization: 150
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: "Pods"
+              value: 1
+              periodSeconds: 180
+        scaleUp:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: "Pods"
+              value: 2
+              periodSeconds: 15
+
   # Nautobot database configuration
   db:
     # -- [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE)
@@ -327,7 +389,7 @@ nautobot:
     # -- lifecycleHooks for the NGINX container(s) to automate configuration before or after startup
     lifecycleHooks: {}
 
-    # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context
+    # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) NGINX Container Security Context
     # @default -- See values.yaml
     containerSecurityContext:
       allowPrivilegeEscalation: false
@@ -369,8 +431,8 @@ nautobot:
     readinessProbe:
       enabled: true
       httpGet:
-        path: "/health/"
-        port: "http"
+        path: "/"
+        port: "metrics"
       initialDelaySeconds: 2
       periodSeconds: 10
       timeoutSeconds: 5
@@ -384,7 +446,7 @@ nautobot:
         cpu: ".1"
         memory: "256Mi"
       limits:
-        cpu: "1"
+        cpu: ".5"
         memory: "1Gi"
 
 # Nautobot Celery Worker
@@ -810,6 +872,136 @@ metrics:
   # -- Enable and configure a Prometheus [serviceMonitor](https://prometheus-operator.dev/docs/operator/design/#servicemonitor) (requires the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator))
   enabled: false
 
+  nginxExporter:
+    enabled: false
+    # NGINX Exporter image
+    image:
+      # -- NGINX Exporter image registry
+      registry: "docker.io"
+      # -- NGINX Exporter image name
+      repository: "nginx/nginx-prometheus-exporter"
+      # -- NGINX Exporter image tag
+      tag: "0.10.0"
+      # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/) valid values: `Always`, `Never`, or `IfNotPresent`
+      pullPolicy: "Always"
+      # -- List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments
+      pullSecrets: []
+      # e.g.
+      # pullSecrets:
+      #   - myRegistryKeySecretName
+
+    # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) NGINX Exporter Container Security Context
+    # @default -- See values.yaml
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      enabled: true
+      readOnlyRootFilesystem: false
+      runAsUser: 101
+      capabilities:
+        drop:
+          - "ALL"
+
+    # -- [ref](http://kubernetes.io/docs/user-guide/compute-resources/) NGINX Exporter resource requests and limits
+    # @default -- See values.yaml
+    resources:
+      requests:
+        cpu: ".1"
+        memory: "256Mi"
+      limits:
+        cpu: "1"
+        memory: "1Gi"
+
+    # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) NGINX Exporter liveness probe
+    # @default -- See values.yaml
+    livenessProbe:
+      enabled: true
+      httpGet:
+        path: "/"
+        port: "nginxmetrics"
+      initialDelaySeconds: 2
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+
+    # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) NGINX Exporter readiness probe
+    # @default -- See values.yaml
+    readinessProbe:
+      enabled: true
+      httpGet:
+        path: "/metrics"
+        port: "nginxmetrics"
+      initialDelaySeconds: 2
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+
+  uwsgiExporter:
+    enabled: false
+    # uWSGI Exporter image
+    image:
+      # -- uWSGI Exporter image registry
+      registry: "docker.io"
+      # -- uWSGI Exporter image name
+      repository: "timonwong/uwsgi-exporter"
+      # -- uWSGI Exporter image tag
+      tag: "v1.0.0"
+      # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/) valid values: `Always`, `Never`, or `IfNotPresent`
+      pullPolicy: "Always"
+      # -- List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments
+      pullSecrets: []
+      # e.g.
+      # pullSecrets:
+      #   - myRegistryKeySecretName
+
+    # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) NGINX Exporter Container Security Context
+    # @default -- See values.yaml
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      enabled: true
+      readOnlyRootFilesystem: false
+      runAsUser: 101
+      capabilities:
+        drop:
+          - "ALL"
+
+    # -- [ref](http://kubernetes.io/docs/user-guide/compute-resources/) uWSGI Exporter resource requests and limits
+    # @default -- See values.yaml
+    resources:
+      requests:
+        cpu: ".001"
+        memory: "5Mi"
+      limits:
+        cpu: ".01"
+        memory: "10Mi"
+
+    # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) uWSGI Exporter liveness probe
+    # @default -- See values.yaml
+    livenessProbe:
+      enabled: true
+      httpGet:
+        path: "/-/healthy"
+        port: "uwsgimetrics"
+      initialDelaySeconds: 2
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+
+    # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) uWSGI Exporter readiness probe
+    # @default -- See values.yaml
+    readinessProbe:
+      enabled: true
+      httpGet:
+        path: "/metrics"
+        port: "uwsgimetrics"
+      initialDelaySeconds: 2
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+
   capacityMetrics:
     # -- Enable serviceMonitor for [Nautobot Capacity Metrics](https://github.com/nautobot/nautobot-plugin-capacity-metrics) (Requires custom image)
     enabled: false
@@ -821,6 +1013,7 @@ metrics:
     labels: {}
 
   serviceMonitor:
+    enabled: true
     # -- [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval
     interval: "1m"
     # -- [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape timeout

@@ -10,7 +10,7 @@ http = 0.0.0.0:8080
 https = 0.0.0.0:8443,/opt/nautobot/nautobot.crt,/opt/nautobot/nautobot.key
 {{ end }}
 
-{{- if .Values.metrics.enabled -}}
+{{- if .Values.metrics.uwsgiExporter.enabled -}}
 ; Export statistics used for metrics gathering
 stats = 127.0.0.1:1717
 stats-http = true

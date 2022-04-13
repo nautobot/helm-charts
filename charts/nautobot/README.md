@@ -756,13 +756,37 @@ helm delete nautobot
 | metrics.capacityMetrics.labels | object | `{}` | Additional labels for the  for Nautobot Capacity Metrics serviceMonitor Object |
 | metrics.capacityMetrics.scrapeTimeout | string | `"1m"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape timeout for Nautobot Capacity Metrics serviceMonitor |
 | metrics.enabled | bool | `false` | Enable and configure a Prometheus [serviceMonitor](https://prometheus-operator.dev/docs/operator/design/#servicemonitor) (requires the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator)) |
+| metrics.nginxExporter.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) NGINX Exporter Container Security Context |
+| metrics.nginxExporter.enabled | bool | `false` |  |
+| metrics.nginxExporter.image.pullPolicy | string | `"Always"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/) valid values: `Always`, `Never`, or `IfNotPresent` |
+| metrics.nginxExporter.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
+| metrics.nginxExporter.image.registry | string | `"docker.io"` | NGINX Exporter image registry |
+| metrics.nginxExporter.image.repository | string | `"nginx/nginx-prometheus-exporter"` | NGINX Exporter image name |
+| metrics.nginxExporter.image.tag | string | `"0.10.0"` | NGINX Exporter image tag |
+| metrics.nginxExporter.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) NGINX Exporter liveness probe |
+| metrics.nginxExporter.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) NGINX Exporter readiness probe |
+| metrics.nginxExporter.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) NGINX Exporter resource requests and limits |
 | metrics.prometheusRule | object | See values.yaml | Enable and configure Prometheus Rules. |
 | metrics.prometheusRule.rules | list | See [alerting rules documentation](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) | Configure additional rules for the chart. |
+| metrics.serviceMonitor.enabled | bool | `true` |  |
 | metrics.serviceMonitor.interval | string | `"1m"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape interval |
 | metrics.serviceMonitor.labels | object | `{}` | Additional labels for the serviceMonitor Object |
 | metrics.serviceMonitor.scrapeTimeout | string | `"30s"` | [ref](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) Prometheus scrape timeout |
+| metrics.uwsgiExporter.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) NGINX Exporter Container Security Context |
+| metrics.uwsgiExporter.enabled | bool | `false` |  |
+| metrics.uwsgiExporter.image.pullPolicy | string | `"Always"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/) valid values: `Always`, `Never`, or `IfNotPresent` |
+| metrics.uwsgiExporter.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
+| metrics.uwsgiExporter.image.registry | string | `"docker.io"` | uWSGI Exporter image registry |
+| metrics.uwsgiExporter.image.repository | string | `"timonwong/uwsgi-exporter"` | uWSGI Exporter image name |
+| metrics.uwsgiExporter.image.tag | string | `"v1.0.0"` | uWSGI Exporter image tag |
+| metrics.uwsgiExporter.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) uWSGI Exporter liveness probe |
+| metrics.uwsgiExporter.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) uWSGI Exporter readiness probe |
+| metrics.uwsgiExporter.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) uWSGI Exporter resource requests and limits |
 | nautobot.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot pods assignment |
 | nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
+| nautobot.apiEndpoint.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
+| nautobot.apiEndpoint.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for Nautobot-API (beta) |
+| nautobot.apiEndpoint.enabled | bool | `false` |  |
 | nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |
 | nautobot.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
 | nautobot.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for Nautobot (beta) |
@@ -785,6 +809,9 @@ helm delete nautobot
 | nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`) |
 | nautobot.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot containers |
 | nautobot.extraVolumes | list | `[]` | List of additional volumes for the Nautobot server pod |
+| nautobot.graphqlEndpoint.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
+| nautobot.graphqlEndpoint.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for Nautobot-GraphQL (beta) |
+| nautobot.graphqlEndpoint.enabled | bool | `false` |  |
 | nautobot.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases |
 | nautobot.image.pullPolicy | string | `"Always"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent` |
 | nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
@@ -796,7 +823,7 @@ helm delete nautobot
 | nautobot.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
 | nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` |
 | nautobot.metrics | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED) |
-| nautobot.nginx.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot RQ Worker Container Security Context |
+| nautobot.nginx.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) NGINX Container Security Context |
 | nautobot.nginx.enabled | bool | `false` | Enable an nginx sidecar to proxy Nautobot traffic (can be useful for large deployments) |
 | nautobot.nginx.extraEnvVars | list | `[]` | Extra Env Vars to set only on the NGINX containers |
 | nautobot.nginx.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for the NGINX containers |

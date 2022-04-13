@@ -12,6 +12,8 @@ nautobot:
     - name: "gmail-auth"
       secret:
         secretName: "nautobot-gmail-auth"
+  nginx:
+    enabled: true
 
 celeryBeat:
   extraVolumeMounts:

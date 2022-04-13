@@ -16,6 +16,13 @@ Return the proper nautobot image name
 {{ include "common.images.image" (dict "imageRoot" .Values.nautobot.nginx.image "global" .Values.global) }}
 {{- end -}}
 
+{{- define "nautobot.nginxExporter.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.metrics.nginxExporter.image "global" .Values.global) }}
+{{- end -}}
+
+{{- define "nautobot.uwsgiExporter.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.metrics.uwsgiExporter.image "global" .Values.global) }}
+{{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names

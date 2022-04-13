@@ -1,5 +1,5 @@
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
 ---
-{{- if .Values.metrics.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -43,4 +43,50 @@ spec:
       {{- end }}
       path: "/api/plugins/capacity-metrics/app-metrics"
     {{- end }}
+{{- if .Values.metrics.nginxExporter.enabled }}
+---
+apiVersion: "monitoring.coreos.com/v1"
+kind: "ServiceMonitor"
+metadata:
+  name: {{ include "common.names.fullname" . }}-nginx
+  labels:
+    app.kubernetes.io/component: nautobot
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- with .Values.metrics.serviceMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: nautobot
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+  endpoints:
+    - port: "nginxmetrics"
+      path: "/metrics"
+{{- end }}
+{{- if .Values.metrics.uwsgiExporter.enabled }}
+---
+apiVersion: "monitoring.coreos.com/v1"
+kind: "ServiceMonitor"
+metadata:
+  name: {{ include "common.names.fullname" . }}-uwsgi
+  labels:
+    app.kubernetes.io/component: nautobot
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- with .Values.metrics.serviceMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: nautobot
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+  endpoints:
+    - port: "uwsgimetrics"
+      path: "/metrics"
+{{- end }}
 {{- end }}

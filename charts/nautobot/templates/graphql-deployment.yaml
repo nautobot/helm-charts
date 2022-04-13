@@ -1,11 +1,12 @@
 ---
+{{- if .Values.nautobot.graphqlEndpoint.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}-graphql
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: nautobot
+    app.kubernetes.io/component: nautobot-graphql
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -13,7 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.nautobot.autoscaling.enabled }}
+  {{- if not .Values.nautobot.graphqlEndpoint.autoscaling.enabled }}
   replicas: {{ .Values.nautobot.replicaCount | int }}
   {{- end }}
   revisionHistoryLimit: {{ .Values.nautobot.revisionHistoryLimit | int }}
@@ -22,14 +23,14 @@ spec:
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: nautobot
+      app.kubernetes.io/component: nautobot-graphql
   template:
     metadata:
       {{- if .Values.nautobot.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: nautobot
+        app.kubernetes.io/component: nautobot-graphql
         {{- if .Values.nautobot.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -62,63 +63,6 @@ spec:
       securityContext: {{- omit .Values.nautobot.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-        # This init container will run post_upgrade which initializes/upgrades the DB as well as collects static files
-        - name: nautobot-init
-          image: {{ template "nautobot.image" . }}
-          imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
-          {{- if .Values.nautobot.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.nautobot.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.nautobot.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          args:
-            - "echo"
-            - "Nautobot Initialization Done"
-          env:
-            {{- if .Values.nautobot.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "common.names.fullname" . }}-env
-            - secretRef:
-                name: {{ include "common.names.fullname" . }}-env
-            {{- if .Values.nautobot.extraEnvVarsCM }}
-            {{- range .Values.nautobot.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
-            {{- end }}
-            {{- end }}
-            {{- if .Values.nautobot.extraEnvVarsSecret }}
-            {{- range .Values.nautobot.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
-            {{- end }}
-            {{- end }}
-          {{- if .Values.nautobot.resources }}
-          resources: {{- toYaml .Values.nautobot.resources | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: "nautobot-static"
-              mountPath: "/opt/nautobot/static"
-            - name: "git-repos"
-              mountPath: "/opt/nautobot/git"
-            - name: "nautobot-config"
-              mountPath: "/opt/nautobot/uwsgi.ini"
-              subPath: "uwsgi.ini"
-            {{- if .Values.nautobot.nginx.enabled }}
-            - name: "nautobot-certs"
-              mountPath: "/opt/certs"
-            {{- end }}
-            {{- if .Values.nautobot.config }}
-            - name: "nautobot-config"
-              mountPath: "/opt/nautobot/nautobot_config.py"
-              subPath: "nautobot_config.py"
-            {{- end }}
-            {{- if .Values.nautobot.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.extraVolumeMounts "context" $) | nindent 12 }}
-            {{- end }}
         {{- if .Values.nautobot.nginx.enabled }}
         # This container is used to copy the self-signed SSL certs from the Nautobot pod to the nginx pod and changes the permission
         - name: nautobot-certs
@@ -213,8 +157,6 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nautobot.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: "nautobot-static"
-              mountPath: "/opt/nautobot/static"
             - name: "git-repos"
               mountPath: "/opt/nautobot/git"
             - name: "nautobot-config"
@@ -278,9 +220,6 @@ spec:
             - name: "nginx-config"
               mountPath: "/etc/nginx/conf.d"
               readOnly: true
-            - name: "nautobot-static"
-              mountPath: "/opt/nautobot/static"
-              readOnly: true
             - name: "nautobot-certs"
               mountPath: "/opt/nautobot_certs"
               readOnly: true
@@ -340,8 +279,6 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: "nautobot-static"
-          emptyDir: {}
         - name: "git-repos"
           emptyDir: {}
         - name: "nautobot-config"
@@ -359,3 +296,4 @@ spec:
         {{- if .Values.nautobot.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}

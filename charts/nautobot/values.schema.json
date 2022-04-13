@@ -562,8 +562,10 @@
       "required": [
         "capacityMetrics",
         "enabled",
+        "nginxExporter",
         "prometheusRule",
-        "serviceMonitor"
+        "serviceMonitor",
+        "uwsgiExporter"
       ],
       "properties": {
         "enabled": {
@@ -590,6 +592,9 @@
             }
           }
         },
+        "nginxExporter": {
+          "type": "object"
+        },
         "prometheusRule": {
           "type": "object",
           "additionalProperties": false,
@@ -615,6 +620,9 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
             "interval": {
               "type": "string"
             },
@@ -625,6 +633,9 @@
               "type": "object"
             }
           }
+        },
+        "uwsgiExporter": {
+          "type": "object"
         }
       }
     },

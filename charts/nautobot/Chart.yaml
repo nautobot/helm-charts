@@ -29,7 +29,8 @@ annotations:
     - kind: changed
       description: Nautobot post_upgrade now occurs in an initContainer
 apiVersion: "v2"
-appVersion: "2.0.0-alpha.1"
+appVersion: "1.2.11"
+version: "2.0.0-alpha.2"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
@@ -69,4 +70,3 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "1.3.7"

@@ -49,7 +49,6 @@ data:
 {{- .name | nindent 2 }}: {{ .value | quote }}
 {{- end }}
 {{- end }}
-{{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -69,8 +68,9 @@ data:
   nautobot_config.py: |
     {{- .Values.nautobot.config | nindent 4 }}
   {{- end }}
-  {{- if .Values.nautobot.uWSGIini }}
   uwsgi.ini: |
+  {{- if .Values.nautobot.uWSGIini }}
     {{- .Values.nautobot.uWSGIini | nindent 4 }}
+  {{ else }}
+    {{- include "nautobot.uwsgi.ini" . | nindent 4 }}
   {{- end }}
-{{- end }}

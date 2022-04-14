@@ -1,9 +1,4 @@
 ---
-rqWorker:
-  enabled: true
-  autoscaling:
-    enabled: true
-
 nautobot:
   autoscaling:
     enabled: true
@@ -17,6 +12,8 @@ nautobot:
     - name: "gmail-auth"
       secret:
         secretName: "nautobot-gmail-auth"
+  nginx:
+    enabled: true
 
 celeryBeat:
   extraVolumeMounts:

@@ -111,14 +111,28 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.celeryBeat.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if (include "celeryBeat.extraVolumeMounts" .) }}
-          {{- include "common.tplvalues.render" (dict "value" (include "celeryBeat.extraVolumeMounts" .) "context" $) | nindent 12 }}
-          {{- end }}
+            - name: "git-repos"
+              mountPath: "/opt/nautobot/git"
+            {{- if .Values.nautobot.config }}
+            - name: "nautobot-config"
+              mountPath: "/opt/nautobot/nautobot_config.py"
+              subPath: "nautobot_config.py"
+            {{- end }}
+            {{- if .Values.celeryBeat.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.celeryBeat.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.celeryBeat.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.celeryBeat.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if (include "celeryBeat.extraVolumes" .) }}
       volumes:
-        {{- include "common.tplvalues.render" (dict "value" (include "celeryBeat.extraVolumes" .) "context" $) | nindent 8 }}
-      {{- end }}
+        - name: "git-repos"
+          emptyDir: {}
+        {{- if .Values.nautobot.config }}
+        - name: "nautobot-config"
+          configMap:
+            name: {{ include "common.names.fullname" . }}-config
+        {{- end }}
+        {{- if .Values.celeryBeat.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.celeryBeat.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 1.3.7](https://img.shields.io/badge/Version-1.3.7-informational?style=flat-square) ![AppVersion: 1.2.11](https://img.shields.io/badge/AppVersion-1.2.11-informational?style=flat-square)
+![Version: 1.3.7](https://img.shields.io/badge/Version-1.3.7-informational?style=flat-square) ![AppVersion: 2.0.0-alpha.1](https://img.shields.io/badge/AppVersion-2.0.0--alpha.1-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -870,6 +870,9 @@ helm delete nautobot
 | nautobot.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot pods assignment |
 | nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value |
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type |
+| nautobot.uwsgi.listen | int | `128` | [ref](set the socket listen queue size) Set the uWSGI socket listen queue size. |
+| nautobot.uwsgi.processes | int | `3` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#processes) Spawn the specified number of workers/processes |
+| nautobot.uwsgi.threads | int | `2` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#threads) Run each worker in prethreaded mode with the specified number of threads |
 | postgresql.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | postgresql.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | postgresql.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |

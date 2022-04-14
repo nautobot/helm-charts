@@ -3,14 +3,16 @@ entries:
   nautobot:
   - annotations:
       artifacthub.io/changes: |
-        - kind: added
-          description: Added NGINX sidecars
-        - kind: added
-          description: Added NGINX and uWSGI exporter sidecars for metrics
-        - kind: added
-          description: Added the ability to add separate /api and /graphql endpoints for scaling out
         - kind: changed
-          description: Nautobot post_upgrade now occurs in an initContainer
+          description: Upgraded Nautobot from 1.2.10 to 1.2.11
+        - kind: changed
+          description: Upgraded Bitnami common subchart from 1.12.0 to 1.13.0
+        - kind: changed
+          description: Upgraded Mariadb subchart from 10.4.1 to 10.4.5
+        - kind: changed
+          description: Upgraded PostgreSQL-HA subchart from 8.6.3 to 8.6.9
+        - kind: changed
+          description: Upgraded Redis subchart from 16.5.4 to 16.8.9
       artifacthub.io/containsSecurityUpdates: "false"
       artifacthub.io/images: |
         - name: nautobot
@@ -21,7 +23,7 @@ entries:
           url: https://nautobot.readthedocs.io/en/stable/
         - name: Nautobot
           url: https://github.com/nautobot/nautobot
-      artifacthub.io/prerelease: "true"
+      artifacthub.io/prerelease: "false"
       artifacthub.io/screenshots: |
         - title: Main Page
           url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot1.png
@@ -31,8 +33,8 @@ entries:
           url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
       category: Infrastructure
     apiVersion: v2
-    appVersion: 2.0.0-alpha.1
-    created: "2022-04-14T16:45:18.234367886Z"
+    appVersion: 1.2.11
+    created: "2022-04-14T17:35:22.892931806Z"
     dependencies:
     - condition: redis.enabled
       name: redis
@@ -57,7 +59,7 @@ entries:
       - bitnami-common
       version: 1.x.x
     description: Nautobot is a Network Source of Truth and Network Automation Platform.
-    digest: 192235adde9908d1d6669b4d2250d850bd08036d7b247f2376f1a5141a14123c
+    digest: 24e58314ec79d32efc6c70216091da589510560cad3de0793f83352edb98d254
     home: https://github.com/nautobot/nautobot
     icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
     keywords:
@@ -2184,4 +2186,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2022-04-14T16:45:18.202481409Z"
+generated: "2022-04-14T17:35:22.862065991Z"

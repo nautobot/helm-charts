@@ -32,7 +32,7 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.2.11
-    created: "2022-04-15T14:38:20.04566091Z"
+    created: "2022-04-15T15:49:33.796984508Z"
     dependencies:
     - condition: redis.enabled
       name: redis
@@ -57,7 +57,7 @@ entries:
       - bitnami-common
       version: 1.x.x
     description: Nautobot is a Network Source of Truth and Network Automation Platform.
-    digest: 39bbd19f69dc25e478f11a7e392ee0e18b79376718cea0ec3b50d28a0401275d
+    digest: 3311b3344a5593fc425b65e841ea1a6c0972f1cfb9b499a8db7f65cb90fb3657
     home: https://github.com/nautobot/nautobot
     icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
     keywords:
@@ -2334,4 +2334,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2022-04-15T14:38:20.018204516Z"
+generated: "2022-04-15T15:49:33.773950769Z"

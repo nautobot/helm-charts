@@ -30,7 +30,7 @@ annotations:
       description: Nautobot post_upgrade now occurs in an initContainer
 apiVersion: "v2"
 appVersion: "1.2.11"
-version: "2.0.0-alpha.2"
+version: "2.0.0-alpha.3"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

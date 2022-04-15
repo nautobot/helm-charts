@@ -65,7 +65,7 @@ spec:
       initContainers:
         {{- if .Values.nautobot.nginx.enabled }}
         # This container is used to copy the self-signed SSL certs from the Nautobot pod to the nginx pod and changes the permission
-        - name: nautobot-certs
+        - name: nautobot-certs-api
           image: {{ template "nautobot.image" . }}
           imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
           {{- if .Values.nautobot.lifecycleHooks }}
@@ -111,7 +111,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.nautobot.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: nautobot
+        - name: nautobot-api
           image: {{ template "nautobot.image" . }}
           imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
           {{- if .Values.nautobot.lifecycleHooks }}
@@ -181,7 +181,7 @@ spec:
               containerPort: 8003
             {{ end }}
         {{- if .Values.nautobot.nginx.enabled }}
-        - name: nginx
+        - name: nginx-api
           image: {{ template "nautobot.nginx.image" . }}
           imagePullPolicy: {{ .Values.nautobot.nginx.image.pullPolicy }}
           {{- if .Values.nautobot.nginx.lifecycleHooks }}
@@ -232,7 +232,7 @@ spec:
               containerPort: 8002
         {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.nginxExporter.enabled }}
-        - name: nginx-exporter
+        - name: nginx-exporter-api
           image: {{ template "nautobot.nginxExporter.image" . }}
           imagePullPolicy: {{ .Values.metrics.nginxExporter.image.pullPolicy }}
           {{- if .Values.metrics.nginxExporter.containerSecurityContext.enabled }}
@@ -254,7 +254,7 @@ spec:
               containerPort: 9113
         {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.uwsgiExporter.enabled }}
-        - name: uwsgi-exporter
+        - name: uwsgi-exporter-api
           image: {{ template "nautobot.uwsgiExporter.image" . }}
           imagePullPolicy: {{ .Values.metrics.uwsgiExporter.image.pullPolicy }}
           {{- if .Values.metrics.uwsgiExporter.containerSecurityContext.enabled }}

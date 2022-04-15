@@ -82,10 +82,10 @@ nautobot:
   # @default -- See values.yaml
   resources:
     requests:
-      cpu: "100m"
+      cpu: "300m"
       memory: "1280M"
     limits:
-      cpu: "600m"
+      cpu: "1000m"
       memory: "8704M"
 
   # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context
@@ -303,11 +303,11 @@ nautobot:
     # @default -- See values.yaml
     resources:
       requests:
-        cpu: ".1"
-        memory: "256Mi"
+        cpu: ".001"
+        memory: "6Mi"
       limits:
         cpu: ".5"
-        memory: "1Gi"
+        memory: "128Mi"
 
   # Enable a separate deployment specifically for API requests
   apiEndpoint:
@@ -475,7 +475,7 @@ celeryWorker:
         - "bash"
         - "-c"
         - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
-    initialDelaySeconds: 30
+    initialDelaySeconds: 5
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 3
@@ -490,7 +490,7 @@ celeryWorker:
         - "bash"
         - "-c"
         - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
-    initialDelaySeconds: 30
+    initialDelaySeconds: 10
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 3
@@ -914,10 +914,10 @@ metrics:
     resources:
       requests:
         cpu: ".1"
-        memory: "256Mi"
+        memory: "6Mi"
       limits:
-        cpu: "1"
-        memory: "1Gi"
+        cpu: ".5"
+        memory: "128Mi"
 
     # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) NGINX Exporter liveness probe
     # @default -- See values.yaml
@@ -979,10 +979,10 @@ metrics:
     resources:
       requests:
         cpu: ".001"
-        memory: "5Mi"
+        memory: "6Mi"
       limits:
         cpu: ".01"
-        memory: "10Mi"
+        memory: "128Mi"
 
     # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) uWSGI Exporter liveness probe
     # @default -- See values.yaml

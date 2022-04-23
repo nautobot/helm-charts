@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * <!--- Renovate --->
+- {{{prTitle}}}
 
 ## 1.3.8 - 2022-04-21
 

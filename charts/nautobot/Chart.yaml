@@ -21,9 +21,11 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: changed
+      description: {{{prTitle}}}
+    - kind: changed
       description: Upgraded Nautobot from 1.3.1 to 1.3.2
 apiVersion: "v2"
-appVersion: "1.3.2"
+appVersion: "1.3.2-py3.10"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

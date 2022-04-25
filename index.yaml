@@ -300,6 +300,74 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
+          description: Upgraded Nautobot from 1.3.1 to 1.3.2
+      artifacthub.io/containsSecurityUpdates: "true"
+      artifacthub.io/images: |
+        - name: nautobot
+          image: ghcr.io/nautobot/nautobot:1.3.2-py3.10
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Nautobot Documentation
+          url: https://nautobot.readthedocs.io/en/stable/
+        - name: Nautobot
+          url: https://github.com/nautobot/nautobot
+      artifacthub.io/prerelease: "false"
+      artifacthub.io/screenshots: |
+        - title: Main Page
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot1.png
+        - title: Rack Elevation
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot2.png
+        - title: Prefix hierarchy
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.3.2
+    created: "2022-04-25T14:18:02.04833515Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    - alias: postgresqlha
+      condition: postgresqlha.enabled
+      name: postgresql-ha
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Nautobot is a Network Source of Truth and Network Automation Platform.
+    digest: 3cc59bad3cd92706405c50cc15ad12d946aa2a10230c147d5e91cfbe58d11f62
+    home: https://github.com/nautobot/nautobot
+    icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
+    keywords:
+    - DCIM
+    - IPAM
+    - SOT
+    maintainers:
+    - email: opensource@networktocode.com
+      name: Network to Code
+      url: https://www.networktocode.com/
+    name: nautobot
+    sources:
+    - https://github.com/nautobot/nautobot
+    - https://github.com/nautobot/helm-charts
+    urls:
+    - https://nautobot.github.io/helm-charts/nautobot-1.3.9.tgz
+    version: 1.3.9
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
           description: Upgraded Nautobot from 1.2.11 to 1.3.1
         - kind: changed
           description: Changed the default Python interpreter to 3.10
@@ -2558,4 +2626,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2022-04-21T19:50:32.361212786Z"
+generated: "2022-04-25T14:18:02.017704518Z"

@@ -17,7 +17,7 @@ repos:
           - "--no-sort-keys"
 
   - repo: "https://github.com/Lucas-C/pre-commit-hooks"
-    rev: "v1.1.13"
+    rev: "v1.2.0"
     hooks:
       - id: "remove-crlf"
       - id: "remove-tabs"
@@ -41,7 +41,7 @@ repos:
           - "-s"
 
   - repo: "https://github.com/norwoodj/helm-docs"
-    rev: "v1.9.1"
+    rev: "v1.10.0"
     hooks:
       - id: "helm-docs"
         args:

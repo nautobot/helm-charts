@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 1.3.12](https://img.shields.io/badge/Version-1.3.12-informational?style=flat-square) ![AppVersion: 1.3.5](https://img.shields.io/badge/AppVersion-1.3.5-informational?style=flat-square)
+![Version: 1.3.12](https://img.shields.io/badge/Version-1.3.12-informational?style=flat-square) ![AppVersion: 1.3.5-py3.10](https://img.shields.io/badge/AppVersion-1.3.5--py3.10-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -646,7 +646,7 @@ helm delete nautobot
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | common | 1.x.x |
-| https://charts.bitnami.com/bitnami | mariadb | 10.x.x |
+| https://charts.bitnami.com/bitnami | mariadb | 11.x |
 | https://charts.bitnami.com/bitnami | postgresql | 10.x.x |
 | https://charts.bitnami.com/bitnami | postgresqlha(postgresql-ha) | 8.x.x |
 | https://charts.bitnami.com/bitnami | redis | 16.x.x |

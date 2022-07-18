@@ -500,6 +500,8 @@ redis:
 
 [PostgreSQL HA](#posgresql-high-availability) and [Redis Sentinel](#redis-sentinel) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.
 
+In practice it is highly recommended to utilize a cloud providers relational database service such as RDS.  Additionally, when running Nautobot in production (especially if you are looking for postgres or redis high availability), it is recommended to deploy each chart separately versus deploying them as subcharts of Nautobot.
+
 ## Nautobot Application Values
 
 | Key | Type | Default | Description |
@@ -832,7 +834,7 @@ helm delete nautobot
 | nautobot.nginx.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.nginx.image.registry | string | `"docker.io"` | NGINX image registry |
 | nautobot.nginx.image.repository | string | `"nginxinc/nginx-unprivileged"` | NGINX image name |
-| nautobot.nginx.image.tag | string | `"1.21"` | NGINX image tag |
+| nautobot.nginx.image.tag | string | `"1.23"` | NGINX image tag |
 | nautobot.nginx.lifecycleHooks | object | `{}` | lifecycleHooks for the NGINX container(s) to automate configuration before or after startup |
 | nautobot.nginx.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) NGINX liveness probe |
 | nautobot.nginx.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) NGINX readiness probe |

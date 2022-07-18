@@ -500,6 +500,8 @@ redis:
 
 [PostgreSQL HA](#posgresql-high-availability) and [Redis Sentinel](#redis-sentinel) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.
 
+In practice it is highly recommended to utilize a cloud providers relational database service such as RDS.  Additionally, when running Nautobot in production (especially if you are looking for postgres or redis high availability), it is recommended to deploy each chart separately versus deploying them as subcharts of Nautobot.
+
 ## Nautobot Application Values
 
 | Key | Type | Default | Description |

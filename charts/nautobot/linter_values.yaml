@@ -1,6 +1,10 @@
 ---
 nautobot:
+  apiEndpoint:
+    enabled: true
   autoscaling:
+    enabled: true
+  graphqlEndpoint:
     enabled: true
   pdb:
     create: true
@@ -53,6 +57,10 @@ ingress:
 metrics:
   enabled: true
   capacityMetrics:
+    enabled: true
+  nginxExporter:
+    enabled: true
+  uwsgiExporter:
     enabled: true
   prometheusRule:
     enabled: true

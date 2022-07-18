@@ -36,7 +36,7 @@ Create the name of the service account to use
 */}}
 {{- define "nautobot.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (printf "%s" (include "common.names.fullname" .)) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
@@ -322,4 +322,19 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "nautobot.redis.encryptedPassword" -}}
   {{- include "nautobot.redis.rawPassword" . | b64enc | quote -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for Horizontal Pod Autoscaler.
+*/}}
+{{- define "common.capabilities.hpa.apiVersion" -}}
+{{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- if .beta2 -}}
+{{- print "autoscaling/v2beta2" -}}
+{{- else -}}
+{{- print "autoscaling/v2beta1" -}}
+{{- end -}}
+{{- else -}}
+{{- print "autoscaling/v2" -}}
+{{- end -}}
 {{- end -}}

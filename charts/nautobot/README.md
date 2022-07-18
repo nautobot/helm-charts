@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 2.0.0-alpha.7](https://img.shields.io/badge/Version-2.0.0--alpha.7-informational?style=flat-square) ![AppVersion: 1.2.11](https://img.shields.io/badge/AppVersion-1.2.11-informational?style=flat-square)
+![Version: 2.0.0-alpha.7](https://img.shields.io/badge/Version-2.0.0--alpha.7-informational?style=flat-square) ![AppVersion: 1.3.8](https://img.shields.io/badge/AppVersion-1.3.8-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -637,10 +637,10 @@ helm delete nautobot
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | common | 1.x.x |
-| https://charts.bitnami.com/bitnami | mariadb | 10.x.x |
-| https://charts.bitnami.com/bitnami | postgresql | 10.x.x |
-| https://charts.bitnami.com/bitnami | postgresqlha(postgresql-ha) | 8.x.x |
-| https://charts.bitnami.com/bitnami | redis | 16.x.x |
+| https://charts.bitnami.com/bitnami | mariadb | 11.x.x |
+| https://charts.bitnami.com/bitnami | postgresql | 11.x.x |
+| https://charts.bitnami.com/bitnami | postgresqlha(postgresql-ha) | 9.x.x |
+| https://charts.bitnami.com/bitnami | redis | 17.x.x |
 
 ## Values
 
@@ -661,7 +661,7 @@ helm delete nautobot
 | celeryBeat.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot Celery Beat container(s) to automate configuration before or after startup |
 | celeryBeat.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Beat liveness probe |
 | celeryBeat.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Beat Node Affinity preset |
-| celeryBeat.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
+| celeryBeat.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set  |
 | celeryBeat.nodeAffinityPreset.type | string | `""` | Nautobot Celery Beat Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | celeryBeat.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
 | celeryBeat.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Beat pods assignment |
@@ -694,7 +694,7 @@ helm delete nautobot
 | celeryWorker.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot Celery Worker container(s) to automate configuration before or after startup |
 | celeryWorker.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker liveness probe |
 | celeryWorker.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Worker Node Affinity preset |
-| celeryWorker.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
+| celeryWorker.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set  |
 | celeryWorker.nodeAffinityPreset.type | string | `""` | Nautobot Celery Worker Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | celeryWorker.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
 | celeryWorker.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Worker pods assignment |
@@ -817,7 +817,7 @@ helm delete nautobot
 | nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
-| nautobot.image.tag | string | `"1.2.11-py3.9"` | Nautobot image tag, common to all deployments |
+| nautobot.image.tag | string | `"1.3.8-py3.10"` | Nautobot image tag, common to all deployments |
 | nautobot.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods |
 | nautobot.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | nautobot.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
@@ -941,5 +941,6 @@ helm delete nautobot
 | service.port | int | `80` | Port to expose for Nautobot http access |
 | service.type | string | `"ClusterIP"` | [ref](https://kubernetes.io/docs/concepts/services-networking/service/) Kubernetes service type, valid values: `ExternalName`, `ClusterIP`, `NodePort`, or `LoadBalancer` |
 | serviceAccount.annotations | object | `{}` | Service account annotations |
+| serviceAccount.automountServiceAccountToken | bool | `false` | Auto Mount Service account token |
 | serviceAccount.create | bool | `true` | Enable creation of a Kubernetes Service Account for Nautobot |
 | serviceAccount.name | string | `$release_name` | Name of the Kubernetes Service Account for Nautobot |

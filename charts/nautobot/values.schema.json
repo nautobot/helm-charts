@@ -1042,10 +1042,14 @@
       "additionalProperties": false,
       "required": [
         "annotations",
+        "automountServiceAccountToken",
         "create",
         "name"
       ],
       "properties": {
+        "automountServiceAccountToken": {
+          "type": "boolean"
+        },
         "annotations": {
           "additionalProperties": {
             "type": "string"

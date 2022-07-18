@@ -1,7 +1,7 @@
 ---
 annotations:
   category: "Infrastructure"
-  artifacthub.io/containsSecurityUpdates: "false"
+  artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/license: "Apache-2.0"
   artifacthub.io/prerelease: "true"
   artifacthub.io/images: |

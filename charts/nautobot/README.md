@@ -661,7 +661,7 @@ helm delete nautobot
 | celeryBeat.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot Celery Beat container(s) to automate configuration before or after startup |
 | celeryBeat.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Beat liveness probe |
 | celeryBeat.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Beat Node Affinity preset |
-| celeryBeat.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set  |
+| celeryBeat.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
 | celeryBeat.nodeAffinityPreset.type | string | `""` | Nautobot Celery Beat Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | celeryBeat.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
 | celeryBeat.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Beat pods assignment |
@@ -694,7 +694,7 @@ helm delete nautobot
 | celeryWorker.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot Celery Worker container(s) to automate configuration before or after startup |
 | celeryWorker.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker liveness probe |
 | celeryWorker.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Worker Node Affinity preset |
-| celeryWorker.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set  |
+| celeryWorker.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
 | celeryWorker.nodeAffinityPreset.type | string | `""` | Nautobot Celery Worker Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | celeryWorker.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
 | celeryWorker.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Worker pods assignment |

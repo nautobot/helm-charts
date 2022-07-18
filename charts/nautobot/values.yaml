@@ -560,7 +560,6 @@ celeryWorker:
     # -- Nautobot Celery Worker Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard`
     type: ""
     # -- Node label key to match. Ignored if `nautobot.affinity` is set
-    #
     key: ""
     # -- Node label values to match. Ignored if `nautobot.affinity` is set
     values: []
@@ -741,7 +740,6 @@ celeryBeat:
     # -- Nautobot Celery Beat Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard`
     type: ""
     # -- Node label key to match. Ignored if `nautobot.affinity` is set
-    #
     key: ""
     # -- Node label values to match. Ignored if `nautobot.affinity` is set
     values: []

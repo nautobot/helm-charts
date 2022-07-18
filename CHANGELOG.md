@@ -11,6 +11,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * <!--- Renovate --->
 
+## 1.3.12 - 2022-05-31
+
+### Changed
+
+* Nautobot Version 1.3.5
+* Upgraded Nautobot from 1.3.4 to 1.3.5
+* Upgraded Bitnami common subchart from 1.14.0 to 1.14.1
+* Upgraded Redis subchart from 16.9.5 to 16.10.1
+
+## 1.3.11 - 2022-05-17
+
+### Changed
+
+* Nautobot Version 1.3.4
+* Upgraded Bitnami common subchart from 1.13.1 to 1.14.0
+* Upgraded Redis subchart from 16.8.9 to 16.9.5
+
+## 1.3.10 - 2022-05-04
+
+### Changed
+
+* Nautobot Version 1.3.3
+* Upgraded Bitnami common subchart from 1.13.0 to 1.13.1
+* Upgraded Redis subchart from 16.8.7 to 16.8.9
+
+## 1.3.9 - 2022-04-25
+
+### Changed
+
+* Nautobot Version 1.3.2
+
+## 1.3.8 - 2022-04-21
+
+### Changed
+
+* Nautobot Version 1.3.1
+* Update Python version to 3.10
+* Upgraded Mariadb subchart from 10.4.5 to 10.5.1
+* Upgraded PostgreSQL-HA subchart from 8.6.9 to 8.6.13
+* Upgraded Redis subchart from 16.8.2 to 16.8.7
+
 ## 1.3.7 - 2022-04-05
 
 ### Changed

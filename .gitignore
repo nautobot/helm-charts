@@ -1,4 +1,3 @@
 template_output/
 local_tests/
 tmp-kubescape*
-charts/nautobot/charts

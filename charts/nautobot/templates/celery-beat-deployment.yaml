@@ -124,6 +124,7 @@ spec:
         {{- if .Values.celeryBeat.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.celeryBeat.sidecars "context" $) | nindent 8 }}
         {{- end }}
+      tty: true
       volumes:
         - name: "git-repos"
           emptyDir: {}

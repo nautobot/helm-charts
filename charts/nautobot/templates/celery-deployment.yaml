@@ -126,6 +126,7 @@ spec:
         {{- if .Values.celeryWorker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.celeryWorker.sidecars "context" $) | nindent 8 }}
         {{- end }}
+      tty: true
       volumes:
         - name: "git-repos"
           emptyDir: {}

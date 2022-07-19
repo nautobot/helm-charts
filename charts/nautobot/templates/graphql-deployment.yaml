@@ -278,6 +278,7 @@ spec:
         {{- if .Values.nautobot.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.sidecars "context" $) | nindent 8 }}
         {{- end }}
+      tty: true
       volumes:
         - name: "git-repos"
           emptyDir: {}

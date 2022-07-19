@@ -1,11 +1,10 @@
 ---
-rqWorker:
-  enabled: true
+nautobot:
+  apiEndpoint:
+    enabled: true
   autoscaling:
     enabled: true
-
-nautobot:
-  autoscaling:
+  graphqlEndpoint:
     enabled: true
   pdb:
     create: true
@@ -17,6 +16,8 @@ nautobot:
     - name: "gmail-auth"
       secret:
         secretName: "nautobot-gmail-auth"
+  nginx:
+    enabled: true
 
 celeryBeat:
   extraVolumeMounts:
@@ -56,6 +57,10 @@ ingress:
 metrics:
   enabled: true
   capacityMetrics:
+    enabled: true
+  nginxExporter:
+    enabled: true
+  uwsgiExporter:
     enabled: true
   prometheusRule:
     enabled: true

@@ -21,6 +21,20 @@ spec:
     - host: {{ .Values.ingress.hostname }}
       http:
         paths:
+          {{- if .Values.nautobot.apiEndpoint.enabled }}
+          - path: {{ .Values.ingress.path }}api
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s%s" (include "common.names.fullname" .) "-api") "servicePort" (default "https" .Values.ingress.backendProtocol) "context" $)  | nindent 14 }}
+          {{- end }}
+          {{- if .Values.nautobot.graphqlEndpoint.enabled }}
+          - path: {{ .Values.ingress.path }}graphql
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s%s" (include "common.names.fullname" .) "-graphql") "servicePort" (default "https" .Values.ingress.backendProtocol) "context" $)  | nindent 14 }}
+          {{- end }}
           {{- if .Values.ingress.extraPaths }}
           {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
           {{- end }}
@@ -34,6 +48,20 @@ spec:
     - host: {{ .hostname | quote }}
       http:
         paths:
+          {{- if .Values.nautobot.apiEndpoint.enabled }}
+          - path: {{ .Values.ingress.path }}api
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s%s" (include "common.names.fullname" .) "-api") "servicePort" (default "https" .Values.ingress.backendProtocol) "context" $)  | nindent 14 }}
+          {{- end }}
+          {{- if .Values.nautobot.graphqlEndpoint.enabled }}
+          - path: {{ .Values.ingress.path }}graphql
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s%s" (include "common.names.fullname" .) "-graphql") "servicePort" (default "https" .Values.ingress.backendProtocol) "context" $)  | nindent 14 }}
+          {{- end }}
           {{- if .extraPaths }}
           {{- toYaml .extraPaths | nindent 10 }}
           {{- end }}

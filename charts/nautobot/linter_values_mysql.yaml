@@ -1,9 +1,4 @@
 ---
-rqWorker:
-  enabled: true
-  autoscaling:
-    enabled: true
-
 nautobot:
   autoscaling:
     enabled: true

@@ -11,6 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * <!--- Renovate --->
 
+## 2.0.0 - 2022-07-19
+
+### Added
+
+* Added the ability to create additional endpoints for API (`nautobot.apiEndpoint.enabled`) and GraphQL (`nautobot.graphqlEndpoint.enabled`) requests
+* Added support for Nginx (`nautobot.nginx.enabled`) as a proxy to Nautobot (deployed as a sidecar)
+* Added support for Nginx exporters (`metrics.nginxExporter.enabled`)
+* Added support for UWSGI exporters (`metrics.uwsgiExporter.enabled`)
+* [191](https://github.com/nautobot/helm-charts/issues/191) Added Observability for Celery Workers
+* Added the ability to specify `automountServiceAccountToken` on the `ServiceAccount`
+
+### Changed
+
+* Moved Nautobot post-upgrade task to a separate init container
+* Nautobot Version 1.3.8
+* Upgraded Bitnami common subchart from 1.11.1 to 1.16.1
+* Upgraded Mariadb subchart from 10.5.1 to 11.1.0
+* Upgraded PostgreSQL-HA subchart from 8.6.13 to 9.2.2
+* Upgraded Redis subchart from 16.10.1 to 17.0.1
+
 ## 1.3.12 - 2022-05-31
 
 ### Changed
@@ -19,6 +39,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Upgraded Nautobot from 1.3.4 to 1.3.5
 * Upgraded Bitnami common subchart from 1.14.0 to 1.14.1
 * Upgraded Redis subchart from 16.9.5 to 16.10.1
+
+### Removed
+
+* Support for RQ Workers
+* Included archives of subcharts
 
 ## 1.3.11 - 2022-05-17
 

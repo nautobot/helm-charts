@@ -1,7 +1,4 @@
 ---
-rqWorker:
-  enabled: true
-
 postgresql:
   enabled: false
 

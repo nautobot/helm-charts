@@ -875,21 +875,22 @@ helm delete nautobot
 | nautobot.uwsgi.listen | int | `128` | [ref](set the socket listen queue size) Set the uWSGI socket listen queue size. |
 | nautobot.uwsgi.processes | int | `3` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#processes) Spawn the specified number of workers/processes |
 | nautobot.uwsgi.threads | int | `2` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#threads) Run each worker in prethreaded mode with the specified number of threads |
-| postgresql.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
-| postgresql.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
-| postgresql.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
 | postgresql.enabled | bool | `true` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart |
 | postgresql.image.pullPolicy | string | `"Always"` |  |
 | postgresql.postgresqlDatabase | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name |
 | postgresql.postgresqlPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password |
 | postgresql.postgresqlUsername | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username |
-| postgresql.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| postgresql.primary.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresql.primary.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| postgresql.primary.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
+| postgresql.primary.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | postgresqlha.enabled | bool | `false` | Enable deployment of the [Bitnami postgresql-ha](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart, all other `postgresql-ha.*` parameters will be passed directly to that chart |
 | postgresqlha.image.pullPolicy | string | `"Always"` |  |
-| postgresqlha.metrics.securityContext.allowPrivilegeEscalation | bool | `false` |  |
-| postgresqlha.metrics.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
-| postgresqlha.metrics.securityContext.readOnlyRootFilesystem | bool | `true` |  |
-| postgresqlha.metrics.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
+| postgresqlha.metrics.podSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| postgresqlha.metrics.podSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| postgresqlha.metrics.podSecurityContext.enabled | bool | `true` |  |
+| postgresqlha.metrics.podSecurityContext.readOnlyRootFilesystem | bool | `true` |  |
+| postgresqlha.metrics.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | postgresqlha.metricsImage.pullPolicy | string | `"Always"` |  |
 | postgresqlha.pgpool.adminPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters) Pgpool Admin password |
 | postgresqlha.pgpool.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
@@ -903,14 +904,16 @@ helm delete nautobot
 | postgresqlha.pgpoolImage.pullPolicy | string | `"Always"` |  |
 | postgresqlha.postgresql.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | postgresqlha.postgresql.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| postgresqlha.postgresql.containerSecurityContext.enabled | bool | `true` |  |
 | postgresqlha.postgresql.containerSecurityContext.readOnlyRootFilesystem | bool | `false` |  |
 | postgresqlha.postgresql.containerSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | postgresqlha.postgresql.database | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL database name |
 | postgresqlha.postgresql.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL user password |
 | postgresqlha.postgresql.pdb.create | bool | `true` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) Enable a Pod Distribution Budget for Postgres |
+| postgresqlha.postgresql.podSecurityContext.enabled | bool | `true` |  |
+| postgresqlha.postgresql.podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | postgresqlha.postgresql.postgresPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL postgres user password |
 | postgresqlha.postgresql.repmgrPassword | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL Repmgr password |
-| postgresqlha.postgresql.securityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | postgresqlha.postgresql.username | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) PostgreSQL username |
 | postgresqlha.postgresqlImage.pullPolicy | string | `"Always"` |  |
 | redis.architecture | string | `"standalone"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters) Redis Architecture valid values: `standalone` or `replication` |

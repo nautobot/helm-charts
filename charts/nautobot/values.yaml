@@ -1059,15 +1059,16 @@ postgresql:
   postgresqlDatabase: "nautobot"
   # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password
   postgresqlPassword: ""
-  securityContext:
-    seccompProfile:
-      type: "RuntimeDefault"
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false  # Must be set to false
-    capabilities:
-      drop:
-        - "ALL"
+  primary:
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: false  # Must be set to false
+      capabilities:
+        drop:
+          - "ALL"
 
 redis:
   # -- Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart
@@ -1185,10 +1186,12 @@ postgresqlha:
     pdb:
       # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters) Enable a Pod Distribution Budget for Postgres
       create: true
-    securityContext:
+    podSecurityContext:
+      enabled: true
       seccompProfile:
         type: "RuntimeDefault"
     containerSecurityContext:
+      enabled: true
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: false  # Must be set to false
       seccompProfile:
@@ -1199,7 +1202,8 @@ postgresqlha:
   postgresqlImage:
     pullPolicy: "Always"
   metrics:
-    securityContext:
+    podSecurityContext:
+      enabled: true
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
       seccompProfile:

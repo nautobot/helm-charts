@@ -23,7 +23,7 @@ repos:
       - id: "remove-tabs"
 
   - repo: "https://github.com/jumanjihouse/pre-commit-hooks.git"
-    rev: "2.1.6"
+    rev: "3.0.0"
     hooks:
       - id: "markdownlint"
 

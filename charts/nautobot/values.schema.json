@@ -360,9 +360,7 @@
     }
   },
   "type": "object",
-  "additionalProperties": {
-    "type": "object"
-  },
+  "additionalProperties": false,
   "required": [
     "celeryBeat",
     "celeryWorker",
@@ -424,6 +422,12 @@
       "additionalProperties": {
         "type": "string"
       },
+      "type": "object"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "global": {
       "type": "object"
     },
     "ingress": {

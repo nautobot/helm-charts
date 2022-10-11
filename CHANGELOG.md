@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Upgraded Bitnami common subchart from 1.11.1 to 1.16.1
 * Upgraded Mariadb subchart from 10.5.1 to 11.1.0
 * Upgraded PostgreSQL-HA subchart from 8.6.13 to 9.2.2
+* Upgraded PostgreSQL subchart from 10.16.2 to 11.6.16
 * Upgraded Redis subchart from 16.10.1 to 17.0.1
 
 ## 1.3.12 - 2022-05-31
@@ -43,7 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 * Support for RQ Workers
-* Included archives of subcharts
 
 ## 1.3.11 - 2022-05-17
 

@@ -859,14 +859,30 @@
       "type": "object",
       "required": [
         "enabled",
-        "postgresqlPassword"
+        "auth"
       ],
       "properties": {
         "enabled": {
           "type": "boolean"
         },
-        "postgresqlPassword": {
-          "type": "string"
+        "auth": {
+          "type": "object",
+          "required": [
+            "database",
+            "password",
+            "username"
+          ],
+          "properties": {
+            "database": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
+          }
         }
       }
     },

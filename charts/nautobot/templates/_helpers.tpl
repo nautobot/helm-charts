@@ -129,7 +129,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "nautobot.database.dbname" -}}
   {{- if eq .Values.postgresql.enabled true -}}
-    {{- .Values.postgresql.postgresqlDatabase -}}
+    {{- .Values.postgresql.auth.database -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
     {{- .Values.postgresqlha.postgresql.database -}}
   {{- else if eq .Values.mariadb.enabled true -}}
@@ -151,7 +151,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "nautobot.database.username" -}}
   {{- if eq .Values.postgresql.enabled true -}}
-    {{- .Values.postgresql.postgresqlUsername -}}
+    {{- .Values.postgresql.auth.username -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
     {{- .Values.postgresqlha.postgresql.username -}}
   {{- else if eq .Values.mariadb.enabled true -}}
@@ -181,7 +181,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
         {{- end -}}
         {{- $password | b64dec -}}
       {{- else -}}
-        {{- required "A Postgres Password is required!" .Values.postgresql.postgresqlPassword -}}
+        {{- required "A Postgres Password is required!" .Values.postgresql.auth.password -}}
       {{- end -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
       {{- if .Values.postgresqlha.postgresql.existingSecret -}}

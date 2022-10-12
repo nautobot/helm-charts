@@ -44,7 +44,8 @@ celeryWorker:
     create: true
 
 postgresql:
-  auth.password: "change-me"
+  auth:
+    password: "change-me"
 redis:
   auth:
     password: "change-me"

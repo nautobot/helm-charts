@@ -21,13 +21,18 @@ jobs:
 
       - name: "Setup Go"
         uses: "actions/setup-go@v3"
+      - run: "echo $HOME/go/bin >> $GITHUB_PATH"
 
-      # - name: "Install helm-docs"
-      #   run: "go get github.com/norwoodj/helm-docs/cmd/helm-docs"
-      #   env:
-      #     GO111MODULE: "on"
+      - name: "Setup Helm"
+        uses: "azure/setup-helm@v3"
+      - run: "mkdir template_output"
+      - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
+      - run: "helm dependency update charts/nautobot"
 
-      # - run: "echo $HOME/go/bin >> $GITHUB_PATH"
+      - name: "Install helm-docs"
+        run: "go install github.com/norwoodj/helm-docs/cmd/helm-docs@v1.11.0"
+        env:
+          GO111MODULE: "on"
 
       - uses: "dorny/paths-filter@v2"
         id: "filter"

@@ -175,7 +175,7 @@
               "$ref": "#/$defs/empty-object"
             },
             {
-              "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/nodeselector.json"
+              "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/nodeselector.json"
             }
           ]
         },
@@ -486,7 +486,7 @@
     "mariadb": {
       "allOf": [
         {
-          "$ref": "https://raw.githubusercontent.com/bitnami/charts/master/bitnami/mariadb/values.schema.json"
+          "$ref": "https://raw.githubusercontent.com/bitnami/charts/ba59192a4d0b28454f072903e5186d8bb2adf43f/bitnami/mariadb/values.schema.json"
         },
         {
           "required": [
@@ -802,7 +802,7 @@
     "postgresql": {
       "allOf": [
         {
-          "$ref": "https://raw.githubusercontent.com/bitnami/charts/master/bitnami/postgresql/values.schema.json"
+          "$ref": "https://raw.githubusercontent.com/bitnami/charts/d3ec8fa952007380c6001c526b027a8bb064cbab/bitnami/postgresql/values.schema.json"
         },
         {
           "required": [
@@ -865,7 +865,7 @@
     "redis": {
       "allOf": [
         {
-          "$ref": "https://raw.githubusercontent.com/bitnami/charts/master/bitnami/redis/values.schema.json"
+          "$ref": "https://raw.githubusercontent.com/bitnami/charts/6d27b518fe3bf57fb792ac42f16133177f2c4d76/bitnami/redis/values.schema.json"
         },
         {
           "required": [

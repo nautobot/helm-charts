@@ -14,8 +14,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "common.names.fullname" . }}
-  minReplicas: {{ .Values.nautobot.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.nautobot.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.nautobot.autoscaling.minReplicas | int }}
+  maxReplicas: {{ .Values.nautobot.autoscaling.maxReplicas | int }}
   metrics:
     {{- toYaml .Values.nautobot.autoscaling.metrics | nindent 4 }}
   behavior:
@@ -37,8 +37,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "common.names.fullname" . }}-celery-worker
-  minReplicas: {{ .Values.celeryWorker.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.celeryWorker.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.celeryWorker.autoscaling.minReplicas | int }}
+  maxReplicas: {{ .Values.celeryWorker.autoscaling.maxReplicas | int }}
   metrics:
     {{- toYaml .Values.celeryWorker.autoscaling.metrics | nindent 4 }}
   behavior:
@@ -60,8 +60,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "common.names.fullname" . }}-api
-  minReplicas: {{ .Values.nautobot.apiEndpoint.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.nautobot.apiEndpoint.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.nautobot.apiEndpoint.autoscaling.minReplicas | int }}
+  maxReplicas: {{ .Values.nautobot.apiEndpoint.autoscaling.maxReplicas | int }}
   metrics:
     {{- toYaml .Values.nautobot.apiEndpoint.autoscaling.metrics | nindent 4 }}
   behavior:
@@ -83,8 +83,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "common.names.fullname" . }}-graphql
-  minReplicas: {{ .Values.nautobot.graphqlEndpoint.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.nautobot.graphqlEndpoint.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.nautobot.graphqlEndpoint.autoscaling.minReplicas | int }}
+  maxReplicas: {{ .Values.nautobot.graphqlEndpoint.autoscaling.maxReplicas | int }}
   metrics:
     {{- toYaml .Values.nautobot.graphqlEndpoint.autoscaling.metrics | nindent 4 }}
   behavior:

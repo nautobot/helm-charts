@@ -1,6 +1,10 @@
 {
-  "$schema": "http://json-schema.org/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$defs": {
+    "empty-object": {
+      "type": "object",
+      "additionalProperties": false
+    },
     "deployment": {
       "type": "object",
       "required": [
@@ -31,7 +35,7 @@
       ],
       "properties": {
         "affinity": {
-          "type": "object"
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/affinity.json"
         },
         "args": {
           "type": "array",
@@ -115,29 +119,29 @@
         "extraVolumeMounts": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/volumemount.json"
           }
         },
         "extraVolumes": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/volume.json"
           }
         },
         "hostAliases": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/hostalias.json"
           }
         },
         "initContainers": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/container.json"
           }
         },
         "lifecycleHooks": {
-          "type": "object"
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/lifecycle.json"
         },
         "livenessProbe": {
           "$ref": "#/$defs/probe"
@@ -166,7 +170,14 @@
           }
         },
         "nodeSelector": {
-          "type": "object"
+          "oneOf": [
+            {
+              "$ref": "#/$defs/empty-object"
+            },
+            {
+              "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/nodeselector.json"
+            }
+          ]
         },
         "pdb": {
           "type": "object",
@@ -199,12 +210,29 @@
         },
         "podAnnotations": {
           "additionalProperties": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
-          "type": "object"
+          "description": "Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations",
+          "type": [
+            "object",
+            "null"
+          ]
         },
         "podLabels": {
-          "type": "object"
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": "Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels",
+          "type": [
+            "object",
+            "null"
+          ]
         },
         "podSecurityContext": {
           "$ref": "#/$defs/securityContext"
@@ -224,39 +252,18 @@
           "minimum": 1
         },
         "resources": {
-          "type": "object",
-          "properties": {
-            "limits": {
-              "type": "object",
-              "properties": {
-                "cpu": {
-                  "type": "string"
-                },
-                "memory": {
-                  "type": "string"
-                }
-              }
-            },
-            "requests": {
-              "type": "object",
-              "properties": {
-                "cpu": {
-                  "type": "string"
-                },
-                "memory": {
-                  "type": "string"
-                }
-              }
-            }
-          }
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/resourcerequirements.json"
         },
         "sidecars": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/container.json"
+          }
         },
         "tolerations": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/toleration.json"
           }
         },
         "updateStrategy": {
@@ -274,89 +281,38 @@
       }
     },
     "probe": {
-      "type": "object",
-      "required": [
-        "enabled"
-      ],
-      "properties": {
-        "enabled": {
-          "type": "boolean"
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/probe.json"
         },
-        "exec": {
-          "type": "object"
-        },
-        "failureThreshold": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "httpGet": {
-          "type": "object"
-        },
-        "initialDelaySeconds": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "periodSeconds": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "successThreshold": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "tcpSocket": {
-          "type": "object"
-        },
-        "timeoutSeconds": {
-          "type": "integer",
-          "minimum": 1
-        }
-      }
-    },
-    "securityContext": {
-      "type": "object",
-      "required": [
-        "enabled"
-      ],
-      "properties": {
-        "properties": {
-          "allowPrivilegeEscalation": {
-            "type": "boolean"
-          },
-          "capabilities": {
-            "type": "object",
-            "properties": {
-              "add": {
-                "type": "array"
-              },
-              "drop": {
-                "type": "array"
-              }
+        {
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
             }
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "fsGroup": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "readOnlyRootFilesystem": {
-            "type": "boolean"
-          },
-          "runAsGroup": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "runAsUser": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "seccompProfile": {
-            "type": "object"
           }
         }
-      }
+      ]
+    },
+    "securityContext": {
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/securitycontext.json"
+        },
+        {
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
     }
   },
   "type": "object",
@@ -421,6 +377,12 @@
       "additionalProperties": {
         "type": "string"
       },
+      "type": "object"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "global": {
       "type": "object"
     },
     "ingress": {
@@ -522,39 +484,21 @@
       }
     },
     "mariadb": {
-      "type": "object",
-      "required": [
-        "auth",
-        "enabled"
-      ],
-      "properties": {
-        "auth": {
-          "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/bitnami/charts/ba59192a4d0b28454f072903e5186d8bb2adf43f/bitnami/mariadb/values.schema.json"
+        },
+        {
           "required": [
-            "database",
-            "password",
-            "rootPassword",
-            "username"
+            "enabled"
           ],
           "properties": {
-            "database": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            },
-            "rootPassword": {
-              "type": "string"
-            },
-            "username": {
-              "type": "string"
+            "enabled": {
+              "type": "boolean"
             }
           }
-        },
-        "enabled": {
-          "type": "boolean"
         }
-      }
+      ]
     },
     "metrics": {
       "additionalProperties": false,
@@ -856,35 +800,21 @@
       ]
     },
     "postgresql": {
-      "type": "object",
-      "required": [
-        "enabled",
-        "auth"
-      ],
-      "properties": {
-        "enabled": {
-          "type": "boolean"
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/bitnami/charts/d3ec8fa952007380c6001c526b027a8bb064cbab/bitnami/postgresql/values.schema.json"
         },
-        "auth": {
-          "type": "object",
+        {
           "required": [
-            "database",
-            "password",
-            "username"
+            "enabled"
           ],
           "properties": {
-            "database": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            },
-            "username": {
-              "type": "string"
+            "enabled": {
+              "type": "boolean"
             }
           }
         }
-      }
+      ]
     },
     "postgresql-ha": {
       "type": "object"
@@ -933,31 +863,21 @@
       }
     },
     "redis": {
-      "type": "object",
-      "required": [
-        "enabled",
-        "auth"
-      ],
-      "properties": {
-        "auth": {
-          "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/bitnami/charts/6d27b518fe3bf57fb792ac42f16133177f2c4d76/bitnami/redis/values.schema.json"
+        },
+        {
           "required": [
-            "enabled",
-            "password"
+            "enabled"
           ],
           "properties": {
             "enabled": {
               "type": "boolean"
-            },
-            "password": {
-              "type": "string"
             }
           }
-        },
-        "enabled": {
-          "type": "boolean"
         }
-      }
+      ]
     },
     "service": {
       "type": "object",

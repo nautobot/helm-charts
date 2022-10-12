@@ -77,7 +77,8 @@ The following settings are the bare minimum required values to deploy this chart
 
 ```yaml
 postgresql:
-  auth.password: "change-me"
+  auth:
+    password: "change-me"
 redis:
   auth:
     password: "change-me"
@@ -491,7 +492,8 @@ nautobot:
       value: "Production"
 postgresql:
   enabled: true  # Consider utilizing an external HA database rather than the built-in database
-  auth.password: "change-me"
+  auth:
+    password: "change-me"
 redis:
   enabled: true  # Consider utilizing an external HA redis rather than the built-in redis
   auth:

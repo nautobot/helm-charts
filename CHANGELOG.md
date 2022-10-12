@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * <!--- Renovate --->
 
+## TODO Revisit this
+
 ## 2.0.0 - 2022-07-19
 
 ### Added
@@ -31,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Upgraded PostgreSQL-HA subchart from 8.6.13 to 9.2.2
 * Upgraded PostgreSQL subchart from 10.16.2 to 11.6.16
 * Upgraded Redis subchart from 16.10.1 to 17.0.1
+* Updated JSON Schema to utilize external schemas where appropriate
 
 ## 1.3.12 - 2022-05-31
 

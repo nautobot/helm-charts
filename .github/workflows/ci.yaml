@@ -15,12 +15,12 @@ jobs:
     runs-on: "ubuntu-20.04"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
         with:
           fetch-depth: 0
 
       - name: "Setup Go"
-        uses: "actions/setup-go@v2"
+        uses: "actions/setup-go@v3"
 
       - name: "Install helm-docs"
         run: "go get github.com/norwoodj/helm-docs/cmd/helm-docs"
@@ -56,7 +56,7 @@ jobs:
     runs-on: "ubuntu-20.04"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - uses: "azure/setup-helm@v1"
       - run: "mkdir template_output"
       - run: "helm template -n testing -f charts/nautobot/linter_values.yaml charts/nautobot --output-dir=./template_output/test-postgresql"
@@ -77,7 +77,7 @@ jobs:
           # or `main.tf` for a Terraform configuration file
           file: "./template_output"
       - name: "Upload result to GitHub Code Scanning"
-        uses: "github/codeql-action/upload-sarif@v1"
+        uses: "github/codeql-action/upload-sarif@v2"
         with:
           sarif_file: "snyk.sarif"
 
@@ -86,7 +86,7 @@ jobs:
     runs-on: "ubuntu-20.04"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - uses: "azure/setup-helm@v1"
       - name: "Install Kubescape"
         run: "curl -s https://raw.githubusercontent.com/armosec/kubescape/master/install.sh | /bin/bash"

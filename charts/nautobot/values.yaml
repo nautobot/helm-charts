@@ -1053,14 +1053,15 @@ postgresql:
   enabled: true
   image:
     pullPolicy: "Always"
-  # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username
-  postgresqlUsername: "nautobot"
-  # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name
-  postgresqlDatabase: "nautobot"
-  # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password
-  postgresqlPassword: ""
+  auth:
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username
+    username: "nautobot"
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name
+    database: "nautobot"
+    # -- [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password
+    password: ""
   primary:
-    securityContext:
+    podSecurityContext:
       seccompProfile:
         type: "RuntimeDefault"
     containerSecurityContext:

@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "true"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.3.8-py3.10
+      image: ghcr.io/nautobot/nautobot:1.4.5-py3.10
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -14,11 +14,17 @@ annotations:
       url: https://github.com/nautobot/nautobot
   artifacthub.io/screenshots: |
     - title: Main Page
-      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot1.png
-    - title: Rack Elevation
-      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot2.png
+      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_main_page.png
+    - title: Config Contexts
+      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_config_contexts.png
+    - title: GraphQL
+      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_graphiql.png
     - title: Prefix hierarchy
-      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
+      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_prefix_hierarchy.png
+    - title: Config Compliance
+      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_golden_config.png
+    - title: Chatops
+      url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     TODO CHANGE THIS
     - kind: added
@@ -54,7 +60,7 @@ dependencies:
     repository: "https://charts.bitnami.com/bitnami"
     tags:
       - "bitnami-common"
-    version: "1.x.x"
+    version: "2.x.x"
 description: "Nautobot is a Network Source of Truth and Network Automation Platform."
 home: "https://github.com/nautobot/nautobot"
 icon: "https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png"

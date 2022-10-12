@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 2.0.0-alpha.7](https://img.shields.io/badge/Version-2.0.0--alpha.7-informational?style=flat-square) ![AppVersion: 1.3.8](https://img.shields.io/badge/AppVersion-1.3.8-informational?style=flat-square)
+![Version: 2.0.0-alpha.7](https://img.shields.io/badge/Version-2.0.0--alpha.7-informational?style=flat-square) ![AppVersion: 1.4.5](https://img.shields.io/badge/AppVersion-1.4.5-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -647,6 +647,20 @@ helm repo update nautobot
 helm upgrade nautobot nautobot/nautobot -f nautobot.values.yaml
 ```
 
+## Nautobot as a subchart
+
+When using Nautobot as a subchart make sure to include the following in your Chart.yaml:
+
+```yaml
+dependencies:
+  - condition: "nautobot.enabled"
+    name: "nautobot"
+    repository: "https://nautobot.github.io/helm-charts/"
+    version: "1.x.x"
+```
+
+The `global` values will be shared between the parent and child charts.  Nautobot can be enabled by setting `nautobot.enabled` to `true`.  Other Nautobot settings would then be found under the `nautobot` key in your parent chart's yaml file.  For more information on subcharts checkout the [helm documentation](https://helm.sh/docs/chart_template_guide/subcharts_and_globals/).
+
 ## Known Issues
 
 ### Invalidate Redis Cache
@@ -860,7 +874,7 @@ helm delete nautobot
 | nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
-| nautobot.image.tag | string | `"1.3.8-py3.10"` | Nautobot image tag, common to all deployments |
+| nautobot.image.tag | string | `"1.4.5-py3.10"` | Nautobot image tag, common to all deployments |
 | nautobot.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods |
 | nautobot.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | nautobot.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |

@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Setup Go"
-        uses: "actions/setup-go@v2"
+        uses: "actions/setup-go@v3"
 
       - name: "Install helm-docs"
         run: "go get github.com/norwoodj/helm-docs/cmd/helm-docs"

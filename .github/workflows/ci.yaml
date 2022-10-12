@@ -12,7 +12,7 @@ concurrency:
 jobs:
   pre-commit-check:
     name: "Run pre-commit checks"
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
@@ -53,7 +53,7 @@ jobs:
 
   snyk-security-check:
     name: "Snyk Security Scanning"
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
@@ -83,7 +83,7 @@ jobs:
 
   kubescape-security-check:
     name: "Kubescape Security Scanning"
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"

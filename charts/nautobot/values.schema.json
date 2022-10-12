@@ -424,6 +424,12 @@
       },
       "type": "object"
     },
+    "enabled": {
+      "type": "boolean"
+    },
+    "global": {
+      "type": "object"
+    },
     "ingress": {
       "type": "object",
       "additionalProperties": false,

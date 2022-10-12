@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * <!--- Renovate --->
 
+## 1.3.13 - 2022-05-31
+
+### Changed
+
+* Nautobot Version 1.4.5
+* Updated pre-commit hooks
+
+### Fixed
+
+* Fixed #181 with nested root values in json schema
+
 ## 1.3.12 - 2022-05-31
 
 ### Changed

@@ -12,7 +12,7 @@ concurrency:
 jobs:
   pre-commit-check:
     name: "Run pre-commit checks"
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
@@ -21,13 +21,18 @@ jobs:
 
       - name: "Setup Go"
         uses: "actions/setup-go@v3"
+      - run: "echo $HOME/go/bin >> $GITHUB_PATH"
+
+      - name: "Setup Helm"
+        uses: "azure/setup-helm@v3"
+      - run: "mkdir template_output"
+      - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
+      - run: "helm dependency update charts/nautobot"
 
       - name: "Install helm-docs"
-        run: "go get github.com/norwoodj/helm-docs/cmd/helm-docs"
+        run: "go install github.com/norwoodj/helm-docs/cmd/helm-docs@v1.11.0"
         env:
           GO111MODULE: "on"
-
-      - run: "echo $HOME/go/bin >> $GITHUB_PATH"
 
       - uses: "dorny/paths-filter@v2"
         id: "filter"
@@ -39,26 +44,28 @@ jobs:
 
       # run only if changed files were detected
       - name: "Run against changes"
-        uses: "pre-commit/action@v2.0.3"
+        uses: "pre-commit/action@v3.0.0"
         if: "steps.filter.outputs.addedOrModified == 'true'"
         with:
           extra_args: "--files ${{ steps.filter.outputs.addedOrModified_files }}"
 
       # run if no changed files were detected (e.g. workflow_dispatch on main branch)
       - name: "Run against all files"
-        uses: "pre-commit/action@v2.0.3"
+        uses: "pre-commit/action@v3.0.0"
         if: "steps.filter.outputs.addedOrModified != 'true'"
         with:
           extra_args: "--all-files"
 
   snyk-security-check:
     name: "Snyk Security Scanning"
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
       - uses: "azure/setup-helm@v3"
       - run: "mkdir template_output"
+      - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
+      - run: "helm dependency update charts/nautobot"
       - run: "helm template -n testing -f charts/nautobot/linter_values.yaml charts/nautobot --output-dir=./template_output/test-postgresql"
       - run: "helm template -n testing -f charts/nautobot/linter_values_mysql.yaml charts/nautobot --output-dir=./template_output/test-mysql"
       - run: "helm template -n testing -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot --output-dir=./template_output/test-postgresql-ha"
@@ -83,13 +90,15 @@ jobs:
 
   kubescape-security-check:
     name: "Kubescape Security Scanning"
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
       - uses: "azure/setup-helm@v3"
       - name: "Install Kubescape"
         run: "curl -s https://raw.githubusercontent.com/armosec/kubescape/master/install.sh | /bin/bash"
+      - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
+      - run: "helm dependency update charts/nautobot"
       - name: "Kubescape NSA Scan - PostgreSQL"
         run: "helm template -n testing -f charts/nautobot/linter_values.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape NSA Scan - MySQL"

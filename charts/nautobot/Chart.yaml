@@ -39,7 +39,7 @@ annotations:
       description: Fixed #181 allowing Nautobot to be used as a subchart
 apiVersion: "v2"
 appVersion: "1.4.5"
-version: "2.0.0-alpha.7"
+version: "2.0.0-alpha.8"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

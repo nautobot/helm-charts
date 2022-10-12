@@ -22,12 +22,12 @@ jobs:
       - name: "Setup Go"
         uses: "actions/setup-go@v3"
 
-      - name: "Install helm-docs"
-        run: "go get github.com/norwoodj/helm-docs/cmd/helm-docs"
-        env:
-          GO111MODULE: "on"
+      # - name: "Install helm-docs"
+      #   run: "go get github.com/norwoodj/helm-docs/cmd/helm-docs"
+      #   env:
+      #     GO111MODULE: "on"
 
-      - run: "echo $HOME/go/bin >> $GITHUB_PATH"
+      # - run: "echo $HOME/go/bin >> $GITHUB_PATH"
 
       - uses: "dorny/paths-filter@v2"
         id: "filter"
@@ -39,14 +39,14 @@ jobs:
 
       # run only if changed files were detected
       - name: "Run against changes"
-        uses: "pre-commit/action@v2.0.3"
+        uses: "pre-commit/action@v3.0.0"
         if: "steps.filter.outputs.addedOrModified == 'true'"
         with:
           extra_args: "--files ${{ steps.filter.outputs.addedOrModified_files }}"
 
       # run if no changed files were detected (e.g. workflow_dispatch on main branch)
       - name: "Run against all files"
-        uses: "pre-commit/action@v2.0.3"
+        uses: "pre-commit/action@v3.0.0"
         if: "steps.filter.outputs.addedOrModified != 'true'"
         with:
           extra_args: "--all-files"

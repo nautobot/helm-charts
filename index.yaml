@@ -85,7 +85,6 @@ entries:
     version: 2.0.0-alpha.9
   - annotations:
       artifacthub.io/changes: |
-        TODO CHANGE THIS
         - kind: added
           description: Added NGINX sidecars
         - kind: added

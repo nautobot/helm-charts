@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "true"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.4.5-py3.10
+      image: ghcr.io/nautobot/nautobot:1.4.7-py3.10
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -25,8 +25,8 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_golden_config.png
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
+  # TODO CHANGE THIS
   artifacthub.io/changes: |
-    TODO CHANGE THIS
     - kind: added
       description: Added NGINX sidecars
     - kind: added
@@ -38,8 +38,8 @@ annotations:
     - kind: fixed
       description: Fixed #181 allowing Nautobot to be used as a subchart
 apiVersion: "v2"
-appVersion: "1.4.5"
-version: "2.0.0-alpha.8"
+appVersion: "1.4.7"
+version: "2.0.0-alpha.9"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

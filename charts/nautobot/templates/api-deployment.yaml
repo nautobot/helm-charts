@@ -112,6 +112,7 @@ spec:
         {{- end }}
       containers:
         - name: nautobot-api
+          tty: true
           image: {{ template "nautobot.image" . }}
           imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
           {{- if .Values.nautobot.lifecycleHooks }}

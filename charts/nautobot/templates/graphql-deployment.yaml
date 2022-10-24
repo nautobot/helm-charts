@@ -112,6 +112,7 @@ spec:
         {{- end }}
       containers:
         - name: nautobot-graphql
+          tty: true
           image: {{ template "nautobot.image" . }}
           imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
           {{- if .Values.nautobot.lifecycleHooks }}
@@ -278,7 +279,6 @@ spec:
         {{- if .Values.nautobot.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.nautobot.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      tty: true
       volumes:
         - name: "git-repos"
           emptyDir: {}

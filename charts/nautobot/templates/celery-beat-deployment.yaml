@@ -66,6 +66,7 @@ spec:
         {{- end }}
       containers:
         - name: nautobot-celery-beat
+          tty: true
           image: {{ template "nautobot.image" . }}
           imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
           {{- if .Values.celeryBeat.lifecycleHooks }}
@@ -124,7 +125,6 @@ spec:
         {{- if .Values.celeryBeat.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.celeryBeat.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      tty: true
       volumes:
         - name: "git-repos"
           emptyDir: {}

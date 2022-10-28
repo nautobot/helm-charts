@@ -38,7 +38,7 @@ dependencies:
   - condition: "postgresqlha.enabled"
     name: "postgresql-ha"
     repository: "https://charts.bitnami.com/bitnami"
-    version: "8.x.x"
+    version: "10.x"
     alias: "postgresqlha"
   - condition: "mariadb.enabled"
     name: "mariadb"

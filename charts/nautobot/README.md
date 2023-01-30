@@ -659,11 +659,11 @@ helm delete nautobot
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | common | 1.x.x |
-| https://charts.bitnami.com/bitnami | mariadb | 10.x.x |
-| https://charts.bitnami.com/bitnami | postgresql | 10.x.x |
-| https://charts.bitnami.com/bitnami | postgresqlha(postgresql-ha) | 8.x.x |
-| https://charts.bitnami.com/bitnami | redis | 16.x.x |
+| file://./charts/common-1.14.1.tgz | common | 1.x.x |
+| file://./charts/mariadb-10.5.1.tgz | mariadb | 10.x.x |
+| file://./charts/postgresql-ha-8.6.13.tgz | postgresqlha(postgresql-ha) | 8.x.x |
+| file://./charts/redis-16.10.1.tgz | redis | 16.x.x |
+| file://./charts/ssspostgresql-10.16.2.tgz | postgresql | 10.x.x |
 
 ## Values
 

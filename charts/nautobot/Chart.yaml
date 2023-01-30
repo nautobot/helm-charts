@@ -22,6 +22,8 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Upgraded Nautobot from 1.4.5 to 1.5.9
+    - kind: changed
+      description: Chart dependencies now included locally as they no longer exist at bitnami.com (too old)
     - kind: fixed
       description: Fixed #214 allowing sops in helm values
 apiVersion: "v2"
@@ -29,23 +31,23 @@ appVersion: "1.5.9"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
-    repository: "https://charts.bitnami.com/bitnami"
+    repository: "file://./charts/redis-16.10.1.tgz"
     version: "16.x.x"
   - condition: "postgresql.enabled"
     name: "postgresql"
-    repository: "https://charts.bitnami.com/bitnami"
+    repository: "file://./charts/ssspostgresql-10.16.2.tgz"
     version: "10.x.x"
   - condition: "postgresqlha.enabled"
     name: "postgresql-ha"
-    repository: "https://charts.bitnami.com/bitnami"
+    repository: "file://./charts/postgresql-ha-8.6.13.tgz"
     version: "8.x.x"
     alias: "postgresqlha"
   - condition: "mariadb.enabled"
     name: "mariadb"
-    repository: "https://charts.bitnami.com/bitnami"
+    repository: "file://./charts/mariadb-10.5.1.tgz"
     version: "10.x.x"
   - name: "common"
-    repository: "https://charts.bitnami.com/bitnami"
+    repository: "file://./charts/common-1.14.1.tgz"
     tags:
       - "bitnami-common"
     version: "1.x.x"

@@ -8,4 +8,6 @@ rules:
   line-length: "disable"
   quoted-strings:
     quote-type: "double"
-ignore: "charts/*/templates/"
+ignore: |
+  charts/*/templates/
+  charts/nautobot/charts/*

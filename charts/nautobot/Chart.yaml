@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.4.5-py3.10
+      image: ghcr.io/nautobot/nautobot:1.5.9-py3.10
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -21,34 +21,36 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/screenshot3.png
   artifacthub.io/changes: |
     - kind: changed
-      description: Upgraded Nautobot from 1.3.5 to 1.4.5
+      description: Upgraded Nautobot from 1.4.5 to 1.5.9
+    - kind: changed
+      description: Chart dependencies now included locally as they no longer exist at bitnami.com (too old)
     - kind: fixed
-      description: Fixed #181 allowing Nautobot to be used as a subchart
+      description: Fixed #214 allowing sops in helm values
 apiVersion: "v2"
-appVersion: "1.4.5"
+appVersion: "1.5.9"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
-    repository: "https://charts.bitnami.com/bitnami"
-    version: "16.x.x"
+    repository: "file://charts/redis"
+    version: "16.10.1"
   - condition: "postgresql.enabled"
     name: "postgresql"
-    repository: "https://charts.bitnami.com/bitnami"
-    version: "10.x.x"
+    repository: "file://charts/postgresql"
+    version: "10.16.2"
   - condition: "postgresqlha.enabled"
     name: "postgresql-ha"
-    repository: "https://charts.bitnami.com/bitnami"
-    version: "8.x.x"
+    repository: "file://charts/postgresql-ha"
+    version: "8.6.13"
     alias: "postgresqlha"
   - condition: "mariadb.enabled"
     name: "mariadb"
-    repository: "https://charts.bitnami.com/bitnami"
-    version: "10.x.x"
+    repository: "file://charts/mariadb"
+    version: "10.5.1"
   - name: "common"
-    repository: "https://charts.bitnami.com/bitnami"
+    repository: "file://charts/common"
     tags:
       - "bitnami-common"
-    version: "1.x.x"
+    version: "1.14.1"
 description: "Nautobot is a Network Source of Truth and Network Automation Platform."
 engine: "gotpl"
 home: "https://github.com/nautobot/nautobot"
@@ -65,4 +67,4 @@ name: "nautobot"
 sources:
   - "https://github.com/nautobot/nautobot"
   - "https://github.com/nautobot/helm-charts"
-version: "1.3.13"
+version: "1.3.14"

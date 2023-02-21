@@ -1,7 +1,7 @@
----
 {{- if .Values.celeryWorker.enabled }}
 # Prepend the default Nautobot Celery queue
 {{- range $queue := (prepend .Values.celeryWorker.extraCeleryQueues (dict "name" "celery" "replicaCount" $.Values.celeryWorker.replicaCount)) }}
+---
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" $ }}
 kind: Deployment
 metadata:

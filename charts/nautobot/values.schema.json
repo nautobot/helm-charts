@@ -410,6 +410,25 @@
           "properties": {
             "enabled": {
               "type": "boolean"
+            },
+            "extraCeleryQueues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "replicaCount"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "replicaCount": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
             }
           }
         }

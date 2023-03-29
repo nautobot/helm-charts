@@ -35,6 +35,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Upgraded Redis subchart from 16.10.1 to 17.0.1
 * Updated JSON Schema to utilize external schemas where appropriate
 
+## 1.3.14 - 2023-01-27
+
+### Fixed
+
+* Fixed #214 support for using [Mozilla SOPS](https://github.com/mozilla/sops)
+
 ## 1.3.13 - 2022-05-31
 
 ### Changed

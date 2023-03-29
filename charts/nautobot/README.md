@@ -695,8 +695,8 @@ helm delete nautobot
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | common | 2.x.x |
 | https://charts.bitnami.com/bitnami | mariadb | 11.x.x |
-| https://charts.bitnami.com/bitnami | postgresql | 11.x.x |
-| https://charts.bitnami.com/bitnami | postgresqlha(postgresql-ha) | 9.x.x |
+| https://charts.bitnami.com/bitnami | postgresql | 12.x.x |
+| https://charts.bitnami.com/bitnami | postgresqlha(postgresql-ha) | 11.x.x |
 | https://charts.bitnami.com/bitnami | redis | 17.x.x |
 
 ## Values

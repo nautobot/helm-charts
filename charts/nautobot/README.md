@@ -693,6 +693,7 @@ helm delete nautobot
 | celeryWorker.command | list | See values.yaml | Override default Nautobot Celery Worker container command (useful when using custom images) |
 | celeryWorker.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context |
 | celeryWorker.enabled | bool | `true` | Enables the Celery Worker for Nautobot |
+| celeryWorker.extraCeleryQueues | list | `[]` | Extra Celery queue to use. 1 queue = 1 Worker |
 | celeryWorker.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot Celery Worker pods |
 | celeryWorker.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot Celery Worker pods |
 | celeryWorker.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot Celery Worker pods |
@@ -715,7 +716,7 @@ helm delete nautobot
 | celeryWorker.podSecurityContext | object | See values.yaml | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Pods Security Context |
 | celeryWorker.priorityClassName | string | `""` | Nautobot Celery Worker pods' priorityClassName |
 | celeryWorker.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker readiness probe |
-| celeryWorker.replicaCount | int | `2` | Number of Nautobot Celery Workers replicas to deploy |
+| celeryWorker.replicaCount | int | `2` | Number of replicas Nautobot Celery Workers listening default queue to deploy |
 | celeryWorker.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot Celery Worker resource requests and limits |
 | celeryWorker.revisionHistoryLimit | int | `3` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain |
 | celeryWorker.sidecars | list | `[]` | Add additional sidecar containers to the Nautobot Celery Worker pods |

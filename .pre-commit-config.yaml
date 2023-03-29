@@ -28,12 +28,12 @@ repos:
       - id: "markdownlint"
 
   - repo: "https://github.com/gruntwork-io/pre-commit"
-    rev: "v0.1.17"  # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
+    rev: "v0.1.19"  # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
     hooks:
       - id: "helmlint"
 
   - repo: "https://github.com/adrienverge/yamllint.git"
-    rev: "v1.28.0"
+    rev: "v1.30.0"
     hooks:
       - id: "yamllint"
         args:

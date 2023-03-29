@@ -999,6 +999,9 @@
           "type": "string"
         }
       }
+    },
+    "sops": {
+      "type": "object"
     }
   }
 }

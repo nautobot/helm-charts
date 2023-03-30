@@ -334,3 +334,46 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- print "autoscaling/v2" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Build a dict of nautobot deployments each item will be keyed by the name to use for the deployment
+name and will containe "ingressPath" specifying the path for which this Nautobot deployment will
+respond.  The .Values.nautobot defines the default nautobot deployment with an ingressPath of / and
+the default values for all other nautobot deployments.  Other Nautobot deployments can be specified
+in the .Values.Nautobots key which is a dictionary with the same spec as .Values.Nautobot.
+*/}}
+{{ define "nautobot.nautobots" }}
+{{- $nautobots := dict }}
+{{- range $nautobotName, $nautobot := .Values.nautobots }}
+{{- $nautobots = mustMerge $nautobots (dict $nautobotName (deepCopy $.Values.nautobot | mustMerge $nautobot)) }}
+{{- end }}
+{{- mustToJson $nautobots -}}
+{{- end }}
+
+{{/*
+Build a dict of nautobot celery deployments each item will be keyed by the name to use for the deployment
+name.  The .Values.celery defines the default celery deployment.  Other Celery deployments can be specified
+in the .Values.workers key which is a dictionary with the same spec as .Values.Nautobot.
+*/}}
+{{ define "nautobot.workers" }}
+{{- $workers := dict }}
+{{/*
+Handle deprecation of celeryWorkers and celeryBeat keys, precedence will be:
+
+workers.[celeryWorker|celeryBeat]
+[celeryWorker|celeryBeat]
+celery
+
+where values in the new workers key will always win over the others
+*/}}
+{{- $workers = mustMerge $workers (dict "default" (deepCopy $.Values.celery | mustMerge $.Values.celeryWorker)) }}
+{{- $workers = mustMerge $workers (dict "beat" (deepCopy $.Values.celery | mustMerge $.Values.celeryBeat)) }}
+{{- range $celeryName, $celery := .Values.workers }}
+{{- $workers = mustMerge $workers (dict $celeryName (deepCopy $.Values.celery | mustMerge $celery)) }}
+{{- end }}
+{{/*
+Celery Beat can only have 1 replica enforce that here
+*/}}
+{{- $workers = mustMerge $workers (dict "beat" (dict "replicaCount" 1)) }}
+{{- mustToJson $workers -}}
+{{- end }}

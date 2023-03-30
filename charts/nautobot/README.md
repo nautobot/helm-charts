@@ -508,35 +508,39 @@ In practice it is highly recommended to utilize a cloud providers relational dat
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
-| nautobot.config | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value |
-| nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE) |
-| nautobot.db.existingSecret | string | `""` | Name of existing secret to use for Database passwords |
-| nautobot.db.existingSecretPasswordKey | string | `"NAUTOBOT_DB_PASSWORD"` | Password key to be retrieved from existing secret |
-| nautobot.db.host | string | `"postgres"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST) |
-| nautobot.db.name | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME) |
-| nautobot.db.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database password, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PASSWORD) |
-| nautobot.db.port | int | `5432` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database port, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PORT) |
-| nautobot.db.timeout | int | `300` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT) |
-| nautobot.db.user | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER) |
-| nautobot.debug | bool | `false` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG) |
-| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker`) |
-| nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` |
-| nautobot.metrics | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED) |
-| nautobot.redis.existingSecret | string | `""` | Name of existing secret to use for Redis passwords |
-| nautobot.redis.existingSecretPasswordKey | string | `"NAUTOBOT_REDIS_PASSWORD"` | Password key to be retrieved from existing secret |
-| nautobot.redis.host | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST) |
-| nautobot.redis.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD) |
-| nautobot.redis.port | int | `6379` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT) |
-| nautobot.redis.ssl | bool | `false` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis ssl enabled, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_SSL) |
-| nautobot.redis.username | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME) |
-| nautobot.secretKey | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#secret_key) Nautobot Secret Key (NAUTOBOT_SECRET_KEY) |
-| nautobot.superUser.apitoken | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token) Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN) |
-| nautobot.superUser.email | string | `"admin@example.com"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_email) Configure an email address for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_EMAIL) |
-| nautobot.superUser.enabled | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser) Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER) |
-| nautobot.superUser.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password) Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated |
-| nautobot.superUser.username | string | `"admin"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_name) User name to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME) |
-| nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value |
+| nautobot.allowedHosts | string | `"*"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS)<sup>[1](#notes)</sup> |
+| nautobot.config | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value<sup>[1](#notes)</sup> |
+| nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE)<sup>[1](#notes)</sup> |
+| nautobot.db.existingSecret | string | `""` | Name of existing secret to use for Database passwords<sup>[1](#notes)</sup> |
+| nautobot.db.existingSecretPasswordKey | string | `"NAUTOBOT_DB_PASSWORD"` | Password key to be retrieved from existing secret<sup>[1](#notes)</sup> |
+| nautobot.db.host | string | `"postgres"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST)<sup>[1](#notes)</sup> |
+| nautobot.db.name | string | `"nautobot"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME)<sup>[1](#notes)</sup> |
+| nautobot.db.password | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database password, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PASSWORD)<sup>[1](#notes)</sup> |
+| nautobot.db.port | int | `5432` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database port, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PORT)<sup>[1](#notes)</sup> |
+| nautobot.db.timeout | int | `300` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT)<sup>[1](#notes)</sup> |
+| nautobot.db.user | string | `"nautobot"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER)<sup>[1](#notes)</sup> |
+| nautobot.debug | bool | `false` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG)<sup>[1](#notes)</sup> |
+| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`)<sup>[1](#notes)</sup> |
+| nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG`<sup>[1](#notes)</sup> |
+| nautobot.metrics | bool | `true` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED)<sup>[1](#notes)</sup> |
+| nautobot.redis.existingSecret | string | `""` | Name of existing secret to use for Redis passwords<sup>[1](#notes)</sup> |
+| nautobot.redis.existingSecretPasswordKey | string | `"NAUTOBOT_REDIS_PASSWORD"` | Password key to be retrieved from existing secret<sup>[1](#notes)</sup> |
+| nautobot.redis.host | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST)<sup>[1](#notes)</sup> |
+| nautobot.redis.password | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD)<sup>[1](#notes)</sup> |
+| nautobot.redis.port | int | `6379` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT)<sup>[1](#notes)</sup> |
+| nautobot.redis.ssl | bool | `false` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis ssl enabled, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_SSL)<sup>[1](#notes)</sup> |
+| nautobot.redis.username | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME)<sup>[1](#notes)</sup> |
+| nautobot.secretKey | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#secret_key) Nautobot Secret Key (NAUTOBOT_SECRET_KEY)<sup>[1](#notes)</sup> |
+| nautobot.superUser.apitoken | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token) Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN)<sup>[1](#notes)</sup> |
+| nautobot.superUser.email | string | `"admin@example.com"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_email) Configure an email address for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_EMAIL)<sup>[1](#notes)</sup> |
+| nautobot.superUser.enabled | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser) Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER)<sup>[1](#notes)</sup> |
+| nautobot.superUser.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password) Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated<sup>[1](#notes)</sup> |
+| nautobot.superUser.username | string | `"admin"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_name) User name to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME)<sup>[1](#notes)</sup> |
+| nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value<sup>[1](#notes)</sup> |
+| nautobot.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type |
+| nautobot.uwsgi.listen | int | `128` | [ref](set the socket listen queue size) Set the uWSGI socket listen queue size.<sup>[1](#notes)</sup> |
+| nautobot.uwsgi.processes | int | `3` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#processes) Spawn the specified number of workers/processes<sup>[1](#notes)</sup> |
+| nautobot.uwsgi.threads | int | `2` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#threads) Run each worker in prethreaded mode with the specified number of threads<sup>[1](#notes)</sup> |
 
 ## Configuring PostgreSQL
 
@@ -703,72 +707,44 @@ helm delete nautobot
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| celeryBeat.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot Celery Beat pods assignment |
-| celeryBeat.args | list | `[]` | Override default Nautobot Celery Beat container args (useful when using custom images) |
-| celeryBeat.command | list | See values.yaml | Override default Nautobot Celery Beat container command (useful when using custom images) |
-| celeryBeat.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Beat Container Security Context |
-| celeryBeat.enabled | bool | `true` | Enables the Celery Beat (scheduled jobs) for Nautobot |
-| celeryBeat.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot Celery Beat pods |
-| celeryBeat.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot Celery Beat pods |
-| celeryBeat.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot Celery Beat pods |
-| celeryBeat.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot Celery Beat containers |
-| celeryBeat.extraVolumes | list | `[]` | List of additional volumes for the Nautobot Celery Beat pod |
-| celeryBeat.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot Celery Beat pods host aliases |
-| celeryBeat.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Beat pods |
-| celeryBeat.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot Celery Beat container(s) to automate configuration before or after startup |
-| celeryBeat.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Beat liveness probe |
-| celeryBeat.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Beat Node Affinity preset |
-| celeryBeat.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
-| celeryBeat.nodeAffinityPreset.type | string | `""` | Nautobot Celery Beat Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
-| celeryBeat.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
-| celeryBeat.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Beat pods assignment |
-| celeryBeat.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Beat Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
-| celeryBeat.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot Celery Beat pods |
-| celeryBeat.podAntiAffinityPreset | string | `"soft"` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Beat Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
-| celeryBeat.podLabels | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for Nautobot Celery Beat pods |
-| celeryBeat.podSecurityContext | object | See values.yaml | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Beat Pods Security Context |
-| celeryBeat.priorityClassName | string | `""` | Nautobot Celery Beat pods' priorityClassName |
-| celeryBeat.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Beat readiness probe |
-| celeryBeat.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot Celery Beat resource requests and limits |
-| celeryBeat.revisionHistoryLimit | int | `3` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain |
-| celeryBeat.sidecars | list | `[]` | Add additional sidecar containers to the Nautobot Celery Beat pods |
-| celeryBeat.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot Celery Beat pods assignment |
-| celeryBeat.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Celery Beat Deployment strategy type |
-| celeryWorker.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot Celery Worker pods assignment |
-| celeryWorker.args | list | `[]` | Override default Nautobot Celery Worker container args (useful when using custom images) |
-| celeryWorker.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
-| celeryWorker.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for the Celery Worker (beta) |
-| celeryWorker.command | list | See values.yaml | Override default Nautobot Celery Worker container command (useful when using custom images) |
-| celeryWorker.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context |
-| celeryWorker.enabled | bool | `true` | Enables the Celery Worker for Nautobot |
-| celeryWorker.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot Celery Worker pods |
-| celeryWorker.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot Celery Worker pods |
-| celeryWorker.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot Celery Worker pods |
-| celeryWorker.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot Celery Worker containers |
-| celeryWorker.extraVolumes | list | `[]` | List of additional volumes for the Nautobot Celery Worker pod |
-| celeryWorker.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot Celery Worker pods host aliases |
-| celeryWorker.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Worker pods |
-| celeryWorker.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot Celery Worker container(s) to automate configuration before or after startup |
-| celeryWorker.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker liveness probe |
-| celeryWorker.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Worker Node Affinity preset |
-| celeryWorker.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
-| celeryWorker.nodeAffinityPreset.type | string | `""` | Nautobot Celery Worker Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
-| celeryWorker.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
-| celeryWorker.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Worker pods assignment |
-| celeryWorker.pdb | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) Nautobot Pod Distribution Budget |
-| celeryWorker.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Worker Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
-| celeryWorker.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot Celery Worker pods |
-| celeryWorker.podAntiAffinityPreset | string | `"soft"` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Worker Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
-| celeryWorker.podLabels | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for Nautobot Celery Worker pods |
-| celeryWorker.podSecurityContext | object | See values.yaml | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Pods Security Context |
-| celeryWorker.priorityClassName | string | `""` | Nautobot Celery Worker pods' priorityClassName |
-| celeryWorker.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker readiness probe |
-| celeryWorker.replicaCount | int | `2` | Number of Nautobot Celery Workers replicas to deploy |
-| celeryWorker.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot Celery Worker resource requests and limits |
-| celeryWorker.revisionHistoryLimit | int | `3` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain |
-| celeryWorker.sidecars | list | `[]` | Add additional sidecar containers to the Nautobot Celery Worker pods |
-| celeryWorker.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot Celery Worker pods assignment |
-| celeryWorker.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Celery Worker Deployment strategy type |
+| celery.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot Celery Worker pods assignment |
+| celery.args | list | `[]` | Override default Nautobot Celery Worker container args (useful when using custom images) |
+| celery.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
+| celery.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for the Celery Worker (beta) |
+| celery.command | list | See values.yaml | Override default Nautobot Celery Worker container command (useful when using custom images) |
+| celery.concurrency | int | `0` | [ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/#concurrency-setting)Concurrency Setting (0: use the default which is the number of CPUs available on your system) |
+| celery.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Container Security Context |
+| celery.enabled | bool | `true` | Enables the default Celery Worker for Nautobot |
+| celery.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot Celery Worker pods |
+| celery.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot Celery Worker pods |
+| celery.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot Celery Worker pods |
+| celery.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot Celery Worker containers |
+| celery.extraVolumes | list | `[]` | List of additional volumes for the Nautobot Celery Worker pod |
+| celery.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot Celery Worker pods host aliases |
+| celery.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot Celery Worker pods |
+| celery.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot Celery Worker container(s) to automate configuration before or after startup |
+| celery.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker liveness probe |
+| celery.nodeAffinityPreset | object | See values.yaml | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) Nautobot Celery Worker Node Affinity preset |
+| celery.nodeAffinityPreset.key | string | `""` | Node label key to match. Ignored if `nautobot.affinity` is set |
+| celery.nodeAffinityPreset.type | string | `""` | Nautobot Celery Worker Node affinity preset type. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
+| celery.nodeAffinityPreset.values | list | `[]` | Node label values to match. Ignored if `nautobot.affinity` is set |
+| celery.nodeSelector | object | `{}` | [ref](https://kubernetes.io/docs/user-guide/node-selection/) Node labels for Nautobot Celery Worker pods assignment |
+| celery.pdb | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) Nautobot Pod Distribution Budget |
+| celery.podAffinityPreset | string | `""` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Worker Pod affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
+| celery.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot Celery Worker pods |
+| celery.podAntiAffinityPreset | string | `"soft"` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Worker Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
+| celery.podLabels | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for Nautobot Celery Worker pods |
+| celery.podSecurityContext | object | See values.yaml | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Pods Security Context |
+| celery.priorityClassName | string | `""` | Nautobot Celery Worker pods' priorityClassName |
+| celery.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker readiness probe |
+| celery.replicaCount | int | `2` | Number of Nautobot Celery Workers replicas to deploy |
+| celery.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot Celery Worker resource requests and limits |
+| celery.revisionHistoryLimit | int | `3` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain |
+| celery.sidecars | list | `[]` | Add additional sidecar containers to the Nautobot Celery Worker pods |
+| celery.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot Celery Worker pods assignment |
+| celery.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Celery Worker Deployment strategy type |
+| celeryBeat | object | `{}` | DEPRECATED see `workers.beat` and `celery` |
+| celeryWorker | object | `{}` | DEPRECATED see `workers.default` and `celery` |
 | commonAnnotations | object | `{}` | Annotations to be applied to ALL resources created by this chart |
 | ingress.annotations | object | `{}` | Ingress annotations defined as key:value pairs, see the documentation for your specific Ingress provider for more details |
 | ingress.apiVersion | string | `nil` | Override API Version (automatically detected if not set) |
@@ -840,46 +816,41 @@ helm delete nautobot
 | metrics.uwsgiExporter.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) uWSGI Exporter readiness probe |
 | metrics.uwsgiExporter.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) uWSGI Exporter resource requests and limits |
 | nautobot.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot pods assignment |
-| nautobot.allowedHosts | string | `"*"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS) |
-| nautobot.apiEndpoint.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
-| nautobot.apiEndpoint.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for Nautobot-API (beta) |
-| nautobot.apiEndpoint.enabled | bool | `false` |  |
+| nautobot.allowedHosts | string | `"*"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS)<sup>[1](#notes)</sup> |
 | nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |
 | nautobot.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
 | nautobot.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for Nautobot (beta) |
 | nautobot.command | list | `["nautobot-server","start","--ini","/opt/nautobot/uwsgi.ini"]` | Override default Nautobot container command (useful when using custom images) |
-| nautobot.config | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value |
+| nautobot.config | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value<sup>[1](#notes)</sup> |
 | nautobot.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Container Security Context |
-| nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE) |
-| nautobot.db.existingSecret | string | `""` | Name of existing secret to use for Database passwords |
-| nautobot.db.existingSecretPasswordKey | string | `"NAUTOBOT_DB_PASSWORD"` | Password key to be retrieved from existing secret |
-| nautobot.db.host | string | `"postgres"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST) |
-| nautobot.db.name | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME) |
-| nautobot.db.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database password, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PASSWORD) |
-| nautobot.db.port | int | `5432` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database port, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PORT) |
-| nautobot.db.timeout | int | `300` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT) |
-| nautobot.db.user | string | `"nautobot"` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER) |
-| nautobot.debug | bool | `false` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG) |
+| nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE)<sup>[1](#notes)</sup> |
+| nautobot.db.existingSecret | string | `""` | Name of existing secret to use for Database passwords<sup>[1](#notes)</sup> |
+| nautobot.db.existingSecretPasswordKey | string | `"NAUTOBOT_DB_PASSWORD"` | Password key to be retrieved from existing secret<sup>[1](#notes)</sup> |
+| nautobot.db.host | string | `"postgres"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST)<sup>[1](#notes)</sup> |
+| nautobot.db.name | string | `"nautobot"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME)<sup>[1](#notes)</sup> |
+| nautobot.db.password | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database password, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PASSWORD)<sup>[1](#notes)</sup> |
+| nautobot.db.port | int | `5432` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database port, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_PORT)<sup>[1](#notes)</sup> |
+| nautobot.db.timeout | int | `300` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT)<sup>[1](#notes)</sup> |
+| nautobot.db.user | string | `"nautobot"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER)<sup>[1](#notes)</sup> |
+| nautobot.debug | bool | `false` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG)<sup>[1](#notes)</sup> |
+| nautobot.enabled | bool | `true` | Enable the default Nautobot deployment |
 | nautobot.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot server pods |
 | nautobot.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot server pods |
 | nautobot.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot server pods |
-| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`) |
+| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`)<sup>[1](#notes)</sup> |
 | nautobot.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot containers |
 | nautobot.extraVolumes | list | `[]` | List of additional volumes for the Nautobot server pod |
-| nautobot.graphqlEndpoint.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
-| nautobot.graphqlEndpoint.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for Nautobot-GraphQL (beta) |
-| nautobot.graphqlEndpoint.enabled | bool | `false` |  |
 | nautobot.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases |
 | nautobot.image.pullPolicy | string | `"Always"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent` |
 | nautobot.image.pullSecrets | list | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | nautobot.image.registry | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | nautobot.image.repository | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
-| nautobot.image.tag | string | `"1.4.5-py3.10"` | Nautobot image tag, common to all deployments |
+| nautobot.image.tag | string | `"1.5.14-py3.10"` | Nautobot image tag, common to all deployments |
 | nautobot.initContainers | list | `[]` | [ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) Add additional init containers to the Nautobot server pods |
 | nautobot.lifecycleHooks | object | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | nautobot.livenessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot liveness probe |
-| nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` |
-| nautobot.metrics | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED) |
+| nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG`<sup>[1](#notes)</sup> |
+| nautobot.metrics | bool | `true` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED)<sup>[1](#notes)</sup> |
 | nautobot.nginx.containerSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) NGINX Container Security Context |
 | nautobot.nginx.enabled | bool | `false` | Enable an nginx sidecar to proxy Nautobot traffic (can be useful for large deployments) |
 | nautobot.nginx.extraEnvVars | list | `[]` | Extra Env Vars to set only on the NGINX containers |
@@ -907,29 +878,31 @@ helm delete nautobot
 | nautobot.podSecurityContext | object | See values.yaml | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context |
 | nautobot.priorityClassName | string | `""` | Nautobot pods' priorityClassName |
 | nautobot.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot readiness probe |
-| nautobot.redis.existingSecret | string | `""` | Name of existing secret to use for Redis passwords |
-| nautobot.redis.existingSecretPasswordKey | string | `"NAUTOBOT_REDIS_PASSWORD"` | Password key to be retrieved from existing secret |
-| nautobot.redis.host | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST) |
-| nautobot.redis.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD) |
-| nautobot.redis.port | int | `6379` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT) |
-| nautobot.redis.ssl | bool | `false` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis ssl enabled, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_SSL) |
-| nautobot.redis.username | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME) |
+| nautobot.redis.existingSecret | string | `""` | Name of existing secret to use for Redis passwords<sup>[1](#notes)</sup> |
+| nautobot.redis.existingSecretPasswordKey | string | `"NAUTOBOT_REDIS_PASSWORD"` | Password key to be retrieved from existing secret<sup>[1](#notes)</sup> |
+| nautobot.redis.host | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST)<sup>[1](#notes)</sup> |
+| nautobot.redis.password | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD)<sup>[1](#notes)</sup> |
+| nautobot.redis.port | int | `6379` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis port, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PORT)<sup>[1](#notes)</sup> |
+| nautobot.redis.ssl | bool | `false` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis ssl enabled, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_SSL)<sup>[1](#notes)</sup> |
+| nautobot.redis.username | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues) Nautobot external Redis username, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_USERNAME)<sup>[1](#notes)</sup> |
 | nautobot.replicaCount | int | `2` | Number of Nautobot server replicas to deploy |
 | nautobot.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) Nautobot resource requests and limits |
 | nautobot.revisionHistoryLimit | int | `3` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) Number of old ReplicaSets to retain |
-| nautobot.secretKey | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/configuration/required-settings/#secret_key) Nautobot Secret Key (NAUTOBOT_SECRET_KEY) |
+| nautobot.secretKey | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#secret_key) Nautobot Secret Key (NAUTOBOT_SECRET_KEY)<sup>[1](#notes)</sup> |
 | nautobot.sidecars | list | `[]` | Add additional sidecar containers to the Nautobot server pods |
-| nautobot.superUser.apitoken | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token) Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN) |
-| nautobot.superUser.email | string | `"admin@example.com"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_email) Configure an email address for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_EMAIL) |
-| nautobot.superUser.enabled | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser) Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER) |
-| nautobot.superUser.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password) Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated |
-| nautobot.superUser.username | string | `"admin"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_name) User name to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME) |
+| nautobot.superUser.apitoken | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token) Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN)<sup>[1](#notes)</sup> |
+| nautobot.superUser.email | string | `"admin@example.com"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_email) Configure an email address for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_EMAIL)<sup>[1](#notes)</sup> |
+| nautobot.superUser.enabled | bool | `true` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser) Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER)<sup>[1](#notes)</sup> |
+| nautobot.superUser.password | string | `""` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password) Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated<sup>[1](#notes)</sup> |
+| nautobot.superUser.username | string | `"admin"` | [ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_name) User name to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME)<sup>[1](#notes)</sup> |
 | nautobot.tolerations | list | `[]` | [ref](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) Tolerations for Nautobot pods assignment |
-| nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value |
+| nautobot.uWSGIini | string | `""` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html) Replace the entire `uwsgi.ini` file with this value<sup>[1](#notes)</sup> |
 | nautobot.updateStrategy.type | string | `"RollingUpdate"` | [ref](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) Nautobot Deployment strategy type |
-| nautobot.uwsgi.listen | int | `128` | [ref](set the socket listen queue size) Set the uWSGI socket listen queue size. |
-| nautobot.uwsgi.processes | int | `3` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#processes) Spawn the specified number of workers/processes |
-| nautobot.uwsgi.threads | int | `2` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#threads) Run each worker in prethreaded mode with the specified number of threads |
+| nautobot.uwsgi.listen | int | `128` | [ref](set the socket listen queue size) Set the uWSGI socket listen queue size.<sup>[1](#notes)</sup> |
+| nautobot.uwsgi.processes | int | `3` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#processes) Spawn the specified number of workers/processes<sup>[1](#notes)</sup> |
+| nautobot.uwsgi.threads | int | `2` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#threads) Run each worker in prethreaded mode with the specified number of threads<sup>[1](#notes)</sup> |
+| nautobots.default.enabled | bool | `true` |  |
+| nautobots.default.ingressPath | string | `"/"` |  |
 | postgresql.auth.database | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name |
 | postgresql.auth.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password |
 | postgresql.auth.username | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username |
@@ -1004,3 +977,10 @@ helm delete nautobot
 | serviceAccount.automountServiceAccountToken | bool | `false` | Auto Mount Service account token |
 | serviceAccount.create | bool | `true` | Enable creation of a Kubernetes Service Account for Nautobot |
 | serviceAccount.name | string | `$release_name` | Name of the Kubernetes Service Account for Nautobot |
+| workers.beat | object | `{"command":["nautobot-server","celery","beat","--loglevel","$(NAUTOBOT_LOG_LEVEL)"],"enabled":true,"livenessProbe":{"initialDelaySeconds":30},"readinessProbe":{"initialDelaySeconds":30},"replicaCount":1,"resources":{"requests":{"cpu":"5m","memory":"256M"}}}` | Values for the Celery Beat deployment see values.yaml `.celery` for assumed defaults |
+| workers.default | object | `{"enabled":true,"taskQueues":"default"}` | Values for the Default Celery Worker deployment see values.yaml `.celery` for assumed defaults |
+| workers.default.taskQueues | string | `"default"` | [ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/) a comma separated list of Celery Queues to listen on. |
+
+## Notes
+
+1. These are global values which apply to all Nautobot and Celery pods, these can not be overridden by the `nautobots` or `workers` dictionaries.

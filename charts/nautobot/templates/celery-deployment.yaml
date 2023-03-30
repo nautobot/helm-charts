@@ -1,141 +1,150 @@
+{{- $workers := (include "nautobot.workers" .) | mustFromJson -}}
+{{- range $celeryName, $celery := $workers -}}
+{{- if $celery.enabled }}
 ---
-{{- if .Values.celeryWorker.enabled }}
-apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" $ }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-celery-worker
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: nautobot-celery-worker
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  name: {{ include "common.names.fullname" $ }}-celery-{{ $celeryName }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    app.kubernetes.io/component: nautobot-celery-{{ $celeryName }}
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.celeryWorker.autoscaling.enabled }}
-  replicas: {{ .Values.celeryWorker.replicaCount }}
+  {{- if not $celery.autoscaling.enabled }}
+  replicas: {{ $celery.replicaCount }}
   {{- end }}
-  revisionHistoryLimit: {{ .Values.celeryWorker.revisionHistoryLimit | int }}
-  {{- if .Values.celeryWorker.updateStrategy }}
-  strategy: {{- toYaml .Values.celeryWorker.updateStrategy | nindent 4 }}
+  revisionHistoryLimit: {{ $celery.revisionHistoryLimit | int }}
+  {{- if $celery.updateStrategy }}
+  strategy: {{- toYaml $celery.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: nautobot-celery-worker
+    matchLabels: {{- include "common.labels.matchLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: nautobot-celery-{{ $celeryName }}
   template:
     metadata:
-      {{- if .Values.celeryWorker.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.podAnnotations "context" $) | nindent 8 }}
+      {{- if $celery.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" $celery.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: nautobot-celery-worker
-        {{- if .Values.celeryWorker.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.podLabels "context" $) | nindent 8 }}
+      labels: {{- include "common.labels.standard" $ | nindent 8 }}
+        app.kubernetes.io/component: nautobot-celery-{{ $celeryName }}
+        {{- if $celery.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" $celery.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      {{- if .Values.serviceAccount.name }}
-      serviceAccountName: {{ template "nautobot.serviceAccountName" . }}
+      {{- if $.Values.serviceAccount.name }}
+      serviceAccountName: {{ include "nautobot.serviceAccountName" $ }}
       {{- end }}
-      {{- include "nautobot.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.celeryWorker.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.hostAliases "context" $) | nindent 8 }}
+      {{- include "nautobot.imagePullSecrets" $ | nindent 6 }}
+      {{- if $celery.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" $celery.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.celeryWorker.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.celeryWorker.affinity "context" $) | nindent 8 }}
+      {{- if $celery.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" $celery.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.celeryWorker.podAffinityPreset "component" "nautobot-celery-worker" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.celeryWorker.podAntiAffinityPreset "component" "nautobot-celery-worker" "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.celeryWorker.nodeAffinityPreset.type "key" .Values.celeryWorker.nodeAffinityPreset.key "values" .Values.celeryWorker.nodeAffinityPreset.values) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" $celery.podAffinityPreset "component" (printf "%s-%s" "nautobot-celery" $celeryName) "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $celery.podAntiAffinityPreset "component" (printf "%s-%s" "nautobot-celery" $celeryName) "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $celery.nodeAffinityPreset.type "key" $celery.nodeAffinityPreset.key "values" $celery.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
-      {{- if .Values.celeryWorker.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.celeryWorker.nodeSelector "context" $) | nindent 8 }}
+      {{- if $celery.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" $celery.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.celeryWorker.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.tolerations "context" .) | nindent 8 }}
+      {{- if $celery.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" $celery.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.celeryWorker.priorityClassName }}
-      priorityClassName: {{ .Values.celeryWorker.priorityClassName | quote }}
+      {{- if $celery.priorityClassName }}
+      priorityClassName: {{ $celery.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.celeryWorker.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.celeryWorker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- if $celery.podSecurityContext.enabled }}
+      securityContext: {{- omit $celery.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if .Values.celeryWorker.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.initContainers "context" $) | nindent 8 }}
+        {{- if $celery.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" $celery.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: nautobot-celery
           tty: true
-          image: {{ template "nautobot.image" . }}
-          imagePullPolicy: {{ .Values.nautobot.image.pullPolicy }}
-          {{- if .Values.celeryWorker.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.lifecycleHooks "context" $) | nindent 12 }}
+          image: {{ include "nautobot.image" $ }}
+          imagePullPolicy: {{ $.Values.nautobot.image.pullPolicy }}
+          {{- if $celery.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" $celery.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.celeryWorker.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.celeryWorker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if $celery.containerSecurityContext.enabled }}
+          securityContext: {{- omit $celery.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.celeryWorker.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.command "context" $) | nindent 12 }}
+          {{- if $celery.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" $celery.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.celeryWorker.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.args "context" $) | nindent 12 }}
+          {{- if $celery.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" $celery.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            {{- if .Values.celeryWorker.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.celeryWorker.extraEnvVars "context" $) | nindent 12 }}
+            - name: "NAUTOBOT_K8S_COMPONENT"
+              value: "nautobot-celery-{{ $celeryName }}"
+            {{- if (ne $celeryName "beat") }}
+            - name: "CELERY_TASK_QUEUES"
+              value: {{ $celery.taskQueues | quote }}
+            {{- end }}
+            {{- if $celery.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" $celery.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ include "common.names.fullname" . }}-env
+                name: {{ include "common.names.fullname" $ }}-env
             - secretRef:
-                name: {{ include "common.names.fullname" . }}-env
-            {{- if .Values.celeryWorker.extraEnvVarsCM }}
-            {{- range .Values.celeryWorker.extraEnvVarsCM }}
+                name: {{ include "common.names.fullname" $ }}-env
+            {{- if $celery.extraEnvVarsCM }}
+            {{- range $celery.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
             {{- end }}
             {{- end }}
-            {{- if .Values.celeryWorker.extraEnvVarsSecret }}
-            {{- range .Values.celeryWorker.extraEnvVarsSecret }}
+            {{- if $celery.extraEnvVarsSecret }}
+            {{- range $celery.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
             {{- end }}
             {{- end }}
-          {{- if .Values.celeryWorker.resources }}
-          resources: {{- toYaml .Values.celeryWorker.resources | nindent 12 }}
+          {{- if $celery.resources }}
+          resources: {{- toYaml $celery.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.celeryWorker.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.celeryWorker.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- if $celery.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $celery.livenessProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.celeryWorker.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.celeryWorker.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- if $celery.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $celery.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: "git-repos"
               mountPath: "/opt/nautobot/git"
-            {{- if .Values.nautobot.config }}
+            {{- if $.Values.nautobot.config }}
             - name: "nautobot-config"
               mountPath: "/opt/nautobot/nautobot_config.py"
               subPath: "nautobot_config.py"
             {{- end }}
-            {{- if .Values.celeryWorker.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.celeryWorker.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- if $celery.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" $celery.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-        {{- if .Values.celeryWorker.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.celeryWorker.sidecars "context" $) | nindent 8 }}
+        {{- if $celery.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" $celery.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: "git-repos"
           emptyDir: {}
-        {{- if .Values.nautobot.config }}
+        {{- if $.Values.nautobot.config }}
         - name: "nautobot-config"
           configMap:
-            name: {{ include "common.names.fullname" . }}-config
+            name: {{ include "common.names.fullname" $ }}-config
         {{- end }}
-        {{- if .Values.celeryWorker.extraVolumes }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.celeryWorker.extraVolumes "context" $) | nindent 8 }}
+        {{- if $celery.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" $celery.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}
 {{- end }}

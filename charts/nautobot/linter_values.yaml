@@ -2,10 +2,6 @@
 nautobot:
   apiEndpoint:
     enabled: true
-  autoscaling:
-    enabled: true
-  graphqlEndpoint:
-    enabled: true
   pdb:
     create: true
   extraVolumeMounts:
@@ -18,6 +14,20 @@ nautobot:
         secretName: "nautobot-gmail-auth"
   nginx:
     enabled: true
+
+nautobots:
+  # Enable a separate deployment specifically for API requests
+  api:
+    enabled: true
+    ingressPath: "/api"
+    replicaCount: 3
+    autoscaling:
+      enabled: false
+
+  # Enable a separate deployment specifically for GraphQL requests
+  graphql:
+    enabled: true
+    ingressPath: "/graphql"
 
 celeryBeat:
   extraVolumeMounts:

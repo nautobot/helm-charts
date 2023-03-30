@@ -1,92 +1,26 @@
-{{- if .Values.nautobot.autoscaling.enabled }}
+{{- $nautobots := (include "nautobot.nautobots" .) | mustFromJson -}}
+{{- range $nautobotName, $nautobot := $nautobots -}}
+{{- if (and $nautobot.enabled $nautobot.autoscaling.enabled) }}
 ---
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" $ }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" $ }}-{{ $nautobotName }}
   labels:
-    app.kubernetes.io/component: nautobot
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: nautobot-{{ $nautobotName }}
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "common.names.fullname" . }}
-  minReplicas: {{ .Values.nautobot.autoscaling.minReplicas | int }}
-  maxReplicas: {{ .Values.nautobot.autoscaling.maxReplicas | int }}
+    name: {{ include "common.names.fullname" $ }}-{{ $nautobotName }}
+  minReplicas: {{ $nautobot.autoscaling.minReplicas | int }}
+  maxReplicas: {{ $nautobot.autoscaling.maxReplicas | int }}
   metrics:
-    {{- toYaml .Values.nautobot.autoscaling.metrics | nindent 4 }}
+    {{- toYaml $nautobot.autoscaling.metrics | nindent 4 }}
   behavior:
-    {{- toYaml .Values.nautobot.autoscaling.behavior | nindent 4 }}
+    {{- toYaml $nautobot.autoscaling.behavior | nindent 4 }}
 {{- end }}
-{{- if .Values.celeryWorker.autoscaling.enabled }}
----
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
-kind: HorizontalPodAutoscaler
-metadata:
-  name: {{ include "common.names.fullname" . }}-celery-worker
-  labels:
-    app.kubernetes.io/component: nautobot-celery-worker
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: {{ include "common.names.fullname" . }}-celery-worker
-  minReplicas: {{ .Values.celeryWorker.autoscaling.minReplicas | int }}
-  maxReplicas: {{ .Values.celeryWorker.autoscaling.maxReplicas | int }}
-  metrics:
-    {{- toYaml .Values.celeryWorker.autoscaling.metrics | nindent 4 }}
-  behavior:
-    {{- toYaml .Values.celeryWorker.autoscaling.behavior | nindent 4 }}
-{{- end }}
-{{- if .Values.nautobot.apiEndpoint.autoscaling.enabled }}
----
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
-kind: HorizontalPodAutoscaler
-metadata:
-  name: {{ include "common.names.fullname" . }}-api
-  labels:
-    app.kubernetes.io/component: nautobot-api
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: {{ include "common.names.fullname" . }}-api
-  minReplicas: {{ .Values.nautobot.apiEndpoint.autoscaling.minReplicas | int }}
-  maxReplicas: {{ .Values.nautobot.apiEndpoint.autoscaling.maxReplicas | int }}
-  metrics:
-    {{- toYaml .Values.nautobot.apiEndpoint.autoscaling.metrics | nindent 4 }}
-  behavior:
-    {{- toYaml .Values.nautobot.apiEndpoint.autoscaling.behavior | nindent 4 }}
-{{- end }}
-{{- if .Values.nautobot.graphqlEndpoint.autoscaling.enabled }}
----
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
-kind: HorizontalPodAutoscaler
-metadata:
-  name: {{ include "common.names.fullname" . }}-graphql
-  labels:
-    app.kubernetes.io/component: nautobot-graphql
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: {{ include "common.names.fullname" . }}-graphql
-  minReplicas: {{ .Values.nautobot.graphqlEndpoint.autoscaling.minReplicas | int }}
-  maxReplicas: {{ .Values.nautobot.graphqlEndpoint.autoscaling.maxReplicas | int }}
-  metrics:
-    {{- toYaml .Values.nautobot.graphqlEndpoint.autoscaling.metrics | nindent 4 }}
-  behavior:
-    {{- toYaml .Values.nautobot.graphqlEndpoint.autoscaling.behavior | nindent 4 }}
 {{- end }}

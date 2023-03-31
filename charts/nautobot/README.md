@@ -161,18 +161,7 @@ nautobot:
       secret:
         secretName: "nautobot-redis-crt"
 
-celeryBeat:
-  extraVolumeMounts:
-    - mountPath: "/opt/nautobot/redis"
-      name: "redis-tls"
-  extraVolumes:
-    - name: "redis-tls"
-      secret:
-        secretName: "nautobot-redis-crt"
-
-celeryWorker:
-  replicaCount: 1
-  resources: {}
+celery:
   extraVolumeMounts:
     - mountPath: "/opt/nautobot/redis"
       name: "redis-tls"
@@ -520,7 +509,7 @@ In practice it is highly recommended to utilize a cloud providers relational dat
 | nautobot.db.timeout | int | `300` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT)<sup>[1](#notes)</sup> |
 | nautobot.db.user | string | `"nautobot"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER)<sup>[1](#notes)</sup> |
 | nautobot.debug | bool | `false` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG)<sup>[1](#notes)</sup> |
-| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`)<sup>[1](#notes)</sup> |
+| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup> |
 | nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG`<sup>[1](#notes)</sup> |
 | nautobot.metrics | bool | `true` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED)<sup>[1](#notes)</sup> |
 | nautobot.redis.existingSecret | string | `""` | Name of existing secret to use for Redis passwords<sup>[1](#notes)</sup> |
@@ -837,7 +826,7 @@ helm delete nautobot
 | nautobot.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot server pods |
 | nautobot.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot server pods |
 | nautobot.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot server pods |
-| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`)<sup>[1](#notes)</sup> |
+| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup> |
 | nautobot.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot containers |
 | nautobot.extraVolumes | list | `[]` | List of additional volumes for the Nautobot server pod |
 | nautobot.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases |
@@ -903,6 +892,7 @@ helm delete nautobot
 | nautobot.uwsgi.threads | int | `2` | [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#threads) Run each worker in prethreaded mode with the specified number of threads<sup>[1](#notes)</sup> |
 | nautobots.default.enabled | bool | `true` |  |
 | nautobots.default.ingressPath | string | `"/"` |  |
+| nautobots.default.initNautobot | bool | `true` |  |
 | postgresql.auth.database | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL database name |
 | postgresql.auth.password | string | `""` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL user password |
 | postgresql.auth.username | string | `"nautobot"` | [ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters) PostgreSQL username |

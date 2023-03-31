@@ -65,6 +65,7 @@ spec:
       securityContext: {{- omit $nautobot.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
+        {{- if $nautobot.initNautobot }}
         # This init container will run post_upgrade which initializes/upgrades the DB as well as collects static files
         - name: nautobot-init
           image: {{ include "nautobot.image" $ }}
@@ -122,6 +123,7 @@ spec:
             {{- if $nautobot.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $nautobot.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- end }}
         {{- if $nautobot.nginx.enabled }}
         # This container is used to copy the self-signed SSL certs from the Nautobot pod to the nginx pod and changes the permission
         - name: nautobot-certs

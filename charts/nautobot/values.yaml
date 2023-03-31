@@ -390,7 +390,7 @@ nautobot:
     # -- [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#threads) Run each worker in prethreaded mode with the specified number of threads<sup>[1](#notes)</sup>
     threads: 2
 
-  # -- An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot related deployments (i.e. `celeryWorker` and `rqWorker`)<sup>[1](#notes)</sup>
+  # -- An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup>
   extraVars: []  # https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/
   # e.g.
   # extraVars:
@@ -401,15 +401,19 @@ nautobots:
   default:
     enabled: true
     ingressPath: "/"
+    initNautobot: true
+
 # Enable a separate deployment specifically for API requests
 # api:
 #   enabled: true
 #   ingressPath: "/api"
+#   initNautobot: false
 
 # # Enable a separate deployment specifically for GraphQL requests
 # graphql:
 #   enabled: true
 #   ingressPath: "/graphql"
+#   initNautobot: false
 
 # Default values for Celery Workers
 celery:

@@ -1,4 +1,6 @@
 {{- $nautobots := (include "nautobot.nautobots" .) | mustFromJson -}}
+{{- $nautobotKeys :=  keys (omit $nautobots "default") | sortAlpha -}}
+{{- $nautobotKeys := append $nautobotKeys "default"}}
 ---
 {{- if .Values.ingress.enabled }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
@@ -22,7 +24,8 @@ spec:
     - host: {{ .Values.ingress.hostname }}
       http:
         paths:
-          {{- range $nautobotName, $nautobot := $nautobots -}}
+          {{- range $nautobotName := $nautobotKeys -}}
+          {{- $nautobot := (first (values (pick $nautobots $nautobotName))) }}
           {{- if $nautobot.enabled }}
           - path: {{ $nautobot.ingressPath | quote }}
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
@@ -36,9 +39,10 @@ spec:
     - host: {{ .hostname | quote }}
       http:
         paths:
-          {{- range $nautobotName, $nautobot := $nautobots -}}
-          {{- if $nautobot.enabled -}}
-          - path: {{ $nautobot.ingressPath }}
+          {{- range $nautobotName := $nautobotKeys -}}
+          {{- $nautobot := (first (values (pick $nautobots $nautobotName))) }}
+          {{- if $nautobot.enabled }}
+          - path: {{ $nautobot.ingressPath | quote }}
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ $.Values.ingress.pathType }}
             {{- end }}

@@ -800,7 +800,8 @@
             {
               "required": [
                 "enabled",
-                "ingressPath"
+                "ingressPath",
+                "initNautobot"
               ],
               "properties": {
                 "enabled": {
@@ -808,6 +809,9 @@
                 },
                 "ingressPath": {
                   "type": "string"
+                },
+                "initNautobot": {
+                  "type": "boolean"
                 }
               }
             }

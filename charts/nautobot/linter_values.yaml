@@ -1,7 +1,5 @@
 ---
 nautobot:
-  apiEndpoint:
-    enabled: true
   pdb:
     create: true
   extraVolumeMounts:
@@ -20,6 +18,7 @@ nautobots:
   api:
     enabled: true
     ingressPath: "/api"
+    initNautobot: false
     replicaCount: 3
     autoscaling:
       enabled: false
@@ -27,19 +26,23 @@ nautobots:
   # Enable a separate deployment specifically for GraphQL requests
   graphql:
     enabled: true
+    initNautobot: false
     ingressPath: "/graphql"
+    autoscaling:
+      enabled: true
 
-celeryBeat:
-  extraVolumeMounts:
-    - name: "gmail-auth"
-      mountPath: "/opt/nautobot/circuit-maintenance-secrets"
-      readOnly: true
-  extraVolumes:
-    - name: "gmail-auth"
-      secret:
-        secretName: "nautobot-gmail-auth"
+workers:
+  beat:
+    extraVolumeMounts:
+      - name: "gmail-auth"
+        mountPath: "/opt/nautobot/circuit-maintenance-secrets"
+        readOnly: true
+    extraVolumes:
+      - name: "gmail-auth"
+        secret:
+          secretName: "nautobot-gmail-auth"
 
-celeryWorker:
+celery:
   autoscaling:
     enabled: true
   extraVolumeMounts:
@@ -64,6 +67,13 @@ ingress:
   enabled: true
   ingressClassName: "nginx"
   path: "/*"
+  extraHosts:
+    - hostname: "nautobot2.local"
+      path: "/"
+      pathType: "Prefix"
+      extraPaths: []
+      backendProtocol: "https"
+  tls: true
 
 metrics:
   enabled: true

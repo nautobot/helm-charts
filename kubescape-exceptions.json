@@ -213,5 +213,27 @@
         "ruleName": "pods-in-default-namespace"
       }
     ]
+  },
+  {
+    "name": "ignore-no-signature",
+    "policyType": "postureExceptionPolicy",
+    "actions": [
+      "alertOnly"
+    ],
+    "resources": [
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": ".*",
+          "name": ".*"
+        }
+      }
+    ],
+    "posturePolicies": [
+      {
+        "frameworkName": "ArmoBest",
+        "ruleName": "has-image-signature"
+      }
+    ]
   }
 ]

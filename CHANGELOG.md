@@ -268,7 +268,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Security scanning provided by Snyk and Kubescan to CI process
+* Security scanning provided by Snyk and Kubescape to CI process
 * Security remediations for most findings from security scanners, notably:
 
 ```yaml

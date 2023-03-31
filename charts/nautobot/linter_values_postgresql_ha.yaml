@@ -22,10 +22,10 @@ metrics:
     enabled: true
 
 commonAnnotations:
-  annotateeverything: "everywhere"
+  annotate_everything: "everywhere"
 serviceAccount:
   annotations:
-    saannotation: "only_the_sa"
+    service_account_annotation: "only_the_sa"
 
 mariadb:
   enabled: false

@@ -337,7 +337,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 
 {{/*
 Build a dict of nautobot deployments each item will be keyed by the name to use for the deployment
-name and will containe "ingressPath" specifying the path for which this Nautobot deployment will
+name and will contain "ingressPath" specifying the path for which this Nautobot deployment will
 respond.  The .Values.nautobot defines the default nautobot deployment with an ingressPath of / and
 the default values for all other nautobot deployments.  Other Nautobot deployments can be specified
 in the .Values.Nautobots key which is a dictionary with the same spec as .Values.Nautobot.

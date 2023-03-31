@@ -13,7 +13,7 @@ rule 'MD013', :line_length => 99999
 # CHANGELOGs have a lot of "duplicate heading" findings
 exclude_rule 'MD024'
 
-# Allow question and exlamation mark in heading
+# Allow question and exclamation mark in heading
 rule 'MD026', :punctuation => '.,;:。，；：'
 
 # Ordered lists on GitHub should be 1,2,3 not 1,1,1

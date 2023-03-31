@@ -38,9 +38,9 @@ Before pushing any code the pre-commit tests should all pass locally, these test
 
 Pre-commit runs several [built-in hooks](https://pre-commit.com/hooks.html) for linting tasks such as:
 
-* `check-case-conflict` - Check for files that would conflict in case-insensitive filesystems.
-* `check-json` - This hook checks json files for parseable syntax.
-* `check-yaml` - This hook checks yaml files for parseable syntax.
+* `check-case-conflict` - Check for files that would conflict in case-insensitive file systems.
+* `check-json` - This hook checks json files for parsable syntax.
+* `check-yaml` - This hook checks yaml files for parsable syntax.
 * `check-merge-conflict` - Check for files that contain merge conflict strings.
 * `end-of-file-fixer` - Ensures that a file is either empty or ends with one newline.
 * `fix-byte-order-marker` - removes UTF-8 byte order marker.
@@ -55,7 +55,7 @@ Some other [generic linting from Lucas-C](https://github.com/Lucas-C/pre-commit-
 
 Project specific linting includes:
 
-* [`helmlint`](https://helm.sh/docs/helm/helm_lint/) - Performs basic helm linting as well as [schema validation](https://json-schema.org/) with `values.schema.json`.  The JSON schema is also validated at runtime when a user attempts to deploy the chart.
+* [`helm_lint`](https://helm.sh/docs/helm/helm_lint/) - Performs basic helm linting as well as [schema validation](https://json-schema.org/) with `values.schema.json`.  The JSON schema is also validated at runtime when a user attempts to deploy the chart.
 * [`yamllint`](https://github.com/adrienverge/yamllint) - Runs `yamllint` based on the `.yamllint` configuration in the root of the repo.
 
 To run a single check from the above list run:

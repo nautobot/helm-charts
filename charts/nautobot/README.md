@@ -125,9 +125,13 @@ postgresql:
 
 This will autogenerate certificates for use with Postgres.  Unfortunately, to force Nautobot to use Postgres over SSL a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
 
+<!-- spell-checker: disable -->
+
 ```python
 DATABASES["default"]["OPTIONS"] = {"sslmode": "require"}
 ```
+
+<!-- spell-checker: enable -->
 
 ### External Redis
 
@@ -148,6 +152,8 @@ redis:
 ### Redis TLS
 
 To enable TLS within the deployment of Nautobot and the embedded [Bitnami Redis subchart](https://github.com/bitnami/charts/tree/master/bitnami/redis) set the following helm values:
+
+<!-- spell-checker: disable -->
 
 ```yaml
 nautobot:
@@ -181,7 +187,11 @@ redis:
     # certCAFilename: "ca.crt"
 ```
 
+<!-- spell-checker: enable -->
+
 This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot, a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
+
+<!-- spell-checker: disable -->
 
 ```python
 import ssl
@@ -210,6 +220,8 @@ CACHEOPS_REDIS = {
     "ssl_keyfile": "/opt/nautobot/redis/tls.key",
 }
 ```
+
+<!-- spell-checker: enable -->
 
 The secret name will change based on your Helm release name.  It is also possible and likely more secure to generate your own certificates and secrets, doing so is beyond the scope of this documentation, however, is described in the additional resources listed below.
 
@@ -334,9 +346,9 @@ mariadb:
 
 Use existing secret for password details (auth.rootPassword, auth.password, auth.replicationPassword will be ignored and picked up from this secret). The secret has to contain the keys mariadb-root-password, mariadb-replication-password and mariadb-password
 
-### PosgreSQL High Availability
+### PostgreSQL High Availability
 
-This chart supports the deployment of PostgreSQL in a Highly Available (HA) fasion as provided by the Bitnami [PostgreSQL-HA](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart.  To enable HA PostgreSQL use the following values:
+This chart supports the deployment of PostgreSQL in a Highly Available (HA) fashion as provided by the Bitnami [PostgreSQL-HA](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart.  To enable HA PostgreSQL use the following values:
 
 ```yaml
 postgresql:
@@ -367,7 +379,7 @@ This secret can be created with:
 kubectl create secret generic my-secret --from-literal=admin-password=change-me --from-literal=postgresql-password=change-me --from-literal=postgresql-postgres-password=change-me --from-literal=repmgr-password=change-me
 ```
 
-This helm chart's support for PosgreSQL HA is still in an early alpha/beta phase you should use this feature cautiously.
+This helm chart's support for PostgreSQL HA is still in an early alpha/beta phase you should use this feature cautiously.
 
 ### Ingress
 
@@ -378,7 +390,7 @@ ingress:
   enabled: true
   hostname: nautobot.example.com
   tls: true
-  secretName: myingress-cert
+  secretName: ingress-cert
   annotations:
     kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
@@ -489,7 +501,7 @@ redis:
     password: "change-me"
 ```
 
-[PostgreSQL HA](#posgresql-high-availability) and [Redis Sentinel](#redis-sentinel) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.
+[PostgreSQL HA](#postgresql-high-availability) and [Redis Sentinel](#redis-sentinel) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.
 
 In practice it is highly recommended to utilize a cloud providers relational database service such as RDS.  Additionally, when running Nautobot in production (especially if you are looking for postgres or redis high availability), it is recommended to deploy each chart separately versus deploying them as subcharts of Nautobot.
 
@@ -497,7 +509,7 @@ In practice it is highly recommended to utilize a cloud providers relational dat
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| nautobot.allowedHosts | string | `"*"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS)<sup>[1](#notes)</sup> |
+| nautobot.allowedHosts | string | `"*"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#allowed_hosts) Space separated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS)<sup>[1](#notes)</sup> |
 | nautobot.config | string | `""` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/) Replace the entire `nautobot_config.py` file with this value<sup>[1](#notes)</sup> |
 | nautobot.db.engine | string | `"django.db.backends.postgresql"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot database engine, valid values: `django.db.backends.postgresql` and `django.db.backends.mysql` (NAUTOBOT_DB_ENGINE)<sup>[1](#notes)</sup> |
 | nautobot.db.existingSecret | string | `""` | Name of existing secret to use for Database passwords<sup>[1](#notes)</sup> |
@@ -509,7 +521,7 @@ In practice it is highly recommended to utilize a cloud providers relational dat
 | nautobot.db.timeout | int | `300` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot database timeout (NAUTOBOT_DB_TIMEOUT)<sup>[1](#notes)</sup> |
 | nautobot.db.user | string | `"nautobot"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases) Nautobot external database username, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_USER)<sup>[1](#notes)</sup> |
 | nautobot.debug | bool | `false` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG)<sup>[1](#notes)</sup> |
-| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup> |
+| nautobot.extraVars | list | `[]` | An array of environment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup> |
 | nautobot.logLevel | string | `"INFO"` | Log Level used for Celery logging, valid values: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG`<sup>[1](#notes)</sup> |
 | nautobot.metrics | bool | `true` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#metrics_enabled) Enable Prometheus metrics endpoint (NAUTOBOT_METRICS_ENABLED)<sup>[1](#notes)</sup> |
 | nautobot.redis.existingSecret | string | `""` | Name of existing secret to use for Redis passwords<sup>[1](#notes)</sup> |
@@ -552,7 +564,7 @@ export POSTGRES_PASSWORD=$(kubectl get secret --namespace $NAMESPACE $POSTGRES_S
 echo $POSTGRES_PASSWORD | kubectl exec -itn $NAMESPACE statefulset.apps/nautobot-postgresql -- pg_dump --username nautobot --clean --if-exists nautobot > backup.sql
 ```
 
-NOTE: The name of the secret is dependent on the helm release name and may be different in your envirnoment.
+NOTE: The name of the secret is dependent on the helm release name and may be different in your environment.
 
 Make sure to save your `NAUTOBOT_SECRET_KEY` in a safe place as well:
 
@@ -723,7 +735,7 @@ helm delete nautobot
 | celery.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot Celery Worker pods |
 | celery.podAntiAffinityPreset | string | `"soft"` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Celery Worker Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | celery.podLabels | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for Nautobot Celery Worker pods |
-| celery.podSecurityContext | object | See values.yaml | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Pods Security Context |
+| celery.podSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Pods Security Context |
 | celery.priorityClassName | string | `""` | Nautobot Celery Worker pods' priorityClassName |
 | celery.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot Celery Worker readiness probe |
 | celery.replicaCount | int | `2` | Number of Nautobot Celery Workers replicas to deploy |
@@ -805,7 +817,7 @@ helm delete nautobot
 | metrics.uwsgiExporter.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) uWSGI Exporter readiness probe |
 | metrics.uwsgiExporter.resources | object | See values.yaml | [ref](http://kubernetes.io/docs/user-guide/compute-resources/) uWSGI Exporter resource requests and limits |
 | nautobot.affinity | object | `{}` | [ref](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) Affinity for Nautobot pods assignment |
-| nautobot.allowedHosts | string | `"*"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS)<sup>[1](#notes)</sup> |
+| nautobot.allowedHosts | string | `"*"` | [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#allowed_hosts) Space separated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS)<sup>[1](#notes)</sup> |
 | nautobot.args | list | `[]` | Override default Nautobot container args (useful when using custom images) |
 | nautobot.autoscaling | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) Define a horizontal pod autoscaler |
 | nautobot.autoscaling.enabled | bool | `false` | Add an horizontal pod autoscaler for Nautobot (beta) |
@@ -826,7 +838,7 @@ helm delete nautobot
 | nautobot.extraEnvVars | list | `[]` | Extra Env Vars to set only on the Nautobot server pods |
 | nautobot.extraEnvVarsCM | list | `[]` | List of names of existing ConfigMaps containing extra env vars for Nautobot server pods |
 | nautobot.extraEnvVarsSecret | list | `[]` | List of names of existing Secrets containing extra env vars for Nautobot server pods |
-| nautobot.extraVars | list | `[]` | An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup> |
+| nautobot.extraVars | list | `[]` | An array of environment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup> |
 | nautobot.extraVolumeMounts | list | `[]` | List of additional volumeMounts for the Nautobot containers |
 | nautobot.extraVolumes | list | `[]` | List of additional volumes for the Nautobot server pod |
 | nautobot.hostAliases | list | `[]` | [ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) Nautobot pods host aliases |
@@ -864,7 +876,7 @@ helm delete nautobot
 | nautobot.podAnnotations | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Annotations for Nautobot pods |
 | nautobot.podAntiAffinityPreset | string | `"soft"` | [ref](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) Nautobot Pod anti-affinity preset. Ignored if `nautobot.affinity` is set. Valid values: `soft` or `hard` |
 | nautobot.podLabels | object | `{}` | [ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Extra labels for Nautobot pods |
-| nautobot.podSecurityContext | object | See values.yaml | [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context |
+| nautobot.podSecurityContext | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context |
 | nautobot.priorityClassName | string | `""` | Nautobot pods' priorityClassName |
 | nautobot.readinessProbe | object | See values.yaml | [ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes) Nautobot readiness probe |
 | nautobot.redis.existingSecret | string | `""` | Name of existing secret to use for Redis passwords<sup>[1](#notes)</sup> |

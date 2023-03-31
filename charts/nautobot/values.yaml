@@ -90,7 +90,7 @@ nautobot:
       cpu: "1000m"
       memory: "8704M"
 
-  # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context
+  # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Pods Security Context
   # @default -- See values.yaml
   podSecurityContext:
     enabled: true
@@ -319,7 +319,7 @@ nautobot:
   # -- [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#debug) Enable Nautobot Debug (NAUTOBOT_DEBUG)<sup>[1](#notes)</sup>
   debug: false
 
-  # -- [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#allowed_hosts) Space seperated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS)<sup>[1](#notes)</sup>
+  # -- [ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#allowed_hosts) Space separated list of Nautobot allowed hosts (NAUTOBOT_ALLOWED_HOSTS)<sup>[1](#notes)</sup>
   allowedHosts: "*"
 
   # Nautobot database configuration
@@ -390,7 +390,7 @@ nautobot:
     # -- [ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#threads) Run each worker in prethreaded mode with the specified number of threads<sup>[1](#notes)</sup>
     threads: 2
 
-  # -- An array of envirnoment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup>
+  # -- An array of environment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup>
   extraVars: []  # https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/
   # e.g.
   # extraVars:
@@ -467,7 +467,7 @@ celery:
       cpu: "3328m"
       memory: "6656M"
 
-  # -- [ref](ttps://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Pods Security Context
+  # -- [ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) Nautobot Celery Worker Pods Security Context
   # @default -- See values.yaml
   podSecurityContext:
     enabled: true

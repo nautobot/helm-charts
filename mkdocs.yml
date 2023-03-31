@@ -1,4 +1,5 @@
 ---
+# spell-checker: disable
 dev_addr: "0.0.0.0:8001"
 site_name: "Nautobot Helm Charts"
 # site_url: "https://tbd.example.com"
@@ -61,4 +62,11 @@ plugins:
 
 nav:
   - Overview: "index.md"
-  - Examples: "examples.md"
+  - Installation:
+    - Basic Installation: "installation/basic.md"  # yamllint disable-line rule:indentation
+    - Production Installation: "installation/production.md"
+    - Dependencies: "installation/dependencies.md"
+    - Prerequisites: "installation/prerequisites.md"
+    - System Requirements: "installation/system-requirements.md"
+  - Advanced Usage:
+    - Topic1: "advanced-features/index.md"  # yamllint disable-line rule:indentation

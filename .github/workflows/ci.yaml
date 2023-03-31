@@ -91,12 +91,15 @@ jobs:
   kubescape-security-check:
     name: "Kubescape Security Scanning"
     runs-on: "ubuntu-22.04"
+    env:
+      GITHUB_PATH: "/home/runner/.kubescape/bin"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
       - uses: "azure/setup-helm@v3"
       - name: "Install Kubescape"
-        run: "curl -s https://raw.githubusercontent.com/armosec/kubescape/master/install.sh | /bin/bash"
+        run: "curl -s https://raw.githubusercontent.com/kubescape/kubescape/master/install.sh | /bin/bash"
+      - run: 'echo "${HOME}/.kubescape/bin" >> $GITHUB_PATH'  # yamllint disable-line rule:quoted-strings
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
       - run: "helm dependency update charts/nautobot"
       - name: "Kubescape NSA Scan - PostgreSQL"

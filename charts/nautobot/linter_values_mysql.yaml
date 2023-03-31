@@ -3,7 +3,7 @@ nautobot:
   autoscaling:
     enabled: true
 
-celeryWorker:
+celery:
   autoscaling:
     enabled: true
 

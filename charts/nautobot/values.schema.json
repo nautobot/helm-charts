@@ -5,34 +5,30 @@
       "type": "object",
       "additionalProperties": false
     },
+    "celery": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "concurrency": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "taskQueues": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
     "deployment": {
       "type": "object",
-      "required": [
-        "affinity",
-        "args",
-        "command",
-        "containerSecurityContext",
-        "extraEnvVars",
-        "extraVolumeMounts",
-        "extraVolumes",
-        "hostAliases",
-        "initContainers",
-        "lifecycleHooks",
-        "livenessProbe",
-        "nodeAffinityPreset",
-        "nodeSelector",
-        "podAffinityPreset",
-        "podAntiAffinityPreset",
-        "podAnnotations",
-        "podLabels",
-        "podSecurityContext",
-        "priorityClassName",
-        "readinessProbe",
-        "resources",
-        "sidecars",
-        "tolerations",
-        "updateStrategy"
-      ],
       "properties": {
         "affinity": {
           "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/affinity.json"
@@ -46,13 +42,6 @@
         "autoscaling": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "behavior",
-            "enabled",
-            "minReplicas",
-            "maxReplicas",
-            "metrics"
-          ],
           "properties": {
             "behavior": {
               "type": "object"
@@ -182,10 +171,6 @@
         "pdb": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "create",
-            "minAvailable"
-          ],
           "properties": {
             "create": {
               "type": "boolean"
@@ -280,15 +265,216 @@
         }
       }
     },
+    "nautobot": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "allowedHosts": {
+              "type": "string"
+            },
+            "config": {
+              "type": "string"
+            },
+            "db": {
+              "additionalProperties": false,
+              "required": [
+                "engine",
+                "existingSecret",
+                "existingSecretPasswordKey",
+                "host",
+                "name",
+                "password",
+                "port",
+                "timeout",
+                "user"
+              ],
+              "properties": {
+                "engine": {
+                  "type": "string",
+                  "pattern": "^(django\\.db\\.backends\\.postgresql|django\\.db\\.backends\\.mysql)$"
+                },
+                "existingSecret": {
+                  "type": "string"
+                },
+                "existingSecretPasswordKey": {
+                  "type": "string"
+                },
+                "host": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                "timeout": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "user": {
+                  "type": "string"
+                }
+              }
+            },
+            "debug": {
+              "type": "boolean"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "extraVars": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "image": {
+              "type": "object",
+              "required": [
+                "pullPolicy",
+                "pullSecrets",
+                "registry",
+                "repository",
+                "tag"
+              ],
+              "properties": {
+                "pullPolicy": {
+                  "type": "string",
+                  "pattern": "^(Always|Never|IfNotPresent)$"
+                },
+                "pullSecrets": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              }
+            },
+            "logLevel": {
+              "type": "string",
+              "pattern": "^(CRITICAL|ERROR|WARNING|INFO|DEBUG)"
+            },
+            "metrics": {
+              "type": "boolean"
+            },
+            "redis": {
+              "additionalProperties": false,
+              "required": [
+                "existingSecret",
+                "existingSecretPasswordKey",
+                "host",
+                "password",
+                "port",
+                "ssl",
+                "username"
+              ],
+              "properties": {
+                "existingSecret": {
+                  "type": "string"
+                },
+                "existingSecretPasswordKey": {
+                  "type": "string"
+                },
+                "host": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                "ssl": {
+                  "type": "boolean"
+                },
+                "username": {
+                  "type": "string"
+                }
+              }
+            },
+            "secretKey": {
+              "type": "string"
+            },
+            "superUser": {
+              "required": [
+                "apitoken",
+                "email",
+                "enabled",
+                "username",
+                "password"
+              ],
+              "properties": {
+                "apitoken": {
+                  "type": "string",
+                  "pattern": "^([0-9A-Za-z]+|)$"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                }
+              }
+            },
+            "uWSGIini": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
     "probe": {
       "allOf": [
         {
           "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/probe.json"
         },
         {
-          "required": [
-            "enabled"
-          ],
           "properties": {
             "enabled": {
               "type": "boolean"
@@ -318,6 +504,8 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "workers",
+    "celery",
     "celeryBeat",
     "celeryWorker",
     "commonAnnotations",
@@ -325,6 +513,7 @@
     "mariadb",
     "metrics",
     "nautobot",
+    "nautobots",
     "postgresql",
     "postgresqlha",
     "redis",
@@ -332,41 +521,50 @@
     "serviceAccount"
   ],
   "properties": {
-    "celeryBeat": {
+    "workers": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9]+$": {
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/celery"
+            },
+            {
+              "required": [
+                "enabled"
+              ],
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "description": "List of Nautobot objects (matching the Nautobot spec) to create deployments for"
+    },
+    "celery": {
       "allOf": [
         {
-          "$ref": "#/$defs/deployment"
-        },
+          "$ref": "#/$defs/celery"
+        }
+      ]
+    },
+    "celeryBeat": {
+      "description": "DEPRECATED See workers.beat",
+      "allOf": [
         {
-          "type": "object",
-          "required": [
-            "enabled"
-          ],
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          }
+          "$ref": "#/$defs/celery"
         }
       ]
     },
     "celeryWorker": {
+      "description": "DEPRECATED See workers.default",
       "allOf": [
         {
-          "$ref": "#/$defs/deployment"
-        },
-        {
-          "type": "object",
-          "required": [
-            "autoscaling",
-            "enabled",
-            "replicaCount"
-          ],
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          }
+          "$ref": "#/$defs/celery"
         }
       ]
     },
@@ -586,218 +784,41 @@
     "nautobot": {
       "allOf": [
         {
-          "$ref": "#/$defs/deployment"
-        },
-        {
+          "$ref": "#/$defs/nautobot"
+        }
+      ]
+    },
+    "nautobots": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9]+$": {
           "type": "object",
-          "required": [
-            "allowedHosts",
-            "config",
-            "db",
-            "debug",
-            "extraVars",
-            "image",
-            "logLevel",
-            "metrics",
-            "redis",
-            "replicaCount",
-            "secretKey",
-            "superUser",
-            "uWSGIini"
-          ],
-          "properties": {
-            "allowedHosts": {
-              "type": "string"
+          "allOf": [
+            {
+              "$ref": "#/$defs/nautobot"
             },
-            "config": {
-              "type": "string"
-            },
-            "db": {
-              "additionalProperties": false,
+            {
               "required": [
-                "engine",
-                "existingSecret",
-                "existingSecretPasswordKey",
-                "host",
-                "name",
-                "password",
-                "port",
-                "timeout",
-                "user"
-              ],
-              "properties": {
-                "engine": {
-                  "type": "string",
-                  "pattern": "^(django\\.db\\.backends\\.postgresql|django\\.db\\.backends\\.mysql)$"
-                },
-                "existingSecret": {
-                  "type": "string"
-                },
-                "existingSecretPasswordKey": {
-                  "type": "string"
-                },
-                "host": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "port": {
-                  "type": [
-                    "integer",
-                    "null"
-                  ],
-                  "minimum": 1,
-                  "maximum": 65535
-                },
-                "timeout": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "user": {
-                  "type": "string"
-                }
-              }
-            },
-            "debug": {
-              "type": "boolean"
-            },
-            "extraVars": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "name",
-                  "value"
-                ],
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "image": {
-              "type": "object",
-              "required": [
-                "pullPolicy",
-                "pullSecrets",
-                "registry",
-                "repository",
-                "tag"
-              ],
-              "properties": {
-                "pullPolicy": {
-                  "type": "string",
-                  "pattern": "^(Always|Never|IfNotPresent)$"
-                },
-                "pullSecrets": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "registry": {
-                  "type": "string"
-                },
-                "repository": {
-                  "type": "string"
-                },
-                "tag": {
-                  "type": "string"
-                }
-              }
-            },
-            "logLevel": {
-              "type": "string",
-              "pattern": "^(CRITICAL|ERROR|WARNING|INFO|DEBUG)"
-            },
-            "metrics": {
-              "type": "boolean"
-            },
-            "redis": {
-              "additionalProperties": false,
-              "required": [
-                "existingSecret",
-                "existingSecretPasswordKey",
-                "host",
-                "password",
-                "port",
-                "ssl",
-                "username"
-              ],
-              "properties": {
-                "existingSecret": {
-                  "type": "string"
-                },
-                "existingSecretPasswordKey": {
-                  "type": "string"
-                },
-                "host": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "port": {
-                  "type": [
-                    "integer",
-                    "null"
-                  ],
-                  "minimum": 1,
-                  "maximum": 65535
-                },
-                "ssl": {
-                  "type": "boolean"
-                },
-                "username": {
-                  "type": "string"
-                }
-              }
-            },
-            "secretKey": {
-              "type": "string"
-            },
-            "superUser": {
-              "required": [
-                "apitoken",
-                "email",
                 "enabled",
-                "username",
-                "password"
+                "ingressPath",
+                "initNautobot"
               ],
               "properties": {
-                "apitoken": {
-                  "type": "string",
-                  "pattern": "^([0-9A-Za-z]+|)$"
-                },
-                "email": {
-                  "type": "string"
-                },
                 "enabled": {
                   "type": "boolean"
                 },
-                "password": {
+                "ingressPath": {
                   "type": "string"
                 },
-                "username": {
-                  "type": "string"
+                "initNautobot": {
+                  "type": "boolean"
                 }
               }
-            },
-            "uWSGIini": {
-              "type": "string"
             }
-          }
+          ]
         }
-      ]
+      },
+      "description": "List of Nautobot objects (matching the Nautobot spec) to create deployments for"
     },
     "postgresql": {
       "allOf": [

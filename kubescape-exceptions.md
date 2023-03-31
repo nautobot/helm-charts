@@ -47,3 +47,10 @@ Some of these containers are hosted on docker.io
 *Reference:* [https://hub.armo.cloud/docs/c-0061](https://hub.armo.cloud/docs/c-0061)
 
 This is an artifact of using helm to generate the template manifests which are passed to kubescape.  The issue here is helm uses the k8s api to specify a namespace for the manifests outside of the manifests themselves.  There is a lengthy discussion on this [here](https://github.com/helm/helm/issues/5465).
+
+## No Signature Exists
+
+*Name:* ignore-no-signature
+*Reference:* [https://hub.armosec.io/docs/c-0237](https://hub.armosec.io/docs/c-0237)
+
+Many containers we deploy are not signed to include Nautobot, there is nothing this helm-chart project can fix.

@@ -99,7 +99,7 @@ jobs:
       - uses: "azure/setup-helm@v3"
       - name: "Install Kubescape"
         run: "curl -s https://raw.githubusercontent.com/kubescape/kubescape/master/install.sh | /bin/bash"
-      - run: 'run: echo "${HOME}/.kubescape/bin" >> $GITHUB_PATH'  # yamllint disable-line rule:quoted-strings
+      - run: 'echo "${HOME}/.kubescape/bin" >> $GITHUB_PATH'  # yamllint disable-line rule:quoted-strings
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
       - run: "helm dependency update charts/nautobot"
       - name: "Kubescape NSA Scan - PostgreSQL"

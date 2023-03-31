@@ -91,6 +91,8 @@ jobs:
   kubescape-security-check:
     name: "Kubescape Security Scanning"
     runs-on: "ubuntu-22.04"
+    env:
+      GITHUB_PATH: "/home/runner/.kubescape/bin"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"

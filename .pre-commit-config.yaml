@@ -26,6 +26,8 @@ repos:
     rev: "3.0.0"
     hooks:
       - id: "markdownlint"
+        args:
+          - "--ignore-front-matter"
 
   - repo: "https://github.com/gruntwork-io/pre-commit"
     rev: "v0.1.20"  # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases

@@ -1,6 +1,6 @@
 ---
 # spell-checker: disable
-# dev_addr: "0.0.0.0:8001"
+dev_addr: "127.0.0.1:8001"
 site_name: "Nautobot Helm Charts"
 # site_url: "https://tbd.example.com"
 # repo_url: "https://github.com/org/example"
@@ -70,6 +70,8 @@ nav:
     - System Requirements: "installation/system-requirements.md"
   - Advanced Usage:
     - Overview: "advanced-features/index.md"  # yamllint disable-line rule:indentation
+    - Additional Nautobots: "advanced-features/additional-nautobots.md"
+    - Celery Queues: "advanced-features/celery-queues.md"
     - Custom Nautobot Image: "advanced-features/custom-image.md"
     - Custom nautobot_config.py: "advanced-features/custom-nautobot-config.md"
     - Custom uwsgi.ini: "advanced-features/custom-uwsgi.md"
@@ -91,7 +93,8 @@ nav:
   - Reference:
     - Configuration Reference: "configuration/reference.md"  # yamllint disable-line rule:indentation
   - Developer Guide:
-    - Contributing: "development/contributing.md"  # yamllint disable-line rule:indentation
+    - Local Development: "development/local-dev.md"  # yamllint disable-line rule:indentation
+    - Contributing: "development/contributing.md"
     - Release Checklist: "development/release-checklist.md"
   - Release Notes:
     - Version 2.x: "release-notes/version-2.x.md"  # yamllint disable-line rule:indentation

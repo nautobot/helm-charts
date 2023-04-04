@@ -1,3 +1,4 @@
+apiserver
 apitoken
 armo
 armobest
@@ -8,6 +9,9 @@ bitnami
 cacheops
 chatops
 codeql
+containerd
+contrib
+cpus
 custom-nautobot_configpy
 dbname
 dcim
@@ -22,6 +26,7 @@ harakiri
 healthcheck
 hostname
 hostnames
+hyperkit
 ipam
 keepalive
 kubernetescrd
@@ -31,6 +36,7 @@ loadbalancer
 loglevel
 middlewares
 mkdocs
+nameserver
 nautobot
 nautobots
 nginxinc
@@ -55,6 +61,7 @@ statefulset
 statefulsets
 subchart
 subcharts
+timesyncd
 timonwong
 tolerations
 tplvalues

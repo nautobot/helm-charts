@@ -345,7 +345,7 @@ in the .Values.Nautobots key which is a dictionary with the same spec as .Values
 {{ define "nautobot.nautobots" }}
 {{- $nautobots := dict }}
 {{- range $nautobotName, $nautobot := .Values.nautobots }}
-{{- $nautobots = mustMerge $nautobots (dict $nautobotName (deepCopy $.Values.nautobot | mustMerge $nautobot (dict "component" "nautobot"))) }}
+{{- $nautobots = mustMerge (dict $nautobotName (deepCopy $.Values.nautobot | mustMerge $nautobot (dict "component" "nautobot"))) $nautobots }}
 {{- end }}
 {{- mustToJson $nautobots -}}
 {{- end }}
@@ -369,12 +369,12 @@ where values in the new workers key will always win over the others
 {{- $workers = mustMerge $workers (dict "default" (deepCopy $.Values.celery | mustMerge $.Values.celeryWorker)) }}
 {{- $workers = mustMerge $workers (dict "beat" (deepCopy $.Values.celery | mustMerge $.Values.celeryBeat)) }}
 {{- range $celeryName, $celery := .Values.workers }}
-{{- $workers = mustMerge $workers (dict $celeryName (deepCopy $.Values.celery | mustMerge $celery (dict "component" "nautobot-celery"))) }}
+{{- $workers = mustMerge (dict $celeryName (deepCopy $.Values.celery | mustMerge $celery (dict "component" "nautobot-celery"))) $workers }}
 {{- end }}
 {{/*
 Celery Beat can only have 1 replica enforce that here
 */}}
-{{- $workers = mustMerge $workers (dict "beat" (dict "replicaCount" 1)) }}
-{{- $workers = mustMerge $workers (dict "beat" (dict "autoscaling" (dict "enabled" false))) }}
+{{- $workers = mustMerge (dict "beat" (dict "replicaCount" 1)) $workers }}
+{{- $workers = mustMerge (dict "beat" (dict "autoscaling" (dict "enabled" false))) $workers }}
 {{- mustToJson $workers -}}
 {{- end }}

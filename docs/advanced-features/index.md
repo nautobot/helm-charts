@@ -2,6 +2,8 @@
 
 With [Kubernetes](https://kubernetes.io/), public clouds, and the [dependency subcharts](/installation/dependencies) we use the sky is the limit as far as installation and deployment possibilities.  There is no way we can capture everything here.  We have run into several common deployment use cases which may come in handy which we try to document here.  Each feature is documented as a stand alone option however they can be combined where it makes sense to do so.  We also have no control over many of the variables involved in these deployments so these examples are provided as-is and should be considered as a reference example only.
 
+* [Additional Nautobots](/advanced-features/additional-nautobots)
+* [Celery Queues](/advanced-features/celery-queues)
 * [Custom Nautobot Image](/advanced-features/custom-image)
 * [Custom `nautobot_config.py`](/advanced-features/custom-nautobot-config)
 * [Custom `uwsgi.ini`](/advanced-features/custom-uwsgi)

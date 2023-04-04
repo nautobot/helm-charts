@@ -1,6 +1,6 @@
 ---
 # spell-checker: disable
-dev_addr: "0.0.0.0:8001"
+# dev_addr: "0.0.0.0:8001"
 site_name: "Nautobot Helm Charts"
 # site_url: "https://tbd.example.com"
 # repo_url: "https://github.com/org/example"

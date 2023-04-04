@@ -77,20 +77,7 @@
         "extraEnvVars": {
           "type": "array",
           "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "name",
-              "value"
-            ],
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "value": {
-                "type": "string"
-              }
-            }
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/envvar.json"
           }
         },
         "extraEnvVarsCM": {
@@ -220,7 +207,7 @@
           ]
         },
         "podSecurityContext": {
-          "$ref": "#/$defs/securityContext"
+          "$ref": "#/$defs/podSecurityContext"
         },
         "priorityClassName": {
           "type": "string"
@@ -487,6 +474,23 @@
       "allOf": [
         {
           "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/securitycontext.json"
+        },
+        {
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "podSecurityContext": {
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/podsecuritycontext.json"
         },
         {
           "required": [
@@ -936,7 +940,7 @@
         "extraPorts": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/serviceport.json"
           },
           "description": "Extra ports to expose in the nautobot service (normally used with the `sidecars` value)"
         },

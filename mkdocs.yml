@@ -69,4 +69,30 @@ nav:
     - Prerequisites: "installation/prerequisites.md"
     - System Requirements: "installation/system-requirements.md"
   - Advanced Usage:
-    - Topic1: "advanced-features/index.md"  # yamllint disable-line rule:indentation
+    - Overview: "advanced-features/index.md"  # yamllint disable-line rule:indentation
+    - Custom Nautobot Image: "advanced-features/custom-image.md"
+    - Custom nautobot_config.py: "advanced-features/custom-nautobot-config.md"
+    - Custom uwsgi.ini: "advanced-features/custom-uwsgi.md"
+    - Existing Secrets: "advanced-features/existing-secrets.md"
+    - External Database: "advanced-features/external-database.md"
+    - External Redis: "advanced-features/external-redis.md"
+    - Ingress: "advanced-features/ingress.md"
+    - MySQL Support: "advanced-features/mysql.md"
+    - PostgreSQL High Availability: "advanced-features/postgresql-ha.md"
+    - PostgreSQL TLS: "advanced-features/postgresql-tls.md"
+    - Prometheus Operator Metrics: "advanced-features/prometheus-metrics.md"
+    - Redis Sentinel: "advanced-features/redis-sentinel.md"
+    - Redis TLS: "advanced-features/redis-tls.md"
+  - Operators Guide:
+    - Backup and Restore: "operations/backup-restore.md"  # yamllint disable-line rule:indentation
+    - Invalidate Redis Cache: "operations/redis-cache.md"
+    - Upgrading: "operations/upgrading.md"
+    - Uninstall: "operations/uninstall.md"
+  - Reference:
+    - Configuration Reference: "configuration/reference.md"  # yamllint disable-line rule:indentation
+  - Developer Guide:
+    - Contributing: "development/contributing.md"  # yamllint disable-line rule:indentation
+    - Release Checklist: "development/release-checklist.md"
+  - Release Notes:
+    - Version 2.x: "release-notes/version-2.x.md"  # yamllint disable-line rule:indentation
+    - Version 1.x: "release-notes/version-1.x.md"

@@ -24,6 +24,7 @@
 .vscode/
 # README template
 README.md.gotmpl
+reference.md.gotmpl
 # Linter Values
 linter_values.yaml
 linter_values_mysql.yaml

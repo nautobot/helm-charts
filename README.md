@@ -10,7 +10,11 @@
 
 This repo is intended to house [Helm](https://helm.sh/) charts for the Nautobot project, today there is one Nautobot chart but we are ready for more if the need arises.  Helm is the unofficial package manager for Kubernetes, it provides a simple way for users to deploy applications to Kubernetes without defining custom Kubernetes manifests.  This allows users of all experience levels to deploy applications the way the developers intend for them to be deployed.  Helm is capable of also providing restrictions and tests to validate the deployment configuration.
 
-## Usage
+## Official Documentation
+
+Please checkout our [documentation site](https://docs.nautobot.com/projects/helm-charts/en/latest/) for much more detailed documentation on the Nautobot Helm Chart.
+
+## Quick Start
 
 [Helm](https://helm.sh) must be installed to use the charts.
 Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
@@ -37,17 +41,17 @@ helm install nautobot nautobot/nautobot
 
 ## Support
 
-* **Documentation**: See the [Nautobot chart README](./charts/nautobot/README.md).
+* **Documentation**: See the [Official Nautobot Helm Chart Documentation site](https://docs.nautobot.com/projects/helm-charts/en/latest/).
 * **Slack**: checkout the **#nautobot** channel on the [Network to Code slack](https://networktocode.slack.com/)!
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md)
+See [Contributing](https://docs.nautobot.com/projects/helm-charts/en/latest/development/contributing/)
 
 ## Releases
 
-See the [Release Checklist](./docs/release-checklist.md)
+See the [Release Checklist](https://docs.nautobot.com/projects/helm-charts/en/latest/development/release-checklist)
 
 ## License
 
-[Apache 2.0 License](./LICENSE.txt)
+[Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0)

@@ -59,3 +59,12 @@ repos:
 
           # The `./` makes it relative to the chart-search-root set above
           - "--template-files=README.md.gotmpl"
+
+  - repo: "https://github.com/norwoodj/helm-docs"
+    rev: "v1.11.0"
+    hooks:
+      - id: "helm-docs"
+        args:
+          - "--chart-to-generate=charts/nautobot"
+          - "--template-files=./docs/configuration/reference.md.gotmpl"
+          - "--output-file=../../docs/configuration/reference.md"

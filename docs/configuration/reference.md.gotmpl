@@ -1,0 +1,87 @@
+---
+hide:
+  - navigation
+  - toc
+---
+
+{{- define "chart.valueDefaultColumnRender" }}
+{{- $defaultValue := (default .Default .AutoDefault)  -}}
+{{- $notationType := .NotationType -}}
+{{- $defaultValue -}}
+{{- end -}}
+
+{{- define "chart.typeColumnRender" }}
+{{- $prefix := "" }}
+{{- $type := .Type }}
+{{- if (hasPrefix "[]" $type)}}
+{{- $prefix = "[]" }}
+{{- $type = trimPrefix "[]" $type }}
+{{- end }}
+{{- if (eq $type "ServicePort" )}}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
+{{- else if (eq $type "Probe") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)
+{{- else if (eq $type "ResourceRequirements") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+{{- else if (eq $type "SecurityContext") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-2)
+{{- else if (eq $type "Lifecycle") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)
+{{- else if (eq $type "EnvVar") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#environment-variables)
+{{- else if (eq $type "Volume") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/volume/#Volume)
+{{- else if (eq $type "VolumeMount") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#volumes-1)
+{{- else if (eq $type "Container") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container)
+{{- else if (eq $type "HostAlias") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#hostname-and-name-resolution)
+{{- else if (eq $type "Affinity") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+{{- else if (eq $type "NodeSelector") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+{{- else if (eq $type "Toleration") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling)
+{{- else if (eq $type "PodSecurityContext") }}
+{{- $prefix }}[{{ $type }}](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context)
+{{- else if (eq $type "PrometheusRule") }}
+{{- $prefix }}[{{ $type }}](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Rule)
+{{- else if (eq $type "Duration") }}
+{{- $prefix }}[{{ $type }}](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Duration)
+{{- else }}
+{{- .Type }}
+{{- end }}
+{{- end }}
+
+{{ define "chart.valuesTableHtml" }}
+{{- $lastPrefix := "" }}
+{{- range .Values }}
+{{- $prefix := (first (regexSplit "\\." .Key 2)) }}
+{{- if (ne $prefix $lastPrefix) }}
+{{- $lastPrefix = $prefix }}
+
+## {{ title $prefix }} Values
+
+{{ if (has $prefix (list "mariadb" "postgresql" "postgresqlha" "redis")) }}
+
+The `{{ $prefix }}.*` values configure the upstream chart from Bitnami.  Please see the [upstream chart](https://github.com/bitnami/charts/tree/main/bitnami/{{ if (eq $prefix  "postgresqlha") }}postgresql-ha{{ else }}{{ $prefix }}{{ end }}) for complete details on all of its values.
+
+{{ end }}
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+{{- end }}
+{{- if (ne .AutoDescription "") }}
+| <a name="{{- .Key -}}">[{{- .Key -}}](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L{{- .LineNumber -}})</a> | {{ template "chart.typeColumnRender" . }} | {{ template "chart.valueDefaultColumnRender" . }} | {{ if .Description }}{{- .Description }}{{ else }}{{- .AutoDescription }}{{ end }} |
+{{- end }}
+{{- end }}
+
+{{ end }}
+
+{{ template "chart.valuesTableHtml" . }}
+
+## Notes
+
+1. These are global values which apply to all Nautobot and Celery pods, these can not be overridden by the `nautobots` or `workers` dictionaries.
+
+{{ template "helm-docs.versionFooter" . }}

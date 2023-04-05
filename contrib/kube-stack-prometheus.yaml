@@ -1,0 +1,29 @@
+---
+# spell-checker: disable
+alertmanager:
+  alertmanagerSpec:
+    resources: {}
+  ingress:
+    enabled: true
+    hosts:
+      - "alertmanager.minikube.local"
+grafana:
+  adminPassword: "admin"
+  resources: {}
+  ingress:
+    enabled: true
+    hosts:
+      - "grafana.minikube.local"
+prometheus:
+  ingress:
+    enabled: true
+    hosts:
+      - "prometheus.minikube.local"
+  prometheusSpec:
+    podMonitorSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: false
+    resources: {}
+    ruleSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+prometheusOperator:
+  resources: {}

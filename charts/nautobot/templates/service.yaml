@@ -44,6 +44,15 @@ spec:
       {{- if (and (eq $.Values.service.type "NodePort") (not (empty $.Values.service.nodePorts.http))) }}
       nodePort: {{ $.Values.service.nodePorts.http }}
       {{- end }}
+    {{- if and $.Values.metrics.uwsgiExporter.enabled $.Values.metrics.enabled }}
+    - protocol: "TCP"
+      port: 9117
+      targetPort: "uwsgimetrics"
+      name: "uwsgimetrics"
+      {{- if (and (eq $.Values.service.type "NodePort") (not (empty $.Values.service.nodePorts.http))) }}
+      nodePort: {{ $.Values.service.nodePorts.uwsgimetrics }}
+      {{- end }}
+    {{- end }}
     {{- if $.Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" $.Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

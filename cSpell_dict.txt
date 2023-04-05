@@ -28,6 +28,7 @@ hostname
 hostnames
 hyperkit
 ipam
+jetstack
 keepalive
 kubernetescrd
 kubescape

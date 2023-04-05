@@ -80,6 +80,7 @@ nav:
     - External Redis: "advanced-features/external-redis.md"
     - Ingress: "advanced-features/ingress.md"
     - MySQL Support: "advanced-features/mysql.md"
+    - Nautobot as a Subchart: "advanced-features/nautobot-as-subchart.md"
     - PostgreSQL High Availability: "advanced-features/postgresql-ha.md"
     - PostgreSQL TLS: "advanced-features/postgresql-tls.md"
     - Prometheus Operator Metrics: "advanced-features/prometheus-metrics.md"
@@ -96,6 +97,7 @@ nav:
     - Local Development: "development/local-dev.md"  # yamllint disable-line rule:indentation
     - Contributing: "development/contributing.md"
     - Release Checklist: "development/release-checklist.md"
+    - Testing: "development/testing.md"
   - Release Notes:
     - Version 2.x: "release-notes/version-2.x.md"  # yamllint disable-line rule:indentation
     - Version 1.x: "release-notes/version-1.x.md"

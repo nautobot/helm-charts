@@ -107,9 +107,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
     {{- fail (printf "Both PostgreSQL and PostgreSQL-HA can't be enabled at the same time.") -}}
   {{- end -}}
   {{- if (or .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
-    django.db.backends.postgresql
+    {{- if (.Values.nautobot.metrics) -}}
+      django_prometheus.db.backends.postgresql
+    {{- else -}}
+      django.db.backends.postgresql
+    {{- end -}}
   {{- else if .Values.mariadb.enabled -}}
-    django.db.backends.mysql
+    {{- if (.Values.nautobot.metrics) -}}
+      django_prometheus.db.backends.mysql
+    {{- else -}}
+      django.db.backends.mysql
+    {{- end -}}
   {{- else -}}
     {{- .Values.nautobot.db.engine -}}
   {{- end -}}

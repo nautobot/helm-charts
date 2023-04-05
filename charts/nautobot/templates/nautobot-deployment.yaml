@@ -300,7 +300,7 @@ spec:
             - name: "metrics"
               containerPort: 8002
         {{- end }}
-        {{- if and $.Values.metrics.enabled $.Values.metrics.nginxExporter.enabled }}
+        {{- if and $.Values.metrics.enabled $nautobot.nginx.enabled $.Values.metrics.nginxExporter.enabled }}
         - name: nginx-exporter
           image: {{ include "nautobot.nginxExporter.image" $ }}
           imagePullPolicy: {{ $.Values.metrics.nginxExporter.image.pullPolicy }}

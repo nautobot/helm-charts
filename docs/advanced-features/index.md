@@ -12,6 +12,7 @@ With [Kubernetes](https://kubernetes.io/), public clouds, and the [dependency su
 * [External Redis](/advanced-features/external-redis)
 * [Ingress](/advanced-features/ingress)
 * [MySQL Support](/advanced-features/mysql)
+* [Nautobot as a Subchart](/advanced-features/nautobot-as-subchart)
 * [PostgreSQL High Availability](/advanced-features/postgresql-ha)
 * [PostgreSQL TLS](/advanced-features/postgresql-tls)
 * [Prometheus Operator Metrics](/advanced-features/prometheus-metrics)

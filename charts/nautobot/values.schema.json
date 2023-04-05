@@ -721,13 +721,17 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "enabled"
+            "enabled",
+            "nautobot"
           ],
           "properties": {
             "enabled": {
               "type": "boolean"
             },
             "interval": {
+              "type": "string"
+            },
+            "nautobot": {
               "type": "string"
             },
             "scrapeTimeout": {
@@ -976,6 +980,15 @@
               "description": "Node Port to use for the http service, the default range is 30000-32767 however this can be changed with --service-node-port-range"
             },
             "https": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Node Port to use for the https service, the default range is 30000-32767 however this can be changed with --service-node-port-range"
+            },
+            "uwsgimetrics": {
               "type": [
                 "integer",
                 "null"

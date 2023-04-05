@@ -27,5 +27,6 @@ README.md.gotmpl
 reference.md.gotmpl
 # Linter Values
 linter_values.yaml
+linter_values_minimum.yaml
 linter_values_mysql.yaml
 linter_values_postgresql_ha.yaml

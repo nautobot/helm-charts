@@ -56,13 +56,6 @@ celery:
   pdb:
     create: true
 
-postgresql:
-  auth:
-    password: "change-me"
-redis:
-  auth:
-    password: "change-me"
-
 ingress:
   enabled: true
   ingressClassName: "nginx"
@@ -85,9 +78,18 @@ metrics:
     enabled: true
   prometheusRule:
     enabled: true
+  serviceMonitor:
+    enabled: true
 
 commonAnnotations:
   annotate_everything: "everywhere"
 serviceAccount:
   annotations:
     service_account_annotation: "only_the_sa"
+
+postgresql:
+  auth:
+    password: "change-me"
+redis:
+  auth:
+    password: "change-me"

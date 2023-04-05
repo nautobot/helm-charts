@@ -22,7 +22,7 @@ minikube config set container-runtime containerd
 These settings are here simply to demonstrate how to change them, they are not requirements.
 
 ```no-highlight
-minikube start --memory=4G --cpus=2 --disk-size 10000mb --extra-config=apiserver.service-node-port-range=80-32767
+minikube start --memory=4G --cpus=4 --disk-size 10000mb --extra-config=apiserver.service-node-port-range=80-32767
 ```
 
 ### Running minikube Config
@@ -69,12 +69,29 @@ This will install the [`kube-prometheus-stack`](https://github.com/prometheus-co
 
 ```no-highlight
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm install monitoring prometheus-community/kube-prometheus-stack
+helm install monitoring prometheus-community/kube-prometheus-stack -f contrib/kube-stack-prometheus.yaml
 helm upgrade nautobot charts/nautobot -f contrib/minikube-with-metrics.yaml
 ```
+
+Using the predefined values file the following endpoints will be available:
+
+* `http://grafana.minikube.local` (username: `admin` password: `admin`)
+* `http://prometheus.minikube.local`
+* `http://alertmanager.minikube.local`
 
 ### Cert-Manager
 
 The following will install `cert-manager`, configure a CA, issue certificates, and trust the CA locally on your system
 
-TODO
+```no-highlight
+helm repo add jetstack https://charts.jetstack.io
+helm install cert-manager jetstack/cert-manager --set installCRDs=true
+```
+
+TODO Document self signed certs
+
+### Metrics Server
+
+```no-highlight
+minikube addons enable metrics-server
+```

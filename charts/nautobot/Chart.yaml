@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "true"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.5.14-py3.10
+      image: ghcr.io/nautobot/nautobot:1.5.15-py3.10
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -36,7 +36,7 @@ annotations:
     - kind: added
       description: Added the ability to add deploy workers for [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/)
     - kind: changed
-      description: Upgraded Nautobot from 1.4.5 to 1.5.14
+      description: Upgraded Nautobot from 1.4.5 to 1.5.15
     - kind: changed
       description: Chart dependencies now included locally as they no longer exist at bitnami.com (too old)
     - kind: fixed
@@ -44,7 +44,7 @@ annotations:
     - kind: deprecated
       description: The `.celeryWorker` and `.celeryBeat` values have been deprecated and are now defined in `.workers.default` and `.workers.beat`
 apiVersion: "v2"
-appVersion: "1.5.14"
+appVersion: "1.5.15"
 version: "2.0.0-alpha.10"
 dependencies:
   - condition: "redis.enabled"

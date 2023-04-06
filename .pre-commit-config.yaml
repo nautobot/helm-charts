@@ -32,7 +32,7 @@ repos:
           - "docs/"
 
   - repo: "https://github.com/streetsidesoftware/cspell-cli"
-    rev: "v6.2.0"
+    rev: "v6.31.0"
     hooks:
       - id: "cspell"
 
@@ -48,6 +48,20 @@ repos:
         args:
           - "-c=.yamllint"
           - "-s"
+
+  - repo: "https://github.com/bridgecrewio/checkov.git"
+    rev: "2.3.152"
+    hooks:
+      - id: "checkov"
+        args:
+          - "--directory"
+          - "charts/nautobot"
+          - "--skip-path"
+          - "charts/nautobot/linter_values.*.yaml"
+          - "--var-file"
+          - "charts/nautobot/linter_values.yaml"
+          - "--framework"
+          - "helm"
 
   - repo: "https://github.com/norwoodj/helm-docs"
     rev: "v1.11.0"

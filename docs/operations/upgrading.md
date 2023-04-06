@@ -5,7 +5,7 @@
 !!! note
     These instructions assume you have followed the very basic installation instructions as described above.  If you have utilized existing secrets or advanced options, please see the release notes referenced below for possible additional steps.
 
-* The PostgreSQL subchart was upgraded from version 10 to version 11, this was a breaking change, see the [release notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/) for more information.  At a minimum the following values must change:
+* The PostgreSQL subchart was upgraded from version 10 to version 12, this was a breaking change, see the [release notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/) for more information.  At a minimum the following values must change:
 
     * `postgresql.postgresqlPostgresPassword` changes to `postgresql.auth.postgresPassword`
     * `postgresql.postgresqlUsername` changes to `postgresql.auth.username`
@@ -16,7 +16,7 @@
     * `postgresql.containerSecurityContext` changes to `postgresql.primary.containerSecurityContext`
 
 * The Redis subchart was upgraded from version 16 to version 17, this was a breaking change, see the [release notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) for more information.  No default values passed to this chart have changed.
-* The PostgreSQL-HA subchart was upgraded from version 8 to version 9, this was a breaking change, see the [release notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#to-900) for more information.  At a minimum the following values must change:
+* The PostgreSQL-HA subchart was upgraded from version 8 to version 11, this was a breaking change, see the [release notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#to-900) for more information.  At a minimum the following values must change:
 
     * `postgresqlha.postgresql.securityContext` changes to `postgresqlha.postgresql.podSecurityContext`
     * `postgresqlha.metrics.securityContext` changes to `postgresqlha.metrics.podSecurityContext`

@@ -949,6 +949,7 @@ redis:
     pullPolicy: "Always"
   master:
     containerSecurityContext:
+      enabled: true
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
       capabilities:
@@ -958,8 +959,17 @@ redis:
     podSecurityContext:
       seccompProfile:
         type: "RuntimeDefault"
+  metrics:
+    containerSecurityContext:
+      enabled: true
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - "ALL"
   replica:
     containerSecurityContext:
+      enabled: true
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
       capabilities:
@@ -971,6 +981,7 @@ redis:
         type: "RuntimeDefault"
   sentinel:
     containerSecurityContext:
+      enabled: true
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: false
       capabilities:

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Default database engine now accounts for `METRICS_ENABLED`
 * Moved Nautobot post-upgrade task to a separate init container
 * Nautobot Version 1.5.15
 * Upgraded Bitnami common subchart from 1.11.1 to 2.2.4

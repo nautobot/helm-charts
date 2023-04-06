@@ -70,4 +70,5 @@ traefik
 trunc
 uwsgi
 uwsgimetrics
+workermetrics
 wsgi

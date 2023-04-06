@@ -622,6 +622,9 @@ celery:
             value: 2
             periodSeconds: 15
 
+  # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#celery_worker_prometheus_ports)] Ports for Prometheus metric HTTP server running on the celery worker(s) if `nautobot.metrics` is `true`
+  metricsPort: 8080
+
 # -- (map[name]celery) Additional Celery Worker deployments, map key is the name of the deployment and the additional key `enabled` is required for each Worker deployment, all other keys for each Worker will override the defaults provided by the root `.Values.celery`.
 # @default -- See values.yaml
 workers:

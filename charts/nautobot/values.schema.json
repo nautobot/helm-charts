@@ -22,6 +22,11 @@
             },
             "taskQueues": {
               "type": "string"
+            },
+            "metricsPort": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
             }
           }
         }

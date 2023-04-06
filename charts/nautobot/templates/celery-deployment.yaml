@@ -91,6 +91,10 @@ spec:
             {{- if (ne $celeryName "beat") }}
             - name: "CELERY_TASK_QUEUES"
               value: {{ $celery.taskQueues | quote }}
+            {{- if (and $.Values.metrics.enabled $.Values.nautobot.metrics (ne $celeryName "beat")) }}
+            - name: "NAUTOBOT_CELERY_WORKER_PROMETHEUS_PORTS"
+              value: {{ $celery.metricsPort | quote }}
+            {{- end }}
             {{- end }}
             {{- if $celery.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $celery.extraEnvVars "context" $) | nindent 12 }}
@@ -120,6 +124,11 @@ spec:
           {{- end }}
           {{- if $celery.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $celery.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if (and $.Values.metrics.enabled $.Values.nautobot.metrics (ne $celeryName "beat")) }}
+          ports:
+            - name: "workermetrics"
+              containerPort: {{ $celery.metricsPort }}
           {{- end }}
           volumeMounts:
             - name: "git-repos"

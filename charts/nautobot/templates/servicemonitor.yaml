@@ -1,6 +1,8 @@
 {{- if and $.Values.metrics.enabled $.Values.metrics.serviceMonitor.enabled }}
 {{- $nautobots := (include "nautobot.nautobots" $) | mustFromJson }}
 {{- range $nautobotName, $nautobot := $nautobots }}
+{{- if $nautobot.enabled }}
+{{- if or $.Values.nautobot.metrics (and $.Values.metrics.capacityMetrics.enabled (eq $.Values.metrics.capacityMetrics.nautobot $nautobotName)) }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -17,9 +19,11 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" $ | nindent 6 }}
       app.kubernetes.io/component: nautobot-{{ $nautobotName }}
   endpoints:
+    {{- if $.Values.nautobot.metrics }}
     - port: http
       interval: {{ $.Values.metrics.serviceMonitor.interval }}
       scrapeTimeout: {{ $.Values.metrics.serviceMonitor.scrapeTimeout }}
+    {{- end }}
     {{- if (and $.Values.metrics.capacityMetrics.enabled (eq $.Values.metrics.capacityMetrics.nautobot $nautobotName)) }}
     - port: http
       interval: {{ $.Values.metrics.serviceMonitor.interval }}
@@ -30,6 +34,7 @@ spec:
       scrapeTimeout: {{ $.Values.metrics.capacityMetrics.scrapeTimeout }}
       path: "/api/plugins/capacity-metrics/app-metrics"
     {{- end }}
+{{- end }}
 {{- if and $nautobot.nginx.enabled $.Values.metrics.nginxExporter.enabled }}
 ---
 apiVersion: "monitoring.coreos.com/v1"
@@ -48,7 +53,6 @@ spec:
       app.kubernetes.io/component: nautobot-{{ $nautobotName }}
   endpoints:
     - port: "nginxmetrics"
-      path: "/metrics"
 {{- end }}
 {{- if $.Values.metrics.uwsgiExporter.enabled }}
 ---
@@ -68,7 +72,31 @@ spec:
       app.kubernetes.io/component: nautobot-{{ $nautobotName }}
   endpoints:
     - port: "uwsgimetrics"
-      path: "/metrics"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if $.Values.nautobot.metrics }}
+{{- $workers := (include "nautobot.workers" $) | mustFromJson }}
+{{- range $celeryName, $celery := $workers }}
+{{- if (and $celery.enabled (ne $celeryName "beat")) }}
+---
+apiVersion: "monitoring.coreos.com/v1"
+kind: "ServiceMonitor"
+metadata:
+  name: {{ include "common.names.fullname" $ }}-celery-{{ $celeryName }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    app.kubernetes.io/component: nautobot-celery-{{ $celeryName }}
+    {{- if $.Values.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: nautobot-celery-{{ $celeryName }}
+  endpoints:
+    - port: "workermetrics"
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

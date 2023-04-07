@@ -454,6 +454,9 @@
                 }
               }
             },
+            "singleInit": {
+              "type": "boolean"
+            },
             "uWSGIini": {
               "type": "string"
             }

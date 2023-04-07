@@ -385,6 +385,9 @@ nautobot:
     # -- [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password)] Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated<sup>[1](#notes)</sup>
     password: ""  # NAUTOBOT_SUPERUSER_PASSWORD
 
+  # -- [[ref](https://helm-charts.readthedocs.io/en/latest/advanced-features/init-hook)] Run the Nautobot initialization tasks as a helm hook instead of an initContainer<sup>[1](#notes)</sup>
+  singleInit: false
+
   # -- [[ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html)] Replace the entire `uwsgi.ini` file with this value<sup>[1](#notes)</sup>
   uWSGIini: ""
 

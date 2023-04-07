@@ -1,4 +1,7 @@
 ---
+nautobot:
+  singleInit: true
+
 postgresql:
   enabled: false
 

@@ -23,6 +23,12 @@
         "attributes": {
           "kind": "Pod"
         }
+      },
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "kind": "Job"
+        }
       }
     ],
     "posturePolicies": [

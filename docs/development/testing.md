@@ -31,6 +31,12 @@ helm template -n testing -f charts/nautobot/linter_values.yaml charts/nautobot |
 
 We test with 3 frameworks: `nsa`, `mitre`, and `armobest`
 
+We are also working towards implementing [checkov](https://www.checkov.io/) ([GitHub](https://github.com/bridgecrewio/checkov)) tests, these can be run locally with:
+
+```no-highlight
+checkov --directory charts/nautobot --skip-path charts/nautobot/linter_values.*.yaml --var-file charts/nautobot/linter_values.yaml --framework helm
+```
+
 ## Per-Deployment Testing
 
 Helm provides the capability of [running tests in each deployment](https://helm.sh/docs/topics/chart_tests/).  This is something for us to explorer in much more detail in the future.  Today we have a fairly simple curl to ensure the web service is up.

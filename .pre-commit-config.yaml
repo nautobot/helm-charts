@@ -62,6 +62,12 @@ repos:
           - "charts/nautobot/linter_values.yaml"
           - "--framework"
           - "helm"
+          - "--output"
+          - "cli"
+          - "--output"
+          - "sarif"
+          - "--output-file-path"
+          - "console,checkov.sarif"
 
   - repo: "https://github.com/norwoodj/helm-docs"
     rev: "v1.11.0"

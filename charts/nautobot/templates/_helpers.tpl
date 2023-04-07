@@ -378,12 +378,12 @@ where values in the new workers key will always win over the others
 {{- $workers = mustMergeOverwrite $workers (dict "default" (mustMergeOverwrite (deepCopy $.Values.celery) $.Values.celeryWorker)) }}
 {{- $workers = mustMergeOverwrite $workers (dict "beat" (mustMergeOverwrite (deepCopy $.Values.celery) $.Values.celeryBeat)) }}
 {{- range $celeryName, $celery := .Values.workers }}
-{{- $workers = mustMergeOverwrite $workers (dict $celeryName (mustMerge (deepCopy $.Values.celery) $celery (dict "component" "nautobot-celery"))) }}
+{{- $workers = mustMergeOverwrite $workers (dict $celeryName (mustMergeOverwrite (deepCopy $.Values.celery) $celery (dict "component" "nautobot-celery"))) }}
 {{- end }}
 {{/*
 Celery Beat can only have 1 replica enforce that here
 */}}
-{{- $workers = mustMerge (dict "beat" (dict "replicaCount" 1)) $workers }}
-{{- $workers = mustMerge (dict "beat" (dict "autoscaling" (dict "enabled" false))) $workers }}
+{{- $workers = mustMergeOverwrite $workers (dict "beat" (dict "replicaCount" 1)) }}
+{{- $workers = mustMergeOverwrite $workers (dict "beat" (dict "autoscaling" (dict "enabled" false))) }}
 {{- mustToJson $workers -}}
 {{- end }}

@@ -58,6 +58,11 @@ jobs:
         with:
           extra_args: "--all-files"
 
+      - name: "Upload result to GitHub Code Scanning"
+        uses: "github/codeql-action/upload-sarif@v2"
+        with:
+          sarif_file: "checkov.sarif"
+
   snyk-security-check:
     name: "Snyk Security Scanning"
     runs-on: "ubuntu-22.04"

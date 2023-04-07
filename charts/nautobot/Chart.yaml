@@ -37,6 +37,8 @@ annotations:
       description: Added the ability to add deploy workers for [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues)
     - kind: added
       description: Added the ability to [host static files separately](https://docs.nautobot.com/projects/core/en/stable/advanced-features/static-only).
+    - kind: added
+      description: Added the ability to [initialize Nautobot as a Job](https://docs.nautobot.com/projects/core/en/stable/advanced-features/init-hook).
     - kind: changed
       description: Upgraded Nautobot from 1.4.5 to 1.5.15
     - kind: changed

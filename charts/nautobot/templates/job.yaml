@@ -1,0 +1,119 @@
+{{- if $.Values.nautobot.singleInit -}}
+---
+apiVersion: {{ include "common.capabilities.cronjob.apiVersion" $ }}
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" $ }}-init
+  namespace: {{ $.Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    app.kubernetes.io/component: nautobot-init
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+    helm.sh/hook: "post-install,post-upgrade"
+    helm.sh/hook-weight: "-5"
+  {{- end }}
+spec:
+  template:
+    metadata:
+      {{- if $.Values.nautobot.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" $ | nindent 8 }}
+        app.kubernetes.io/component: nautobot-init
+        {{- if $.Values.nautobot.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      restartPolicy: "OnFailure"
+      {{- if $.Values.serviceAccount.name }}
+      serviceAccountName: {{ include "nautobot.serviceAccountName" $ }}
+      {{- end }}
+      {{- include "nautobot.imagePullSecrets" $ | nindent 6 }}
+      {{- if $.Values.nautobot.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if $.Values.nautobot.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" $.Values.nautobot.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if $.Values.nautobot.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if $.Values.nautobot.priorityClassName }}
+      priorityClassName: {{ $.Values.nautobot.priorityClassName | quote }}
+      {{- end }}
+      {{- if $.Values.nautobot.podSecurityContext.enabled }}
+      securityContext: {{- omit $.Values.nautobot.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      containers:
+        # This init container will run post_upgrade which initializes/upgrades the DB as well as collects static files
+        - name: nautobot-init
+          image: {{ include "nautobot.image" $ }}
+          imagePullPolicy: {{ $.Values.nautobot.image.pullPolicy }}
+          {{- if $.Values.nautobot.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if $.Values.nautobot.containerSecurityContext.enabled }}
+          securityContext: {{- omit $.Values.nautobot.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          args:
+            - "echo"
+            - "Nautobot Initialization Done"
+          env:
+            {{- if $.Values.nautobot.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "common.names.fullname" $ }}-env
+            - secretRef:
+                name: {{ include "common.names.fullname" $ }}-env
+            {{- if $.Values.nautobot.extraEnvVarsCM }}
+            {{- range $.Values.nautobot.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
+            {{- end }}
+            {{- if $.Values.nautobot.extraEnvVarsSecret }}
+            {{- range $.Values.nautobot.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
+            {{- end }}
+            {{- end }}
+          {{- if $.Values.nautobot.resources }}
+          resources: {{- toYaml $.Values.nautobot.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: "nautobot-static"
+              mountPath: "/opt/nautobot/static"
+            - name: "git-repos"
+              mountPath: "/opt/nautobot/git"
+            - name: "nautobot-config"
+              mountPath: "/opt/nautobot/uwsgi.ini"
+              subPath: "uwsgi.ini"
+            {{- if $.Values.nautobot.nginx.enabled }}
+            - name: "nautobot-certs"
+              mountPath: "/opt/certs"
+            {{- end }}
+            {{- if $.Values.nautobot.config }}
+            - name: "nautobot-config"
+              mountPath: "/opt/nautobot/nautobot_config.py"
+              subPath: "nautobot_config.py"
+            {{- end }}
+            {{- if $.Values.nautobot.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" $.Values.nautobot.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: "nautobot-static"
+          emptyDir: {}
+        - name: "git-repos"
+          emptyDir: {}
+        - name: "nautobot-config"
+          configMap:
+            name: {{ include "common.names.fullname" $ }}-config
+        {{- if $.Values.nautobot.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" $.Values.nautobot.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{ end -}}

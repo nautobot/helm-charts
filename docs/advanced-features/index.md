@@ -10,6 +10,7 @@ With [Kubernetes](https://kubernetes.io/), public clouds, and the [dependency su
 * [Existing Secrets](/advanced-features/existing-secrets)
 * [External Database](/advanced-features/external-database)
 * [External Redis](/advanced-features/external-redis)
+* [Initialization Job](/advanced-features/init-hook)
 * [Ingress](/advanced-features/ingress)
 * [MySQL Support](/advanced-features/mysql)
 * [Nautobot as a Subchart](/advanced-features/nautobot-as-subchart)

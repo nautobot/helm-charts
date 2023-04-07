@@ -15,6 +15,7 @@ cpus
 custom-nautobot_configpy
 dbname
 dcim
+devel
 dorny
 dualstack
 fixpathinfo

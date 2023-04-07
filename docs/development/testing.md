@@ -10,10 +10,12 @@ This project is [pre-commit](https://pre-commit.com/) enabled, please make sure 
 
 It is possible to do some basic linting with an existing set of `linter_values*.yaml` files.  These files have the following purposes to simulate various deployment methods:
 
-* `linter_values.yaml` - This file is intended to test as much as possible of the templates, if it can be added/deployed it should be in this file.
 * `linter_values_minimum.yaml` - This file is intended to test the bare-minimum default values.
+* `linter_values.yaml` - This file is intended to test as much as possible of the templates, if it can be added/deployed it should be in this file.
 * `linter_values_mysql.yaml` - This file is intended to test the templates when deploying with mysql.
 * `linter_values_postgresql_ha.yaml` - This file is intended to deploy a redis sentinel cluster with postgresql HA.
+
+These files are intended to be layered on top of each other for additional functionality.  In other words to template MySQL values you could run `helm template nautobot charts/nautobot -f linter_values_minimum.yaml -f linter_values_mysql.yaml`.
 
 We really should run functional testing with these templates but they require various levels of system resources which makes this impractical on a developer laptop.
 
@@ -34,7 +36,7 @@ We test with 3 frameworks: `nsa`, `mitre`, and `armobest`
 We are also working towards implementing [checkov](https://www.checkov.io/) ([GitHub](https://github.com/bridgecrewio/checkov)) tests, these can be run locally with:
 
 ```no-highlight
-checkov --directory charts/nautobot --skip-path charts/nautobot/linter_values.*.yaml --var-file charts/nautobot/linter_values.yaml --framework helm
+checkov --directory charts/nautobot --skip-path "charts/nautobot/linter_values.*.yaml" --var-file charts/nautobot/linter_values_minimum.yaml --var-file charts/nautobot/linter_values.yaml --framework helm
 ```
 
 ## Per-Deployment Testing

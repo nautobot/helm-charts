@@ -1,68 +1,14 @@
 ---
 postgresql:
-  auth:
-    password: "change-me"
-  enabled: true
-  primary:
-    resources: {}
   metrics:
     enabled: true
     serviceMonitor:
       enabled: true
 redis:
-  auth:
-    password: "change-me"
-  master:
-    resources: {}
   metrics:
     enabled: true
     serviceMonitor:
       enabled: true
-
-celery:
-  resources:
-    requests:
-      cpu: null
-      memory: null
-    limits:
-      cpu: null
-      memory: null
-
-nautobot:
-  debug: true
-  replicaCount: 1
-  superUser:
-    password: "admin"
-  pdb:
-    create: false
-  resources:
-    requests:
-      cpu: null
-      memory: null
-    limits:
-      cpu: null
-      memory: null
-  nginx:
-    enabled: false
-    resources:
-      requests:
-        cpu: null
-        memory: null
-      limits:
-        cpu: null
-        memory: null
-
-workers:
-  default:
-    pdb:
-      create: false
-    replicaCount: 1
-
-ingress:
-  enabled: true
-  hostname: "nautobot.minikube.local"
-  annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 
 metrics:
   enabled: true

@@ -53,11 +53,9 @@ kubectl get secret nautobot-env -o jsonpath="{.data.NAUTOBOT_SUPERUSER_PASSWORD}
 
 ## Configure Nautobot Deployment Parameters
 
-TODO Update values link
-
 When [deploying a helm chart](https://helm.sh/docs/intro/using_helm/) there are several different methods to apply alternate configuration values.  One option is via the command line using the
 `--set` argument, however, changing multiple variables becomes tedious, a better approach to changing multiple values is to create a YAML file and add the `--values custom_values.yaml` argument.
-Other examples/recommendations on this site demonstrate the usage of a custom YAML file to apply these values.  All of the available options are documented in the [values](#values) section, however, the Nautobot application-specific values are summarized in the [Nautobot Application Values](#nautobot-application-values) section below.  For additional examples be sure to check the [advanced features](/advanced-features/) page.
+Other [examples/recommendations](/advanced-features/) on this site demonstrate the usage of a custom YAML file to apply these values.  All of the available options are documented in the [reference](/configuration/reference) section.  For additional examples be sure to check the [advanced features](/advanced-features/) page.
 
 ### Required Settings
 

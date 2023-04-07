@@ -10,6 +10,16 @@ redis:
     password: "change-me"
   master:
     resources: {}
+
+celery:
+  resources:
+    requests:
+      cpu: null
+      memory: null
+    limits:
+      cpu: null
+      memory: null
+
 nautobot:
   debug: true
   replicaCount: 1
@@ -18,23 +28,27 @@ nautobot:
   pdb:
     create: false
   resources:
-    requests: {}
+    requests:
+      cpu: null
+      memory: null
+    limits:
+      cpu: null
+      memory: null
   nginx:
     enabled: false
-    resources: {}
+    resources:
+      requests:
+        cpu: null
+        memory: null
+      limits:
+        cpu: null
+        memory: null
 
 workers:
   default:
     pdb:
       create: false
     replicaCount: 1
-    resources:
-      requests: {}
-      limits: {}
-  beat:
-    resources:
-      requests: {}
-      limits: {}
 
 ingress:
   enabled: true

@@ -22,7 +22,7 @@ minikube config set container-runtime containerd
 These settings are here simply to demonstrate how to change them, they are not requirements.
 
 ```no-highlight
-minikube start --memory=4G --cpus=4 --disk-size 10000mb --extra-config=apiserver.service-node-port-range=80-32767
+minikube start --memory=6G --cpus=4 --disk-size 10000mb --extra-config=apiserver.service-node-port-range=80-32767
 ```
 
 ### Running minikube Config
@@ -70,7 +70,7 @@ This will install the [`kube-prometheus-stack`](https://github.com/prometheus-co
 ```no-highlight
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm install monitoring prometheus-community/kube-prometheus-stack -f contrib/kube-stack-prometheus.yaml
-helm upgrade nautobot charts/nautobot -f contrib/minikube-with-metrics.yaml
+helm upgrade nautobot charts/nautobot --reuse-values -f contrib/minikube-with-metrics.yaml
 ```
 
 Using the predefined values file the following endpoints will be available:
@@ -86,12 +86,34 @@ The following will install `cert-manager`, configure a CA, issue certificates, a
 ```no-highlight
 helm repo add jetstack https://charts.jetstack.io
 helm install cert-manager jetstack/cert-manager --set installCRDs=true
+kubectl apply -f contrib/cert-manager-config.yaml
+helm upgrade nautobot charts/nautobot --reuse-values -f contrib/cert-manager-delta-values.yaml
 ```
 
-TODO Document self signed certs
+If you want your local Mac OS (for Windows trust the generated temp-ca.cert by hand) to trust the CA use:
+<!-- spell-checker: disable -->
+
+```no-highlight
+kubectl get secret internal-k8s-ca-tls -o jsonpath='{.data.ca\.crt}' | base64 -d  > temp-ca.cert
+security add-trusted-cert -d -r trustRoot -k ~/Library/Keychains/login.keychain-db ./temp-ca.cert
+```
+
+<!-- spell-checker: enable -->
+Remember to "un-trust" the CA when you tare the environment down with `security remove-trusted-cert -d ./temp-ca.cert`
 
 ### Metrics Server
 
 ```no-highlight
 minikube addons enable metrics-server
+```
+
+## Stop/Destroy Minikube Environment
+
+When you are finished with your minikube environment run the following commands:
+
+```no-highlight
+minikube stop
+minikube delete
+# if you setup cert-manager
+security remove-trusted-cert -d ./temp-ca.cert
 ```

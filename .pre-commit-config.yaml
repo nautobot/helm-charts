@@ -59,6 +59,8 @@ repos:
   #         - "--skip-path"
   #         - "charts/nautobot/linter_values.*.yaml"
   #         - "--var-file"
+  #         - "charts/nautobot/linter_values_minimum.yaml"
+  #         - "--var-file"
   #         - "charts/nautobot/linter_values.yaml"
   #         - "--framework"
   #         - "helm"

@@ -86,10 +86,3 @@ commonAnnotations:
 serviceAccount:
   annotations:
     service_account_annotation: "only_the_sa"
-
-postgresql:
-  auth:
-    password: "change-me"
-redis:
-  auth:
-    password: "change-me"

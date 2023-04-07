@@ -1,6 +1,11 @@
 # Upgrading
 
-## To 2.x
+!!! warning
+    These upgrade instructions cover the upgrades of the helm chart only, they do NOT cover any steps necessary to upgrade the Nautobot application.  Please see the [official core documentation](https://docs.nautobot.com/projects/core/en/stable/installation/upgrading) for further details.
+
+## Major Version Upgrades
+
+### To 2.x
 
 !!! note
     These instructions assume you have followed the very basic installation instructions as described above.  If you have utilized existing secrets or advanced options, please see the release notes referenced below for possible additional steps.
@@ -25,7 +30,7 @@
 
 * The MariaDB subchart was upgraded from version 10 to version 11, this is a breaking change, see the [release notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1100) for more information.  No default values passed to this chart have changed.
 
-### Example Upgrade Procedure
+#### Example Upgrade Procedure
 
 !!! warning
     This is only an example based on the most simple default deployment case.  Be sure to read the [Bitnami PostgreSQL Release Notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/) before upgrading.
@@ -120,11 +125,21 @@ helm upgrade nautobot nautobot/nautobot -f ${New values.yaml file from above}
 !!! note
     The instructions above reuse the same PostgreSQL version you were using in your chart release. Otherwise, you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
 
+## Minor Version Upgrades
+
+## Nautobot Versions
+
+This chart doesn't always get a new release with a new release of Nautobot, therefore the chart versions do NOT correspond to a Nautobot version.  It is possible to deploy newer Nautobot versions with this chart however, to do this simply run a command similar to:
+
+```no-highlight
+helm upgrade nautobot nautobot/nautobot --reuse-values --set nautobot.image.tag=1.5.X-py3.10
+```
+
 ## 1.0.x to 1.1.x
 
 Following the normal helm upgrade procedures is sufficient for upgrading during this release:
 
 ```no-highlight
 helm repo update nautobot
-helm upgrade nautobot nautobot/nautobot -f nautobot.values.yaml
+helm upgrade nautobot nautobot/nautobot --reuse-values
 ```

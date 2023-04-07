@@ -825,6 +825,9 @@
                 },
                 "initNautobot": {
                   "type": "boolean"
+                },
+                "staticFilesOnly": {
+                  "type": "boolean"
                 }
               }
             }

@@ -1,0 +1,7 @@
+---
+nautobots:
+  static:
+    enabled: true
+    ingressPath: "/static"
+    initNautobot: true
+    staticFilesOnly: true

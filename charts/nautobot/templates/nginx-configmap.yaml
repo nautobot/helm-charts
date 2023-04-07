@@ -1,4 +1,11 @@
-{{- if and .Values.nautobot.nginx.enabled }}
+{{- $generateConfigMap := false }}
+{{- $nautobots := (include "nautobot.nautobots" .) | mustFromJson -}}
+{{- range $nautobotName, $nautobot := $nautobots -}}
+{{- if or $nautobot.initNautobot $nautobot.staticFilesOnly }}
+{{- $generateConfigMap = true }}
+{{- end }}
+{{- end }}
+{{- if $generateConfigMap }}
 ---
 apiVersion: v1
 kind: ConfigMap

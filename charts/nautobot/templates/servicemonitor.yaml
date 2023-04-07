@@ -54,7 +54,7 @@ spec:
   endpoints:
     - port: "nginxmetrics"
 {{- end }}
-{{- if $.Values.metrics.uwsgiExporter.enabled }}
+{{- if and $.Values.metrics.uwsgiExporter.enabled (not $nautobot.staticFilesOnly) }}
 ---
 apiVersion: "monitoring.coreos.com/v1"
 kind: "ServiceMonitor"

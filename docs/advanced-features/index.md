@@ -18,6 +18,7 @@ With [Kubernetes](https://kubernetes.io/), public clouds, and the [dependency su
 * [Prometheus Operator Metrics](/advanced-features/prometheus-metrics)
 * [Redis Sentinel](/advanced-features/redis-sentinel)
 * [Redis TLS](/advanced-features/redis-tls)
+* [Static Files Only](/advanced-features/static-only)
 
 For additional configuration for one of the subcharts please see their documentation:
 

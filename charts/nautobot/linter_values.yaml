@@ -23,6 +23,9 @@ nautobots:
     autoscaling:
       enabled: false
 
+  default:
+    initNautobot: false  # Will be handled by the docs container
+
   # Enable a separate deployment specifically for GraphQL requests
   graphql:
     enabled: true
@@ -30,6 +33,12 @@ nautobots:
     ingressPath: "/graphql"
     autoscaling:
       enabled: true
+
+  static:
+    enabled: true
+    ingressPath: "/static"
+    initNautobot: true
+    staticFilesOnly: true
 
 workers:
   beat:

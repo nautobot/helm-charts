@@ -34,7 +34,9 @@ annotations:
     - kind: added
       description: Added the ability to add separate endpoints such as /api and /graphql for scaling out
     - kind: added
-      description: Added the ability to add deploy workers for [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/)
+      description: Added the ability to add deploy workers for [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues)
+    - kind: added
+      description: Added the ability to [host static files separately](https://docs.nautobot.com/projects/core/en/stable/advanced-features/static-only).
     - kind: changed
       description: Upgraded Nautobot from 1.4.5 to 1.5.15
     - kind: changed

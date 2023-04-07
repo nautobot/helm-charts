@@ -28,7 +28,7 @@ Deploy it in [minikube](/development/local-dev) and test... yes this needs some 
 We use [kubescape](https://github.com/kubescape/kubescape) in the CI pipeline to test for various security best practice patterns in the helm deployment against the above mentioned linter values files.  As well as [Snyk](https://snyk.io/).  You can test `kubescape` locally with:
 
 ```no-highlight
-helm template -n testing -f charts/nautobot/linter_values.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json
+helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json
 ```
 
 We test with 3 frameworks: `nsa`, `mitre`, and `armobest`

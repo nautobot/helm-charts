@@ -411,7 +411,10 @@ nautobots:
   default:
     enabled: true
     ingressPath: "/"
+    # Should the docker entrypoint run to include the Nautobot post_upgrade steps
     initNautobot: true
+    # Should this deployment ONLY run nginx hosting /static files?
+    staticFilesOnly: false
 
 # Enable a separate deployment specifically for API requests
 # api:

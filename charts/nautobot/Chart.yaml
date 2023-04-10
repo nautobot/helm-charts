@@ -39,6 +39,8 @@ annotations:
       description: Added the ability to [host static files separately](https://docs.nautobot.com/projects/core/en/stable/advanced-features/static-only).
     - kind: added
       description: Added the ability to [initialize Nautobot as a Job](https://docs.nautobot.com/projects/core/en/stable/advanced-features/init-hook).
+    - kind: added
+      description: Added optional [RabbitMQ support](/advanced-features/rabbitmq) for Celery Task Queueing
     - kind: changed
       description: Upgraded Nautobot from 1.4.5 to 1.5.15
     - kind: changed
@@ -66,6 +68,10 @@ dependencies:
     alias: "postgresqlha"
   - condition: "mariadb.enabled"
     name: "mariadb"
+    repository: "https://charts.bitnami.com/bitnami"
+    version: "11.x.x"
+  - condition: "rabbitmq.enabled"
+    name: "rabbitmq"
     repository: "https://charts.bitnami.com/bitnami"
     version: "11.x.x"
   - name: "common"

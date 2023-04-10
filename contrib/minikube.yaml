@@ -13,12 +13,8 @@ redis:
 
 celery:
   resources:
-    requests:
-      cpu: null
-      memory: null
-    limits:
-      cpu: null
-      memory: null
+    requests: null
+    limits: null
 
 nautobot:
   debug: true
@@ -28,27 +24,23 @@ nautobot:
   pdb:
     create: false
   resources:
-    requests:
-      cpu: null
-      memory: null
-    limits:
-      cpu: null
-      memory: null
+    requests: null
+    limits: null
   nginx:
     enabled: false
     resources:
-      requests:
-        cpu: null
-        memory: null
-      limits:
-        cpu: null
-        memory: null
+      requests: null
+      limits: null
 
 workers:
   default:
     pdb:
       create: false
     replicaCount: 1
+  beat:
+    resources:
+      requests: null
+      limits: null
 
 ingress:
   enabled: true

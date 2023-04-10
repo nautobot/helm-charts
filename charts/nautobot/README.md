@@ -93,6 +93,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/latest/operati
 | https://charts.bitnami.com/bitnami | mariadb | 11.x.x |
 | https://charts.bitnami.com/bitnami | postgresql | 12.x.x |
 | https://charts.bitnami.com/bitnami | postgresqlha(postgresql-ha) | 11.x.x |
+| https://charts.bitnami.com/bitnami | rabbitmq | 11.x.x |
 | https://charts.bitnami.com/bitnami | redis | 17.x.x |
 
 <!-- This section is a duplicate of docs/configuration/reference.md.gotmpl -->
@@ -357,6 +358,12 @@ The `postgresqlha.*` values configure the upstream chart from Bitnami.  Please s
 | <a name="postgresqlha.postgresql.postgresPassword">[postgresqlha.postgresql.postgresPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1063)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL postgres user password |
 | <a name="postgresqlha.postgresql.repmgrPassword">[postgresqlha.postgresql.repmgrPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1065)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL Repmgr password |
 | <a name="postgresqlha.postgresql.username">[postgresqlha.postgresql.username](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1067)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL username |
+
+## Rabbitmq Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| <a name="rabbitmq.enabled">[rabbitmq.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1130)</a> | bool | `false` | Enable deployment of the [Bitnami RabbitMQ](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq) chart, all other `rabbitmq.*` parameters will be passed directly to that chart |
 
 ## Redis Values
 

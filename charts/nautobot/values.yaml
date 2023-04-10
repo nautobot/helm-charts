@@ -520,7 +520,7 @@ celery:
     - "--loglevel"
     - "$(NAUTOBOT_LOG_LEVEL)"
     - "--queues"
-    - "$(NAUTOBOT_CELERY_QUEUE)"
+    - "$(CELERY_TASK_QUEUES)"
     - "--events"
 
   # -- ([]string) Override default Nautobot Celery Worker container args (useful when using custom images)
@@ -1124,3 +1124,7 @@ postgresqlha:
           - "ALL"
   pgpoolImage:
     pullPolicy: "Always"
+
+rabbitmq:
+  # -- Enable deployment of the [Bitnami RabbitMQ](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq) chart, all other `rabbitmq.*` parameters will be passed directly to that chart
+  enabled: false

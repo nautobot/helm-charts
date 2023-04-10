@@ -2,6 +2,11 @@
 nautobot:
   singleInit: true
 
+initJob:
+  resources:
+    limits:
+      cpu: "5"
+
 postgresql:
   enabled: false
 

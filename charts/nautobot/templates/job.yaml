@@ -49,7 +49,7 @@ spec:
       {{- end }}
       containers:
         # This init container will run post_upgrade which initializes/upgrades the DB as well as collects static files
-        - name: nautobot-init
+        - name: nautobot
           image: {{ include "nautobot.image" $ }}
           imagePullPolicy: {{ $.Values.nautobot.image.pullPolicy }}
           {{- if $.Values.nautobot.lifecycleHooks }}

@@ -25,16 +25,17 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_golden_config.png
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
-  # TODO CHANGE THIS
   artifacthub.io/changes: |
+    - kind: changed
+      description: Documentation has a new home on [Read The Docs](https://helm-charts.readthedocs.io/en/latest/), check it out!
     - kind: added
-      description: Added NGINX sidecars
+      description: Added optional NGINX sidecars
     - kind: added
-      description: Added NGINX and uWSGI exporter sidecars for metrics
+      description: Added optional NGINX and uWSGI exporter sidecars for metrics
     - kind: added
-      description: Added the ability to add separate endpoints such as /api and /graphql for scaling out
+      description: Added the ability to add separate any endpoint such as /api or /graphql for scaling out
     - kind: added
-      description: Added the ability to add deploy workers for [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues)
+      description: Added the ability to add additional celery workers for [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues)
     - kind: added
       description: Added the ability to [host static files separately](https://docs.nautobot.com/projects/core/en/stable/advanced-features/static-only).
     - kind: added
@@ -44,14 +45,18 @@ annotations:
     - kind: changed
       description: Upgraded Nautobot from 1.4.5 to 1.5.15
     - kind: changed
-      description: Chart dependencies now included locally as they no longer exist at bitnami.com (too old)
-    - kind: fixed
-      description: Fixed #214 allowing sops in helm values
+      description:  Upgraded Bitnami common subchart from 1.14.1 to 2.2.4
+    - kind: changed
+      description:  Upgraded Mariadb subchart from 10.5.1 to 11.5.6
+    - kind: changed
+      description:  Upgraded PostgreSQL-HA subchart from 8.6.13 to 11.2.1
+    - kind: changed
+      description:  Upgraded Redis subchart from 16.10.1 to 17.9.3
     - kind: deprecated
       description: The `.celeryWorker` and `.celeryBeat` values have been deprecated and are now defined in `.workers.default` and `.workers.beat`
 apiVersion: "v2"
 appVersion: "1.5.15"
-version: "2.0.0-alpha.10"
+version: "2.0.0-beta.1"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

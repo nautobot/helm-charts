@@ -5,6 +5,7 @@ The Nautobot Helm Chart is intended to be an all-in-one solution for a basic dep
 * [MariaDB](https://github.com/bitnami/charts/tree/main/bitnami/mariadb)
 * [PostgreSQL](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) or [PostgreSQL-HA](https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha)
 * [Redis](https://github.com/bitnami/charts/tree/main/bitnami/redis)
+* [RabbitMQ](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq) (optional)
 
 Each of these charts can be configured using the following values:
 
@@ -16,6 +17,8 @@ mariadb:
 postgresql:
   enabled: true
 postgresqlha:
+  enabled: false
+rabbitmq:
   enabled: false
 redis:
   enabled: true

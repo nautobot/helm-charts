@@ -51,6 +51,7 @@ postgresqlha
 prethreaded
 proto
 psql
+rabbitmq
 remediations
 repmgr
 respawn

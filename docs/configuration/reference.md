@@ -265,6 +265,12 @@ The `postgresqlha.*` values configure the upstream chart from Bitnami.  Please s
 | <a name="postgresqlha.postgresql.repmgrPassword">[postgresqlha.postgresql.repmgrPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1065)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL Repmgr password |
 | <a name="postgresqlha.postgresql.username">[postgresqlha.postgresql.username](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1067)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL username |
 
+## Rabbitmq Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| <a name="rabbitmq.enabled">[rabbitmq.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1130)</a> | bool | `false` | Enable deployment of the [Bitnami RabbitMQ](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq) chart, all other `rabbitmq.*` parameters will be passed directly to that chart |
+
 ## Redis Values
 
 The `redis.*` values configure the upstream chart from Bitnami.  Please see the [upstream chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) for complete details on all of its values.

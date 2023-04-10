@@ -522,6 +522,7 @@
     "celeryWorker",
     "commonAnnotations",
     "ingress",
+    "initJob",
     "mariadb",
     "metrics",
     "nautobot",
@@ -534,30 +535,6 @@
     "serviceAccount"
   ],
   "properties": {
-    "workers": {
-      "type": "object",
-      "patternProperties": {
-        "^[a-zA-Z0-9]+$": {
-          "type": "object",
-          "allOf": [
-            {
-              "$ref": "#/$defs/celery"
-            },
-            {
-              "required": [
-                "enabled"
-              ],
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                }
-              }
-            }
-          ]
-        }
-      },
-      "description": "List of Nautobot objects (matching the Nautobot spec) to create deployments for"
-    },
     "celery": {
       "allOf": [
         {
@@ -693,6 +670,13 @@
           "type": "boolean"
         }
       }
+    },
+    "initJob": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        }
+      ]
     },
     "mariadb": {
       "allOf": [
@@ -1063,6 +1047,30 @@
     },
     "sops": {
       "type": "object"
+    },
+    "workers": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9]+$": {
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/celery"
+            },
+            {
+              "required": [
+                "enabled"
+              ],
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "description": "List of Nautobot objects (matching the Nautobot spec) to create deployments for"
     }
   }
 }

@@ -387,3 +387,12 @@ Celery Beat can only have 1 replica enforce that here
 {{- $workers = mustMergeOverwrite $workers (dict "beat" (dict "autoscaling" (dict "enabled" false))) }}
 {{- mustToJson $workers -}}
 {{- end }}
+
+{{/*
+Get values for the init job if singleInit is true.  Default all values to the root .nautobot defaults
+*/}}
+{{ define "nautobot.initJob" }}
+{{- $initJob := dict }}
+{{- $initJob = mustMergeOverwrite (deepCopy $.Values.nautobot) $.Values.initJob }}
+{{- mustToJson $initJob -}}
+{{- end }}

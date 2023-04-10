@@ -1,4 +1,5 @@
 {{- if $.Values.nautobot.singleInit -}}
+{{- $initJob := (include "nautobot.initJob" .) | mustFromJson -}}
 ---
 apiVersion: {{ include "common.capabilities.cronjob.apiVersion" $ }}
 kind: Job
@@ -18,13 +19,13 @@ metadata:
 spec:
   template:
     metadata:
-      {{- if $.Values.nautobot.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.podAnnotations "context" $) | nindent 8 }}
+      {{- if $initJob.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" $initJob.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" $ | nindent 8 }}
         app.kubernetes.io/component: nautobot-init
-        {{- if $.Values.nautobot.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.podLabels "context" $) | nindent 8 }}
+        {{- if $initJob.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" $initJob.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
       restartPolicy: "OnFailure"
@@ -32,31 +33,31 @@ spec:
       serviceAccountName: {{ include "nautobot.serviceAccountName" $ }}
       {{- end }}
       {{- include "nautobot.imagePullSecrets" $ | nindent 6 }}
-      {{- if $.Values.nautobot.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.hostAliases "context" $) | nindent 8 }}
+      {{- if $initJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" $initJob.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      {{- if $.Values.nautobot.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" $.Values.nautobot.nodeSelector "context" $) | nindent 8 }}
+      {{- if $initJob.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" $initJob.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- if $.Values.nautobot.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.tolerations "context" $) | nindent 8 }}
+      {{- if $initJob.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" $initJob.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if $.Values.nautobot.priorityClassName }}
-      priorityClassName: {{ $.Values.nautobot.priorityClassName | quote }}
+      {{- if $initJob.priorityClassName }}
+      priorityClassName: {{ $initJob.priorityClassName | quote }}
       {{- end }}
-      {{- if $.Values.nautobot.podSecurityContext.enabled }}
-      securityContext: {{- omit $.Values.nautobot.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- if $initJob.podSecurityContext.enabled }}
+      securityContext: {{- omit $initJob.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
         # This init container will run post_upgrade which initializes/upgrades the DB as well as collects static files
-        - name: nautobot
+        - name: "nautobot-init"
           image: {{ include "nautobot.image" $ }}
-          imagePullPolicy: {{ $.Values.nautobot.image.pullPolicy }}
-          {{- if $.Values.nautobot.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.lifecycleHooks "context" $) | nindent 12 }}
+          imagePullPolicy: {{ $initJob.image.pullPolicy }}
+          {{- if $initJob.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" $initJob.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.nautobot.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.nautobot.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if $initJob.containerSecurityContext.enabled }}
+          securityContext: {{- omit $initJob.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           args:
             - "echo"
@@ -64,28 +65,28 @@ spec:
           env:
             - name: "NAUTOBOT_K8S_COMPONENT"
               value: "nautobot-init"
-            {{- if $.Values.nautobot.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" $.Values.nautobot.extraEnvVars "context" $) | nindent 12 }}
+            {{- if $initJob.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" $initJob.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env
             - secretRef:
                 name: {{ include "common.names.fullname" $ }}-env
-            {{- if $.Values.nautobot.extraEnvVarsCM }}
-            {{- range $.Values.nautobot.extraEnvVarsCM }}
+            {{- if $initJob.extraEnvVarsCM }}
+            {{- range $initJob.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
             {{- end }}
             {{- end }}
-            {{- if $.Values.nautobot.extraEnvVarsSecret }}
-            {{- range $.Values.nautobot.extraEnvVarsSecret }}
+            {{- if $initJob.extraEnvVarsSecret }}
+            {{- range $initJob.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" . "context" $) }}
             {{- end }}
             {{- end }}
-          {{- if $.Values.nautobot.resources }}
-          resources: {{- toYaml $.Values.nautobot.resources | nindent 12 }}
+          {{- if $initJob.resources }}
+          resources: {{- toYaml $initJob.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: "nautobot-static"
@@ -95,17 +96,17 @@ spec:
             - name: "nautobot-config"
               mountPath: "/opt/nautobot/uwsgi.ini"
               subPath: "uwsgi.ini"
-            {{- if $.Values.nautobot.nginx.enabled }}
+            {{- if $initJob.nginx.enabled }}
             - name: "nautobot-certs"
               mountPath: "/opt/certs"
             {{- end }}
-            {{- if $.Values.nautobot.config }}
+            {{- if $initJob.config }}
             - name: "nautobot-config"
               mountPath: "/opt/nautobot/nautobot_config.py"
               subPath: "nautobot_config.py"
             {{- end }}
-            {{- if $.Values.nautobot.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" $.Values.nautobot.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- if $initJob.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" $initJob.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
       volumes:
         - name: "nautobot-static"
@@ -115,7 +116,7 @@ spec:
         - name: "nautobot-config"
           configMap:
             name: {{ include "common.names.fullname" $ }}-config
-        {{- if $.Values.nautobot.extraVolumes }}
-        {{- include "common.tplvalues.render" ( dict "value" $.Values.nautobot.extraVolumes "context" $) | nindent 8 }}
+        {{- if $initJob.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" $initJob.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{ end -}}

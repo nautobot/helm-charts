@@ -406,6 +406,9 @@ nautobot:
   #   - name: "NAUTOBOT_BANNER_TOP"
   #     value: "Nautobot Helm Chart"
 
+# -- Override values for the nautobot-init job if nautobot.singleInit is true
+initJob: {}
+
 # -- (map[name]nautobot) Additional Nautobot deployments, map key is the name of the deployment and the additional keys `enabled`, `ingressPath`, `initNautobot` are required for each Nautobot deployment, all other keys for each Nautobot will override the defaults provided by the root `.Values.nautobot`.
 # @default -- See values.yaml
 nautobots:

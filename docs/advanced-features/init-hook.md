@@ -6,3 +6,6 @@ In certain deployments where shared storage is used for Nautobot static and medi
 nautobot:
   singleInit: true
 ```
+
+!!! note
+    The specs for the job default to the values specified in the `.nautobot` values, if you would like to override them any value in `.nautobot` can also be specified in `.initJob`

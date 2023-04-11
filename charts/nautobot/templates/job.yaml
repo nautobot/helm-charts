@@ -96,10 +96,6 @@ spec:
             - name: "nautobot-config"
               mountPath: "/opt/nautobot/uwsgi.ini"
               subPath: "uwsgi.ini"
-            {{- if $initJob.nginx.enabled }}
-            - name: "nautobot-certs"
-              mountPath: "/opt/certs"
-            {{- end }}
             {{- if $initJob.config }}
             - name: "nautobot-config"
               mountPath: "/opt/nautobot/nautobot_config.py"

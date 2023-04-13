@@ -1,6 +1,6 @@
 # Basic Installation
 
-1. Make sure you meet the [prerequisites](prerequisites/)
+1. Make sure you meet the [prerequisites](../prerequisites/)
 2. Add the Nautobot Helm Repo:
 
 ```no-highlight
@@ -16,7 +16,7 @@ helm repo add nautobot https://nautobot.github.io/helm-charts/
 helm install nautobot nautobot/nautobot --set postgresql.auth.password="change-me" --set redis.auth.password="change-me"
 ```
 
-This command deploys Nautobot, on the Kubernetes cluster, in the default configuration. The [Reference](../configuration/reference/) section lists the parameters that can be customized during installation.
+This command deploys Nautobot, on the Kubernetes cluster, in the default configuration. The [Reference](../../configuration/reference/) section lists the parameters that can be customized during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -55,7 +55,7 @@ kubectl get secret nautobot-env -o jsonpath="{.data.NAUTOBOT_SUPERUSER_PASSWORD}
 
 When [deploying a helm chart](https://helm.sh/docs/intro/using_helm/) there are several different methods to apply alternate configuration values.  One option is via the command line using the
 `--set` argument, however, changing multiple variables becomes tedious, a better approach to changing multiple values is to create a YAML file and add the `--values custom_values.yaml` argument.
-Other [examples/recommendations](..//advanced-features/) on this site demonstrate the usage of a custom YAML file to apply these values.  All of the available options are documented in the [reference](../configuration/reference) section.  For additional examples be sure to check the [advanced features](../advanced-features/) page.
+Other [examples/recommendations](../../advanced-features/) on this site demonstrate the usage of a custom YAML file to apply these values.  All of the available options are documented in the [reference](../../configuration/reference) section.  For additional examples be sure to check the [advanced features](../../advanced-features/) page.
 
 ### Required Settings
 

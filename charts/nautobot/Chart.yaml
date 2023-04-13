@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "true"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.5.15-py3.10
+      image: ghcr.io/nautobot/nautobot:1.5.16-py3.10
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -43,7 +43,7 @@ annotations:
     - kind: added
       description: Added optional [RabbitMQ support](/advanced-features/rabbitmq) for Celery Task Queueing
     - kind: changed
-      description: Upgraded Nautobot from 1.4.5 to 1.5.15
+      description: Upgraded Nautobot from 1.4.5 to 1.5.16
     - kind: changed
       description:  Upgraded Bitnami common subchart from 1.14.1 to 2.2.4
     - kind: changed
@@ -55,8 +55,8 @@ annotations:
     - kind: deprecated
       description: The `.celeryWorker` and `.celeryBeat` values have been deprecated and are now defined in `.workers.default` and `.workers.beat`
 apiVersion: "v2"
-appVersion: "1.5.15"
-version: "2.0.0-beta.6"
+appVersion: "1.5.16"
+version: "2.0.0-beta.7"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

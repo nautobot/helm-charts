@@ -7,11 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Added the ability to create additional endpoints for scaling out, for example `/api` requests can now have their own deployments see `Values.nautobots` and the [Additional Nautobots](/advanced-features/additional-nautobots) page.
-* Added the ability to deploy additional celery workers to listen on [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/) see `Values.workers` and the [Celery Queues](/advanced-features/celery-queues) page
-* Added optional [RabbitMQ support](/advanced-features/rabbitmq) for Celery Task Queueing
-* Added the ability to create an nginx deployment exclusively for `/static` files.  See the [documentation here](/advanced-features/static-only).
-* Added the ability to run a single Job for Nautobot post_install tasks in certain scenarios.  See the [documentation here](/advanced-features/init-hook).
+* Added the ability to create additional endpoints for scaling out, for example `/api` requests can now have their own deployments see `Values.nautobots` and the [Additional Nautobots](../../advanced-features/additional-nautobots/) page.
+* Added the ability to deploy additional celery workers to listen on [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/) see `Values.workers` and the [Celery Queues](../../advanced-features/celery-queues/) page
+* Added optional [RabbitMQ support](../../advanced-features/rabbitmq/) for Celery Task Queueing
+* Added the ability to create an nginx deployment exclusively for `/static` files.  See the [documentation here](../../advanced-features/static-only/).
+* Added the ability to run a single Job for Nautobot post_install tasks in certain scenarios.  See the [documentation here](../../advanced-features/init-hook/).
 * Added support for Nginx (`nautobot.nginx.enabled`) as a proxy to Nautobot (deployed as a sidecar)
 * Added support for Nginx exporters (`metrics.nginxExporter.enabled`)
 * Added support for UWSGI exporters (`metrics.uwsgiExporter.enabled`)

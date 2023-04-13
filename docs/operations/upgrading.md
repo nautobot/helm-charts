@@ -112,7 +112,7 @@
     kubectl scale --namespace $NAMESPACE --replicas 0 deployment/nautobot deployment/nautobot-celery-beat deployment/nautobot-celery-worker
     ```
 
-7. This would be a good time to get a pristine [backup](backup-restore/#backup-nautobot) of your database
+7. This would be a good time to get a pristine [backup](../backup-restore/#backup-nautobot) of your database
 
     ```no-highlight
     kubectl delete statefulsets.apps $STATEFULSET_NAME --namespace $NAMESPACE --cascade=orphan

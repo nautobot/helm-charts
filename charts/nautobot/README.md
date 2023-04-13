@@ -182,9 +182,9 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/latest/operati
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| <a name="initJob">[initJob](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L410)</a> | object | `{"installHook":"post-install","upgradeHook":"post-upgrade"}` | Override values for the nautobot-init job if nautobot.singleInit is true |
-| <a name="initJob.installHook">[initJob.installHook](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L412)</a> | `post-install`, `pre-install` | `"post-install"` | [[ref](https://helm.sh/docs/topics/charts_hooks/#the-available-hooks)] Which helm hook should be used during the installation phase. |
-| <a name="initJob.upgradeHook">[initJob.upgradeHook](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L414)</a> | `post-upgrade`, `pre-upgrade` | `"post-upgrade"` | [[ref](https://helm.sh/docs/topics/charts_hooks/#the-available-hooks)] Which helm hook should be used during the upgrade phase. |
+| <a name="initJob">[initJob](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L410)</a> | object | `{"installHook":"pre-install","upgradeHook":"pre-upgrade"}` | Override values for the nautobot-init job if nautobot.singleInit is true |
+| <a name="initJob.installHook">[initJob.installHook](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L412)</a> | `post-install`, `pre-install` | `"pre-install"` | [[ref](https://helm.sh/docs/topics/charts_hooks/#the-available-hooks)] Which helm hook should be used during the installation phase. |
+| <a name="initJob.upgradeHook">[initJob.upgradeHook](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L414)</a> | `post-upgrade`, `pre-upgrade` | `"pre-upgrade"` | [[ref](https://helm.sh/docs/topics/charts_hooks/#the-available-hooks)] Which helm hook should be used during the upgrade phase. |
 
 ## Mariadb Values
 

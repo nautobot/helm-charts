@@ -13,7 +13,7 @@ metadata:
     {{- end }}
   {{- if $.Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
-    helm.sh/hook: "post-install,post-upgrade"
+    helm.sh/hook: "{{ $initJob.installHook }},{{ $initJob.upgradeHook }}"
     helm.sh/hook-weight: "-5"
   {{- end }}
 spec:

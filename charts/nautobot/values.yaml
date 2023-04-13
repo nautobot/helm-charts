@@ -407,7 +407,11 @@ nautobot:
   #     value: "Nautobot Helm Chart"
 
 # -- Override values for the nautobot-init job if nautobot.singleInit is true
-initJob: {}
+initJob:
+  # -- (`post-install`, `pre-install`) [[ref](https://helm.sh/docs/topics/charts_hooks/#the-available-hooks)] Which helm hook should be used during the installation phase.
+  installHook: "post-install"
+  # -- (`post-upgrade`, `pre-upgrade`) [[ref](https://helm.sh/docs/topics/charts_hooks/#the-available-hooks)] Which helm hook should be used during the upgrade phase.
+  upgradeHook: "post-upgrade"
 
 # -- (map[name]nautobot) Additional Nautobot deployments, map key is the name of the deployment and the additional keys `enabled`, `ingressPath`, `initNautobot` are required for each Nautobot deployment, all other keys for each Nautobot will override the defaults provided by the root `.Values.nautobot`.
 # @default -- See values.yaml

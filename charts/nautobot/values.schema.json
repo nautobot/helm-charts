@@ -675,6 +675,22 @@
       "allOf": [
         {
           "$ref": "#/$defs/deployment"
+        },
+        {
+          "required": [
+            "installHook",
+            "upgradeHook"
+          ],
+          "properties": {
+            "installHook": {
+              "type": "string",
+              "pattern": "^(post-install|pre-install)$"
+            },
+            "upgradeHook": {
+              "type": "string",
+              "pattern": "^(post-upgrade|pre-upgrade)$"
+            }
+          }
         }
       ]
     },

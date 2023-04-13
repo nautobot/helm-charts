@@ -10,7 +10,7 @@ redis:
     masterSet: nautobot
 ```
 
-Nautobot requires some additional configuration via a [custom `nautobot_config.py`](custom-nautobot-config/) with the following values set in `nautobot_config.py`:
+Nautobot requires some additional configuration via a [custom `nautobot_config.py`](../custom-nautobot-config/) with the following values set in `nautobot_config.py`:
 
 ```python
 DJANGO_REDIS_CONNECTION_FACTORY = "django_redis.pool.SentinelConnectionFactory"

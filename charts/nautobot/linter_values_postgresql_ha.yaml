@@ -3,6 +3,7 @@ nautobot:
   singleInit: true
 
 initJob:
+  command: ["/entrypoint.sh"]
   resources:
     limits:
       cpu: "5"

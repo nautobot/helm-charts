@@ -412,6 +412,7 @@ initJob:
   installHook: "pre-install"
   # -- (`post-upgrade`, `pre-upgrade`) [[ref](https://helm.sh/docs/topics/charts_hooks/#the-available-hooks)] Which helm hook should be used during the upgrade phase.
   upgradeHook: "pre-upgrade"
+  command: []
 
 # -- (map[name]nautobot) Additional Nautobot deployments, map key is the name of the deployment and the additional keys `enabled`, `ingressPath`, `initNautobot` are required for each Nautobot deployment, all other keys for each Nautobot will override the defaults provided by the root `.Values.nautobot`.
 # @default -- See values.yaml

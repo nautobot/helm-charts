@@ -57,6 +57,9 @@ spec:
           {{- if $initJob.containerSecurityContext.enabled }}
           securityContext: {{- omit $initJob.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if $initJob.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" $initJob.command "context" $) | nindent 12 }}
+          {{- end }}
           args:
             - "echo"
             - "Nautobot Initialization Done"

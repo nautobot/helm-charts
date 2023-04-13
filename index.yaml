@@ -58,6 +58,110 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.5.16
+    created: "2023-04-13T17:56:09.788972668Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - alias: postgresqlha
+      condition: postgresqlha.enabled
+      name: postgresql-ha
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Nautobot is a Network Source of Truth and Network Automation Platform.
+    digest: 2b42106199e850fa1c7c510ef5d0fdf84f2aaf59183687f561445e4060632e09
+    home: https://github.com/nautobot/nautobot
+    icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
+    keywords:
+    - DCIM
+    - IPAM
+    - SOT
+    maintainers:
+    - email: opensource@networktocode.com
+      name: Network to Code
+      url: https://www.networktocode.com/
+    name: nautobot
+    sources:
+    - https://github.com/nautobot/nautobot
+    - https://github.com/nautobot/helm-charts
+    urls:
+    - https://nautobot.github.io/helm-charts/nautobot-2.0.0-beta.8.tgz
+    version: 2.0.0-beta.8
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: Documentation has a new home on [Read The Docs](https://helm-charts.readthedocs.io/en/latest/), check it out!
+        - kind: added
+          description: Added optional NGINX sidecars
+        - kind: added
+          description: Added optional NGINX and uWSGI exporter sidecars for metrics
+        - kind: added
+          description: Added the ability to add separate any endpoint such as /api or /graphql for scaling out
+        - kind: added
+          description: Added the ability to add additional celery workers for [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues)
+        - kind: added
+          description: Added the ability to [host static files separately](https://docs.nautobot.com/projects/core/en/stable/advanced-features/static-only).
+        - kind: added
+          description: Added the ability to [initialize Nautobot as a Job](https://docs.nautobot.com/projects/core/en/stable/advanced-features/init-hook).
+        - kind: added
+          description: Added optional [RabbitMQ support](/advanced-features/rabbitmq) for Celery Task Queueing
+        - kind: changed
+          description: Upgraded Nautobot from 1.4.5 to 1.5.16
+        - kind: changed
+          description:  Upgraded Bitnami common subchart from 1.14.1 to 2.2.4
+        - kind: changed
+          description:  Upgraded Mariadb subchart from 10.5.1 to 11.5.6
+        - kind: changed
+          description:  Upgraded PostgreSQL-HA subchart from 8.6.13 to 11.2.1
+        - kind: changed
+          description:  Upgraded Redis subchart from 16.10.1 to 17.9.3
+        - kind: deprecated
+          description: The `.celeryWorker` and `.celeryBeat` values have been deprecated and are now defined in `.workers.default` and `.workers.beat`
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: nautobot
+          image: ghcr.io/nautobot/nautobot:1.5.16-py3.10
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Nautobot Documentation
+          url: https://nautobot.readthedocs.io/en/stable/
+        - name: Nautobot
+          url: https://github.com/nautobot/nautobot
+      artifacthub.io/prerelease: "true"
+      artifacthub.io/screenshots: |
+        - title: Main Page
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_main_page.png
+        - title: Config Contexts
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_config_contexts.png
+        - title: GraphQL
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_graphiql.png
+        - title: Prefix hierarchy
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_prefix_hierarchy.png
+        - title: Config Compliance
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_golden_config.png
+        - title: Chatops
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.5.16
     created: "2023-04-13T00:37:44.755665376Z"
     dependencies:
     - condition: redis.enabled
@@ -3958,4 +4062,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2023-04-13T00:37:44.724232628Z"
+generated: "2023-04-13T17:56:09.747589452Z"

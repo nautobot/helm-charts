@@ -48,8 +48,8 @@ helm install nautobot nautobot/nautobot --set postgresql.auth.password="change-m
 
 ## Contributing
 
-See [Contributing](/development/contributing.md)
+See [Contributing](development/contributing.md)
 
 ## Releases
 
-See the [Release Checklist](/development/release-checklist.md)
+See the [Release Checklist](development/release-checklist.md)

@@ -38,7 +38,7 @@ redis:
 
 <!-- spell-checker: enable -->
 
-This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot, a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
+This will autogenerate certificates for use with Redis.  Unfortunately, this CA will not be trusted by Nautobot.  In order to trust these certificates in Nautobot, a [custom `nautobot_config.py`](custom-nautobot-config/) must be created and the following values set in `nautobot_config.py`:
 
 <!-- spell-checker: disable -->
 

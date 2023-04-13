@@ -36,7 +36,7 @@
     This is only an example based on the most simple default deployment case.  Be sure to read the [Bitnami PostgreSQL Release Notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/) before upgrading.
 
 1. Please verify if any values in your local `values.yaml` file match the above values you will need to migrate them.  If you do not have the original `values.yaml` the chart was deployed with you can use `helm get values -n $NAMESPACE -o yaml` to get the deployed values.
-2. ALWAYS [BACKUP YOUR DATABASE](/operations/backup-restore/#backup-nautobot) BEFORE UPGRADING!
+2. ALWAYS [BACKUP YOUR DATABASE](backup-restore/#backup-nautobot) BEFORE UPGRADING!
 3. Run the following Commands:
 
     !!! note
@@ -112,7 +112,7 @@
     kubectl scale --namespace $NAMESPACE --replicas 0 deployment/nautobot deployment/nautobot-celery-beat deployment/nautobot-celery-worker
     ```
 
-7. This would be a good time to get a pristine [backup](/operations/backup-restore/#backup-nautobot) of your database
+7. This would be a good time to get a pristine [backup](backup-restore/#backup-nautobot) of your database
 
     ```no-highlight
     kubectl delete statefulsets.apps $STATEFULSET_NAME --namespace $NAMESPACE --cascade=orphan

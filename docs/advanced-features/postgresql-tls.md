@@ -15,7 +15,7 @@ postgresql:
     # certCAFilename: "ca.crt"
 ```
 
-This will autogenerate certificates for use with Postgres.  Unfortunately, to force Nautobot to use Postgres over SSL a [custom `nautobot_config.py`](#custom-nautobot_configpy) must be created and the following values set in `nautobot_config.py`:
+This will autogenerate certificates for use with Postgres.  Unfortunately, to force Nautobot to use Postgres over SSL a [custom `nautobot_config.py`](custom-nautobot-config/) must be created and the following values set in `nautobot_config.py`:
 
 <!-- spell-checker: disable -->
 

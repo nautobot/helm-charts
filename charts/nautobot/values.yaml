@@ -407,6 +407,7 @@ nautobot:
   #     value: "Nautobot Helm Chart"
 
 # -- Override values for the nautobot-init job if nautobot.singleInit is true
+# @default -- See values.yaml
 initJob:
   # -- (`post-install`, `pre-install`) [[ref](https://helm.sh/docs/topics/charts_hooks/#the-available-hooks)] Which helm hook should be used during the installation phase.
   installHook: "pre-install"

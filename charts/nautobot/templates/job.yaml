@@ -11,11 +11,9 @@ metadata:
     {{- if $.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if $.Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- if $.Values.commonAnnotations }}{{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}{{- end }}
     helm.sh/hook: "{{ $initJob.installHook }},{{ $initJob.upgradeHook }}"
     helm.sh/hook-weight: "-5"
-  {{- end }}
 spec:
   template:
     metadata:
@@ -70,9 +68,9 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ include "common.names.fullname" $ }}-env
+                name: {{ include "common.names.fullname" $ }}-env-init
             - secretRef:
-                name: {{ include "common.names.fullname" $ }}-env
+                name: {{ include "common.names.fullname" $ }}-env-init
             {{- if $initJob.extraEnvVarsCM }}
             {{- range $initJob.extraEnvVarsCM }}
             - configMapRef:
@@ -111,7 +109,7 @@ spec:
           emptyDir: {}
         - name: "nautobot-config"
           configMap:
-            name: {{ include "common.names.fullname" $ }}-config
+            name: {{ include "common.names.fullname" $ }}-config-init
         {{- if $initJob.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" $initJob.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

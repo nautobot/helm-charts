@@ -1,3 +1,15 @@
+{{- if (or (not (empty .Values.celeryWorker)) (not (empty .Values.celeryBeat))) }}
+********************************************************************
+***                      DEPRECATION NOTICE                      ***
+********************************************************************
+{{ if (not (empty .Values.celeryWorker)) }}
+The celeryWorkers helm value has been deprecated and moved to workers.default see
+https://helm-charts.readthedocs.io/en/latest/configuration/reference/#workers-values for more information.
+{{ end }}{{ if (not (empty .Values.celeryBeat)) }}
+The celeryBeat helm value has been deprecated and moved to workers.beat see
+https://helm-charts.readthedocs.io/en/latest/configuration/reference/#workers-values for more information.
+{{ end }}
+{{ end }}
 {{- if and (or .Values.postgresql.enabled .Values.mariadb.enabled .Values.nautobot.db.host ) (or .Values.redis.enabled .Values.nautobot.redis.host) -}}
 
 *********************************************************************

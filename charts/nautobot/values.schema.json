@@ -22,6 +22,11 @@
             },
             "taskQueues": {
               "type": "string"
+            },
+            "metricsPort": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
             }
           }
         }
@@ -77,20 +82,7 @@
         "extraEnvVars": {
           "type": "array",
           "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "name",
-              "value"
-            ],
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "value": {
-                "type": "string"
-              }
-            }
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/envvar.json"
           }
         },
         "extraEnvVarsCM": {
@@ -220,7 +212,7 @@
           ]
         },
         "podSecurityContext": {
-          "$ref": "#/$defs/securityContext"
+          "$ref": "#/$defs/podSecurityContext"
         },
         "priorityClassName": {
           "type": "string"
@@ -462,6 +454,9 @@
                 }
               }
             },
+            "singleInit": {
+              "type": "boolean"
+            },
             "uWSGIini": {
               "type": "string"
             }
@@ -499,6 +494,23 @@
           }
         }
       ]
+    },
+    "podSecurityContext": {
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/podsecuritycontext.json"
+        },
+        {
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
     }
   },
   "type": "object",
@@ -510,41 +522,19 @@
     "celeryWorker",
     "commonAnnotations",
     "ingress",
+    "initJob",
     "mariadb",
     "metrics",
     "nautobot",
     "nautobots",
     "postgresql",
     "postgresqlha",
+    "rabbitmq",
     "redis",
     "service",
     "serviceAccount"
   ],
   "properties": {
-    "workers": {
-      "type": "object",
-      "patternProperties": {
-        "^[a-zA-Z0-9]+$": {
-          "type": "object",
-          "allOf": [
-            {
-              "$ref": "#/$defs/celery"
-            },
-            {
-              "required": [
-                "enabled"
-              ],
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                }
-              }
-            }
-          ]
-        }
-      },
-      "description": "List of Nautobot objects (matching the Nautobot spec) to create deployments for"
-    },
     "celery": {
       "allOf": [
         {
@@ -681,6 +671,29 @@
         }
       }
     },
+    "initJob": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "required": [
+            "installHook",
+            "upgradeHook"
+          ],
+          "properties": {
+            "installHook": {
+              "type": "string",
+              "pattern": "^(post-install|pre-install)$"
+            },
+            "upgradeHook": {
+              "type": "string",
+              "pattern": "^(post-upgrade|pre-upgrade)$"
+            }
+          }
+        }
+      ]
+    },
     "mariadb": {
       "allOf": [
         {
@@ -717,13 +730,17 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "enabled"
+            "enabled",
+            "nautobot"
           ],
           "properties": {
             "enabled": {
               "type": "boolean"
             },
             "interval": {
+              "type": "string"
+            },
+            "nautobot": {
               "type": "string"
             },
             "scrapeTimeout": {
@@ -812,6 +829,9 @@
                 },
                 "initNautobot": {
                   "type": "boolean"
+                },
+                "staticFilesOnly": {
+                  "type": "boolean"
                 }
               }
             }
@@ -883,6 +903,17 @@
         }
       }
     },
+    "rabbitmq": {
+      "type": "object",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
     "redis": {
       "allOf": [
         {
@@ -936,7 +967,7 @@
         "extraPorts": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/serviceport.json"
           },
           "description": "Extra ports to expose in the nautobot service (normally used with the `sidecars` value)"
         },
@@ -972,6 +1003,15 @@
               "description": "Node Port to use for the http service, the default range is 30000-32767 however this can be changed with --service-node-port-range"
             },
             "https": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Node Port to use for the https service, the default range is 30000-32767 however this can be changed with --service-node-port-range"
+            },
+            "uwsgimetrics": {
               "type": [
                 "integer",
                 "null"
@@ -1023,6 +1063,30 @@
     },
     "sops": {
       "type": "object"
+    },
+    "workers": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9]+$": {
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/celery"
+            },
+            {
+              "required": [
+                "enabled"
+              ],
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "description": "List of Nautobot objects (matching the Nautobot spec) to create deployments for"
     }
   }
 }

@@ -44,10 +44,49 @@ spec:
       {{- if (and (eq $.Values.service.type "NodePort") (not (empty $.Values.service.nodePorts.http))) }}
       nodePort: {{ $.Values.service.nodePorts.http }}
       {{- end }}
+    {{- if and $.Values.metrics.uwsgiExporter.enabled $.Values.metrics.enabled }}
+    - protocol: "TCP"
+      port: 9117
+      targetPort: "uwsgimetrics"
+      name: "uwsgimetrics"
+      {{- if (and (eq $.Values.service.type "NodePort") (not (empty $.Values.service.nodePorts.http))) }}
+      nodePort: {{ $.Values.service.nodePorts.uwsgimetrics }}
+      {{- end }}
+    {{- end }}
     {{- if $.Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" $.Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: nautobot-{{ $nautobotName }}
+{{ end }}
+{{ end }}
+{{- if (and $.Values.nautobot.metrics $.Values.metrics.enabled $.Values.metrics.serviceMonitor.enabled) }}
+{{- $workers := (include "nautobot.workers" $) | mustFromJson }}
+{{- range $celeryName, $celery := $workers }}
+{{- if (and $celery.enabled (ne $celeryName "beat")) }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" $ }}-celery-{{ $celeryName }}-headless
+  namespace: {{ $.Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    app.kubernetes.io/component: nautobot-celery-{{ $celeryName }}
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if (or $.Values.service.annotations $.Values.commonAnnotations) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge $.Values.service.annotations $.Values.commonAnnotations) "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  clusterIP: "None"
+  ports:
+    - protocol: "TCP"
+      port: {{ $celery.metricsPort }}
+      targetPort: "workermetrics"
+      name: "workermetrics"
+  selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: nautobot-celery-{{ $celeryName }}
+{{ end }}
 {{ end }}
 {{ end }}

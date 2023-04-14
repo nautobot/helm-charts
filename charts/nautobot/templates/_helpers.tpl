@@ -107,9 +107,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
     {{- fail (printf "Both PostgreSQL and PostgreSQL-HA can't be enabled at the same time.") -}}
   {{- end -}}
   {{- if (or .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
-    django.db.backends.postgresql
+    {{- if (.Values.nautobot.metrics) -}}
+      django_prometheus.db.backends.postgresql
+    {{- else -}}
+      django.db.backends.postgresql
+    {{- end -}}
   {{- else if .Values.mariadb.enabled -}}
-    django.db.backends.mysql
+    {{- if (.Values.nautobot.metrics) -}}
+      django_prometheus.db.backends.mysql
+    {{- else -}}
+      django.db.backends.mysql
+    {{- end -}}
   {{- else -}}
     {{- .Values.nautobot.db.engine -}}
   {{- end -}}
@@ -337,7 +345,7 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 
 {{/*
 Build a dict of nautobot deployments each item will be keyed by the name to use for the deployment
-name and will containe "ingressPath" specifying the path for which this Nautobot deployment will
+name and will contain "ingressPath" specifying the path for which this Nautobot deployment will
 respond.  The .Values.nautobot defines the default nautobot deployment with an ingressPath of / and
 the default values for all other nautobot deployments.  Other Nautobot deployments can be specified
 in the .Values.Nautobots key which is a dictionary with the same spec as .Values.Nautobot.
@@ -345,7 +353,7 @@ in the .Values.Nautobots key which is a dictionary with the same spec as .Values
 {{ define "nautobot.nautobots" }}
 {{- $nautobots := dict }}
 {{- range $nautobotName, $nautobot := .Values.nautobots }}
-{{- $nautobots = mustMerge $nautobots (dict $nautobotName (deepCopy $.Values.nautobot | mustMerge $nautobot (dict "component" "nautobot"))) }}
+{{- $nautobots = mustMergeOverwrite $nautobots (dict $nautobotName (mustMergeOverwrite (deepCopy $.Values.nautobot) $nautobot (dict "component" "nautobot"))) }}
 {{- end }}
 {{- mustToJson $nautobots -}}
 {{- end }}
@@ -360,21 +368,31 @@ in the .Values.workers key which is a dictionary with the same spec as .Values.N
 {{/*
 Handle deprecation of celeryWorkers and celeryBeat keys, precedence will be:
 
-workers.[celeryWorker|celeryBeat]
+workers.[default|beat]
 [celeryWorker|celeryBeat]
 celery
 
 where values in the new workers key will always win over the others
 */}}
-{{- $workers = mustMerge $workers (dict "default" (deepCopy $.Values.celery | mustMerge $.Values.celeryWorker)) }}
-{{- $workers = mustMerge $workers (dict "beat" (deepCopy $.Values.celery | mustMerge $.Values.celeryBeat)) }}
+{{- $workers := dict }}
+{{- $workers = mustMergeOverwrite $workers (dict "default" (mustMergeOverwrite (deepCopy $.Values.celery) $.Values.celeryWorker)) }}
+{{- $workers = mustMergeOverwrite $workers (dict "beat" (mustMergeOverwrite (deepCopy $.Values.celery) $.Values.celeryBeat)) }}
 {{- range $celeryName, $celery := .Values.workers }}
-{{- $workers = mustMerge $workers (dict $celeryName (deepCopy $.Values.celery | mustMerge $celery (dict "component" "nautobot-celery"))) }}
+{{- $workers = mustMergeOverwrite $workers (dict $celeryName (mustMergeOverwrite (deepCopy $.Values.celery) $celery (dict "component" "nautobot-celery"))) }}
 {{- end }}
 {{/*
 Celery Beat can only have 1 replica enforce that here
 */}}
-{{- $workers = mustMerge $workers (dict "beat" (dict "replicaCount" 1)) }}
-{{- $workers = mustMerge $workers (dict "beat" (dict "autoscaling" (dict "enabled" false))) }}
+{{- $workers = mustMergeOverwrite $workers (dict "beat" (dict "replicaCount" 1)) }}
+{{- $workers = mustMergeOverwrite $workers (dict "beat" (dict "autoscaling" (dict "enabled" false))) }}
 {{- mustToJson $workers -}}
+{{- end }}
+
+{{/*
+Get values for the init job if singleInit is true.  Default all values to the root .nautobot defaults
+*/}}
+{{ define "nautobot.initJob" }}
+{{- $initJob := dict }}
+{{- $initJob = mustMergeOverwrite (deepCopy $.Values.nautobot) $.Values.initJob }}
+{{- mustToJson $initJob -}}
 {{- end }}

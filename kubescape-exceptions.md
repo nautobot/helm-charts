@@ -3,12 +3,12 @@
 This page is intended to document the exceptions to kubescape testing that have been implemented and
 the rationale for these exceptions which are captured in kubescape-exceptions.json.
 
-## Immutable Filesystems
+## Immutable File Systems
 
 *Name:* ignore-immutable-container-filesystem
 *Reference:* [https://hub.armo.cloud/docs/c-0017](https://hub.armo.cloud/docs/c-0017)
 
-These containers currently require rw filesystems for scratch space.
+These containers currently require rw file systems for scratch space.
 
 ## Resource Limits
 

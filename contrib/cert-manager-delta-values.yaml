@@ -1,0 +1,5 @@
+---
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: "internal-k8s-ca"
+  tls: true

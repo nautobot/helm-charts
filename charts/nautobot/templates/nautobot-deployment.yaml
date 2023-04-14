@@ -65,7 +65,7 @@ spec:
       securityContext: {{- omit $nautobot.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if $nautobot.initNautobot }}
+        {{- if (and (not $.Values.nautobot.singleInit) (or $nautobot.initNautobot $nautobot.staticFilesOnly)) }}
         # This init container will run post_upgrade which initializes/upgrades the DB as well as collects static files
         - name: nautobot-init
           image: {{ include "nautobot.image" $ }}
@@ -124,7 +124,7 @@ spec:
             {{- include "common.tplvalues.render" ( dict "value" $nautobot.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- end }}
-        {{- if $nautobot.nginx.enabled }}
+        {{- if or $nautobot.nginx.enabled $nautobot.staticFilesOnly }}
         # This container is used to copy the self-signed SSL certs from the Nautobot pod to the nginx pod and changes the permission
         - name: nautobot-certs
           image: {{ include "nautobot.image" $ }}
@@ -172,6 +172,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" $nautobot.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
+        {{- if not $nautobot.staticFilesOnly }}
         - name: nautobot
           tty: true
           image: {{ include "nautobot.image" $ }}
@@ -246,7 +247,8 @@ spec:
             - name: "http"
               containerPort: 8003
             {{ end }}
-        {{- if $nautobot.nginx.enabled }}
+        {{- end }}
+        {{- if or $nautobot.nginx.enabled $nautobot.staticFilesOnly }}
         - name: nginx
           image: {{ include "nautobot.nginx.image" $ }}
           imagePullPolicy: {{ $nautobot.nginx.image.pullPolicy }}
@@ -300,7 +302,7 @@ spec:
             - name: "metrics"
               containerPort: 8002
         {{- end }}
-        {{- if and $.Values.metrics.enabled $.Values.metrics.nginxExporter.enabled }}
+        {{- if and $.Values.metrics.enabled $nautobot.nginx.enabled $.Values.metrics.nginxExporter.enabled }}
         - name: nginx-exporter
           image: {{ include "nautobot.nginxExporter.image" $ }}
           imagePullPolicy: {{ $.Values.metrics.nginxExporter.image.pullPolicy }}
@@ -322,7 +324,7 @@ spec:
             - name: "nginxmetrics"
               containerPort: 9113
         {{- end }}
-        {{- if and $.Values.metrics.enabled $.Values.metrics.uwsgiExporter.enabled }}
+        {{- if and $.Values.metrics.enabled $.Values.metrics.uwsgiExporter.enabled (not $nautobot.staticFilesOnly) }}
         - name: uwsgi-exporter
           image: {{ include "nautobot.uwsgiExporter.image" $ }}
           imagePullPolicy: {{ $.Values.metrics.uwsgiExporter.image.pullPolicy }}
@@ -355,12 +357,10 @@ spec:
         - name: "nautobot-config"
           configMap:
             name: {{ include "common.names.fullname" $ }}-config
-        {{- if $nautobot.nginx.enabled }}
+        {{- if or $nautobot.nginx.enabled $nautobot.staticFilesOnly }}
         - name: "nginx-config"
           configMap:
             name: {{ include "common.names.fullname" $ }}-nginx-config
-        {{- end }}
-        {{- if $nautobot.nginx.enabled }}
         - name: "nautobot-certs"
           emptyDir: {}
         {{- end }}

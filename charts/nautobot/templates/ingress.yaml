@@ -42,7 +42,7 @@ spec:
           {{- range $nautobotName := $nautobotKeys -}}
           {{- $nautobot := (first (values (pick $nautobots $nautobotName))) }}
           {{- if $nautobot.enabled }}
-          - path: {{ $nautobot.ingressPath | quote }}
+          - path: {{if $nautobot.staticFilesOnly }}"/static"{{ else }}{{ $nautobot.ingressPath | quote }}{{ end }}
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ $.Values.ingress.pathType }}
             {{- end }}

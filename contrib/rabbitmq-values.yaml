@@ -1,0 +1,30 @@
+---
+# spell-checker: disable
+nautobot:
+  extraVars:
+    - name: "NAUTOBOT_CELERY_BROKER_URL"
+      value: "amqp://admin:admin@nautobot-rabbitmq-headless.default.svc:5672/"
+
+rabbitmq:
+  # -- Enable deployment of the [Bitnami RabbitMQ](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq) chart, all other `rabbitmq.*` parameters will be passed directly to that chart
+  enabled: true
+  auth:
+    username: "admin"
+    password: "admin"
+    erlangCookie: "someRandomValue"
+  extraEnvVars:
+    - name: "LOG_LEVEL"
+      value: "info"
+  ingress:
+    enabled: true
+    # tls: true
+    hostname: "rabbitmq.minikube.local"
+    annotations:
+      cert-manager.io/cluster-issuer: "internal-k8s-ca"
+
+  metrics:
+    enabled: true
+    ServiceMonitor:
+      enabled: true
+
+  replicaCount: 3

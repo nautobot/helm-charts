@@ -47,7 +47,7 @@ Artifact hub provides several [annotations](https://artifacthub.io/docs/topics/a
 
 ### Update the Changelog
 
-Update the release notes for the new version and commit these changes to the `develop` branch.
+Update the [release notes](/release-notes/version-2.x.md) for the new version and commit these changes to the `develop` branch.
 
 !!! important
     The changelog must adhere to the [Keep a Changelog](https://keepachangelog.com/) style guide.
@@ -62,12 +62,12 @@ Once CI has completed on the PR, merge it.
 
 Draft a [new release](https://github.com/nautobot/nautobot/releases/new) with the following parameters.
 
-* **Tag:** Current version (e.g. `v1.0.0`)
+* **Tag:** Current version (e.g. `v2.0.0`)
 * **Target:** `main`
-* **Title:** Version and date (e.g. `v1.0.0 - 2021-06-01`)
+* **Title:** Version and date (e.g. `v2.0.0 - 2023-06-01`)
 
 Copy the description from the pull request to the release.
 
 ### Publish
 
-Once the release has been created the GitHub Action defined in [release-chart.yaml](../.github/workflows/release-chart.yaml) will run.  This will generate the correct packaging and publish the chart via GitHub pages in the `gh-pages` branch.
+Once the release has been created the GitHub Action defined in [release-chart.yaml](https://github.com/nautobot/helm-charts/blob/main/.github/workflows/release-chart.yaml) will run.  This will generate the correct packaging and publish the chart via GitHub pages in the `gh-pages` branch.

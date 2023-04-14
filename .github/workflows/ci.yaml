@@ -13,6 +13,8 @@ jobs:
   pre-commit-check:
     name: "Run pre-commit checks"
     runs-on: "ubuntu-22.04"
+    env:
+      GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
@@ -56,9 +58,16 @@ jobs:
         with:
           extra_args: "--all-files"
 
+          # - name: "Upload result to GitHub Code Scanning"
+          #   uses: "github/codeql-action/upload-sarif@v2"
+          #   with:
+          #     sarif_file: "checkov.sarif"
+
   snyk-security-check:
     name: "Snyk Security Scanning"
     runs-on: "ubuntu-22.04"
+    env:
+      GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
@@ -66,9 +75,10 @@ jobs:
       - run: "mkdir template_output"
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
       - run: "helm dependency update charts/nautobot"
-      - run: "helm template -n testing -f charts/nautobot/linter_values.yaml charts/nautobot --output-dir=./template_output/test-postgresql"
-      - run: "helm template -n testing -f charts/nautobot/linter_values_mysql.yaml charts/nautobot --output-dir=./template_output/test-mysql"
-      - run: "helm template -n testing -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot --output-dir=./template_output/test-postgresql-ha"
+      - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml charts/nautobot --output-dir=./template_output/test-postgresql"
+      - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_mysql.yaml charts/nautobot --output-dir=./template_output/test-mysql"
+      - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot --output-dir=./template_output/test-postgresql-ha"
+      - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml charts/nautobot --output-dir=./template_output/test-defaults"
       - name: "Run Snyk to check template files for security issues"
         # Snyk can be used to break the build when it detects security issues.
         # In this case we want to upload the issues to GitHub Code Scanning
@@ -93,6 +103,7 @@ jobs:
     runs-on: "ubuntu-22.04"
     env:
       GITHUB_PATH: "/home/runner/.kubescape/bin"
+      GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
@@ -102,21 +113,27 @@ jobs:
       - run: 'echo "${HOME}/.kubescape/bin" >> $GITHUB_PATH'  # yamllint disable-line rule:quoted-strings
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
       - run: "helm dependency update charts/nautobot"
+      - name: "Kubescape NSA Scan - Defaults"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape NSA Scan - PostgreSQL"
-        run: "helm template -n testing -f charts/nautobot/linter_values.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape NSA Scan - MySQL"
-        run: "helm template -n testing -f charts/nautobot/linter_values_mysql.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_mysql.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape NSA Scan - PostgreSQL HA"
-        run: "helm template -n testing -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+      - name: "Kubescape MITRE Scan - Defaults"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml charts/nautobot | kubescape scan framework mitre - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape MITRE Scan - PostgreSQL"
-        run: "helm template -n testing -f charts/nautobot/linter_values.yaml charts/nautobot | kubescape scan framework mitre - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml charts/nautobot | kubescape scan framework mitre - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape MITRE Scan - MySQL"
-        run: "helm template -n testing -f charts/nautobot/linter_values_mysql.yaml charts/nautobot | kubescape scan framework mitre - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_mysql.yaml charts/nautobot | kubescape scan framework mitre - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape MITRE Scan - PostgreSQL HA"
-        run: "helm template -n testing -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot | kubescape scan framework mitre - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot | kubescape scan framework mitre - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+      - name: "Kubescape ARMOBest Scan - Defaults"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml charts/nautobot | kubescape scan framework armobest - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape ARMOBest Scan - PostgreSQL"
-        run: "helm template -n testing -f charts/nautobot/linter_values.yaml charts/nautobot | kubescape scan framework armobest - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml charts/nautobot | kubescape scan framework armobest - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape ARMOBest Scan - MySQL"
-        run: "helm template -n testing -f charts/nautobot/linter_values_mysql.yaml charts/nautobot | kubescape scan framework armobest - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_mysql.yaml charts/nautobot | kubescape scan framework armobest - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape ARMOBest Scan - PostgreSQL HA"
-        run: "helm template -n testing -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot | kubescape scan framework armobest - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot | kubescape scan framework armobest - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"

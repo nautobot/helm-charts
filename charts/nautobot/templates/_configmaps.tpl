@@ -32,7 +32,7 @@ NAUTOBOT_SUPERUSER_NAME: {{ .Values.nautobot.superUser.username | quote }}
 {{- end }}
 {{- if .Values.nautobot.extraVars }}
 {{- range .Values.nautobot.extraVars }}
-{{- .name }}: {{ .value | quote }}
+{{ .name }}: {{ .value | quote }}
 {{- end }}
 {{- end }}
 {{ end }}
@@ -45,7 +45,7 @@ nautobot_config.py: |
 uwsgi.ini: |
 {{- if .Values.nautobot.uWSGIini }}
 {{- .Values.nautobot.uWSGIini | nindent 2 }}
-{{ else }}
+{{- else }}
 {{- include "nautobot.uwsgi.ini" . | nindent 2 }}
 {{- end }}
-{{ end }}
+{{- end }}

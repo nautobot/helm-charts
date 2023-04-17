@@ -2,6 +2,9 @@
 nautobot:
   pdb:
     create: true
+  extraVars:
+    - name: "SOME_VARIABLE"
+      value: "some value"
   extraVolumeMounts:
     - name: "gmail-auth"
       mountPath: "/opt/nautobot/circuit-maintenance-secrets"

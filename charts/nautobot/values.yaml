@@ -769,7 +769,7 @@ metrics:
       # -- NGINX Exporter image name
       repository: "nginx/nginx-prometheus-exporter"
       # -- NGINX Exporter image tag
-      tag: "0.10.0"
+      tag: "0.11.0"
       # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/) valid values: `Always`, `Never`, or `IfNotPresent`
       pullPolicy: "Always"
       # -- ([]string) List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments

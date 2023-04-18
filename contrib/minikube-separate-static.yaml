@@ -2,6 +2,7 @@
 nautobots:
   static:
     enabled: true
-    ingressPath: "/static"
+    ingressPaths:
+      - "/static"
     initNautobot: true
     staticFilesOnly: true

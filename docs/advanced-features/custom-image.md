@@ -7,7 +7,7 @@ nautobot:
   image:
     registry: "ghcr.io"
     repository: "nautobot/nautobot"
-    tag: "1.5.16-py3.10"
+    tag: "1.5.17-py3.10"
     pullPolicy: "Always"
     pullSecrets:
       - ghcr-pull-secret

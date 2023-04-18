@@ -7,7 +7,8 @@ It may be desirable to host the Nautobot static files completely separately from
 nautobots:
   static:
     enabled: true
-    ingressPath: "/static"
+    ingressPaths:
+      - "/static"
     initNautobot: true
     staticFilesOnly: true
 ```

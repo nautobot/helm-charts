@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.0.0 - Unreleased
+## 2.0.0 - 2023-04-18
 
 ### Added
 
@@ -23,9 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * [Docs on the official Nautobot Docs site](https://helm-charts.readthedocs.io/en/latest/)!
 * Default database engine now accounts for `METRICS_ENABLED`
 * Moved Nautobot post-upgrade task to a separate init container
-* Nautobot Version 1.5.16
+* Nautobot Version 1.5.17
 * Upgraded Bitnami common subchart from 1.14.1 to 2.2.4
 * Upgraded Mariadb subchart from 10.5.1 to 11.5.6
+* Upgraded PostgreSQL subchart from 10.16.2 to 12.2.8
 * Upgraded PostgreSQL-HA subchart from 8.6.13 to 11.2.1
 * Upgraded Redis subchart from 16.10.1 to 17.9.3
 * Updated JSON Schema to utilize external schemas where appropriate

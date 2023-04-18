@@ -1,0 +1,52 @@
+---
+postgresql:
+  auth:
+    password: "change-me"
+  enabled: true
+  primary:
+    resources: {}
+redis:
+  auth:
+    password: "change-me"
+  master:
+    resources: {}
+
+celery:
+  resources:
+    requests: null
+    limits: null
+
+nautobot:
+  debug: true
+  replicaCount: 1
+  superUser:
+    password: "admin"
+  pdb:
+    create: false
+  resources:
+    requests: null
+    limits: null
+  nginx:
+    enabled: false
+    resources:
+      requests: null
+      limits: null
+
+workers:
+  default:
+    pdb:
+      create: false
+    replicaCount: 1
+  beat:
+    resources:
+      requests: null
+      limits: null
+
+ingress:
+  enabled: true
+  hostname: "nautobot.minikube.local"
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+
+metrics:
+  enabled: false

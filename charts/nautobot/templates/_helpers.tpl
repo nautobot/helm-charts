@@ -12,6 +12,17 @@ Return the proper nautobot image name
 {{ include "common.images.image" (dict "imageRoot" .Values.nautobot.image "global" .Values.global) }}
 {{- end -}}
 
+{{- define "nautobot.nginx.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.nautobot.nginx.image "global" .Values.global) }}
+{{- end -}}
+
+{{- define "nautobot.nginxExporter.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.metrics.nginxExporter.image "global" .Values.global) }}
+{{- end -}}
+
+{{- define "nautobot.uwsgiExporter.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.metrics.uwsgiExporter.image "global" .Values.global) }}
+{{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
@@ -25,7 +36,7 @@ Create the name of the service account to use
 */}}
 {{- define "nautobot.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (printf "%s" (include "common.names.fullname" .)) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
@@ -96,9 +107,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
     {{- fail (printf "Both PostgreSQL and PostgreSQL-HA can't be enabled at the same time.") -}}
   {{- end -}}
   {{- if (or .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
-    django.db.backends.postgresql
+    {{- if (.Values.nautobot.metrics) -}}
+      django_prometheus.db.backends.postgresql
+    {{- else -}}
+      django.db.backends.postgresql
+    {{- end -}}
   {{- else if .Values.mariadb.enabled -}}
-    django.db.backends.mysql
+    {{- if (.Values.nautobot.metrics) -}}
+      django_prometheus.db.backends.mysql
+    {{- else -}}
+      django.db.backends.mysql
+    {{- end -}}
   {{- else -}}
     {{- .Values.nautobot.db.engine -}}
   {{- end -}}
@@ -118,7 +137,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "nautobot.database.dbname" -}}
   {{- if eq .Values.postgresql.enabled true -}}
-    {{- .Values.postgresql.postgresqlDatabase -}}
+    {{- .Values.postgresql.auth.database -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
     {{- .Values.postgresqlha.postgresql.database -}}
   {{- else if eq .Values.mariadb.enabled true -}}
@@ -140,7 +159,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "nautobot.database.username" -}}
   {{- if eq .Values.postgresql.enabled true -}}
-    {{- .Values.postgresql.postgresqlUsername -}}
+    {{- .Values.postgresql.auth.username -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
     {{- .Values.postgresqlha.postgresql.username -}}
   {{- else if eq .Values.mariadb.enabled true -}}
@@ -170,7 +189,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
         {{- end -}}
         {{- $password | b64dec -}}
       {{- else -}}
-        {{- required "A Postgres Password is required!" .Values.postgresql.postgresqlPassword -}}
+        {{- required "A Postgres Password is required!" .Values.postgresql.auth.password -}}
       {{- end -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
       {{- if .Values.postgresqlha.postgresql.existingSecret -}}
@@ -314,105 +333,66 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a list of dictionaries for extra volumes/volumemounts, if nautobot.config is set prepend it to the list for
-nautobot/celeryBeat/celeryWorker/rqWorker
+Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 */}}
-{{- define "nautobot.extraVolumes" -}}
-  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
-  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.nautobot.extraVolumes) "context" $) -}}
-  {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.nautobot.extraVolumes) "context" $) -}}
-  {{- end -}}
+{{- define "common.capabilities.hpa.apiVersion" -}}
+{{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "autoscaling/v2beta2" -}}
+{{- else -}}
+{{- print "autoscaling/v2" -}}
+{{- end -}}
 {{- end -}}
 
-{{- define "celeryWorker.extraVolumes" -}}
-  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
-  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.celeryWorker.extraVolumes) "context" $) -}}
-  {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.celeryWorker.extraVolumes) "context" $) -}}
-  {{- end -}}
-{{- end -}}
+{{/*
+Build a dict of nautobot deployments each item will be keyed by the name to use for the deployment
+name and will contain "ingressPaths" specifying the path for which this Nautobot deployment will
+respond.  The .Values.nautobot defines the default nautobot deployment with an ingressPaths of / and
+the default values for all other nautobot deployments.  Other Nautobot deployments can be specified
+in the .Values.Nautobots key which is a dictionary with the same spec as .Values.Nautobot.
+*/}}
+{{ define "nautobot.nautobots" }}
+{{- $nautobots := dict }}
+{{- range $nautobotName, $nautobot := .Values.nautobots }}
+{{- $nautobots = mustMergeOverwrite $nautobots (dict $nautobotName (mustMergeOverwrite (deepCopy $.Values.nautobot) $nautobot (dict "component" "nautobot"))) }}
+{{- end }}
+{{- mustToJson $nautobots -}}
+{{- end }}
 
-{{- define "celeryBeat.extraVolumes" -}}
-  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
-  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.celeryBeat.extraVolumes) "context" $) -}}
-  {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.celeryBeat.extraVolumes) "context" $) -}}
-  {{- end -}}
-{{- end -}}
+{{/*
+Build a dict of nautobot celery deployments each item will be keyed by the name to use for the deployment
+name.  The .Values.celery defines the default celery deployment.  Other Celery deployments can be specified
+in the .Values.workers key which is a dictionary with the same spec as .Values.Nautobot.
+*/}}
+{{ define "nautobot.workers" }}
+{{- $workers := dict }}
+{{/*
+Handle deprecation of celeryWorkers and celeryBeat keys, precedence will be:
 
-{{- define "rqWorker.extraVolumes" -}}
-  {{- $gitVolume := (dict "name" "git-repos" "emptyDir" (dict)) -}}
-  {{- if (or .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- $configVolume := (dict "name" "nautobot-config" "configMap" (dict "name" (printf "%s-config" (include "nautobot.names.fullname" . )))) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configVolume) (list $gitVolume) .Values.rqWorker.extraVolumes) "context" $) -}}
-  {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitVolume) .Values.rqWorker.extraVolumes) "context" $) -}}
-  {{- end -}}
-{{- end -}}
+workers.[default|beat]
+[celeryWorker|celeryBeat]
+celery
 
-{{- define "nautobot.extraVolumeMounts" -}}
-  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
-  {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
-  {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
-  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
-  {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
-  {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
-  {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.nautobot.extraVolumeMounts) "context" $) -}}
-  {{- end -}}
-{{- end -}}
+where values in the new workers key will always win over the others
+*/}}
+{{- $workers := dict }}
+{{- $workers = mustMergeOverwrite $workers (dict "default" (mustMergeOverwrite (deepCopy $.Values.celery) $.Values.celeryWorker)) }}
+{{- $workers = mustMergeOverwrite $workers (dict "beat" (mustMergeOverwrite (deepCopy $.Values.celery) $.Values.celeryBeat)) }}
+{{- range $celeryName, $celery := .Values.workers }}
+{{- $workers = mustMergeOverwrite $workers (dict $celeryName (mustMergeOverwrite (deepCopy $.Values.celery) $celery (dict "component" "nautobot-celery"))) }}
+{{- end }}
+{{/*
+Celery Beat can only have 1 replica enforce that here
+*/}}
+{{- $workers = mustMergeOverwrite $workers (dict "beat" (dict "replicaCount" 1)) }}
+{{- $workers = mustMergeOverwrite $workers (dict "beat" (dict "autoscaling" (dict "enabled" false))) }}
+{{- mustToJson $workers -}}
+{{- end }}
 
-{{- define "celeryWorker.extraVolumeMounts" -}}
-  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
-  {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
-  {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
-  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
-  {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
-  {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
-  {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.celeryWorker.extraVolumeMounts) "context" $) -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "celeryBeat.extraVolumeMounts" -}}
-  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
-  {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
-  {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
-  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
-  {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
-  {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
-  {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.celeryBeat.extraVolumeMounts) "context" $) -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "rqWorker.extraVolumeMounts" -}}
-  {{- $gitMount := (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
-  {{- $configMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
-  {{- $uwsgiMount := (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/uwsgi.ini" "subPath" "uwsgi.ini") -}}
-  {{- if (and .Values.nautobot.config .Values.nautobot.uWSGIini) -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $uwsgiMount) (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
-  {{- else if .Values.nautobot.config -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $configMount) (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
-  {{- else if .Values.nautobot.uWSGIini -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $uwsgiMount) (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
-  {{- else -}}
-    {{- include "common.tplvalues.render" (dict "value" (concat (list $gitMount) .Values.rqWorker.extraVolumeMounts) "context" $) -}}
-  {{- end -}}
-{{- end -}}
+{{/*
+Get values for the init job if singleInit is true.  Default all values to the root .nautobot defaults
+*/}}
+{{ define "nautobot.initJob" }}
+{{- $initJob := dict }}
+{{- $initJob = mustMergeOverwrite (deepCopy $.Values.nautobot) $.Values.initJob }}
+{{- mustToJson $initJob -}}
+{{- end }}

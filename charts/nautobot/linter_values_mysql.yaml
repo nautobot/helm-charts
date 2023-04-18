@@ -1,39 +1,6 @@
 ---
-rqWorker:
-  enabled: true
-  autoscaling:
-    enabled: true
-
-nautobot:
-  autoscaling:
-    enabled: true
-
-celeryWorker:
-  autoscaling:
-    enabled: true
-
 postgresql:
   enabled: false
-redis:
-  auth:
-    password: "change-me"
-
-ingress:
-  enabled: true
-  path: "/*"
-
-metrics:
-  enabled: true
-  capacityMetrics:
-    enabled: true
-  prometheusRule:
-    enabled: true
-
-commonAnnotations:
-  annotateeverything: "everywhere"
-serviceAccount:
-  annotations:
-    saannotation: "only_the_sa"
 
 mariadb:
   enabled: true

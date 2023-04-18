@@ -1,6 +1,12 @@
 ---
-rqWorker:
-  enabled: true
+nautobot:
+  singleInit: true
+
+initJob:
+  command: ["/entrypoint.sh"]
+  resources:
+    limits:
+      cpu: "5"
 
 postgresql:
   enabled: false
@@ -12,26 +18,10 @@ redis:
     masterSet: "nautobot"
   auth:
     password: "change-me"
-
-ingress:
-  enabled: true
-  path: "/*"
-
-metrics:
-  enabled: true
-  capacityMetrics:
+  metrics:
     enabled: true
-  prometheusRule:
-    enabled: true
-
-commonAnnotations:
-  annotateeverything: "everywhere"
-serviceAccount:
-  annotations:
-    saannotation: "only_the_sa"
-
-mariadb:
-  enabled: false
+    serviceMonitor:
+      enabled: true
 
 postgresqlha:
   postgresql:

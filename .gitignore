@@ -1,3 +1,5 @@
 template_output/
 local_tests/
 tmp-kubescape*
+# This is not a python project we just use poetry so we have better ability to review docs locally
+poetry.lock

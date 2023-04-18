@@ -1,8 +1,9 @@
 ---
+# spell-checker: disable
 # See https://pre-commit.com for more information
 repos:
   - repo: "https://github.com/pre-commit/pre-commit-hooks"
-    rev: "v4.3.0"
+    rev: "v4.4.0"
     hooks:
       - id: "trailing-whitespace"
       - id: "end-of-file-fixer"
@@ -17,7 +18,7 @@ repos:
           - "--no-sort-keys"
 
   - repo: "https://github.com/Lucas-C/pre-commit-hooks"
-    rev: "v1.3.1"
+    rev: "v1.5.1"
     hooks:
       - id: "remove-crlf"
       - id: "remove-tabs"
@@ -26,19 +27,49 @@ repos:
     rev: "3.0.0"
     hooks:
       - id: "markdownlint"
+        args:
+          - "--ignore-front-matter"
+          - "docs/"
+
+  - repo: "https://github.com/streetsidesoftware/cspell-cli"
+    rev: "v6.31.0"
+    hooks:
+      - id: "cspell"
 
   - repo: "https://github.com/gruntwork-io/pre-commit"
-    rev: "v0.1.17"  # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
+    rev: "v0.1.20"  # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
     hooks:
       - id: "helmlint"
 
   - repo: "https://github.com/adrienverge/yamllint.git"
-    rev: "v1.28.0"
+    rev: "v1.30.0"
     hooks:
       - id: "yamllint"
         args:
           - "-c=.yamllint"
           - "-s"
+
+  # - repo: "https://github.com/bridgecrewio/checkov.git"
+  #   rev: "2.3.152"
+  #   hooks:
+  #     - id: "checkov"
+  #       args:
+  #         - "--directory"
+  #         - "charts/nautobot"
+  #         - "--skip-path"
+  #         - "charts/nautobot/linter_values.*.yaml"
+  #         - "--var-file"
+  #         - "charts/nautobot/linter_values_minimum.yaml"
+  #         - "--var-file"
+  #         - "charts/nautobot/linter_values.yaml"
+  #         - "--framework"
+  #         - "helm"
+  #         - "--output"
+  #         - "cli"
+  #         - "--output"
+  #         - "sarif"
+  #         - "--output-file-path"
+  #         - "console,checkov.sarif"
 
   - repo: "https://github.com/norwoodj/helm-docs"
     rev: "v1.11.0"
@@ -50,3 +81,12 @@ repos:
 
           # The `./` makes it relative to the chart-search-root set above
           - "--template-files=README.md.gotmpl"
+
+  - repo: "https://github.com/norwoodj/helm-docs"
+    rev: "v1.11.0"
+    hooks:
+      - id: "helm-docs"
+        args:
+          - "--chart-to-generate=charts/nautobot"
+          - "--template-files=./docs/configuration/reference.md.gotmpl"
+          - "--output-file=../../docs/configuration/reference.md"

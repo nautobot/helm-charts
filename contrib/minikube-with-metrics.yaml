@@ -1,0 +1,36 @@
+---
+postgresql:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+redis:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+metrics:
+  enabled: true
+  nginxExporter:
+    enabled: true
+    resources:
+      requests:
+        cpu: null
+        memory: null
+      limits:
+        cpu: null
+        memory: null
+  uwsgiExporter:
+    enabled: true
+    resources:
+      requests:
+        cpu: null
+        memory: null
+      limits:
+        cpu: null
+        memory: null
+  prometheusRule:
+    enabled: true
+  serviceMonitor:
+    enabled: true

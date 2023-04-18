@@ -1,0 +1,108 @@
+---
+# spell-checker: disable
+dev_addr: "127.0.0.1:8001"
+site_name: "Nautobot Helm Charts"
+# site_url: "https://tbd.example.com"
+# repo_url: "https://github.com/org/example"
+# edit_uri: "edit/main/docs"
+copyright: "Copyright &copy; Network To Code"
+theme:
+  name: "material"
+  navigation_depth: 4
+  hljs_languages:
+    - "django"
+    - "yaml"
+  features:
+    - "navigation.tracking"
+    - "navigation.tabs"
+    - "navigation.tabs.sticky"
+    - "navigation.indexes"
+    - "search.suggest"
+    - "search.highlight"
+    - "search.share"
+    - "content.code.copy"
+  favicon: "assets/favicon.png"
+  logo: "assets/logo.png"
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: "default"
+      primary: "black"
+      toggle:
+        icon: "material/weather-sunny"
+        name: "Switch to dark mode"
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: "slate"
+      primary: "black"
+      toggle:
+        icon: "material/weather-night"
+        name: "Switch to light mode"
+extra_css:
+  - "assets/extra.css"
+
+extra:
+  generator: true
+
+markdown_extensions:
+  - "admonition"
+  - "toc":
+      permalink: true
+  - "attr_list"
+  - "md_in_html"
+  - "pymdownx.highlight":
+      anchor_linenums: true
+  - "pymdownx.inlinehilite"
+  - "pymdownx.snippets"
+  - "pymdownx.superfences"
+  - "footnotes"
+plugins:
+  - "search"
+  - "mkdocs-version-annotations"
+
+nav:
+  - Overview: "index.md"
+  - Installation:
+    - Basic Installation: "installation/basic.md"  # yamllint disable-line rule:indentation
+    - Production Installation: "installation/production.md"
+    - Dependencies: "installation/dependencies.md"
+    - Prerequisites: "installation/prerequisites.md"
+    - System Requirements: "installation/system-requirements.md"
+  - Advanced Usage:
+    - Overview: "advanced-features/index.md"  # yamllint disable-line rule:indentation
+    - Additional Nautobots: "advanced-features/additional-nautobots.md"
+    - Celery Queues: "advanced-features/celery-queues.md"
+    - Custom Nautobot Image: "advanced-features/custom-image.md"
+    - Custom nautobot_config.py: "advanced-features/custom-nautobot-config.md"
+    - Custom uwsgi.ini: "advanced-features/custom-uwsgi.md"
+    - Existing Secrets: "advanced-features/existing-secrets.md"
+    - External Database: "advanced-features/external-database.md"
+    - External Redis: "advanced-features/external-redis.md"
+    - Initialization Job: "advanced-features/init-hook.md"
+    - Ingress: "advanced-features/ingress.md"
+    - MySQL Support: "advanced-features/mysql.md"
+    - Nautobot as a Subchart: "advanced-features/nautobot-as-subchart.md"
+    - PostgreSQL High Availability: "advanced-features/postgresql-ha.md"
+    - PostgreSQL TLS: "advanced-features/postgresql-tls.md"
+    - Prometheus Operator Metrics: "advanced-features/prometheus-metrics.md"
+    - RabbitMQ Support: "advanced-features/rabbitmq.md"
+    - Redis Sentinel: "advanced-features/redis-sentinel.md"
+    - Redis TLS: "advanced-features/redis-tls.md"
+    - Static Files Only: "advanced-features/static-only.md"
+  - Operators Guide:
+    - Backup and Restore: "operations/backup-restore.md"  # yamllint disable-line rule:indentation
+    - Invalidate Redis Cache: "operations/redis-cache.md"
+    - Upgrading: "operations/upgrading.md"
+    - Uninstall: "operations/uninstall.md"
+  - Reference:
+    - Configuration Reference: "configuration/reference.md"  # yamllint disable-line rule:indentation
+  - Developer Guide:
+    - Local Development: "development/local-dev.md"  # yamllint disable-line rule:indentation
+    - Contributing: "development/contributing.md"
+    - Release Checklist: "development/release-checklist.md"
+    - Testing: "development/testing.md"
+    - Comparing Templates: "development/comparing-templates.md"
+  - Release Notes:
+    - Version 2.x: "release-notes/version-2.x.md"  # yamllint disable-line rule:indentation
+    - Version 1.x: "release-notes/version-1.x.md"

@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "true"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.5.16-py3.10
+      image: ghcr.io/nautobot/nautobot:1.5.17-py3.10
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://nautobot.readthedocs.io/en/stable/
@@ -33,7 +33,7 @@ annotations:
     - kind: added
       description: Added optional NGINX and uWSGI exporter sidecars for metrics
     - kind: added
-      description: Added the ability to add separate any endpoint such as /api or /graphql for scaling out
+      description: Added the ability to add separate any endpoint such as /api or /api/graphql for scaling out
     - kind: added
       description: Added the ability to add additional celery workers for [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues)
     - kind: added
@@ -43,20 +43,22 @@ annotations:
     - kind: added
       description: Added optional [RabbitMQ support](/advanced-features/rabbitmq) for Celery Task Queueing
     - kind: changed
-      description: Upgraded Nautobot from 1.4.5 to 1.5.16
+      description: Upgraded Nautobot from 1.4.5 to 1.5.17
     - kind: changed
       description:  Upgraded Bitnami common subchart from 1.14.1 to 2.2.4
     - kind: changed
-      description:  Upgraded Mariadb subchart from 10.5.1 to 11.5.6
+      description:  Upgraded Mariadb subchart from 10.5.1 to 11.5.7
+    - kind: changed
+      description:  Upgraded PostgreSQL subchart from 10.16.2 to 12.2.8
     - kind: changed
       description:  Upgraded PostgreSQL-HA subchart from 8.6.13 to 11.2.1
     - kind: changed
-      description:  Upgraded Redis subchart from 16.10.1 to 17.9.3
+      description:  Upgraded Redis subchart from 16.10.1 to 17.9.5
     - kind: deprecated
       description: The `.celeryWorker` and `.celeryBeat` values have been deprecated and are now defined in `.workers.default` and `.workers.beat`
 apiVersion: "v2"
-appVersion: "1.5.16"
-version: "2.0.0-beta.10"
+appVersion: "1.5.17"
+version: "2.0.0-beta.11"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

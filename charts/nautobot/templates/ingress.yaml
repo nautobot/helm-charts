@@ -27,11 +27,13 @@ spec:
           {{- range $nautobotName := $nautobotKeys -}}
           {{- $nautobot := (first (values (pick $nautobots $nautobotName))) }}
           {{- if $nautobot.enabled }}
-          - path: {{ $nautobot.ingressPath | quote }}
+          {{- range $ingressPath := $nautobot.ingressPaths }}
+          - path: {{if $nautobot.staticFilesOnly }}"/static"{{ else }}{{ $ingressPath | quote }}{{ end }}
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ $.Values.ingress.pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s" (include "common.names.fullname" $) $nautobotName) "servicePort" (default "https" $.Values.ingress.backendProtocol) "context" $)  | nindent 14 }}
+          {{- end }}
           {{- end }}
           {{- end }}
     {{- end }}
@@ -42,11 +44,13 @@ spec:
           {{- range $nautobotName := $nautobotKeys -}}
           {{- $nautobot := (first (values (pick $nautobots $nautobotName))) }}
           {{- if $nautobot.enabled }}
-          - path: {{if $nautobot.staticFilesOnly }}"/static"{{ else }}{{ $nautobot.ingressPath | quote }}{{ end }}
+          {{- range $ingressPath := $nautobot.ingressPaths }}
+          - path: {{if $nautobot.staticFilesOnly }}"/static"{{ else }}{{ $ingressPath | quote }}{{ end }}
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ $.Values.ingress.pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s" (include "common.names.fullname" $) $nautobotName) "servicePort" (default "https" $.Values.ingress.backendProtocol) "context" $)  | nindent 14 }}
+          {{- end }}
           {{- end }}
           {{- end }}
     {{- end }}

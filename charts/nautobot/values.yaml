@@ -42,7 +42,7 @@ nautobot:
     # -- Nautobot image name, common to all deployments
     repository: "nautobot/nautobot"
     # -- Nautobot image tag, common to all deployments
-    tag: "1.5.16-py3.10"
+    tag: "1.5.17-py3.10"
     # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent`
     pullPolicy: "Always"
     # -- ([]string) List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments
@@ -415,14 +415,15 @@ initJob:
   upgradeHook: "pre-upgrade"
   command: []
 
-# -- (map[name]nautobot) Additional Nautobot deployments, map key is the name of the deployment and the additional keys `enabled`, `ingressPath`, `initNautobot` are required for each Nautobot deployment, all other keys for each Nautobot will override the defaults provided by the root `.Values.nautobot`.
+# -- (map[name]nautobot) Additional Nautobot deployments, map key is the name of the deployment and the additional keys `enabled`, `ingressPaths`, `initNautobot` are required for each Nautobot deployment, all other keys for each Nautobot will override the defaults provided by the root `.Values.nautobot`.
 # @default -- See values.yaml
 nautobots:
   # -- (nautobot) Values for the Default Nautobot deployment see values.yaml `.nautobot` for assumed defaults
   # @default -- See values.yaml
   default:
     enabled: true
-    ingressPath: "/"
+    ingressPaths:
+      - "/"
     # Should the docker entrypoint run to include the Nautobot post_upgrade steps
     initNautobot: true
     # Should this deployment ONLY run nginx hosting /static files?
@@ -431,13 +432,16 @@ nautobots:
 # Enable a separate deployment specifically for API requests
 # api:
 #   enabled: true
-#   ingressPath: "/api"
+#   ingressPaths:
+#     - "/api"
 #   initNautobot: false
 
 # # Enable a separate deployment specifically for GraphQL requests
 # graphql:
 #   enabled: true
-#   ingressPath: "/graphql"
+#   ingressPaths:
+#     - "/api/graphql"
+#     - "/graphql"
 #   initNautobot: false
 
 # Default values for Celery Workers

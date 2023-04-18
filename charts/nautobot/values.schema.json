@@ -817,15 +817,18 @@
             {
               "required": [
                 "enabled",
-                "ingressPath",
+                "ingressPaths",
                 "initNautobot"
               ],
               "properties": {
                 "enabled": {
                   "type": "boolean"
                 },
-                "ingressPath": {
-                  "type": "string"
+                "ingressPaths": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 },
                 "initNautobot": {
                   "type": "boolean"

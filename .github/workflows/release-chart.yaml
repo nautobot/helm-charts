@@ -1,14 +1,16 @@
 ---
+# spell-checker: disable
 name: "Release"
 on:  # yamllint disable-line rule:truthy
   push:
     tags: "*"
 jobs:
   release:
-    runs-on: "ubuntu-latest"
+    runs-on: "ubuntu-22.04"
     steps:
       - uses: "actions/checkout@v3"
       - name: "Publish Helm charts"
-        uses: "stefanprodan/helm-gh-pages@master"
+        uses: "stefanprodan/helm-gh-pages@v1.6.0"
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
+          dependencies: "bitnami,https://charts.bitnami.com/bitnami"

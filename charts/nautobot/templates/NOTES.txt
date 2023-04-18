@@ -1,3 +1,15 @@
+{{- if (or (not (empty .Values.celeryWorker)) (not (empty .Values.celeryBeat))) }}
+********************************************************************
+***                      DEPRECATION NOTICE                      ***
+********************************************************************
+{{ if (not (empty .Values.celeryWorker)) }}
+The celeryWorkers helm value has been deprecated and moved to workers.default see
+https://helm-charts.readthedocs.io/en/latest/configuration/reference/#workers-values for more information.
+{{ end }}{{ if (not (empty .Values.celeryBeat)) }}
+The celeryBeat helm value has been deprecated and moved to workers.beat see
+https://helm-charts.readthedocs.io/en/latest/configuration/reference/#workers-values for more information.
+{{ end }}
+{{ end }}
 {{- if and (or .Values.postgresql.enabled .Values.mariadb.enabled .Values.nautobot.db.host ) (or .Values.redis.enabled .Values.nautobot.redis.host) -}}
 
 *********************************************************************
@@ -56,7 +68,7 @@ Make sure you take note of your Nautobot `NAUTOBOT_SECRET_KEY` by running:
 To take a backup of the database run:
 
   export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-  echo $POSTGRES_PASSWORD | kubectl exec -itn {{ .Release.Namespace }} statefulset.apps/{{ include "common.names.fullname" . }}-postgresql -- pg_dump --username {{ .Values.postgresql.postgresqlUsername }} --clean --if-exists nautobot > backup.sql
+  echo $POSTGRES_PASSWORD | kubectl exec -itn {{ .Release.Namespace }} statefulset.apps/{{ include "common.names.fullname" . }}-postgresql -- pg_dump --username {{ .Values.postgresql.auth.username }} --clean --if-exists nautobot > backup.sql
 
 {{- end }}
 {{- else -}}

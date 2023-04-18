@@ -6,4 +6,5 @@
 # Unless a later match takes precedence, these will be requested for
 # review when someone opens a pull request. Once approved, PR creators
 # are encouraged to merge their own PRs.
+# spell-checker: disable
 * @nniehoff @ubajze

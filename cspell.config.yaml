@@ -1,0 +1,7 @@
+---
+dictionaryDefinitions:
+  - name: "myWords"
+    path: "cSpell_dict.txt"
+    addWords: true
+dictionaries:
+  - "myWords"

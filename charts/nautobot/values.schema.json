@@ -1,37 +1,42 @@
 {
-  "$schema": "http://json-schema.org/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$defs": {
+    "empty-object": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "celery": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "concurrency": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "taskQueues": {
+              "type": "string"
+            },
+            "metricsPort": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          }
+        }
+      ]
+    },
     "deployment": {
       "type": "object",
-      "required": [
-        "affinity",
-        "args",
-        "command",
-        "containerSecurityContext",
-        "extraEnvVars",
-        "extraVolumeMounts",
-        "extraVolumes",
-        "hostAliases",
-        "initContainers",
-        "lifecycleHooks",
-        "livenessProbe",
-        "nodeAffinityPreset",
-        "nodeSelector",
-        "podAffinityPreset",
-        "podAntiAffinityPreset",
-        "podAnnotations",
-        "podLabels",
-        "podSecurityContext",
-        "priorityClassName",
-        "readinessProbe",
-        "resources",
-        "sidecars",
-        "tolerations",
-        "updateStrategy"
-      ],
       "properties": {
         "affinity": {
-          "type": "object"
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/affinity.json"
         },
         "args": {
           "type": "array",
@@ -42,13 +47,6 @@
         "autoscaling": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "behavior",
-            "enabled",
-            "minReplicas",
-            "maxReplicas",
-            "metrics"
-          ],
           "properties": {
             "behavior": {
               "type": "object"
@@ -84,20 +82,7 @@
         "extraEnvVars": {
           "type": "array",
           "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "name",
-              "value"
-            ],
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "value": {
-                "type": "string"
-              }
-            }
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/envvar.json"
           }
         },
         "extraEnvVarsCM": {
@@ -115,29 +100,29 @@
         "extraVolumeMounts": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/volumemount.json"
           }
         },
         "extraVolumes": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/volume.json"
           }
         },
         "hostAliases": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/hostalias.json"
           }
         },
         "initContainers": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/container.json"
           }
         },
         "lifecycleHooks": {
-          "type": "object"
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/lifecycle.json"
         },
         "livenessProbe": {
           "$ref": "#/$defs/probe"
@@ -166,15 +151,18 @@
           }
         },
         "nodeSelector": {
-          "type": "object"
+          "oneOf": [
+            {
+              "$ref": "#/$defs/empty-object"
+            },
+            {
+              "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/nodeselector.json"
+            }
+          ]
         },
         "pdb": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "create",
-            "minAvailable"
-          ],
           "properties": {
             "create": {
               "type": "boolean"
@@ -199,15 +187,32 @@
         },
         "podAnnotations": {
           "additionalProperties": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
-          "type": "object"
+          "description": "Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations",
+          "type": [
+            "object",
+            "null"
+          ]
         },
         "podLabels": {
-          "type": "object"
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": "Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels",
+          "type": [
+            "object",
+            "null"
+          ]
         },
         "podSecurityContext": {
-          "$ref": "#/$defs/securityContext"
+          "$ref": "#/$defs/podSecurityContext"
         },
         "priorityClassName": {
           "type": "string"
@@ -224,39 +229,18 @@
           "minimum": 1
         },
         "resources": {
-          "type": "object",
-          "properties": {
-            "limits": {
-              "type": "object",
-              "properties": {
-                "cpu": {
-                  "type": "string"
-                },
-                "memory": {
-                  "type": "string"
-                }
-              }
-            },
-            "requests": {
-              "type": "object",
-              "properties": {
-                "cpu": {
-                  "type": "string"
-                },
-                "memory": {
-                  "type": "string"
-                }
-              }
-            }
-          }
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/resourcerequirements.json"
         },
         "sidecars": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/container.json"
+          }
         },
         "tolerations": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/toleration.json"
           }
         },
         "updateStrategy": {
@@ -273,368 +257,6 @@
         }
       }
     },
-    "probe": {
-      "type": "object",
-      "required": [
-        "enabled"
-      ],
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
-        "exec": {
-          "type": "object"
-        },
-        "failureThreshold": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "httpGet": {
-          "type": "object"
-        },
-        "initialDelaySeconds": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "periodSeconds": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "successThreshold": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "tcpSocket": {
-          "type": "object"
-        },
-        "timeoutSeconds": {
-          "type": "integer",
-          "minimum": 1
-        }
-      }
-    },
-    "securityContext": {
-      "type": "object",
-      "required": [
-        "enabled"
-      ],
-      "properties": {
-        "properties": {
-          "allowPrivilegeEscalation": {
-            "type": "boolean"
-          },
-          "capabilities": {
-            "type": "object",
-            "properties": {
-              "add": {
-                "type": "array"
-              },
-              "drop": {
-                "type": "array"
-              }
-            }
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "fsGroup": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "readOnlyRootFilesystem": {
-            "type": "boolean"
-          },
-          "runAsGroup": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "runAsUser": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "seccompProfile": {
-            "type": "object"
-          }
-        }
-      }
-    }
-  },
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "celeryBeat",
-    "celeryWorker",
-    "commonAnnotations",
-    "ingress",
-    "mariadb",
-    "metrics",
-    "nautobot",
-    "postgresql",
-    "postgresqlha",
-    "redis",
-    "rqWorker",
-    "service",
-    "serviceAccount"
-  ],
-  "properties": {
-    "celeryBeat": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/deployment"
-        },
-        {
-          "type": "object",
-          "required": [
-            "enabled"
-          ],
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          }
-        }
-      ]
-    },
-    "celeryWorker": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/deployment"
-        },
-        {
-          "type": "object",
-          "required": [
-            "autoscaling",
-            "enabled",
-            "replicaCount"
-          ],
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          }
-        }
-      ]
-    },
-    "common": {
-      "type": "object"
-    },
-    "commonAnnotations": {
-      "additionalProperties": {
-        "type": "string"
-      },
-      "type": "object"
-    },
-    "enabled": {
-      "type": "boolean"
-    },
-    "global": {
-      "type": "object"
-    },
-    "ingress": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "backendProtocol",
-        "enabled",
-        "extraHosts",
-        "extraPaths",
-        "extraTls",
-        "ingressClassName",
-        "pathType",
-        "hostname",
-        "path",
-        "annotations",
-        "tls"
-      ],
-      "properties": {
-        "apiVersion": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "annotations": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "type": "object"
-        },
-        "backendProtocol": {
-          "type": "string",
-          "pattern": "^(http|https)$"
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "extraHosts": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "backendProtocol": {
-                "type": "string",
-                "pattern": "^(http|https)$"
-              },
-              "extraPaths": {
-                "type": "array",
-                "items": {
-                  "type": "object"
-                }
-              },
-              "hostname": {
-                "type": "string"
-              },
-              "path": {
-                "type": "string"
-              },
-              "pathType": {
-                "type": "string",
-                "pattern": "^(Exact|Prefix|ImplementationSpecific)$"
-              }
-            }
-          }
-        },
-        "extraPaths": {
-          "type": "array",
-          "items": {
-            "type": "object"
-          }
-        },
-        "extraTls": {
-          "type": "array",
-          "items": {
-            "type": "object"
-          }
-        },
-        "hostname": {
-          "type": "string"
-        },
-        "ingressClassName": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        },
-        "pathType": {
-          "type": "string",
-          "pattern": "^(Exact|Prefix|ImplementationSpecific)$"
-        },
-        "secretName": {
-          "type": "string"
-        },
-        "tls": {
-          "type": "boolean"
-        }
-      }
-    },
-    "mariadb": {
-      "type": "object",
-      "required": [
-        "auth",
-        "enabled"
-      ],
-      "properties": {
-        "auth": {
-          "type": "object",
-          "required": [
-            "database",
-            "password",
-            "rootPassword",
-            "username"
-          ],
-          "properties": {
-            "database": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            },
-            "rootPassword": {
-              "type": "string"
-            },
-            "username": {
-              "type": "string"
-            }
-          }
-        },
-        "enabled": {
-          "type": "boolean"
-        }
-      }
-    },
-    "metrics": {
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "capacityMetrics",
-        "enabled",
-        "prometheusRule",
-        "serviceMonitor"
-      ],
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
-        "capacityMetrics": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "enabled"
-          ],
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            },
-            "interval": {
-              "type": "string"
-            },
-            "scrapeTimeout": {
-              "type": "string"
-            },
-            "labels": {
-              "type": "object"
-            }
-          }
-        },
-        "prometheusRule": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "enabled"
-          ],
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            },
-            "labels": {
-              "type": "object"
-            },
-            "rules": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          }
-        },
-        "serviceMonitor": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "interval": {
-              "type": "string"
-            },
-            "scrapeTimeout": {
-              "type": "string"
-            },
-            "labels": {
-              "type": "object"
-            }
-          }
-        }
-      }
-    },
     "nautobot": {
       "allOf": [
         {
@@ -642,21 +264,6 @@
         },
         {
           "type": "object",
-          "required": [
-            "allowedHosts",
-            "config",
-            "db",
-            "debug",
-            "extraVars",
-            "image",
-            "logLevel",
-            "metrics",
-            "redis",
-            "replicaCount",
-            "secretKey",
-            "superUser",
-            "uWSGIini"
-          ],
           "properties": {
             "allowedHosts": {
               "type": "string"
@@ -715,6 +322,9 @@
               }
             },
             "debug": {
+              "type": "boolean"
+            },
+            "enabled": {
               "type": "boolean"
             },
             "extraVars": {
@@ -844,6 +454,9 @@
                 }
               }
             },
+            "singleInit": {
+              "type": "boolean"
+            },
             "uWSGIini": {
               "type": "string"
             }
@@ -851,20 +464,401 @@
         }
       ]
     },
-    "postgresql": {
+    "probe": {
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/probe.json"
+        },
+        {
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "securityContext": {
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/securitycontext.json"
+        },
+        {
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "podSecurityContext": {
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/podsecuritycontext.json"
+        },
+        {
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "workers",
+    "celery",
+    "celeryBeat",
+    "celeryWorker",
+    "commonAnnotations",
+    "ingress",
+    "initJob",
+    "mariadb",
+    "metrics",
+    "nautobot",
+    "nautobots",
+    "postgresql",
+    "postgresqlha",
+    "rabbitmq",
+    "redis",
+    "service",
+    "serviceAccount"
+  ],
+  "properties": {
+    "celery": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/celery"
+        }
+      ]
+    },
+    "celeryBeat": {
+      "description": "DEPRECATED See workers.beat",
+      "allOf": [
+        {
+          "$ref": "#/$defs/celery"
+        }
+      ]
+    },
+    "celeryWorker": {
+      "description": "DEPRECATED See workers.default",
+      "allOf": [
+        {
+          "$ref": "#/$defs/celery"
+        }
+      ]
+    },
+    "common": {
+      "type": "object"
+    },
+    "commonAnnotations": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "global": {
+      "type": "object"
+    },
+    "ingress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "backendProtocol",
+        "enabled",
+        "extraHosts",
+        "extraPaths",
+        "extraTls",
+        "ingressClassName",
+        "pathType",
+        "hostname",
+        "path",
+        "annotations",
+        "tls"
+      ],
+      "properties": {
+        "apiVersion": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "backendProtocol": {
+          "type": "string",
+          "pattern": "^(http|https)$"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "extraHosts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "backendProtocol": {
+                "type": "string",
+                "pattern": "^(http|https)$"
+              },
+              "extraPaths": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "hostname": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "pathType": {
+                "type": "string",
+                "pattern": "^(Exact|Prefix|ImplementationSpecific)$"
+              }
+            }
+          }
+        },
+        "extraPaths": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "extraTls": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "ingressClassName": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "pathType": {
+          "type": "string",
+          "pattern": "^(Exact|Prefix|ImplementationSpecific)$"
+        },
+        "secretName": {
+          "type": "string"
+        },
+        "tls": {
+          "type": "boolean"
+        }
+      }
+    },
+    "initJob": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deployment"
+        },
+        {
+          "required": [
+            "installHook",
+            "upgradeHook"
+          ],
+          "properties": {
+            "installHook": {
+              "type": "string",
+              "pattern": "^(post-install|pre-install)$"
+            },
+            "upgradeHook": {
+              "type": "string",
+              "pattern": "^(post-upgrade|pre-upgrade)$"
+            }
+          }
+        }
+      ]
+    },
+    "mariadb": {
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/bitnami/charts/ba59192a4d0b28454f072903e5186d8bb2adf43f/bitnami/mariadb/values.schema.json"
+        },
+        {
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "metrics": {
+      "additionalProperties": false,
       "type": "object",
       "required": [
+        "capacityMetrics",
         "enabled",
-        "postgresqlPassword"
+        "nginxExporter",
+        "prometheusRule",
+        "serviceMonitor",
+        "uwsgiExporter"
       ],
       "properties": {
         "enabled": {
           "type": "boolean"
         },
-        "postgresqlPassword": {
-          "type": "string"
+        "capacityMetrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "nautobot"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "interval": {
+              "type": "string"
+            },
+            "nautobot": {
+              "type": "string"
+            },
+            "scrapeTimeout": {
+              "type": "string"
+            },
+            "labels": {
+              "type": "object"
+            }
+          }
+        },
+        "nginxExporter": {
+          "type": "object"
+        },
+        "prometheusRule": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "labels": {
+              "type": "object"
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "serviceMonitor": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "interval": {
+              "type": "string"
+            },
+            "scrapeTimeout": {
+              "type": "string"
+            },
+            "labels": {
+              "type": "object"
+            }
+          }
+        },
+        "uwsgiExporter": {
+          "type": "object"
         }
       }
+    },
+    "nautobot": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/nautobot"
+        }
+      ]
+    },
+    "nautobots": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9]+$": {
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/nautobot"
+            },
+            {
+              "required": [
+                "enabled",
+                "ingressPaths",
+                "initNautobot"
+              ],
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "ingressPaths": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "initNautobot": {
+                  "type": "boolean"
+                },
+                "staticFilesOnly": {
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "description": "List of Nautobot objects (matching the Nautobot spec) to create deployments for"
+    },
+    "postgresql": {
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/bitnami/charts/d3ec8fa952007380c6001c526b027a8bb064cbab/bitnami/postgresql/values.schema.json"
+        },
+        {
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
     },
     "postgresql-ha": {
       "type": "object"
@@ -912,44 +906,25 @@
         }
       }
     },
-    "redis": {
+    "rabbitmq": {
       "type": "object",
       "required": [
-        "enabled",
-        "auth"
+        "enabled"
       ],
       "properties": {
-        "auth": {
-          "type": "object",
-          "required": [
-            "enabled",
-            "password"
-          ],
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            },
-            "password": {
-              "type": "string"
-            }
-          }
-        },
         "enabled": {
           "type": "boolean"
         }
       }
     },
-    "rqWorker": {
+    "redis": {
       "allOf": [
         {
-          "$ref": "#/$defs/deployment"
+          "$ref": "https://raw.githubusercontent.com/bitnami/charts/6d27b518fe3bf57fb792ac42f16133177f2c4d76/bitnami/redis/values.schema.json"
         },
         {
-          "type": "object",
           "required": [
-            "autoscaling",
-            "enabled",
-            "replicaCount"
+            "enabled"
           ],
           "properties": {
             "enabled": {
@@ -995,7 +970,7 @@
         "extraPorts": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/serviceport.json"
           },
           "description": "Extra ports to expose in the nautobot service (normally used with the `sidecars` value)"
         },
@@ -1038,6 +1013,15 @@
               "minimum": 1,
               "maximum": 65535,
               "description": "Node Port to use for the https service, the default range is 30000-32767 however this can be changed with --service-node-port-range"
+            },
+            "uwsgimetrics": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Node Port to use for the https service, the default range is 30000-32767 however this can be changed with --service-node-port-range"
             }
           }
         },
@@ -1058,10 +1042,14 @@
       "additionalProperties": false,
       "required": [
         "annotations",
+        "automountServiceAccountToken",
         "create",
         "name"
       ],
       "properties": {
+        "automountServiceAccountToken": {
+          "type": "boolean"
+        },
         "annotations": {
           "additionalProperties": {
             "type": "string"
@@ -1078,6 +1066,30 @@
     },
     "sops": {
       "type": "object"
+    },
+    "workers": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9]+$": {
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/celery"
+            },
+            {
+              "required": [
+                "enabled"
+              ],
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "description": "List of Nautobot objects (matching the Nautobot spec) to create deployments for"
     }
   }
 }

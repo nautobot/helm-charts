@@ -12,7 +12,7 @@ Nautobot is a Network Source of Truth and Network Automation Platform.
 <!-- This README.md.gotmpl is used by helm-docs to generate README.md which in turn generates the information on https://artifacthub.io/packages/helm/nautobot/nautobot so there are parts of this which are duplicated from `docs` -->
 ## Documentation
 
-Please see our [official documentation site](https://docs.nautobot.com/projects/helm-charts/en/latest/) for more information.
+Please see our [official documentation site](https://docs.nautobot.com/projects/helm-charts/en/stable/) for more information.
 
 <!-- This section is a duplicate of docs/installation/prerequisites.md -->
 ## Prerequisites
@@ -75,15 +75,15 @@ kubectl get secret nautobot-env -o jsonpath="{.data.NAUTOBOT_SUPERUSER_PASSWORD}
 
 ## Nautobot as a subchart
 
-See [Nautobot as a Subchart](https://docs.nautobot.com/projects/helm-charts/en/latest/advanced-features/nautobot-as-subchart) in the [Advanced Usage](https://docs.nautobot.com/projects/helm-charts/en/latest/advanced-features) section of the documentation
+See [Nautobot as a Subchart](https://docs.nautobot.com/projects/helm-charts/en/stable/advanced-features/nautobot-as-subchart) in the [Advanced Usage](https://docs.nautobot.com/projects/helm-charts/en/stable/advanced-features) section of the documentation
 
 ## Upgrading
 
-See [Upgrading](https://docs.nautobot.com/projects/helm-charts/en/latest/operations/upgrading)
+See [Upgrading](https://docs.nautobot.com/projects/helm-charts/en/stable/operations/upgrading)
 
 ## Uninstalling the Chart
 
-See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/latest/operations/uninstall)
+See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operations/uninstall)
 
 ## Requirements
 
@@ -214,7 +214,7 @@ The `mariadb.*` values configure the upstream chart from Bitnami.  Please see th
 | <a name="metrics.nginxExporter.image.pullSecrets">[metrics.nginxExporter.image.pullSecrets](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L776)</a> | []string | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | <a name="metrics.nginxExporter.image.registry">[metrics.nginxExporter.image.registry](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L768)</a> | string | `"docker.io"` | NGINX Exporter image registry |
 | <a name="metrics.nginxExporter.image.repository">[metrics.nginxExporter.image.repository](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L770)</a> | string | `"nginx/nginx-prometheus-exporter"` | NGINX Exporter image name |
-| <a name="metrics.nginxExporter.image.tag">[metrics.nginxExporter.image.tag](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L772)</a> | string | `"0.10.0"` | NGINX Exporter image tag |
+| <a name="metrics.nginxExporter.image.tag">[metrics.nginxExporter.image.tag](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L772)</a> | string | `"0.11.0"` | NGINX Exporter image tag |
 | <a name="metrics.nginxExporter.livenessProbe">[metrics.nginxExporter.livenessProbe](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L805)</a> | [Probe](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1) | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] NGINX Exporter liveness probe |
 | <a name="metrics.nginxExporter.readinessProbe">[metrics.nginxExporter.readinessProbe](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L818)</a> | [Probe](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1) | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] NGINX Exporter readiness probe |
 | <a name="metrics.nginxExporter.resources">[metrics.nginxExporter.resources](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L795)</a> | [ResourceRequirements](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources) | See values.yaml | [[ref](http://kubernetes.io/docs/user-guide/compute-resources/)] NGINX Exporter resource requests and limits |
@@ -317,7 +317,7 @@ The `mariadb.*` values configure the upstream chart from Bitnami.  Please see th
 | <a name="nautobot.revisionHistoryLimit">[nautobot.revisionHistoryLimit](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L57)</a> | int | `3` | [[ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)] Number of old ReplicaSets to retain |
 | <a name="nautobot.secretKey">[nautobot.secretKey](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L375)</a> | string | `""` | [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#secret_key)] Nautobot Secret Key (NAUTOBOT_SECRET_KEY)<sup>[1](#notes)</sup> |
 | <a name="nautobot.sidecars">[nautobot.sidecars](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L189)</a> | [][Container](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container) | `[]` | Add additional sidecar containers to the Nautobot server pods |
-| <a name="nautobot.singleInit">[nautobot.singleInit](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L389)</a> | bool | `false` | [[ref](https://helm-charts.readthedocs.io/en/latest/advanced-features/init-hook)] Run the Nautobot initialization tasks as a helm hook instead of an initContainer<sup>[1](#notes)</sup> |
+| <a name="nautobot.singleInit">[nautobot.singleInit](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L389)</a> | bool | `false` | [[ref](https://docs.nautobot.com/projects/helm-charts/en/stable/advanced-features/init-hook)] Run the Nautobot initialization tasks as a helm hook instead of an initContainer<sup>[1](#notes)</sup> |
 | <a name="nautobot.superUser.apitoken">[nautobot.superUser.apitoken](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L380)</a> | string | `""` | [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token)] Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN)<sup>[1](#notes)</sup> |
 | <a name="nautobot.superUser.email">[nautobot.superUser.email](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L382)</a> | string | `"admin@example.com"` | [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_email)] Configure an email address for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_EMAIL)<sup>[1](#notes)</sup> |
 | <a name="nautobot.superUser.enabled">[nautobot.superUser.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L378)</a> | bool | `true` | [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser)] Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER)<sup>[1](#notes)</sup> |

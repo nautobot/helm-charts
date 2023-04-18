@@ -98,7 +98,7 @@ or
 pre-commit run -av helm-docs
 ```
 
-The [official docs site](https://docs.nautobot.com/projects/helm-charts/en/latest) is built using mkdocs from the `/docs` folder in the root of the repo.  To preview the docs you can run:
+The [official docs site](https://docs.nautobot.com/projects/helm-charts/en/stable) is built using mkdocs from the `/docs` folder in the root of the repo.  To preview the docs you can run:
 
 ```no-highlight
 invoke docs

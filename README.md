@@ -12,7 +12,7 @@ This repo is intended to house [Helm](https://helm.sh/) charts for the Nautobot 
 
 ## Official Documentation
 
-Please checkout our [documentation site](https://docs.nautobot.com/projects/helm-charts/en/latest/) for much more detailed documentation on the Nautobot Helm Chart.
+Please checkout our [documentation site](https://docs.nautobot.com/projects/helm-charts/en/stable/) for much more detailed documentation on the Nautobot Helm Chart.
 
 ## Quick Start
 
@@ -41,16 +41,16 @@ helm install nautobot nautobot/nautobot
 
 ## Support
 
-* **Documentation**: See the [Official Nautobot Helm Chart Documentation site](https://docs.nautobot.com/projects/helm-charts/en/latest/).
+* **Documentation**: See the [Official Nautobot Helm Chart Documentation site](https://docs.nautobot.com/projects/helm-charts/en/stable/).
 * **Slack**: checkout the **#nautobot** channel on the [Network to Code slack](https://networktocode.slack.com/)!
 
 ## Contributing
 
-See [Contributing](https://docs.nautobot.com/projects/helm-charts/en/latest/development/contributing/)
+See [Contributing](https://docs.nautobot.com/projects/helm-charts/en/stable/development/contributing/)
 
 ## Releases
 
-See the [Release Checklist](https://docs.nautobot.com/projects/helm-charts/en/latest/development/release-checklist)
+See the [Release Checklist](https://docs.nautobot.com/projects/helm-charts/en/stable/development/release-checklist)
 
 ## License
 

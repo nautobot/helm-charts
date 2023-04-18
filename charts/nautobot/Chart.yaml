@@ -9,7 +9,11 @@ annotations:
       image: ghcr.io/nautobot/nautobot:1.5.17-py3.10
   artifacthub.io/links: |
     - name: Nautobot Documentation
+      url: https://docs.nautobot.com/
+    - name: Nautobot Core Documentation
       url: https://nautobot.readthedocs.io/en/stable/
+    - name: Nautobot Helm Chart Documentation
+      url: https://docs.nautobot.com/projects/helm-charts/en/stable
     - name: Nautobot
       url: https://github.com/nautobot/nautobot
   artifacthub.io/screenshots: |
@@ -27,7 +31,7 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: changed
-      description: Documentation has a new home on [Read The Docs](https://helm-charts.readthedocs.io/en/latest/), check it out!
+      description: Documentation has a new home on [Read The Docs](https://docs.nautobot.com/projects/helm-charts/en/stable/), check it out!
     - kind: added
       description: Added optional NGINX sidecars
     - kind: added
@@ -41,7 +45,7 @@ annotations:
     - kind: added
       description: Added the ability to [initialize Nautobot as a Job](https://docs.nautobot.com/projects/core/en/stable/advanced-features/init-hook).
     - kind: added
-      description: Added optional [RabbitMQ support](/advanced-features/rabbitmq) for Celery Task Queueing
+      description: Added optional [RabbitMQ support](https://docs.nautobot.com/projects/core/en/stable/advanced-features/rabbitmq) for Celery Task Queueing
     - kind: changed
       description: Upgraded Nautobot from 1.4.5 to 1.5.17
     - kind: changed

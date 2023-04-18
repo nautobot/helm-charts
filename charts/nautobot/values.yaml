@@ -385,7 +385,7 @@ nautobot:
     # -- [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password)] Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated<sup>[1](#notes)</sup>
     password: ""  # NAUTOBOT_SUPERUSER_PASSWORD
 
-  # -- [[ref](https://helm-charts.readthedocs.io/en/latest/advanced-features/init-hook)] Run the Nautobot initialization tasks as a helm hook instead of an initContainer<sup>[1](#notes)</sup>
+  # -- [[ref](https://docs.nautobot.com/projects/helm-charts/en/stable/advanced-features/init-hook)] Run the Nautobot initialization tasks as a helm hook instead of an initContainer<sup>[1](#notes)</sup>
   singleInit: false
 
   # -- [[ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html)] Replace the entire `uwsgi.ini` file with this value<sup>[1](#notes)</sup>
@@ -769,7 +769,7 @@ metrics:
       # -- NGINX Exporter image name
       repository: "nginx/nginx-prometheus-exporter"
       # -- NGINX Exporter image tag
-      tag: "0.10.0"
+      tag: "0.11.0"
       # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/) valid values: `Always`, `Never`, or `IfNotPresent`
       pullPolicy: "Always"
       # -- ([]string) List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments

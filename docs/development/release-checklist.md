@@ -64,7 +64,7 @@ Draft a [new release](https://github.com/nautobot/nautobot/releases/new) with th
 
 * **Tag:** Current version (e.g. `v2.0.0`)
 * **Target:** `main`
-* **Title:** Version and date (e.g. `v2.0.0 - 2023-06-01`)
+* **Title:** Version and date (e.g. `v2.0.0 - 2023-04-18`)
 
 Copy the description from the pull request to the release.
 

@@ -3,7 +3,7 @@ annotations:
   category: "Infrastructure"
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/license: "Apache-2.0"
-  artifacthub.io/prerelease: "true"
+  artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
       image: ghcr.io/nautobot/nautobot:1.5.17-py3.10
@@ -58,7 +58,7 @@ annotations:
       description: The `.celeryWorker` and `.celeryBeat` values have been deprecated and are now defined in `.workers.default` and `.workers.beat`
 apiVersion: "v2"
 appVersion: "1.5.17"
-version: "2.0.0-beta.11"
+version: "2.0.0"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

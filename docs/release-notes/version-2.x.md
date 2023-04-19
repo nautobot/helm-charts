@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* [Docs on the official Nautobot Docs site](https://helm-charts.readthedocs.io/en/latest/)!
+* [Docs on the official Nautobot Docs site](https://docs.nautobot.com/projects/helm-charts/en/stable/)!
 * Default database engine now accounts for `METRICS_ENABLED`
 * Moved Nautobot post-upgrade task to a separate init container
 * Nautobot Version 1.5.17

@@ -2,9 +2,9 @@
 # spell-checker: disable
 dev_addr: "127.0.0.1:8001"
 site_name: "Nautobot Helm Charts"
-# site_url: "https://tbd.example.com"
-# repo_url: "https://github.com/org/example"
-# edit_uri: "edit/main/docs"
+edit_uri: "edit/main/docs"
+site_url: "https://docs.nautobot.com/projects/helm-charts/en/stable/"
+repo_url: "https://github.com/nautobot/helm-charts"
 copyright: "Copyright &copy; Network To Code"
 theme:
   name: "material"

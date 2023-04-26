@@ -170,26 +170,39 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-  Return the decoded database password.  If postgres is enabled check the existing secret passed to postgres.
-  If not check the existing secret passed to Nautobot.  Either the "postgresql-password" or the existingSecretPasswordKey key is used
+  Return the decoded database password. If postgres is enabled check the existing secret passed to postgres.
+  If not check the existing secret passed to Nautobot with key "existingSecretPasswordKey".
 */}}
 {{- define "nautobot.database.rawPassword" -}}
-  {{- if eq .Values.postgresql.enabled true -}}
-      {{- if .Values.postgresql.existingSecret -}}
+  {{- if .Values.nautobot.db.existingSecret -}}
+    {{- $password := "" -}}
+    {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.nautobot.db.existingSecret) -}}
+    {{- if $secret -}}
+      {{- if index $secret.data .Values.nautobot.db.existingSecretPasswordKey -}}
+        {{- $password = index $secret.data .Values.nautobot.db.existingSecretPasswordKey -}}
+      {{- else -}}
+        {{- fail (printf "Key '%s' not found in secret '%s'" .Values.nautobot.db.existingSecretPasswordKey .Values.nautobot.db.existingSecret) -}}
+      {{- end -}}
+    {{- else -}}
+      {{- fail (printf "Existing secret '%s' not found!" .Values.nautobot.db.existingSecret) -}}
+    {{- end -}}
+    {{- $password | b64dec -}}
+  {{- else if eq .Values.postgresql.enabled true -}}
+      {{- if .Values.postgresql.auth.existingSecret -}}
         {{- $password := "" -}}
-        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.postgresql.existingSecret) -}}
+        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.postgresql.auth.existingSecret) -}}
         {{- if $secret -}}
-          {{- if index $secret.data "postgresql-password" -}}
-            {{- $password = index $secret.data "postgresql-password" -}}
+          {{- if index $secret.data .Values.postgresql.auth.secretKeys.adminPasswordKey -}}
+            {{- $password = index $secret.data .Values.postgresql.auth.secretKeys.adminPasswordKey -}}
           {{- else -}}
-            {{- fail (printf "Key 'postgresql-password' not found in secret %s" .Values.postgresql.existingSecret) -}}
+            {{- fail (printf "Key '%s' not found in secret %s" .Values.postgresql.auth.secretKeys.adminPasswordKey .Values.postgresql.auth.existingSecret) -}}
           {{- end -}}
         {{- else -}}
-          {{- fail (printf "Existing secret %s not found!" .Values.postgresql.existingSecret) -}}
+          {{- fail (printf "Existing secret %s not found!" .Values.postgresql.auth.existingSecret) -}}
         {{- end -}}
         {{- $password | b64dec -}}
       {{- else -}}
-        {{- required "A Postgres Password is required!" .Values.postgresql.auth.password -}}
+        {{- required "A Postgres Password is required! Path: .Values.postgresql.auth.password" .Values.postgresql.auth.password -}}
       {{- end -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
       {{- if .Values.postgresqlha.postgresql.existingSecret -}}
@@ -206,7 +219,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
         {{- end -}}
         {{- $password | b64dec -}}
       {{- else -}}
-        {{- required "A Postgres Password is required!" .Values.postgresqlha.postgresql.password -}}
+        {{- required "A Postgres Password is required! Path: .Values.postgresqlha.postgresql.password" .Values.postgresqlha.postgresql.password -}}
       {{- end -}}
   {{- else if eq .Values.mariadb.enabled true -}}
       {{- if .Values.mariadb.auth.existingSecret -}}
@@ -223,25 +236,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
         {{- end -}}
         {{- $password | b64dec -}}
       {{- else -}}
-        {{- required "A MariaDB Password is required!" .Values.mariadb.auth.password -}}
+        {{- required "A MariaDB Password is required!. Path: .Values.mariadb.auth.password" .Values.mariadb.auth.password -}}
       {{- end -}}
   {{- else -}}
-    {{- if .Values.nautobot.db.existingSecret -}}
-      {{- $password := "" -}}
-      {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.nautobot.db.existingSecret) -}}
-      {{- if $secret -}}
-        {{- if index $secret.data .Values.nautobot.db.existingSecretPasswordKey -}}
-          {{- $password = index $secret.data .Values.nautobot.db.existingSecretPasswordKey -}}
-        {{- else -}}
-          {{- fail (printf "Key '%s' not found in secret %s" .Values.nautobot.db.existingSecretPasswordKey .Values.nautobot.db.existingSecret) -}}
-        {{- end -}}
-      {{- else -}}
-        {{- fail (printf "Existing secret %s not found!" .Values.nautobot.db.existingSecret) -}}
-      {{- end -}}
-      {{- $password | b64dec -}}
-    {{- else -}}
-      {{- required "A Database Password is required!" .Values.nautobot.db.password -}}
-    {{- end -}}
+    {{- fail (printf "You have to configure database credentials.") -}}
   {{- end -}}
 {{- end -}}
 
@@ -291,7 +289,20 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   If not check the existing secret passed to Nautobot.  The existingSecretPasswordKey key is used to lookup the password
 */}}
 {{- define "nautobot.redis.rawPassword" -}}
-  {{- if eq .Values.redis.enabled true -}}
+  {{- if .Values.nautobot.redis.existingSecret -}}
+      {{- $password := "" -}}
+      {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.nautobot.redis.existingSecret) -}}
+      {{- if $secret -}}
+        {{- if index $secret.data .Values.nautobot.redis.existingSecretPasswordKey -}}
+          {{- $password = index $secret.data .Values.nautobot.redis.existingSecretPasswordKey -}}
+        {{- else -}}
+          {{- fail (printf "Key '%s' not found in secret '%s'" .Values.nautobot.redis.existingSecretPasswordKey .Values.nautobot.redis.existingSecret) -}}
+        {{- end -}}
+      {{- else -}}
+        {{- fail (printf "Existing secret '%s' not found!" .Values.nautobot.redis.existingSecret) -}}
+      {{- end -}}
+      {{- $password | b64dec -}}
+  {{- else if eq .Values.redis.enabled true -}}
       {{- if .Values.redis.auth.existingSecret -}}
         {{- $password := "" -}}
         {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.redis.auth.existingSecret) -}}
@@ -299,32 +310,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
           {{- if index $secret.data .Values.redis.auth.existingSecretPasswordKey -}}
             {{- $password = index $secret.data .Values.redis.auth.existingSecretPasswordKey -}}
           {{- else -}}
-            {{- fail (printf "Key '%s' not found in secret %s" .Values.redis.auth.existingSecretPasswordKey .Values.redis.auth.existingSecret) -}}
+            {{- fail (printf "Key '%s' not found in secret '%s'" .Values.redis.auth.existingSecretPasswordKey .Values.redis.auth.existingSecret) -}}
           {{- end -}}
         {{- else -}}
-          {{- fail (printf "Existing secret %s not found!" .Values.redis.auth.existingSecret) -}}
+          {{- fail (printf "Existing secret '%s' not found!" .Values.redis.auth.existingSecret) -}}
         {{- end -}}
         {{- $password | b64dec -}}
       {{- else -}}
-        {{- required "A Redis Password is required!" .Values.redis.auth.password -}}
+        {{- required "A Redis Password is required. Path: .Values.redis.auth.password" .Values.redis.auth.password -}}
       {{- end -}}
   {{- else -}}
-    {{- if .Values.nautobot.redis.existingSecret -}}
-      {{- $password := "" -}}
-      {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.nautobot.redis.existingSecret) -}}
-      {{- if $secret -}}
-        {{- if index $secret.data .Values.nautobot.redis.existingSecretPasswordKey -}}
-          {{- $password = index $secret.data .Values.nautobot.redis.existingSecretPasswordKey -}}
-        {{- else -}}
-          {{- fail (printf "Key '%s' not found in secret %s" .Values.nautobot.redis.existingSecretPasswordKey .Values.nautobot.redis.existingSecret) -}}
-        {{- end -}}
-      {{- else -}}
-        {{- fail (printf "Existing secret %s not found!" .Values.nautobot.redis.existingSecret) -}}
-      {{- end -}}
-      {{- $password | b64dec -}}
-    {{- else -}}
-      {{- required "A Redis Password is required!" .Values.nautobot.redis.password -}}
-    {{- end -}}
+    {{- fail (printf "You have to configure redis credentials.") -}}
   {{- end -}}
 {{- end -}}
 

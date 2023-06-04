@@ -52,6 +52,8 @@ annotations:
       description:  Fixed #261 Init Job is missing initcontainers
     - kind: fixed
       description:  Fixed #213 Docs Update: Add How to Update Passwords
+    - kind: fixed
+      description:  Fixed #260 ServiceAccount not used in default config
     - kind: added
       description:  Added support for `terminationGracePeriodSeconds` to Nautobot and Celery Workers
 apiVersion: "v2"

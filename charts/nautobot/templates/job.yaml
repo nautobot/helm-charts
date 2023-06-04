@@ -27,9 +27,7 @@ spec:
         {{- end }}
     spec:
       restartPolicy: "OnFailure"
-      {{- if $.Values.serviceAccount.name }}
       serviceAccountName: {{ include "nautobot.serviceAccountName" $ }}
-      {{- end }}
       {{- include "nautobot.imagePullSecrets" $ | nindent 6 }}
       {{- if $initJob.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" $initJob.hostAliases "context" $) | nindent 8 }}

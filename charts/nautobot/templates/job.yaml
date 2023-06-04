@@ -46,6 +46,10 @@ spec:
       {{- if $initJob.podSecurityContext.enabled }}
       securityContext: {{- omit $initJob.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      initContainers:
+        {{- if $initJob.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" $initJob.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         # This init container will run post_upgrade which initializes/upgrades the DB as well as collects static files
         - name: "nautobot-init"

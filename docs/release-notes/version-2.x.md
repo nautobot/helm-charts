@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed [#261](https://github.com/nautobot/helm-charts/issues/261) Init Job is missing init containers
 * Fixed [#213](https://github.com/nautobot/helm-charts/issues/213) Docs Update: Add How to Update Passwords
 * Fixed [#260](https://github.com/nautobot/helm-charts/issues/260) ServiceAccount not used in default config
+* Fixed [#256](https://github.com/nautobot/helm-charts/issues/256) v2.0.0 does not allow KV nodeSelector
 
 ## 2.0.0 - 2023-04-18
 

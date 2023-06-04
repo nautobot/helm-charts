@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.0.1 - 2023-06-04
 
+### Added
+
+* Added support for `terminationGracePeriodSeconds` to Nautobot and Celery Workers
+
 ### Changed
 
 * Upgraded Nautobot from 1.5.17 to 1.5.20

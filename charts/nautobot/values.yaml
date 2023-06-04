@@ -70,6 +70,9 @@ nautobot:
     failureThreshold: 3
     successThreshold: 1
 
+  # -- [[ref](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)] Termination Grace Period Seconds
+  terminationGracePeriodSeconds: 30
+
   # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] Nautobot readiness probe
   # @default -- See values.yaml
   readinessProbe:
@@ -470,6 +473,9 @@ celery:
     timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
+
+  # -- [[ref](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)] Termination Grace Period Seconds
+  terminationGracePeriodSeconds: 30
 
   # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] Nautobot Celery Worker readiness probe
   # @default -- See values.yaml

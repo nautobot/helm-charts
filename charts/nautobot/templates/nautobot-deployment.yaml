@@ -349,6 +349,7 @@ spec:
         {{- if $nautobot.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" $nautobot.sidecars "context" $) | nindent 8 }}
         {{- end }}
+      terminationGracePeriodSeconds: {{ $nautobot.terminationGracePeriodSeconds }}
       volumes:
         - name: "nautobot-static"
           emptyDir: {}

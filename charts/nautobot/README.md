@@ -90,7 +90,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | common | 2.x.x |
-| https://charts.bitnami.com/bitnami | mariadb | 11.x.x |
+| https://charts.bitnami.com/bitnami | mariadb | 12.x |
 | https://charts.bitnami.com/bitnami | postgresql | 12.x.x |
 | https://charts.bitnami.com/bitnami | postgresqlha(postgresql-ha) | 11.x.x |
 | https://charts.bitnami.com/bitnami | rabbitmq | 11.x.x |
@@ -286,7 +286,7 @@ The `mariadb.*` values configure the upstream chart from Bitnami.  Please see th
 | <a name="nautobot.nginx.image.pullSecrets">[nautobot.nginx.image.pullSecrets](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L251)</a> | []string | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | <a name="nautobot.nginx.image.registry">[nautobot.nginx.image.registry](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L243)</a> | string | `"docker.io"` | NGINX image registry |
 | <a name="nautobot.nginx.image.repository">[nautobot.nginx.image.repository](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L245)</a> | string | `"nginxinc/nginx-unprivileged"` | NGINX image name |
-| <a name="nautobot.nginx.image.tag">[nautobot.nginx.image.tag](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L247)</a> | string | `"1.24"` | NGINX image tag |
+| <a name="nautobot.nginx.image.tag">[nautobot.nginx.image.tag](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L247)</a> | string | `"1.25"` | NGINX image tag |
 | <a name="nautobot.nginx.lifecycleHooks">[nautobot.nginx.lifecycleHooks](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L257)</a> | [Lifecycle](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle) | `{}` | lifecycleHooks for the NGINX container(s) to automate configuration before or after startup |
 | <a name="nautobot.nginx.livenessProbe">[nautobot.nginx.livenessProbe](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L287)</a> | [Probe](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1) | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] NGINX liveness probe |
 | <a name="nautobot.nginx.readinessProbe">[nautobot.nginx.readinessProbe](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L299)</a> | [Probe](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1) | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] NGINX readiness probe |

@@ -12,7 +12,8 @@ If you don't want to pass values through helm for either Redis or PostgreSQL the
 
     ```yaml
     postgresql:
-      existingSecret: "my-secret"
+      auth:
+        existingSecret: "my-secret"
     redis:
       auth:
         existingSecret: "my-secret"

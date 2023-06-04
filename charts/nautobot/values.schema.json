@@ -237,6 +237,9 @@
             "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/container.json"
           }
         },
+        "terminationGracePeriodSeconds": {
+          "type": "integer"
+        },
         "tolerations": {
           "type": "array",
           "items": {

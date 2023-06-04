@@ -48,6 +48,8 @@ annotations:
       description:  Upgraded Nginx Unprivileged optional container from 1.24 to 1.25
     - kind: fixed
       description:  Fixed #249 helm template command failing
+    - kind: added
+      description:  Added support for `terminationGracePeriodSeconds` to Nautobot and Celery Workers
 apiVersion: "v2"
 appVersion: "1.5.20"
 version: "2.0.1"

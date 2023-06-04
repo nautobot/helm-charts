@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Fixed #249 helm template command failing
+* Fixed #249 helm template command failing (@BlackDark)
 
 ## 2.0.0 - 2023-04-18
 

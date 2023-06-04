@@ -172,6 +172,26 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/*
   Return the decoded database password. If postgres is enabled check the existing secret passed to postgres.
   If not check the existing secret passed to Nautobot with key "existingSecretPasswordKey".
+
+  Pseudo Code:
+  if nautobot.db.existingSecret:
+    return value from the secret at the key nautobot.db.existingSecretPasswordKey
+  else
+    if postgres.enabled:
+      if postgresql.auth.existingSecret:
+        return value from the secret at key postgresql.auth.secretKeys.adminPasswordKey
+      else
+        return value from postgresql.auth.password
+    else if postgresqlha.enabled:
+      if postgresqlha.postgresql.existingSecret
+        return value from the secret at key "postgresql-password"
+      else
+        return value from postgresqlha.postgresql.password
+    else if mariadb.enabled
+      if mariadb.auth.existingSecret:
+        return the value from the secret at key "mariadb-password"
+      else
+        return value from mariadb.auth.password
 */}}
 {{- define "nautobot.database.rawPassword" -}}
   {{- if .Values.nautobot.db.existingSecret -}}
@@ -184,7 +204,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
         {{- fail (printf "Key '%s' not found in secret '%s'" .Values.nautobot.db.existingSecretPasswordKey .Values.nautobot.db.existingSecret) -}}
       {{- end -}}
     {{- else -}}
-      {{- fail (printf "Existing secret '%s' not found!" .Values.nautobot.db.existingSecret) -}}
+      {{- fail (printf "Existing Nautobot DB secret '%s' not found!" .Values.nautobot.db.existingSecret) -}}
     {{- end -}}
     {{- $password | b64dec -}}
   {{- else if eq .Values.postgresql.enabled true -}}
@@ -198,7 +218,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
             {{- fail (printf "Key '%s' not found in secret %s" .Values.postgresql.auth.secretKeys.adminPasswordKey .Values.postgresql.auth.existingSecret) -}}
           {{- end -}}
         {{- else -}}
-          {{- fail (printf "Existing secret %s not found!" .Values.postgresql.auth.existingSecret) -}}
+          {{- fail (printf "Existing PostgreSQL secret %s not found in %s namespace!" .Values.postgresql.auth.existingSecret $.Release.Namespace) -}}
         {{- end -}}
         {{- $password | b64dec -}}
       {{- else -}}
@@ -215,7 +235,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
             {{- fail (printf "Key 'postgresql-password' not found in secret %s" .Values.postgresqlha.postgresql.existingSecret) -}}
           {{- end -}}
         {{- else -}}
-          {{- fail (printf "Existing secret %s not found!" .Values.postgresqlha.postgresql.existingSecret) -}}
+          {{- fail (printf "Existing PostgreSQL-HA secret %s not found!" .Values.postgresqlha.postgresql.existingSecret) -}}
         {{- end -}}
         {{- $password | b64dec -}}
       {{- else -}}
@@ -232,7 +252,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
             {{- fail (printf "Key 'mariadb-password' not found in secret %s" .Values.mariadb.auth.existingSecret) -}}
           {{- end -}}
         {{- else -}}
-          {{- fail (printf "Existing secret %s not found!" .Values.mariadb.auth.existingSecret) -}}
+          {{- fail (printf "Existing MariaDB secret %s not found!" .Values.mariadb.auth.existingSecret) -}}
         {{- end -}}
         {{- $password | b64dec -}}
       {{- else -}}

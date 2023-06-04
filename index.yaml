@@ -4,6 +4,114 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
+          description: Upgraded Nautobot from 1.5.17 to 1.5.20
+        - kind: changed
+          description:  Upgraded Bitnami common subchart from 2.2.4 to 2.4.0
+        - kind: changed
+          description:  Upgraded Mariadb subchart from 11.5.7 to 12.2.4
+        - kind: changed
+          description:  Upgraded PostgreSQL subchart from 12.2.8 to 12.5.6
+        - kind: changed
+          description:  Upgraded PostgreSQL-HA subchart from 11.2.1 to 11.7.4
+        - kind: changed
+          description:  Upgraded RabbitMQ subchart from 11.13.0 to 11.16.1
+        - kind: changed
+          description:  Upgraded Redis subchart from 17.9.5 to 17.11.3
+        - kind: changed
+          description:  Upgraded Nginx Unprivileged optional container from 1.24 to 1.25
+        - kind: fixed
+          description:  Fixed #249 helm template command failing
+        - kind: fixed
+          description:  Fixed #261 Init Job is missing initcontainers
+        - kind: fixed
+          description:  Fixed #213 Docs Update: Add How to Update Passwords
+        - kind: fixed
+          description:  Fixed #260 ServiceAccount not used in default config
+        - kind: fixed
+          description:  Fixed #256 v2.0.0 does not allow KV nodeSelector.
+        - kind: added
+          description:  Added support for `terminationGracePeriodSeconds` to Nautobot and Celery Workers
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: nautobot
+          image: ghcr.io/nautobot/nautobot:1.5.20-py3.10
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Nautobot Documentation
+          url: https://docs.nautobot.com/
+        - name: Nautobot Core Documentation
+          url: https://nautobot.readthedocs.io/en/stable/
+        - name: Nautobot Helm Chart Documentation
+          url: https://docs.nautobot.com/projects/helm-charts/en/stable
+        - name: Nautobot
+          url: https://github.com/nautobot/nautobot
+      artifacthub.io/prerelease: "false"
+      artifacthub.io/screenshots: |
+        - title: Main Page
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_main_page.png
+        - title: Config Contexts
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_config_contexts.png
+        - title: GraphQL
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_graphiql.png
+        - title: Prefix hierarchy
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_prefix_hierarchy.png
+        - title: Config Compliance
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_golden_config.png
+        - title: Chatops
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.5.20
+    created: "2023-06-04T23:33:10.670955733Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - alias: postgresqlha
+      condition: postgresqlha.enabled
+      name: postgresql-ha
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Nautobot is a Network Source of Truth and Network Automation Platform.
+    digest: 024e817b19ca6625a13005694639fd813525135900d27233280adc29e317ab48
+    home: https://github.com/nautobot/nautobot
+    icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
+    keywords:
+    - DCIM
+    - IPAM
+    - SOT
+    maintainers:
+    - email: opensource@networktocode.com
+      name: Network to Code
+      url: https://www.networktocode.com/
+    name: nautobot
+    sources:
+    - https://github.com/nautobot/nautobot
+    - https://github.com/nautobot/helm-charts
+    urls:
+    - https://nautobot.github.io/helm-charts/nautobot-2.0.1.tgz
+    version: 2.0.1
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
           description: Documentation has a new home on [Read The Docs](https://docs.nautobot.com/projects/helm-charts/en/stable/), check it out!
         - kind: added
           description: Added optional NGINX sidecars
@@ -4486,4 +4594,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2023-04-19T13:30:28.252826446Z"
+generated: "2023-06-04T23:33:10.638883203Z"

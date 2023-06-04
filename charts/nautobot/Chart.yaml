@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.5.17-py3.10
+      image: ghcr.io/nautobot/nautobot:1.5.20-py3.10
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -31,38 +31,36 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: changed
-      description: Documentation has a new home on [Read The Docs](https://docs.nautobot.com/projects/helm-charts/en/stable/), check it out!
-    - kind: added
-      description: Added optional NGINX sidecars
-    - kind: added
-      description: Added optional NGINX and uWSGI exporter sidecars for metrics
-    - kind: added
-      description: Added the ability to add separate any endpoint such as /api or /api/graphql for scaling out
-    - kind: added
-      description: Added the ability to add additional celery workers for [additional queues](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues)
-    - kind: added
-      description: Added the ability to [host static files separately](https://docs.nautobot.com/projects/core/en/stable/advanced-features/static-only).
-    - kind: added
-      description: Added the ability to [initialize Nautobot as a Job](https://docs.nautobot.com/projects/core/en/stable/advanced-features/init-hook).
-    - kind: added
-      description: Added optional [RabbitMQ support](https://docs.nautobot.com/projects/core/en/stable/advanced-features/rabbitmq) for Celery Task Queueing
+      description: Upgraded Nautobot from 1.5.17 to 1.5.20
     - kind: changed
-      description: Upgraded Nautobot from 1.4.5 to 1.5.17
+      description:  Upgraded Bitnami common subchart from 2.2.4 to 2.4.0
     - kind: changed
-      description:  Upgraded Bitnami common subchart from 1.14.1 to 2.2.4
+      description:  Upgraded Mariadb subchart from 11.5.7 to 12.2.4
     - kind: changed
-      description:  Upgraded Mariadb subchart from 10.5.1 to 11.5.7
+      description:  Upgraded PostgreSQL subchart from 12.2.8 to 12.5.6
     - kind: changed
-      description:  Upgraded PostgreSQL subchart from 10.16.2 to 12.2.8
+      description:  Upgraded PostgreSQL-HA subchart from 11.2.1 to 11.7.4
     - kind: changed
-      description:  Upgraded PostgreSQL-HA subchart from 8.6.13 to 11.2.1
+      description:  Upgraded RabbitMQ subchart from 11.13.0 to 11.16.1
     - kind: changed
-      description:  Upgraded Redis subchart from 16.10.1 to 17.9.5
-    - kind: deprecated
-      description: The `.celeryWorker` and `.celeryBeat` values have been deprecated and are now defined in `.workers.default` and `.workers.beat`
+      description:  Upgraded Redis subchart from 17.9.5 to 17.11.3
+    - kind: changed
+      description:  Upgraded Nginx Unprivileged optional container from 1.24 to 1.25
+    - kind: fixed
+      description:  Fixed #249 helm template command failing
+    - kind: fixed
+      description:  Fixed #261 Init Job is missing initcontainers
+    - kind: fixed
+      description:  Fixed #213 Docs Update: Add How to Update Passwords
+    - kind: fixed
+      description:  Fixed #260 ServiceAccount not used in default config
+    - kind: fixed
+      description:  Fixed #256 v2.0.0 does not allow KV nodeSelector.
+    - kind: added
+      description:  Added support for `terminationGracePeriodSeconds` to Nautobot and Celery Workers
 apiVersion: "v2"
-appVersion: "1.5.17"
-version: "2.0.0"
+appVersion: "1.5.20"
+version: "2.0.1"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
@@ -80,7 +78,7 @@ dependencies:
   - condition: "mariadb.enabled"
     name: "mariadb"
     repository: "https://charts.bitnami.com/bitnami"
-    version: "11.x.x"
+    version: "12.x"
   - condition: "rabbitmq.enabled"
     name: "rabbitmq"
     repository: "https://charts.bitnami.com/bitnami"

@@ -151,14 +151,18 @@
           }
         },
         "nodeSelector": {
-          "oneOf": [
-            {
-              "$ref": "#/$defs/empty-object"
-            },
-            {
-              "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/nodeselector.json"
-            }
-          ]
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": "NodeSelector is a selector which must be true for the pod to fit on a node. Selector which must match a node's labels for the pod to be scheduled on that node. More info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/",
+          "type": [
+            "object",
+            "null"
+          ],
+          "x-kubernetes-map-type": "atomic"
         },
         "pdb": {
           "type": "object",
@@ -236,6 +240,9 @@
           "items": {
             "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/container.json"
           }
+        },
+        "terminationGracePeriodSeconds": {
+          "type": "integer"
         },
         "tolerations": {
           "type": "array",

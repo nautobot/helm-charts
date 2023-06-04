@@ -3,6 +3,31 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.1 - 2023-06-04
+
+### Added
+
+* Added support for `terminationGracePeriodSeconds` to Nautobot and Celery Workers
+
+### Changed
+
+* Upgraded Nautobot from 1.5.17 to 1.5.20
+* Upgraded Bitnami common subchart from 2.2.4 to 2.4.0
+* Upgraded Mariadb subchart from 11.5.7 to 12.2.4
+* Upgraded PostgreSQL subchart from 12.2.8 to 12.5.6
+* Upgraded PostgreSQL-HA subchart from 11.2.1 to 11.7.4
+* Upgraded RabbitMQ subchart from 11.13.0 to 11.16.1
+* Upgraded Redis subchart from 17.9.5 to 17.11.3
+* Upgraded Nginx Unprivileged optional container from 1.24 to 1.25
+
+### Fixed
+
+* Fixed [#249](https://github.com/nautobot/helm-charts/issues/249) helm template command failing (@BlackDark)
+* Fixed [#261](https://github.com/nautobot/helm-charts/issues/261) Init Job is missing init containers
+* Fixed [#213](https://github.com/nautobot/helm-charts/issues/213) Docs Update: Add How to Update Passwords
+* Fixed [#260](https://github.com/nautobot/helm-charts/issues/260) ServiceAccount not used in default config
+* Fixed [#256](https://github.com/nautobot/helm-charts/issues/256) v2.0.0 does not allow KV nodeSelector
+
 ## 2.0.0 - 2023-04-18
 
 ### Added

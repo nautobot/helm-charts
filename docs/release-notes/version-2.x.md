@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Fixed [#249](https://github.com/nautobot/helm-charts/issues/249) helm template command failing (@BlackDark)
 * Fixed [#261](https://github.com/nautobot/helm-charts/issues/261) Init Job is missing init containers
+* Fixed [#213](https://github.com/nautobot/helm-charts/issues/213) Docs Update: Add How to Update Passwords
 
 ## 2.0.0 - 2023-04-18
 

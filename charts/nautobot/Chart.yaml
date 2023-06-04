@@ -31,7 +31,7 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: changed
-      description: Upgraded Nautobot from 1.4.5 to 1.5.20
+      description: Upgraded Nautobot from 1.5.17 to 1.5.20
     - kind: changed
       description:  Upgraded Bitnami common subchart from 2.2.4 to 2.4.0
     - kind: changed
@@ -46,8 +46,8 @@ annotations:
       description:  Upgraded Redis subchart from 17.9.5 to 17.11.3
     - kind: changed
       description:  Upgraded Nginx Unprivileged optional container from 1.24 to 1.25
-    - kind: deprecated
-      description: The `.celeryWorker` and `.celeryBeat` values have been deprecated and are now defined in `.workers.default` and `.workers.beat`
+    - kind: fixed
+      description:  Fixed #249 helm template command failing
 apiVersion: "v2"
 appVersion: "1.5.20"
 version: "2.0.1"

@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Upgraded Redis subchart from 17.9.5 to 17.11.3
 * Upgraded Nginx Unprivileged optional container from 1.24 to 1.25
 
+### Fixed
+
+* Fixed #249 helm template command failing (@BlackDark)
+
 ## 2.0.0 - 2023-04-18
 
 ### Added

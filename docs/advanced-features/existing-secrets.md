@@ -5,14 +5,18 @@ If you don't want to pass values through helm for either Redis or PostgreSQL the
 1. Create a secret with both PostgreSQL and Redis passwords:
 
     ```no-highlight
-    kubectl create secret generic my-secret --from-literal=postgresql-password=change-me --from-literal=NAUTOBOT_REDIS_PASSWORD=change-me
+    kubectl create secret generic my-secret --from-literal=NAUTOBOT_DB_PASSWORD=change-me --from-literal=password=change-me --from-literal=NAUTOBOT_REDIS_PASSWORD=change-me
     ```
 
 2. Use the following values to install the helm chart:
 
     ```yaml
     postgresql:
-      existingSecret: "my-secret"
+      auth:
+        existingSecret: "my-secret"
+        secretKeys:
+          adminPasswordKey: "NAUTOBOT_DB_PASSWORD"
+          userPasswordKey: "password"
     redis:
       auth:
         existingSecret: "my-secret"
@@ -25,9 +29,10 @@ If you are using external PostgreSQL and Redis servers you can use the following
 nautobot:
   db:
     existingSecret: "my-secret"
-    existingSecretPasswordKey: "postgresql-password"
+    existingSecretPasswordKey: "NAUTOBOT_DB_PASSWORD"
   redis:
     existingSecret: "my-secret"
+    existingSecretPasswordKey: "NAUTOBOT_REDIS_PASSWORD"
 postgresql:
   enabled: false
 redis:

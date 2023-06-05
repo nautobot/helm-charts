@@ -30,37 +30,11 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
-    - kind: changed
-      description: Upgraded Nautobot from 1.5.17 to 1.5.20
-    - kind: changed
-      description:  Upgraded Bitnami common subchart from 2.2.4 to 2.4.0
-    - kind: changed
-      description:  Upgraded Mariadb subchart from 11.5.7 to 12.2.4
-    - kind: changed
-      description:  Upgraded PostgreSQL subchart from 12.2.8 to 12.5.6
-    - kind: changed
-      description:  Upgraded PostgreSQL-HA subchart from 11.2.1 to 11.7.4
-    - kind: changed
-      description:  Upgraded RabbitMQ subchart from 11.13.0 to 11.16.1
-    - kind: changed
-      description:  Upgraded Redis subchart from 17.9.5 to 17.11.3
-    - kind: changed
-      description:  Upgraded Nginx Unprivileged optional container from 1.24 to 1.25
     - kind: fixed
-      description:  Fixed #249 helm template command failing
-    - kind: fixed
-      description:  Fixed #261 Init Job is missing initcontainers
-    - kind: fixed
-      description:  Fixed #213 Docs Update: Add How to Update Passwords
-    - kind: fixed
-      description:  Fixed #260 ServiceAccount not used in default config
-    - kind: fixed
-      description:  Fixed #256 v2.0.0 does not allow KV nodeSelector.
-    - kind: added
-      description:  Added support for `terminationGracePeriodSeconds` to Nautobot and Celery Workers
+      description:  Fixed #279 Using nautobot.db.password no longer supported in 2.0.1
 apiVersion: "v2"
 appVersion: "1.5.20"
-version: "2.0.1"
+version: "2.0.2"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

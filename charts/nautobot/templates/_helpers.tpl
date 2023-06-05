@@ -176,22 +176,25 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   Pseudo Code:
   if nautobot.db.existingSecret:
     return value from the secret at the key nautobot.db.existingSecretPasswordKey
+  else if postgres.enabled:
+    if postgresql.auth.existingSecret:
+      return value from the secret at key postgresql.auth.secretKeys.adminPasswordKey
+    else
+      return value from postgresql.auth.password
+  else if postgresqlha.enabled:
+    if postgresqlha.postgresql.existingSecret
+      return value from the secret at key "postgresql-password"
+    else
+      return value from postgresqlha.postgresql.password
+  else if mariadb.enabled
+    if mariadb.auth.existingSecret:
+      return the value from the secret at key "mariadb-password"
+    else
+      return value from mariadb.auth.password
+  else if nautobot.db.password:
+    return value from nautobot.db.password
   else
-    if postgres.enabled:
-      if postgresql.auth.existingSecret:
-        return value from the secret at key postgresql.auth.secretKeys.adminPasswordKey
-      else
-        return value from postgresql.auth.password
-    else if postgresqlha.enabled:
-      if postgresqlha.postgresql.existingSecret
-        return value from the secret at key "postgresql-password"
-      else
-        return value from postgresqlha.postgresql.password
-    else if mariadb.enabled
-      if mariadb.auth.existingSecret:
-        return the value from the secret at key "mariadb-password"
-      else
-        return value from mariadb.auth.password
+    ERROR
 */}}
 {{- define "nautobot.database.rawPassword" -}}
   {{- if .Values.nautobot.db.existingSecret -}}
@@ -258,6 +261,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
       {{- else -}}
         {{- required "A MariaDB Password is required!. Path: .Values.mariadb.auth.password" .Values.mariadb.auth.password -}}
       {{- end -}}
+  {{- else if .Values.nautobot.db.password -}}
+    {{- .Values.nautobot.db.password -}}
   {{- else -}}
     {{- fail (printf "You have to configure database credentials.") -}}
   {{- end -}}
@@ -307,6 +312,19 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/*
   Return the decoded redis password.  If redis is enabled check the existing secret passed to redis.
   If not check the existing secret passed to Nautobot.  The existingSecretPasswordKey key is used to lookup the password
+
+  Pseudo Code:
+  if nautobot.redis.existingSecret:
+    return value from the secret at the key nautobot.redis.existingSecretPasswordKey
+  else if redis.enabled:
+    if redis.auth.existingSecret:
+      return value from the secret at the key redis.auth.existingSecretPasswordKey
+    else
+      return value from redis.auth.password
+  else if nautobot.redis.password:
+    return value from nautobot.redis.password
+  else
+    ERROR
 */}}
 {{- define "nautobot.redis.rawPassword" -}}
   {{- if .Values.nautobot.redis.existingSecret -}}
@@ -339,6 +357,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
       {{- else -}}
         {{- required "A Redis Password is required. Path: .Values.redis.auth.password" .Values.redis.auth.password -}}
       {{- end -}}
+  {{- else if .Values.nautobot.redis.password -}}
+    {{- .Values.nautobot.redis.password -}}
   {{- else -}}
     {{- fail (printf "You have to configure redis credentials.") -}}
   {{- end -}}

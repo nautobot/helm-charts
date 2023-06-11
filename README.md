@@ -36,6 +36,10 @@ helm install {Release Name} {Repo Name}/{Chart Name}
 for example:
 
 ```console
+helm install nautobot nautobot/nautobot
+```
+
+```console
 helm install nautobot nautobot/nautobot --set postgresql.auth.password="change-me" --set redis.auth.password="change-me"
 ```
 

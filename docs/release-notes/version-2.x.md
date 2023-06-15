@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* [#293](https://github.com/nautobot/helm-charts/issues/293) Allow Increasing uwsgi buffer size
 * Upgraded Nautobot from 1.5.20 to 1.5.21
 
 ## 2.0.2 - 2023-06-05

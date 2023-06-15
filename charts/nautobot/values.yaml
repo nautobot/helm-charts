@@ -452,7 +452,7 @@ celery:
   # -- Enables the default Celery Worker for Nautobot
   enabled: true
 
-  # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/#concurrency-setting)]Concurrency Setting (0: use the default which is the number of CPUs available on your system)
+  # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/#concurrency-setting)]Concurrency Setting (0: use the default which is the number of CPUs available on your system)<sup>[2](#notes)</sup>
   concurrency: 0
   # -- Number of Nautobot Celery Workers replicas to deploy
   replicaCount: 2
@@ -663,6 +663,7 @@ workers:
   # @default -- See values.yaml
   beat:
     enabled: true
+    concurrency: 0
     replicaCount: 1  # Beat can have a max replicaCount of 1
     command:
       - "nautobot-server"

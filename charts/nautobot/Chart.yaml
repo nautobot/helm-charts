@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.5.20-py3.10
+      image: ghcr.io/nautobot/nautobot:1.5.21-py3.10
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -31,10 +31,14 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: fixed
-      description:  Fixed #279 Using nautobot.db.password no longer supported in 2.0.1
+      description: Fixed #288 README Typo
+    - kind: fixed
+      description: Fixed #286 variable celery.concurrency not used
+    - kind: changed
+      description: Upgraded Nautobot from 1.5.20 to 1.5.21
 apiVersion: "v2"
-appVersion: "1.5.20"
-version: "2.0.2"
+appVersion: "1.5.21"
+version: "2.0.3"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

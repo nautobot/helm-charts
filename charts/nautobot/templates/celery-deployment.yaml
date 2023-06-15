@@ -80,6 +80,10 @@ spec:
           {{- if $celery.command }}
           command: {{- include "common.tplvalues.render" (dict "value" $celery.command "context" $) | nindent 12 }}
           {{- end }}
+          {{- if (ne (int $celery.concurrency) 0) }}
+            - --concurrency
+            - {{ $celery.concurrency }}
+          {{- end }}
           {{- if $celery.args }}
           args: {{- include "common.tplvalues.render" (dict "value" $celery.args "context" $) | nindent 12 }}
           {{- end }}

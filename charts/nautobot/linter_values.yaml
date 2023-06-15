@@ -17,6 +17,8 @@ nautobot:
     enabled: true
   nodeSelector:
     kubernetes.io/arch: "amd64"
+  uwsgi:
+    bufferSize: 65535
 
 nautobots:
   # Enable a separate deployment specifically for GraphQL requests

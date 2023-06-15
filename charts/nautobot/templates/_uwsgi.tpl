@@ -72,4 +72,8 @@ listen = {{ .Values.nautobot.uwsgi.listen }}
 ; harakiri = 65
 ; add-header = Connection: Keep-Alive
 ; http-keepalive = 1
+
+; For larger installations, certain API calls (example: Relationships, GraphQL) can have a length of query parameters that go over uWSGI default limit.
+; Setting the buffer size to larger than default (4096) can have an impact on memory utilization, but can be set as high as the header limit of 65535.
+buffer-size = {{ .Values.nautobot.uwsgi.bufferSize }}
 {{ end }}

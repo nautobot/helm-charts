@@ -131,3 +131,11 @@ commonAnnotations:
 serviceAccount:
   annotations:
     service_account_annotation: "only_the_sa"
+
+# Needed in this file for pre-commit hook
+postgresql:
+  auth:
+    password: "change-me"
+redis:
+  auth:
+    password: "change-me"

@@ -4,6 +4,104 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: fixed
+          description: Fixed #288 README Typo
+        - kind: fixed
+          description: Fixed #286 variable celery.concurrency not used
+        - kind: changed
+          description: #293 Allow Increasing uwsgi buffer size
+        - kind: changed
+          description: Upgraded Nautobot from 1.5.20 to 1.5.21
+        - kind: changed
+          description:  Upgraded Mariadb subchart from 12.2.4 to 12.2.5
+        - kind: changed
+          description:  Upgraded PostgreSQL subchart from 12.5.6 to 12.5.7
+        - kind: changed
+          description:  Upgraded PostgreSQL-HA subchart from 11.7.4 to 11.7.5
+        - kind: changed
+          description:  Upgraded RabbitMQ subchart from 11.16.1 to 12.0.1
+        - kind: changed
+          description:  Upgraded Redis subchart from 17.11.3 to 17.11.5
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: nautobot
+          image: ghcr.io/nautobot/nautobot:1.5.21-py3.10
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Nautobot Documentation
+          url: https://docs.nautobot.com/
+        - name: Nautobot Core Documentation
+          url: https://nautobot.readthedocs.io/en/stable/
+        - name: Nautobot Helm Chart Documentation
+          url: https://docs.nautobot.com/projects/helm-charts/en/stable
+        - name: Nautobot
+          url: https://github.com/nautobot/nautobot
+      artifacthub.io/prerelease: "false"
+      artifacthub.io/screenshots: |
+        - title: Main Page
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_main_page.png
+        - title: Config Contexts
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_config_contexts.png
+        - title: GraphQL
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_graphiql.png
+        - title: Prefix hierarchy
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_prefix_hierarchy.png
+        - title: Config Compliance
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_golden_config.png
+        - title: Chatops
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.5.21
+    created: "2023-06-16T20:16:34.558505919Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - alias: postgresqlha
+      condition: postgresqlha.enabled
+      name: postgresql-ha
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Nautobot is a Network Source of Truth and Network Automation Platform.
+    digest: cfafe44596c3f5078ab3f9b2df1ed72e6253cf5fde35edf10c11e82470305a51
+    home: https://github.com/nautobot/nautobot
+    icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
+    keywords:
+    - DCIM
+    - IPAM
+    - SOT
+    maintainers:
+    - email: opensource@networktocode.com
+      name: Network to Code
+      url: https://www.networktocode.com/
+    name: nautobot
+    sources:
+    - https://github.com/nautobot/nautobot
+    - https://github.com/nautobot/helm-charts
+    urls:
+    - https://nautobot.github.io/helm-charts/nautobot-2.0.3.tgz
+    version: 2.0.3
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: fixed
           description:  Fixed #279 Using nautobot.db.password no longer supported in 2.0.1
       artifacthub.io/containsSecurityUpdates: "false"
       artifacthub.io/images: |
@@ -4676,4 +4774,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2023-06-05T13:48:27.751988339Z"
+generated: "2023-06-16T20:16:34.513140436Z"

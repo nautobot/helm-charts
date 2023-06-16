@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.5.20-py3.10
+      image: ghcr.io/nautobot/nautobot:1.5.21-py3.10
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -31,10 +31,26 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: fixed
-      description:  Fixed #279 Using nautobot.db.password no longer supported in 2.0.1
+      description: Fixed #288 README Typo
+    - kind: fixed
+      description: Fixed #286 variable celery.concurrency not used
+    - kind: changed
+      description: #293 Allow Increasing uwsgi buffer size
+    - kind: changed
+      description: Upgraded Nautobot from 1.5.20 to 1.5.21
+    - kind: changed
+      description:  Upgraded Mariadb subchart from 12.2.4 to 12.2.5
+    - kind: changed
+      description:  Upgraded PostgreSQL subchart from 12.5.6 to 12.5.7
+    - kind: changed
+      description:  Upgraded PostgreSQL-HA subchart from 11.7.4 to 11.7.5
+    - kind: changed
+      description:  Upgraded RabbitMQ subchart from 11.16.1 to 12.0.1
+    - kind: changed
+      description:  Upgraded Redis subchart from 17.11.3 to 17.11.5
 apiVersion: "v2"
-appVersion: "1.5.20"
-version: "2.0.2"
+appVersion: "1.5.21"
+version: "2.0.3"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
@@ -56,7 +72,7 @@ dependencies:
   - condition: "rabbitmq.enabled"
     name: "rabbitmq"
     repository: "https://charts.bitnami.com/bitnami"
-    version: "11.x.x"
+    version: "12.x"
   - name: "common"
     repository: "https://charts.bitnami.com/bitnami"
     tags:

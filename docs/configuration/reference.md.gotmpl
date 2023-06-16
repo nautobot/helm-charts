@@ -83,3 +83,4 @@ The `{{ $prefix }}.*` values configure the upstream chart from Bitnami.  Please 
 ## Notes
 
 1. These are global values which apply to all Nautobot and Celery pods, these can not be overridden by the `nautobots` or `workers` dictionaries.
+2. Setting the `celery.concurrency` value will append it to the command defined in `celery.command`, if this is unintended set `celery.concurrency` to 0 and `celery.args` to an appropriate value

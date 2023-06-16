@@ -466,6 +466,29 @@
             },
             "uWSGIini": {
               "type": "string"
+            },
+            "uwsgi": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "listen": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "processes": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "threads": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "bufferSize": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 65535
+                }
+              }
             }
           }
         }

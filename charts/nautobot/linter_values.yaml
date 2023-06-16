@@ -17,6 +17,8 @@ nautobot:
     enabled: true
   nodeSelector:
     kubernetes.io/arch: "amd64"
+  uwsgi:
+    bufferSize: 65535
 
 nautobots:
   # Enable a separate deployment specifically for GraphQL requests
@@ -51,6 +53,7 @@ nautobots:
 
 workers:
   beat:
+    concurrency: 0
     extraVolumeMounts:
       - name: "gmail-auth"
         mountPath: "/opt/nautobot/circuit-maintenance-secrets"
@@ -60,6 +63,7 @@ workers:
         secret:
           secretName: "nautobot-gmail-auth"
   flower:
+    concurrency: 0
     enabled: true
     command:
       - "nautobot-server"
@@ -86,6 +90,7 @@ workers:
         memory: "1Gi"
 
 celery:
+  concurrency: 2
   autoscaling:
     enabled: true
   extraVolumeMounts:
@@ -131,3 +136,11 @@ commonAnnotations:
 serviceAccount:
   annotations:
     service_account_annotation: "only_the_sa"
+
+# Needed in this file for pre-commit hook
+postgresql:
+  auth:
+    password: "change-me"
+redis:
+  auth:
+    password: "change-me"

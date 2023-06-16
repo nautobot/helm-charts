@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * [#293](https://github.com/nautobot/helm-charts/issues/293) Allow Increasing uwsgi buffer size
 * Upgraded Nautobot from 1.5.20 to 1.5.21
+* Upgraded Mariadb subchart from 12.2.4 to 12.2.5
+* Upgraded PostgreSQL subchart from 12.5.6 to 12.5.7
+* Upgraded PostgreSQL-HA subchart from 11.7.4 to 11.7.5
+* Upgraded RabbitMQ subchart from 11.16.1 to 12.0.1
+* Upgraded Redis subchart from 17.11.3 to 17.11.5
 
 ## 2.0.2 - 2023-06-05
 

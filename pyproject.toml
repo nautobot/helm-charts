@@ -11,7 +11,7 @@ invoke = "*"
 # Rendering docs to HTML
 mkdocs = "~1.4.2"
 # Material for MkDocs theme
-mkdocs-material = "9.1.16"
+mkdocs-material = "9.1.18"
 # Render custom markdown for version added/changed/remove notes
 mkdocs-version-annotations = "1.0.0"
 

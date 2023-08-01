@@ -68,7 +68,7 @@ dependencies:
   - condition: "mariadb.enabled"
     name: "mariadb"
     repository: "https://charts.bitnami.com/bitnami"
-    version: "12.x"
+    version: "13.x"
   - condition: "rabbitmq.enabled"
     name: "rabbitmq"
     repository: "https://charts.bitnami.com/bitnami"

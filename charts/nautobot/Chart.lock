@@ -1,21 +1,21 @@
 dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
-  version: 17.11.5
+  version: 18.0.0
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 12.5.7
+  version: 12.10.0
 - name: postgresql-ha
   repository: https://charts.bitnami.com/bitnami
-  version: 11.7.5
+  version: 11.9.0
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
-  version: 12.2.5
+  version: 12.2.9
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
-  version: 12.0.1
+  version: 12.1.2
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 2.4.0
-digest: sha256:72f85b889158c6a7bc0ce23c5e9f906e465d939be550562e878579b102a962bc
-generated: "2023-06-16T14:02:31.424918-06:00"
+  version: 2.9.0
+digest: sha256:8e305e01355a9d3446e051e2e2cd4e6a93f659443af77c853435d873b2f44a9c
+generated: "2023-08-27T14:14:04.658759518Z"

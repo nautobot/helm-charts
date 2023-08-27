@@ -55,7 +55,7 @@ dependencies:
   - condition: "redis.enabled"
     name: "redis"
     repository: "https://charts.bitnami.com/bitnami"
-    version: "17.x.x"
+    version: "18.x"
   - condition: "postgresql.enabled"
     name: "postgresql"
     repository: "https://charts.bitnami.com/bitnami"

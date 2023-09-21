@@ -3,6 +3,23 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.4 - 2023-09-21
+
+### Fixed
+
+* [#306](https://github.com/nautobot/helm-charts/issues/306) Bug: configured prometheus backend not possible
+* [#316](https://github.com/nautobot/helm-charts/issues/316) Concurrency int breaks deployment
+* [#255](https://github.com/nautobot/helm-charts/issues/255) Switch dependencies to OCI
+
+### Changed
+
+* Upgraded Nautobot from 1.5.23 to 1.6.2
+* Upgraded Mariadb subchart from 12.2.5 to 13.1.3
+* Upgraded PostgreSQL subchart from 12.5.7 to 12.12.4
+* Upgraded PostgreSQL-HA subchart from 11.7.5 to 11.9.4
+* Upgraded RabbitMQ subchart from 12.0.1 to 12.1.5
+* Upgraded Redis subchart from 17.11.5 to 18.0.4
+
 ## 2.0.3 - 2023-06-16
 
 ### Fixed

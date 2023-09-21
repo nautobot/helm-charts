@@ -294,7 +294,7 @@
               "properties": {
                 "engine": {
                   "type": "string",
-                  "pattern": "^(django\\.db\\.backends\\.postgresql|django\\.db\\.backends\\.mysql)$"
+                  "pattern": "^(django\\.db\\.backends\\.postgresql|django\\.db\\.backends\\.mysql|django_prometheus\\.db\\.backends\\.postgresql|django_prometheus\\.db\\.backends\\.mysql)$"
                 },
                 "existingSecret": {
                   "type": "string"

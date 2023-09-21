@@ -82,7 +82,7 @@ spec:
           {{- end }}
           {{- if (ne (int $celery.concurrency) 0) }}
             - --concurrency
-            - {{ $celery.concurrency }}
+            - {{ $celery.concurrency | quote }}
           {{- end }}
           {{- if $celery.args }}
           args: {{- include "common.tplvalues.render" (dict "value" $celery.args "context" $) | nindent 12 }}

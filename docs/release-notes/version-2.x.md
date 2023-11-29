@@ -3,6 +3,24 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.5 - 2023-11-29
+
++/- 2.0.5
+    This release of the helm-chart includes an upgrade to Nautobot 2.x.  While this is a non-breaking change for the helm chart this is a significant change to Nautobot and care should be taken during the upgrade, please see the [Nautobot 2.0 Release Notes](https://docs.nautobot.com/projects/core/en/stable/release-notes/version-2.0/) and [upgrading from 1.x instructions](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/upgrading/from-v1/upgrading-from-nautobot-v1/).
+
+### Fixed
+
+* [#338](https://github.com/nautobot/helm-charts/issues/338) Allow Nautobot to Scale to 0
+* [#335](https://github.com/nautobot/helm-charts/issues/335) Use Nautobot 2.0 by default
+
+### Changed
+
+* Upgraded Bitnami Common subchart from 2.11.1 to 2.13.3
+* Upgraded PostgreSQL subchart from 12.12.4 to 12.12.10
+* Upgraded PostgreSQL-HA subchart from 11.9.4 to 11.9.8
+* Upgraded RabbitMQ subchart from 12.1.5 to 12.5.4
+* Upgraded Redis subchart from 18.0.4 to 18.4.0
+
 ## 2.0.4 - 2023-09-21
 
 ### Fixed

@@ -27,6 +27,7 @@ repos:
     rev: "3.0.0"
     hooks:
       - id: "markdownlint"
+        language_version: "3.1.4"
         args:
           - "--ignore-front-matter"
           - "docs/"
@@ -42,7 +43,7 @@ repos:
       - id: "helmlint"
 
   - repo: "https://github.com/adrienverge/yamllint.git"
-    rev: "v1.32.0"
+    rev: "v1.33.0"
     hooks:
       - id: "yamllint"
         args:

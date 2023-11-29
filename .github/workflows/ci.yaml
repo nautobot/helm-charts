@@ -63,41 +63,40 @@ jobs:
           #   with:
           #     sarif_file: "checkov.sarif"
 
-  # Disabling Snyk for now see https://github.com/nautobot/helm-charts/issues/340
-  # snyk-security-check:
-  #   name: "Snyk Security Scanning"
-  #   runs-on: "ubuntu-22.04"
-  #   env:
-  #     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-  #   steps:
-  #     - name: "Checkout"
-  #       uses: "actions/checkout@v4"
-  #     - uses: "azure/setup-helm@v3"
-  #     - run: "mkdir template_output"
-  #     - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
-  #     - run: "helm dependency update charts/nautobot"
-  #     - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml charts/nautobot --output-dir=./template_output/test-postgresql"
-  #     - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_mysql.yaml charts/nautobot --output-dir=./template_output/test-mysql"
-  #     - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot --output-dir=./template_output/test-postgresql-ha"
-  #     - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml charts/nautobot --output-dir=./template_output/test-defaults"
-  #     - name: "Run Snyk to check template files for security issues"
-  #       # Snyk can be used to break the build when it detects security issues.
-  #       # In this case we want to upload the issues to GitHub Code Scanning
-  #       continue-on-error: true
-  #       uses: "snyk/actions/iac@master"
-  #       env:
-  #         # In order to use the Snyk Action you will need to have a Snyk API token.
-  #         # More details in https://github.com/snyk/actions#getting-your-snyk-token
-  #         SNYK_TOKEN: "${{ secrets.SNYK_TOKEN }}"
-  #       with:
-  #         # Add the path to the configuration file that you would like to test.
-  #         # For example `deployment.yaml` for a Kubernetes deployment manifest
-  #         # or `main.tf` for a Terraform configuration file
-  #         file: "./template_output"
-  #     - name: "Upload result to GitHub Code Scanning"
-  #       uses: "github/codeql-action/upload-sarif@v2"
-  #       with:
-  #         sarif_file: "snyk.sarif"
+  snyk-security-check:
+    name: "Snyk Security Scanning"
+    runs-on: "ubuntu-22.04"
+    env:
+      GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+      - uses: "azure/setup-helm@v3"
+      - run: "mkdir template_output"
+      - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
+      - run: "helm dependency update charts/nautobot"
+      - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml charts/nautobot --output-dir=./template_output/test-postgresql"
+      - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_mysql.yaml charts/nautobot --output-dir=./template_output/test-mysql"
+      - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml -f charts/nautobot/linter_values_postgresql_ha.yaml charts/nautobot --output-dir=./template_output/test-postgresql-ha"
+      - run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml charts/nautobot --output-dir=./template_output/test-defaults"
+      - name: "Run Snyk to check template files for security issues"
+        # Snyk can be used to break the build when it detects security issues.
+        # In this case we want to upload the issues to GitHub Code Scanning
+        continue-on-error: true
+        uses: "snyk/actions/iac@master"
+        env:
+          # In order to use the Snyk Action you will need to have a Snyk API token.
+          # More details in https://github.com/snyk/actions#getting-your-snyk-token
+          SNYK_TOKEN: "${{ secrets.SNYK_TOKEN }}"
+        with:
+          # Add the path to the configuration file that you would like to test.
+          # For example `deployment.yaml` for a Kubernetes deployment manifest
+          # or `main.tf` for a Terraform configuration file
+          file: "./template_output"
+      - name: "Upload result to GitHub Code Scanning"
+        uses: "github/codeql-action/upload-sarif@v2"
+        with:
+          sarif_file: "snyk.sarif"
 
   kubescape-security-check:
     name: "Kubescape Security Scanning"

@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:1.6.2-py3.11
+      image: ghcr.io/nautobot/nautobot:2.0.5-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -31,26 +31,24 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: fixed
-      description: Fixed #306 Bug: configured prometheus backend not possible
+      description: Fixed #338 Allow Nautobot to Scale to 0
     - kind: fixed
-      description: Fixed #316 Concurrency int breaks deployment
-    - kind: fixed
-      description: Fixed #255 Switch dependencies to OCI
+      description: Fixed #335 Use Nautobot 2.0 by default
     - kind: changed
-      description: Upgraded Nautobot from 1.5.23 to 1.6.2
+      description: Upgraded Nautobot from 1.6.2 to 2.0.5
     - kind: changed
-      description:  Upgraded Mariadb subchart from 12.2.5 to 13.1.3
+      description:  Upgraded Bitnami Common subchart from 2.11.1 to 2.13.3
     - kind: changed
-      description:  Upgraded PostgreSQL subchart from 12.5.7 to 12.12.4
+      description:  Upgraded PostgreSQL subchart from 12.12.4 to 12.12.10
     - kind: changed
-      description:  Upgraded PostgreSQL-HA subchart from 11.7.5 to 11.9.4
+      description:  Upgraded PostgreSQL-HA subchart from 11.9.4 to 11.9.8
     - kind: changed
-      description:  Upgraded RabbitMQ subchart from 12.0.1 to 12.1.5
+      description:  Upgraded RabbitMQ subchart from 12.1.5 to 12.5.4
     - kind: changed
-      description:  Upgraded Redis subchart from 17.11.5 to 18.0.4
+      description:  Upgraded Redis subchart from 18.0.4 to 18.4.0
 apiVersion: "v2"
-appVersion: "1.6.2"
-version: "2.0.4"
+appVersion: "2.0.5"
+version: "2.0.5"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

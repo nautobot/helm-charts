@@ -3,7 +3,7 @@
 # See https://pre-commit.com for more information
 repos:
   - repo: "https://github.com/pre-commit/pre-commit-hooks"
-    rev: "v4.4.0"
+    rev: "v4.5.0"
     hooks:
       - id: "trailing-whitespace"
       - id: "end-of-file-fixer"
@@ -27,22 +27,23 @@ repos:
     rev: "3.0.0"
     hooks:
       - id: "markdownlint"
+        language_version: "3.1.4"
         args:
           - "--ignore-front-matter"
           - "docs/"
 
   - repo: "https://github.com/streetsidesoftware/cspell-cli"
-    rev: "v7.3.0"
+    rev: "v8.0.0"
     hooks:
       - id: "cspell"
 
   - repo: "https://github.com/gruntwork-io/pre-commit"
-    rev: "v0.1.22"  # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
+    rev: "v0.1.23"  # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
     hooks:
       - id: "helmlint"
 
   - repo: "https://github.com/adrienverge/yamllint.git"
-    rev: "v1.32.0"
+    rev: "v1.33.0"
     hooks:
       - id: "yamllint"
         args:
@@ -72,7 +73,7 @@ repos:
   #         - "console,checkov.sarif"
 
   - repo: "https://github.com/norwoodj/helm-docs"
-    rev: "v1.11.2"
+    rev: "v1.11.3"
     hooks:
       - id: "helm-docs"
         args:
@@ -83,7 +84,7 @@ repos:
           - "--template-files=README.md.gotmpl"
 
   - repo: "https://github.com/norwoodj/helm-docs"
-    rev: "v1.11.2"
+    rev: "v1.11.3"
     hooks:
       - id: "helm-docs"
         args:

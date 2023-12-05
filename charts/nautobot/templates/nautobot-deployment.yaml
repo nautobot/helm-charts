@@ -293,9 +293,9 @@ spec:
               mountPath: "/opt/nautobot_certs"
               readOnly: true
           ports:
-            - name: "https"
+            - name: "https-nginx"
               containerPort: 8443
-            - name: "http"
+            - name: "http-nginx"
               containerPort: 8080
             - name: "metrics"
               containerPort: 8002

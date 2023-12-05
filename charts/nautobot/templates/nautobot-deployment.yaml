@@ -242,7 +242,7 @@ spec:
             - name: "http"
               containerPort: 8080
             {{ else }}
-            - name: "http-nautobot"
+            - name: "http"
               containerPort: 8003
             {{ end }}
         {{- end }}

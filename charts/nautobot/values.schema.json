@@ -70,6 +70,35 @@
             }
           }
         },
+        "persistence": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "storageClass": {
+              "type": "string"
+            },
+            "accessMode": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "selector": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "accessMode",
+            "enabled",
+            "selector",
+            "size",
+            "storageClass"
+          ],
+          "title": "Persistence"
+        },
         "command": {
           "type": "array",
           "items": {

@@ -109,7 +109,12 @@ spec:
             {{- end }}
       volumes:
         - name: "nautobot-static"
+        {{- if $.Values.nautobot.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "common.names.fullname" $ }}-static
+        {{- else }}
           emptyDir: {}
+        {{- end }}
         - name: "git-repos"
           emptyDir: {}
         - name: "nautobot-config"

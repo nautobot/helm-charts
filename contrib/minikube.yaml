@@ -26,11 +26,44 @@ nautobot:
   resources:
     requests: null
     limits: null
+  singleInit: true
+  initContainers:
+    - name: collectstatic
+      image: ghcr.io/nautobot/nautobot:2.0.5-py3.11
+      imagePullPolicy: Always
+      command: ['nautobot-server', 'collectstatic']
+      volumeMounts:
+        - mountPath: "/opt/nautobot/static"
+          name: "nautobot-static"
+          readOnly: false
+
   nginx:
     enabled: false
     resources:
       requests: null
       limits: null
+
+nautobots:
+  # Enable a separate deployment specifically for API requests
+  default:
+    initNautobot: false
+
+  # static:
+  #   enabled: true
+  #   ingressPaths:
+  #     - "/static"
+  #   initNautobot: true
+  #   # staticFilesOnly: true
+
+  #   initContainers:
+  #   - name: collectstatic
+  #     image: ghcr.io/nautobot/nautobot:2.0.5-py3.11
+  #     imagePullPolicy: Always
+  #     command: ['nautobot-server', 'collectstatic']
+  #     volumeMounts:
+  #       - mountPath: "/opt/nautobot/static"
+  #         name: "nautobot-static"
+  #         readOnly: false
 
 workers:
   default:
@@ -44,9 +77,11 @@ workers:
 
 ingress:
   enabled: true
-  hostname: "nautobot.minikube.local"
+  hostname: "nautobot-test.internal"
+  ingressClassName: "nginx"
+  backendProtocol: "http"
   annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 
 metrics:
   enabled: false

@@ -14,6 +14,7 @@ With [Kubernetes](https://kubernetes.io/), public clouds, and the [dependency su
 * [Ingress](ingress/)
 * [MySQL Support](mysql/)
 * [Nautobot as a Subchart](nautobot-as-subchart/)
+* [Persistent Volume](persistence/)
 * [PostgreSQL High Availability](postgresql-ha/)
 * [PostgreSQL TLS](postgresql-tls/)
 * [Prometheus Operator Metrics](prometheus-metrics/)

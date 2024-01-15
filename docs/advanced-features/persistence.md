@@ -11,7 +11,7 @@ nautobot:
     size: "2Gi"
 ```
 
-Unfortunately, if the underlying storage solution does not support the `ReadWriteMany` option, you have to use node affinity in order for the Pods of the deployment to be scheduled on the same node as the Persistant Volume. Below there is an example using Node labels as selector to create the PVC and schedule the Pods in the same node.
+Unfortunately, if the underlying storage solution does not support the `ReadWriteMany` option, you have to use node affinity in order for the Pods of the deployment to be scheduled on the same node as the Persistent Volume. Below there is an example using Node labels as selector to create the PVC and schedule the Pods in the same node.
 
 ```yaml
 nautobot:

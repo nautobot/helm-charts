@@ -235,17 +235,17 @@ nautobot:
             value: 2
             periodSeconds: 15
 
-  # Add a Persistent Volume Claim for /static files of Nautobot
-  persistence:
+  # Add a Persistent Volume Claim for Nautobot static files
+  persistenceStaticFiles:
     # --- Enable PVC and the relevant volumes
     enabled: false
     # --- [Kubernetes StorageClass Name](https://kubernetes.io/docs/concepts/storage/storage-classes/), for the creation of Persistent Volume Claim
-    storageClass: ""
+    storageClassName: ""
     # --- [Kubernetes Volumes AccessMode](https://kubernetes.io/docs/concepts/storage/storage-classes/)
     accessMode: "ReadWriteOnce"
     # --- Persistent storage size request
-    size: "2Gi"
-    # ---
+    size: "1Gi"
+    # --- [Kubernetes PVC Selectors](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector) to specify volume for Persistent Volume Claim
     selector: {}
     # e.g.
     # selector:

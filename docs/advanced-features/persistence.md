@@ -1,6 +1,6 @@
 # Persistence for Static files
 
-Besides using an external shared storage (e.g. S3) for storing static files, it is also possible to leverage Kubernetes persistence. The following configuration creates a Persistent Volume Claim called `nautobot-static` and mounts it at the `/opt/nautobot/static` path of the Pods.
+The recommended way to store static files is to use an external shared storage such as [using S3 for Django storage](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/guides/s3-django-storage/). That said, it is also possible to leverage Kubernetes Persistent Volumes, following the below setting a Persistent Volume Claim is created and mounted it at the `/opt/nautobot/static` path of the Pods.
 
 ```yaml
 nautobot:
@@ -8,7 +8,7 @@ nautobot:
     enabled: true
     storageClass: "your-storage-class"
     accessMode: "ReadWriteMany"
-    size: "2Gi"
+    size: "1Gi"
 ```
 
 Unfortunately, if the underlying storage solution does not support the `ReadWriteMany` option, you have to use node affinity in order for the Pods of the deployment to be scheduled on the same node as the Persistent Volume. Below there is an example using Node labels as selector to create the PVC and schedule the Pods in the same node.
@@ -18,7 +18,7 @@ nautobot:
   persistence:
     enabled: true
     storageClass: "your-storage-class"
-    size: "2Gi"
+    size: "1Gi"
     selector:
       matchLabel:
         nautobot-storage: static

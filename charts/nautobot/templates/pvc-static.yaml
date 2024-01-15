@@ -1,5 +1,5 @@
 {{- if .Values.nautobot.enabled -}}
-{{- if and .Values.nautobot.persistence.enabled -}}
+{{- if .Values.nautobot.persistenceStaticFiles.enabled -}}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -15,19 +15,19 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.nautobot.persistence.storageClass }}
-  {{- if (eq "-" .Values.nautobot.persistence.storageClass) }}
+  {{- if .Values.nautobot.persistenceStaticFiles.storageClassName }}
+  {{- if (eq "-" .Values.nautobot.persistenceStaticFiles.storageClassName) }}
   storageClassName: ""
   {{- else }}
-  storageClassName: {{ .Values.nautobot.persistence.storageClass | quote }}
+  storageClassName: {{ .Values.nautobot.persistenceStaticFiles.storageClassName | quote }}
   {{- end }}
   {{- end }}
   accessModes:
-  - {{ .Values.nautobot.persistence.accessMode | quote }}
+  - {{ .Values.nautobot.persistenceStaticFiles.accessMode | quote }}
   resources:
     requests:
-      storage: {{ .Values.nautobot.persistence.size | quote }}
-  {{- with .Values.nautobot.persistence.selector }}
+      storage: {{ .Values.nautobot.persistenceStaticFiles.size | quote }}
+  {{- with .Values.nautobot.persistenceStaticFiles.selector }}
   selector:
     {{- toYaml . | nindent 4 }}
   {{- end }}

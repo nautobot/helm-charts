@@ -350,7 +350,7 @@ spec:
       terminationGracePeriodSeconds: {{ $nautobot.terminationGracePeriodSeconds }}
       volumes:
         - name: "nautobot-static"
-        {{- if $nautobot.persistence.enabled }}
+        {{- if $nautobot.persistenceStaticFiles.enabled }}
           persistentVolumeClaim:
             claimName: {{ include "common.names.fullname" $ }}-static
         {{- else }}

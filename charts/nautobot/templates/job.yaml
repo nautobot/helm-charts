@@ -109,7 +109,7 @@ spec:
             {{- end }}
       volumes:
         - name: "nautobot-static"
-        {{- if $.Values.nautobot.persistence.enabled }}
+        {{- if $.Values.nautobot.persistenceStaticFiles.enabled }}
           persistentVolumeClaim:
             claimName: {{ include "common.names.fullname" $ }}-static
         {{- else }}

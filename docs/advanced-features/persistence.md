@@ -1,6 +1,6 @@
 # Persistence for Static files
 
-Besides using an external shared storage (e.g. S3) for storing static files, it is also possible to leverage Kubernetes peristence. The following configuration creates a Persistent Volume Claim called `nautobot-static` and mounts it at the `/opt/nautobot/static` path of the Pods.
+Besides using an external shared storage (e.g. S3) for storing static files, it is also possible to leverage Kubernetes persistence. The following configuration creates a Persistent Volume Claim called `nautobot-static` and mounts it at the `/opt/nautobot/static` path of the Pods.
 
 ```yaml
 nautobot:

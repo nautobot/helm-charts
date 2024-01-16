@@ -70,7 +70,7 @@
             }
           }
         },
-        "persistence": {
+        "persistenceStaticFiles": {
           "type": "object",
           "additionalProperties": false,
           "properties": {

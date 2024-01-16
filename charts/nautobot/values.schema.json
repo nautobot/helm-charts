@@ -77,7 +77,7 @@
             "enabled": {
               "type": "boolean"
             },
-            "storageClass": {
+            "storageClassName": {
               "type": "string"
             },
             "accessMode": {

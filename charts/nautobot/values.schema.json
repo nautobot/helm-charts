@@ -95,7 +95,7 @@
             "enabled",
             "selector",
             "size",
-            "storageClass"
+            "storageClassName"
           ],
           "title": "Persistence"
         },

@@ -1,7 +1,6 @@
 ---
 # -- (map[string]string) Annotations to be applied to ALL resources created by this chart
 commonAnnotations: {}
-
 # Nautobot UI front end service
 service:
   # -- (`ExternalName`, `ClusterIP`, `NodePort`, or `LoadBalancer`) [[ref](https://kubernetes.io/docs/concepts/services-networking/service/)] Kubernetes service type, valid values: `ExternalName`, `ClusterIP`, `NodePort`, or `LoadBalancer`
@@ -235,6 +234,23 @@ nautobot:
           - type: "Pods"
             value: 2
             periodSeconds: 15
+
+  # Add a Persistent Volume Claim for Nautobot static files
+  persistenceStaticFiles:
+    # --- Enable PVC and the relevant volumes
+    enabled: false
+    # --- [Kubernetes StorageClass Name](https://kubernetes.io/docs/concepts/storage/storage-classes/), for the creation of Persistent Volume Claim
+    storageClassName: ""
+    # --- [Kubernetes Volumes AccessMode](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+    accessMode: "ReadWriteOnce"
+    # --- Persistent storage size request
+    size: "1Gi"
+    # --- [Kubernetes PVC Selectors](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector) to specify volume for Persistent Volume Claim
+    selector: {}
+    # e.g.
+    # selector:
+    #   matchLabel:
+    #     nautobot-storage: static
 
   # Nautobot NGINX configuration
   nginx:

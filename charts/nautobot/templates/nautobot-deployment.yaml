@@ -81,6 +81,11 @@ spec:
             {{- if $nautobot.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $nautobot.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+            - name: NAUTOBOT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.database.passwordName" $ }}
+                  key: {{ include "nautobot.database.passwordKey" $ }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env
@@ -139,6 +144,11 @@ spec:
             {{- if $nautobot.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $nautobot.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+            - name: NAUTOBOT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.database.passwordName" $ }}
+                  key: {{ include "nautobot.database.passwordKey" $ }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env
@@ -193,6 +203,11 @@ spec:
             {{- if $nautobot.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $nautobot.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+            - name: NAUTOBOT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.database.passwordName" $ }}
+                  key: {{ include "nautobot.database.passwordKey" $ }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env

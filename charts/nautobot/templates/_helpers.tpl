@@ -169,107 +169,40 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
-{{/*
-  Return the decoded database password. If postgres is enabled check the existing secret passed to postgres.
-  If not check the existing secret passed to Nautobot with key "existingSecretPasswordKey".
-
-  Pseudo Code:
-  if nautobot.db.existingSecret:
-    return value from the secret at the key nautobot.db.existingSecretPasswordKey
-  else if postgres.enabled:
-    if postgresql.auth.existingSecret:
-      return value from the secret at key postgresql.auth.secretKeys.adminPasswordKey
-    else
-      return value from postgresql.auth.password
-  else if postgresqlha.enabled:
-    if postgresqlha.postgresql.existingSecret
-      return value from the secret at key "postgresql-password"
-    else
-      return value from postgresqlha.postgresql.password
-  else if mariadb.enabled
-    if mariadb.auth.existingSecret:
-      return the value from the secret at key "mariadb-password"
-    else
-      return value from mariadb.auth.password
-  else if nautobot.db.password:
-    return value from nautobot.db.password
-  else
-    ERROR
-*/}}
-{{- define "nautobot.database.rawPassword" -}}
+{{- define "nautobot.database.passwordName" -}}
   {{- if .Values.nautobot.db.existingSecret -}}
-    {{- $password := "" -}}
-    {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.nautobot.db.existingSecret) -}}
-    {{- if $secret -}}
-      {{- if index $secret.data .Values.nautobot.db.existingSecretPasswordKey -}}
-        {{- $password = index $secret.data .Values.nautobot.db.existingSecretPasswordKey -}}
-      {{- else -}}
-        {{- fail (printf "Key '%s' not found in secret '%s'" .Values.nautobot.db.existingSecretPasswordKey .Values.nautobot.db.existingSecret) -}}
-      {{- end -}}
-    {{- else -}}
-      {{- fail (printf "Existing Nautobot DB secret '%s' not found!" .Values.nautobot.db.existingSecret) -}}
-    {{- end -}}
-    {{- $password | b64dec -}}
+    {{- .Values.nautobot.db.existingSecret -}}
   {{- else if eq .Values.postgresql.enabled true -}}
-      {{- if .Values.postgresql.auth.existingSecret -}}
-        {{- $password := "" -}}
-        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.postgresql.auth.existingSecret) -}}
-        {{- if $secret -}}
-          {{- if index $secret.data .Values.postgresql.auth.secretKeys.adminPasswordKey -}}
-            {{- $password = index $secret.data .Values.postgresql.auth.secretKeys.adminPasswordKey -}}
-          {{- else -}}
-            {{- fail (printf "Key '%s' not found in secret %s" .Values.postgresql.auth.secretKeys.adminPasswordKey .Values.postgresql.auth.existingSecret) -}}
-          {{- end -}}
-        {{- else -}}
-          {{- fail (printf "Existing PostgreSQL secret %s not found in %s namespace!" .Values.postgresql.auth.existingSecret $.Release.Namespace) -}}
-        {{- end -}}
-        {{- $password | b64dec -}}
-      {{- else -}}
-        {{- required "A Postgres Password is required! Path: .Values.postgresql.auth.password" .Values.postgresql.auth.password -}}
-      {{- end -}}
+      {{- default (printf "%s-db-password" (include "common.names.fullname" .)) .Values.postgresql.auth.existingSecret -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
-      {{- if .Values.postgresqlha.postgresql.existingSecret -}}
-        {{- $password := "" -}}
-        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.postgresqlha.postgresql.existingSecret) -}}
-        {{- if $secret -}}
-          {{- if index $secret.data "postgresql-password" -}}
-            {{- $password = index $secret.data "postgresql-password" -}}
-          {{- else -}}
-            {{- fail (printf "Key 'postgresql-password' not found in secret %s" .Values.postgresqlha.postgresql.existingSecret) -}}
-          {{- end -}}
-        {{- else -}}
-          {{- fail (printf "Existing PostgreSQL-HA secret %s not found!" .Values.postgresqlha.postgresql.existingSecret) -}}
-        {{- end -}}
-        {{- $password | b64dec -}}
-      {{- else -}}
-        {{- required "A Postgres Password is required! Path: .Values.postgresqlha.postgresql.password" .Values.postgresqlha.postgresql.password -}}
-      {{- end -}}
+    {{- if .Values.postgresql.auth.existingSecret -}}
+      {{- default (printf "%s-db-password" (include "common.names.fullname" .)) .Values.postgresqlha.auth.existingSecret -}}
+    {{- else -}}
+      {{- printf "%s-db-password" (include "common.names.fullname" .) -}}
+    {{- end -}}
   {{- else if eq .Values.mariadb.enabled true -}}
-      {{- if .Values.mariadb.auth.existingSecret -}}
-        {{- $password := "" -}}
-        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.mariadb.auth.existingSecret) -}}
-        {{- if $secret -}}
-          {{- if index $secret.data "mariadb-password" -}}
-            {{- $password = index $secret.data "mariadb-password" -}}
-          {{- else -}}
-            {{- fail (printf "Key 'mariadb-password' not found in secret %s" .Values.mariadb.auth.existingSecret) -}}
-          {{- end -}}
-        {{- else -}}
-          {{- fail (printf "Existing MariaDB secret %s not found!" .Values.mariadb.auth.existingSecret) -}}
-        {{- end -}}
-        {{- $password | b64dec -}}
-      {{- else -}}
-        {{- required "A MariaDB Password is required!. Path: .Values.mariadb.auth.password" .Values.mariadb.auth.password -}}
-      {{- end -}}
-  {{- else if .Values.nautobot.db.password -}}
-    {{- .Values.nautobot.db.password -}}
+      {{- default (printf "%s-db-password" (include "common.names.fullname" .)) .Values.mariadb.auth.existingSecret -}}
   {{- else -}}
-    {{- fail (printf "You have to configure database credentials.") -}}
+    {{- printf "%s-db-password" (include "common.names.fullname" .) -}}
   {{- end -}}
 {{- end -}}
 
-{{- define "nautobot.database.encryptedPassword" -}}
-  {{- include "nautobot.database.rawPassword" . | b64enc | quote -}}
+{{- define "nautobot.database.passwordKey" -}}
+  {{- if .Values.nautobot.db.existingSecret -}}
+    {{- .Values.nautobot.db.existingSecretPasswordKey -}}
+  {{- else if eq .Values.postgresql.enabled true -}}
+    {{- if .Values.postgresql.auth.existingSecret -}}
+      {{- default "password" .Values.postgresql.auth.secretsKeys.adminPasswordKey -}}
+    {{- else -}}
+      {{- printf "password" -}}
+    {{- end -}}
+  {{- else if eq .Values.postgresqlha.enabled true -}}
+      {{- printf "postgresql-password" -}}
+  {{- else if eq .Values.mariadb.enabled true -}}
+      {{- printf "mariadb-password" -}}
+  {{- else -}}
+    {{- printf "password" -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*

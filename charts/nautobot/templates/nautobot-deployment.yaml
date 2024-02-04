@@ -86,6 +86,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "nautobot.database.passwordName" $ }}
                   key: {{ include "nautobot.database.passwordKey" $ }}
+            - name: NAUTOBOT_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.redis.passwordName" $ }}
+                  key: {{ include "nautobot.redis.passwordKey" $ }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env
@@ -149,6 +154,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "nautobot.database.passwordName" $ }}
                   key: {{ include "nautobot.database.passwordKey" $ }}
+            - name: NAUTOBOT_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.redis.passwordName" $ }}
+                  key: {{ include "nautobot.redis.passwordKey" $ }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env
@@ -208,6 +218,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "nautobot.database.passwordName" $ }}
                   key: {{ include "nautobot.database.passwordKey" $ }}
+            - name: NAUTOBOT_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.redis.passwordName" $ }}
+                  key: {{ include "nautobot.redis.passwordKey" $ }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env

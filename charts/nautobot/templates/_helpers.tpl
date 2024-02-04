@@ -243,62 +243,28 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-  Return the decoded redis password.  If redis is enabled check the existing secret passed to redis.
-  If not check the existing secret passed to Nautobot.  The existingSecretPasswordKey key is used to lookup the password
-
-  Pseudo Code:
-  if nautobot.redis.existingSecret:
-    return value from the secret at the key nautobot.redis.existingSecretPasswordKey
-  else if redis.enabled:
-    if redis.auth.existingSecret:
-      return value from the secret at the key redis.auth.existingSecretPasswordKey
-    else
-      return value from redis.auth.password
-  else if nautobot.redis.password:
-    return value from nautobot.redis.password
-  else
-    ERROR
+  Return the secret name where the redis password will exist.
+  Either in the value you've supplied to the Nautobot chart, the Redis chart
+  or if a password is being generated, where it will be generated at.
 */}}
-{{- define "nautobot.redis.rawPassword" -}}
+{{- define "nautobot.redis.passwordName" -}}
   {{- if .Values.nautobot.redis.existingSecret -}}
-      {{- $password := "" -}}
-      {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.nautobot.redis.existingSecret) -}}
-      {{- if $secret -}}
-        {{- if index $secret.data .Values.nautobot.redis.existingSecretPasswordKey -}}
-          {{- $password = index $secret.data .Values.nautobot.redis.existingSecretPasswordKey -}}
-        {{- else -}}
-          {{- fail (printf "Key '%s' not found in secret '%s'" .Values.nautobot.redis.existingSecretPasswordKey .Values.nautobot.redis.existingSecret) -}}
-        {{- end -}}
-      {{- else -}}
-        {{- fail (printf "Existing secret '%s' not found!" .Values.nautobot.redis.existingSecret) -}}
-      {{- end -}}
-      {{- $password | b64dec -}}
-  {{- else if eq .Values.redis.enabled true -}}
-      {{- if .Values.redis.auth.existingSecret -}}
-        {{- $password := "" -}}
-        {{- $secret := (lookup "v1" "Secret" $.Release.Namespace .Values.redis.auth.existingSecret) -}}
-        {{- if $secret -}}
-          {{- if index $secret.data .Values.redis.auth.existingSecretPasswordKey -}}
-            {{- $password = index $secret.data .Values.redis.auth.existingSecretPasswordKey -}}
-          {{- else -}}
-            {{- fail (printf "Key '%s' not found in secret '%s'" .Values.redis.auth.existingSecretPasswordKey .Values.redis.auth.existingSecret) -}}
-          {{- end -}}
-        {{- else -}}
-          {{- fail (printf "Existing secret '%s' not found!" .Values.redis.auth.existingSecret) -}}
-        {{- end -}}
-        {{- $password | b64dec -}}
-      {{- else -}}
-        {{- required "A Redis Password is required. Path: .Values.redis.auth.password" .Values.redis.auth.password -}}
-      {{- end -}}
-  {{- else if .Values.nautobot.redis.password -}}
-    {{- .Values.nautobot.redis.password -}}
+    {{- .Values.nautobot.redis.existingSecret -}}
+  {{- else if .Values.redis.auth.existingSecret -}}
+    {{- .Values.redis.auth.existingSecret -}}
   {{- else -}}
-    {{- fail (printf "You have to configure redis credentials.") -}}
+    {{- printf "nautobot-redis" -}}
   {{- end -}}
 {{- end -}}
 
-{{- define "nautobot.redis.encryptedPassword" -}}
-  {{- include "nautobot.redis.rawPassword" . | b64enc | quote -}}
+{{- define "nautobot.redis.passwordKey" -}}
+  {{- if .Values.nautobot.redis.existingSecretPasswordKey -}}
+    {{- .Values.nautobot.redis.existingSecretPasswordKey -}}
+  {{- else if .Values.redis.auth.existingSecretPasswordKey -}}
+    {{- .Values.redis.auth.existingSecretPasswordKey -}}
+  {{- else -}}
+    {{- printf "redis-password" -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*

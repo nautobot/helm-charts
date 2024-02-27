@@ -192,7 +192,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
     {{- .Values.nautobot.db.existingSecretPasswordKey -}}
   {{- else if eq .Values.postgresql.enabled true -}}
     {{- if .Values.postgresql.auth.existingSecret -}}
-      {{- default "password" .Values.postgresql.auth.secretsKeys.adminPasswordKey -}}
+      {{- default "password" .Values.postgresql.auth.secretKeys.userPasswordKey -}}
     {{- else -}}
       {{- printf "password" -}}
     {{- end -}}

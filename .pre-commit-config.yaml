@@ -73,7 +73,7 @@ repos:
   #         - "console,checkov.sarif"
 
   - repo: "https://github.com/norwoodj/helm-docs"
-    rev: "v1.11.3"
+    rev: "v1.13.1"
     hooks:
       - id: "helm-docs"
         args:
@@ -84,7 +84,7 @@ repos:
           - "--template-files=README.md.gotmpl"
 
   - repo: "https://github.com/norwoodj/helm-docs"
-    rev: "v1.11.3"
+    rev: "v1.13.1"
     hooks:
       - id: "helm-docs"
         args:

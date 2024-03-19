@@ -1,7 +1,9 @@
-{{- define "nautobot.secret.env" -}}
-NAUTOBOT_SECRET_KEY: {{ include "nautobot.encryptedSecretKey" .}}
-{{- if .Values.nautobot.superUser.enabled }}
-NAUTOBOT_SUPERUSER_API_TOKEN: {{ include "nautobot.encryptedSuperUserAPIToken" .}}
-NAUTOBOT_SUPERUSER_PASSWORD: {{ include "nautobot.encryptedSuperUserPassword" .}}
+{{define "nautobot.secret.env" -}}
+{{- if not .Values.nautobot.django.existingSecret -}}
+NAUTOBOT_SECRET_KEY: {{ include "nautobot.django.secretKey" .}}
+{{ end -}}
+{{- if (and .Values.nautobot.superUser.enabled (not .Values.nautobot.superUser.existingSecret)) -}}
+NAUTOBOT_SUPERUSER_API_TOKEN: {{ include "nautobot.superUser.apiToken" .}}
+NAUTOBOT_SUPERUSER_PASSWORD: {{ include "nautobot.superUser.password" .}}
+{{- end -}}
 {{- end }}
-{{ end }}

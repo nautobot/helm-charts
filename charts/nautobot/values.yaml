@@ -392,7 +392,16 @@ nautobot:
 
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#secret_key)] Nautobot Secret Key (NAUTOBOT_SECRET_KEY)<sup>[1](#notes)</sup>
   secretKey: ""
+
+  django:
+    existingSecret: ""
+    existingSecretSecretKeyKey: ""
+    secretKey: ""
+
   superUser:
+    existingSecret: ""
+    existingSecretPasswordKey: ""
+    existingSecretApiTokenKey: ""
     # -- [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser)] Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER)<sup>[1](#notes)</sup>
     enabled: true
     # -- [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token)] Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN)<sup>[1](#notes)</sup>

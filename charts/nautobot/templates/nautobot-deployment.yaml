@@ -91,6 +91,23 @@ spec:
                 secretKeyRef:
                   name: {{ include "nautobot.redis.passwordName" $ }}
                   key: {{ include "nautobot.redis.passwordKey" $ }}
+            - name: NAUTOBOT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.django.secretName" $ }}
+                  key: {{ include "nautobot.django.existingSecretSecretKeyKey" $ }}
+            {{ if $nautobot.superUser.existingSecret -}}
+            - name: NAUTOBOT_SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.superUser.secretName" $ }}
+                  key: {{ include "nautobot.superUser.existingSecretPasswordKey" $ }}
+            - name: NAUTOBOT_SUPERUSER_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.superUser.secretName" $ }}
+                  key: {{ include "nautobot.superUser.existingSecretApiTokenKey" $ }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env
@@ -223,6 +240,23 @@ spec:
                 secretKeyRef:
                   name: {{ include "nautobot.redis.passwordName" $ }}
                   key: {{ include "nautobot.redis.passwordKey" $ }}
+            - name: NAUTOBOT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.django.secretName" $ }}
+                  key: {{ include "nautobot.django.existingSecretSecretKeyKey" $ }}
+            {{ if $nautobot.superUser.existingSecret -}}
+            - name: NAUTOBOT_SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.superUser.secretName" $ }}
+                  key: {{ include "nautobot.superUser.existingSecretPasswordKey" $ }}
+            - name: NAUTOBOT_SUPERUSER_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.superUser.secretName" $ }}
+                  key: {{ include "nautobot.superUser.existingSecretApiTokenKey" $ }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env

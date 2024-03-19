@@ -68,7 +68,7 @@ Make sure you take note of your Nautobot `NAUTOBOT_SECRET_KEY` by running:
 
 To take a backup of the database run:
 
-  export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-postgresql -o jsonpath="{.data.postgres-password}" | base64 --decode)
   echo $POSTGRES_PASSWORD | kubectl exec -itn {{ .Release.Namespace }} statefulset.apps/{{ include "common.names.fullname" . }}-postgresql -- pg_dump --username {{ .Values.postgresql.auth.username }} --clean --if-exists nautobot > backup.sql
 
 {{- end }}

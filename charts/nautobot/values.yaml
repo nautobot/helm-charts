@@ -354,7 +354,7 @@ nautobot:
     # -- Name of existing secret to use for Database passwords<sup>[1](#notes)</sup>
     existingSecret: ""
     # -- Password key to be retrieved from existing secret<sup>[1](#notes)</sup>
-    existingSecretPasswordKey: "NAUTOBOT_DB_PASSWORD"
+    existingSecretPasswordKey: ""
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases)] Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST)<sup>[1](#notes)</sup>
     host: "postgres"
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases)] Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME)<sup>[1](#notes)</sup>
@@ -378,7 +378,7 @@ nautobot:
     # -- Name of existing secret to use for Redis passwords<sup>[1](#notes)</sup>
     existingSecret: ""
     # -- Password key to be retrieved from existing secret<sup>[1](#notes)</sup>
-    existingSecretPasswordKey: "NAUTOBOT_REDIS_PASSWORD"
+    existingSecretPasswordKey: ""
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues)] Nautobot external Redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST)<sup>[1](#notes)</sup>
     host: ""
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues)] Nautobot external Redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD)<sup>[1](#notes)</sup>

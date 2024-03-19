@@ -190,15 +190,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if .Values.nautobot.db.existingSecret -}}
     {{- .Values.nautobot.db.existingSecret -}}
   {{- else if eq .Values.postgresql.enabled true -}}
-      {{- default (printf "%s-db-password" (include "common.names.fullname" .)) .Values.postgresql.auth.existingSecret -}}
+      {{- default (printf "%s-postgresql" (include "common.names.fullname" .)) .Values.postgresql.auth.existingSecret -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
     {{- if .Values.postgresql.auth.existingSecret -}}
-      {{- default (printf "%s-db-password" (include "common.names.fullname" .)) .Values.postgresqlha.auth.existingSecret -}}
+      {{- default (printf "%s-postgresql" (include "common.names.fullname" .)) .Values.postgresqlha.auth.existingSecret -}}
     {{- else -}}
       {{- printf "%s-db-password" (include "common.names.fullname" .) -}}
     {{- end -}}
   {{- else if eq .Values.mariadb.enabled true -}}
-      {{- default (printf "%s-db-password" (include "common.names.fullname" .)) .Values.mariadb.auth.existingSecret -}}
+      {{- default (printf "%s-mariadb" (include "common.names.fullname" .)) .Values.mariadb.auth.existingSecret -}}
   {{- else -}}
     {{- printf "%s-db-password" (include "common.names.fullname" .) -}}
   {{- end -}}
@@ -221,11 +221,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
     {{- printf "password" -}}
   {{- end -}}
 {{- end -}}
-
-{{- define "nautobot.database.password" -}}
-  {{- include "common.secrets.passwords.manage" (dict "secret" (include "nautobot.database.passwordName" . ) "key" (include "nautobot.database.passwordKey" . ) "providedValues" (list .Values.nautobot.db.password .Values.postgresql.auth.password .Values.mariadb.auth.password .Values.postgresqlha.postgresql.password) "length" 40 "strong" true "context" $) -}}
-{{- end -}}
-  
 
 {{/*
 Create a default fully qualified redis name.

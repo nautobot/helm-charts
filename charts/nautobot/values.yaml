@@ -394,13 +394,19 @@ nautobot:
   secretKey: ""
 
   django:
+    # -- Name of existing secret to use for NAUTOBOT_SECRET_KEY<sup>[1](#notes)</sup>
     existingSecret: ""
+    # -- SecretKey key to be retrieved from existing secret<sup>[1](#notes)</sup>
     existingSecretSecretKeyKey: ""
+    # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#secret_key)] Nautobot Secret Key (NAUTOBOT_SECRET_KEY), takes priority over nautobot.secretKey<sup>[1](#notes)</sup>
     secretKey: ""
 
   superUser:
+    # -- Name of existing secret to use for superuser password and API token<sup>[1](#notes)</sup>
     existingSecret: ""
+    # -- Password key to be retrieved from existing secret<sup>[1](#notes)</sup>
     existingSecretPasswordKey: ""
+    # -- API Token key to be retrieved from existing secret<sup>[1](#notes)</sup>
     existingSecretApiTokenKey: ""
     # -- [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser)] Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER)<sup>[1](#notes)</sup>
     enabled: true

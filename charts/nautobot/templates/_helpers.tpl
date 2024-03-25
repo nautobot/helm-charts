@@ -57,28 +57,45 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
-{{- define "nautobot.encryptedSecretKey" -}}
-  {{- if not .Values.nautobot.secretKey -}}
-    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SECRET_KEY" "providedValues" (list "nautobot.secretKey") "length" 64 "strong" true "context" $) }}
-  {{- else -}}
-    {{- .Values.nautobot.secretKey | b64enc | quote -}}
-  {{- end -}}
+{{/*
+The secret name where the nautobot secret_key used by django will exist.
+*/}}
+{{- define "nautobot.django.secretName" -}}
+  {{- default (printf "%s-env" (include "common.names.fullname" .)) .Values.nautobot.django.existingSecret -}}
 {{- end -}}
 
-{{- define "nautobot.encryptedSuperUserAPIToken" -}}
-  {{- if not .Values.nautobot.superUser.apitoken -}}
-    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SUPERUSER_API_TOKEN" "providedValues" (list "nautobot.superUserAPIToken") "length" 40 "strong" false "context" $) }}
-  {{- else -}}
-    {{- .Values.nautobot.superUser.apitoken | b64enc | quote -}}
-  {{- end -}}
+{{/*
+The secret key where the nautobot secret_key used by django will exist.
+*/}}
+{{- define "nautobot.django.existingSecretSecretKeyKey" -}}
+  {{- default (printf "NAUTOBOT_SECRET_KEY") .Values.nautobot.django.existingSecretSecretKeyKey -}}
 {{- end -}}
 
-{{- define "nautobot.encryptedSuperUserPassword" -}}
-  {{- if not .Values.nautobot.superUser.password -}}
-    {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-env" (include "nautobot.names.fullname" . )) "key" "NAUTOBOT_SUPERUSER_PASSWORD" "providedValues" (list "nautobot.superUserPassword") "length" 64 "strong" true "context" $) }}
-  {{- else -}}
-    {{- .Values.nautobot.superUser.password | b64enc | quote -}}
-  {{- end -}}
+{{/*
+Retrieve existing django/nautobot secret key, use one provided via values or generate a random one
+*/}}
+{{- define "nautobot.django.secretKey" -}}
+  {{- include "common.secrets.passwords.manage" (dict "secret" (include "nautobot.django.secretName" .) "key" (include "nautobot.django.existingSecretSecretKeyKey" .) "providedValues" (list .Values.nautobot.django.secretKey .Values.nautobot.secretKey) "length" 64 "strong" true "context" $) -}}
+{{- end -}}
+
+{{- define "nautobot.superUser.secretName" -}}
+  {{- default (printf "%s-env" (include "common.names.fullname" .)) .Values.nautobot.superUser.existingSecret -}}
+{{- end -}}
+
+{{- define "nautobot.superUser.existingSecretPasswordKey" -}}
+  {{- default (printf "NAUTOBOT_SUPERUSER_PASSWORD") .Values.nautobot.superUser.existingSecretPasswordKey -}}
+{{- end -}}
+
+{{- define "nautobot.superUser.existingSecretApiTokenKey" -}}
+  {{- default (printf "NAUTOBOT_SUPERUSER_API_TOKEN") .Values.nautobot.superUser.existingSecretApiTokenKey -}}
+{{- end -}}
+
+{{- define "nautobot.superUser.apiToken" -}}
+  {{- include "common.secrets.passwords.manage" (dict "secret" (include "nautobot.superUser.secretName" . ) "key" (include "nautobot.superUser.existingSecretApiTokenKey" .) "providedValues" (list .Values.nautobot.superUser.apitoken) "length" 40 "strong" false "context" $) -}}
+{{- end -}}
+
+{{- define "nautobot.superUser.password" -}}
+  {{- include "common.secrets.passwords.manage" (dict "secret" (include "nautobot.superUser.secretName" . ) "key" (include "nautobot.superUser.existingSecretPasswordKey" .) "providedValues" (list .Values.nautobot.superUser.password) "length" 64 "strong" true "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -173,15 +190,15 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- if .Values.nautobot.db.existingSecret -}}
     {{- .Values.nautobot.db.existingSecret -}}
   {{- else if eq .Values.postgresql.enabled true -}}
-      {{- default (printf "%s-db-password" (include "common.names.fullname" .)) .Values.postgresql.auth.existingSecret -}}
+      {{- default (printf "%s-postgresql" (include "common.names.fullname" .)) .Values.postgresql.auth.existingSecret -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
     {{- if .Values.postgresql.auth.existingSecret -}}
-      {{- default (printf "%s-db-password" (include "common.names.fullname" .)) .Values.postgresqlha.auth.existingSecret -}}
+      {{- default (printf "%s-postgresql" (include "common.names.fullname" .)) .Values.postgresqlha.auth.existingSecret -}}
     {{- else -}}
       {{- printf "%s-db-password" (include "common.names.fullname" .) -}}
     {{- end -}}
   {{- else if eq .Values.mariadb.enabled true -}}
-      {{- default (printf "%s-db-password" (include "common.names.fullname" .)) .Values.mariadb.auth.existingSecret -}}
+      {{- default (printf "%s-mariadb" (include "common.names.fullname" .)) .Values.mariadb.auth.existingSecret -}}
   {{- else -}}
     {{- printf "%s-db-password" (include "common.names.fullname" .) -}}
   {{- end -}}

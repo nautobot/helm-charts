@@ -1,6 +1,16 @@
 # Existing Secrets
 
-If you don't want to pass values through helm for either Redis or PostgreSQL there are a few options.  If you want to deploy PostgreSQL and Redis with this chart:
+If you don't want to pass values through helm for...
+
+- Redis
+- PostgreSQL
+- MariaDB
+- Nautobot Secret Key
+- Superuser password and API token
+
+...there's the option of creating these secrets manually and referencing them in the configuration.
+
+For example, if you want to deploy PostgreSQL and Redis with this chart:
 
 1. Create a secret with both PostgreSQL and Redis passwords:
 
@@ -39,4 +49,23 @@ redis:
   enabled: false
 ```
 
-You can use various combinations of `existingSecret` and `existingSecretPasswordKey` options depending on the existing secrets you have deployed.  (NOTE: The Bitnami PostgreSQL chart does require the key name to be "postgresql-password")
+To reference an existing NAUTOBOT_SECRET_KEY you can use the following values:
+
+```yaml
+nautobot:
+  django:
+    existingSecret: "my-secret"
+    existingSecretSecretKeyKey: "NAUTOBOT_SECRET_KEY"
+```
+
+And/or for the superuser credentials you can use this configuration:
+
+```yaml
+nautobot:
+  superUser:
+    existingSecret: "my-secret"
+    existingSecretPasswordKey: "NAUTOBOT_SUPERUSER_PASSWORD"
+    existingSecretApiTokenKey: "NAUTOBOT_SUPERUSER_API_TOKEN"
+```
+
+You can use various combinations of `existingSecret` and `*Key` options depending on the existing secrets you have deployed.

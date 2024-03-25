@@ -50,7 +50,7 @@ https://docs.nautobot.com/projects/helm-charts/en/stable/configuration/reference
   echo "Nautobot URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- end }}
-{{- if .Values.nautobot.superUser.enabled }}
+{{- if and .Values.nautobot.superUser.enabled (not .Values.nautobot.superUser.existingSecret) }}
 
 2. Get your Nautobot login admin credentials by running:
 
@@ -58,16 +58,17 @@ https://docs.nautobot.com/projects/helm-charts/en/stable/configuration/reference
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-env -o jsonpath="{.data.NAUTOBOT_SUPERUSER_PASSWORD}" | base64 --decode)
   echo api-token: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-env -o jsonpath="{.data.NAUTOBOT_SUPERUSER_API_TOKEN}" | base64 --decode)
 {{- end }}
-{{- if not .Values.nautobot.secretKey }}
+{{- if not (or .Values.nautobot.secretKey .Values.nautobot.django.secretKey .Values.nautobot.django.existingSecret) }}
 
 Make sure you take note of your Nautobot `NAUTOBOT_SECRET_KEY` by running:
 
   echo Secret Key: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-env -o jsonpath="{.data.NAUTOBOT_SECRET_KEY}" | base64 --decode)
 {{- end }}
 {{- if .Values.postgresql.enabled }}
+
 To take a backup of the database run:
 
-  export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-postgresql -o jsonpath="{.data.postgres-password}" | base64 --decode)
   echo $POSTGRES_PASSWORD | kubectl exec -itn {{ .Release.Namespace }} statefulset.apps/{{ include "common.names.fullname" . }}-postgresql -- pg_dump --username {{ .Values.postgresql.auth.username }} --clean --if-exists nautobot > backup.sql
 
 {{- end }}

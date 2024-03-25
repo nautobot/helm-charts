@@ -94,7 +94,7 @@ jobs:
           # or `main.tf` for a Terraform configuration file
           file: "./template_output"
       - name: "Upload result to GitHub Code Scanning"
-        uses: "github/codeql-action/upload-sarif@v2"
+        uses: "github/codeql-action/upload-sarif@v3"
         with:
           sarif_file: "snyk.sarif"
 

@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Setup Go"
-        uses: "actions/setup-go@v4"
+        uses: "actions/setup-go@v5"
       - run: "echo $HOME/go/bin >> $GITHUB_PATH"
 
       - name: "Setup Helm"

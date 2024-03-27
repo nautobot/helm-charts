@@ -1,0 +1,8 @@
+{
+    "yaml.schemas": {
+        "https://json.schemastore.org/yamllint.json": [
+            "file:///home/whitej6/helm-charts/charts/nautobot/Chart.yaml",
+            "file:///home/whitej6/helm-charts/charts/nautobot/values.yaml"
+        ]
+    }
+}

@@ -31,6 +31,8 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: fixed
+      description: Fixed #371 Update liveness probe to support nautobot 1.6.16 & 2.1.9
+    - kind: fixed
       description: Fixed #338 Allow Nautobot to Scale to 0
     - kind: fixed
       description: Fixed #335 Use Nautobot 2.0 by default
@@ -48,7 +50,7 @@ annotations:
       description:  Upgraded Redis subchart from 18.0.4 to 18.4.0
 apiVersion: "v2"
 appVersion: "2.1.9"
-version: "2.0.6"
+version: "2.1.0"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

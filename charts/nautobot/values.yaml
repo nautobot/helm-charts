@@ -12,15 +12,15 @@ service:
   # Node ports to expose if service.type is NodePort
   nodePorts:
     # -- (int) Node port for Nautobot http choose port in Kubernetes `--service-node-port-range` typically 30000-32767
-    http:  # yamllint disable-line rule:empty-values
+    http: # yamllint disable-line rule:empty-values
     # -- (int) Node port for Nautobot https choose port in Kubernetes `--service-node-port-range` typically 30000-32767
-    https:  # yamllint disable-line rule:empty-values
+    https: # yamllint disable-line rule:empty-values
     # -- (int) Node port for Nautobot uwsgimetrics choose port in Kubernetes `--service-node-port-range` typically 30000-32767
-    uwsgimetrics:  # yamllint disable-line rule:empty-values
+    uwsgimetrics: # yamllint disable-line rule:empty-values
   # -- (IP) IP address to use as the clusterIP
-  clusterIP:  # yamllint disable-line rule:empty-values
+  clusterIP: # yamllint disable-line rule:empty-values
   # -- (IP) IP address to use as the loadBalancerIP
-  loadBalancerIP:  # yamllint disable-line rule:empty-values
+  loadBalancerIP: # yamllint disable-line rule:empty-values
   # -- ([]CIDR) List of allowed CIDRs to access the load balancer default 0.0.0.0/0, cloud provider dependent
   loadBalancerSourceRanges: []
   # -- (`Cluster`, `Local`) Kubernetes externalTrafficPolicy valid values: `Cluster` or `Local`
@@ -41,7 +41,7 @@ nautobot:
     # -- Nautobot image name, common to all deployments
     repository: "nautobot/nautobot"
     # -- Nautobot image tag, common to all deployments
-    tag: "2.0.5-py3.11"
+    tag: "2.1.9-py3.11"
     # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent`
     pullPolicy: "Always"
     # -- ([]string) List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments
@@ -60,12 +60,14 @@ nautobot:
   livenessProbe:
     # -- Enable the Nautobot Liveness Probe
     enabled: true
-    httpGet:
-      path: "/api/"
-      port: "http"
+    exec:
+      command:
+        - "bash"
+        - "-c"
+        - "nautobot-server health_check"
     initialDelaySeconds: 3
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 15
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
 
@@ -117,7 +119,7 @@ nautobot:
     allowPrivilegeEscalation: false
     # -- Enable the Nautobot container security context
     enabled: true
-    readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
+    readOnlyRootFilesystem: false # Must be set to false due to jobs directory
     runAsUser: 999
     runAsGroup: 999
     capabilities:
@@ -415,9 +417,9 @@ nautobot:
     # -- [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_email)] Configure an email address for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_EMAIL)<sup>[1](#notes)</sup>
     email: "admin@example.com"
     # -- [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_name)] User name to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME)<sup>[1](#notes)</sup>
-    username: "admin"  # NAUTOBOT_SUPERUSER_NAME
+    username: "admin" # NAUTOBOT_SUPERUSER_NAME
     # -- [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_password)] Password to use for the super user to be created if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_NAME), if unset a random password will be generated<sup>[1](#notes)</sup>
-    password: ""  # NAUTOBOT_SUPERUSER_PASSWORD
+    password: "" # NAUTOBOT_SUPERUSER_PASSWORD
 
   # -- [[ref](https://docs.nautobot.com/projects/helm-charts/en/stable/advanced-features/init-hook)] Run the Nautobot initialization tasks as a helm hook instead of an initContainer<sup>[1](#notes)</sup>
   singleInit: false
@@ -436,7 +438,7 @@ nautobot:
     bufferSize: 4096
 
   # -- ([]map[name,value]string)An array of environment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup>
-  extraVars: []  # https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/
+  extraVars: [] # https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/
   # e.g.
   # extraVars:
   #   - name: "NAUTOBOT_BANNER_TOP"
@@ -557,7 +559,7 @@ celery:
     allowPrivilegeEscalation: false
     # -- Enable the Worker Celery Container security context
     enabled: true
-    readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
+    readOnlyRootFilesystem: false # Must be set to false due to jobs directory
     runAsUser: 999
     capabilities:
       drop:
@@ -697,7 +699,7 @@ workers:
   beat:
     enabled: true
     concurrency: 0
-    replicaCount: 1  # Beat can have a max replicaCount of 1
+    replicaCount: 1 # Beat can have a max replicaCount of 1
     command:
       - "nautobot-server"
       - "celery"
@@ -739,7 +741,7 @@ ingress:
   pathType: "Prefix"
 
   # -- Override API Version (automatically detected if not set)
-  apiVersion:  # yamllint disable-line rule:empty-values
+  apiVersion: # yamllint disable-line rule:empty-values
 
   # -- Ingress Hostname
   hostname: "nautobot.local"
@@ -989,7 +991,7 @@ postgresql:
         type: "RuntimeDefault"
     containerSecurityContext:
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: false  # Must be set to false
+      readOnlyRootFilesystem: false # Must be set to false
       capabilities:
         drop:
           - "ALL"
@@ -1076,7 +1078,7 @@ mariadb:
   primary:
     containerSecurityContext:
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: false  # Must be set to false
+      readOnlyRootFilesystem: false # Must be set to false
       capabilities:
         drop:
           - "ALL"
@@ -1091,7 +1093,7 @@ mariadb:
   secondary:
     containerSecurityContext:
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: false  # Must be set to false
+      readOnlyRootFilesystem: false # Must be set to false
       capabilities:
         drop:
           - "ALL"
@@ -1130,7 +1132,7 @@ postgresqlha:
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: false  # Must be set to false
+      readOnlyRootFilesystem: false # Must be set to false
       seccompProfile:
         type: "RuntimeDefault"
       capabilities:
@@ -1169,7 +1171,7 @@ postgresqlha:
       create: true
     containerSecurityContext:
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: false  # Must be set to false
+      readOnlyRootFilesystem: false # Must be set to false
       seccompProfile:
         type: "RuntimeDefault"
       capabilities:

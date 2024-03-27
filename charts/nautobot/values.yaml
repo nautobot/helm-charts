@@ -121,8 +121,8 @@ nautobot:
     # -- Enable the Nautobot container security context
     enabled: true
     readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
-    runAsUser: 999
-    runAsGroup: 999
+    runAsUser: 1000
+    runAsGroup: 1000
     capabilities:
       drop:
         - "ALL"

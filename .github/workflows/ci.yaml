@@ -114,7 +114,7 @@ jobs:
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
       - run: "helm dependency update charts/nautobot"
       - name: "Kubescape NSA Scan - Defaults"
-        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml charts/nautobot | kubescape scan -v framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
+        run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml charts/nautobot | kubescape scan framework nsa - --compliance-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape NSA Scan - PostgreSQL"
         run: "helm template -n testing -f charts/nautobot/linter_values_minimum.yaml -f charts/nautobot/linter_values.yaml charts/nautobot | kubescape scan framework nsa - --fail-threshold 0 --exceptions ./kubescape-exceptions.json"
       - name: "Kubescape NSA Scan - MySQL"

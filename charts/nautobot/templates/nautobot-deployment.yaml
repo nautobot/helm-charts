@@ -81,6 +81,33 @@ spec:
             {{- if $nautobot.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $nautobot.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+            - name: NAUTOBOT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.database.passwordName" $ }}
+                  key: {{ include "nautobot.database.passwordKey" $ }}
+            - name: NAUTOBOT_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.redis.passwordName" $ }}
+                  key: {{ include "nautobot.redis.passwordKey" $ }}
+            - name: NAUTOBOT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.django.secretName" $ }}
+                  key: {{ include "nautobot.django.existingSecretSecretKeyKey" $ }}
+            {{ if $nautobot.superUser.existingSecret -}}
+            - name: NAUTOBOT_SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.superUser.secretName" $ }}
+                  key: {{ include "nautobot.superUser.existingSecretPasswordKey" $ }}
+            - name: NAUTOBOT_SUPERUSER_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.superUser.secretName" $ }}
+                  key: {{ include "nautobot.superUser.existingSecretApiTokenKey" $ }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env
@@ -139,6 +166,16 @@ spec:
             {{- if $nautobot.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $nautobot.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+            - name: NAUTOBOT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.database.passwordName" $ }}
+                  key: {{ include "nautobot.database.passwordKey" $ }}
+            - name: NAUTOBOT_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.redis.passwordName" $ }}
+                  key: {{ include "nautobot.redis.passwordKey" $ }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env
@@ -192,6 +229,33 @@ spec:
               value: "nautobot-{{ $nautobotName }}"
             {{- if $nautobot.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $nautobot.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            - name: NAUTOBOT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.database.passwordName" $ }}
+                  key: {{ include "nautobot.database.passwordKey" $ }}
+            - name: NAUTOBOT_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.redis.passwordName" $ }}
+                  key: {{ include "nautobot.redis.passwordKey" $ }}
+            - name: NAUTOBOT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.django.secretName" $ }}
+                  key: {{ include "nautobot.django.existingSecretSecretKeyKey" $ }}
+            {{ if $nautobot.superUser.existingSecret -}}
+            - name: NAUTOBOT_SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.superUser.secretName" $ }}
+                  key: {{ include "nautobot.superUser.existingSecretPasswordKey" $ }}
+            - name: NAUTOBOT_SUPERUSER_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.superUser.secretName" $ }}
+                  key: {{ include "nautobot.superUser.existingSecretApiTokenKey" $ }}
             {{- end }}
           envFrom:
             - configMapRef:
@@ -350,7 +414,12 @@ spec:
       terminationGracePeriodSeconds: {{ $nautobot.terminationGracePeriodSeconds }}
       volumes:
         - name: "nautobot-static"
+        {{- if $nautobot.persistenceStaticFiles.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "common.names.fullname" $ }}-static
+        {{- else }}
           emptyDir: {}
+        {{- end }}
         - name: "git-repos"
           emptyDir: {}
         - name: "nautobot-config"

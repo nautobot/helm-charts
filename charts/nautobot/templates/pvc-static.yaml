@@ -1,0 +1,35 @@
+{{- if .Values.nautobot.enabled -}}
+{{- if .Values.nautobot.persistenceStaticFiles.enabled -}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "common.names.fullname" $ }}-static
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+    app.kubernetes.io/component: nautobot-static-pvc
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.nautobot.persistenceStaticFiles.storageClassName }}
+  {{- if (eq "-" .Values.nautobot.persistenceStaticFiles.storageClassName) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: {{ .Values.nautobot.persistenceStaticFiles.storageClassName | quote }}
+  {{- end }}
+  {{- end }}
+  accessModes:
+  - {{ .Values.nautobot.persistenceStaticFiles.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.nautobot.persistenceStaticFiles.size | quote }}
+  {{- with .Values.nautobot.persistenceStaticFiles.selector }}
+  selector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{ end -}}
+{{ end -}}

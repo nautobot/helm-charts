@@ -71,6 +71,21 @@ spec:
             {{- if $initJob.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $initJob.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+            - name: NAUTOBOT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.database.passwordName" $ }}
+                  key: {{ include "nautobot.database.passwordKey" $ }}
+            - name: NAUTOBOT_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.redis.passwordName" $ }}
+                  key: {{ include "nautobot.redis.passwordKey" $ }}
+            - name: NAUTOBOT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nautobot.django.secretName" $ }}
+                  key: {{ include "nautobot.django.existingSecretSecretKeyKey" $ }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env-init
@@ -109,7 +124,12 @@ spec:
             {{- end }}
       volumes:
         - name: "nautobot-static"
+        {{- if $.Values.nautobot.persistenceStaticFiles.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "common.names.fullname" $ }}-static
+        {{- else }}
           emptyDir: {}
+        {{- end }}
         - name: "git-repos"
           emptyDir: {}
         - name: "nautobot-config"

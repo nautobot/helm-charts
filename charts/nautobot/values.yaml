@@ -1,7 +1,6 @@
 ---
 # -- (map[string]string) Annotations to be applied to ALL resources created by this chart
 commonAnnotations: {}
-
 # Nautobot UI front end service
 service:
   # -- (`ExternalName`, `ClusterIP`, `NodePort`, or `LoadBalancer`) [[ref](https://kubernetes.io/docs/concepts/services-networking/service/)] Kubernetes service type, valid values: `ExternalName`, `ClusterIP`, `NodePort`, or `LoadBalancer`
@@ -42,7 +41,7 @@ nautobot:
     # -- Nautobot image name, common to all deployments
     repository: "nautobot/nautobot"
     # -- Nautobot image tag, common to all deployments
-    tag: "2.0.5-py3.11"
+    tag: "2.1.9-py3.11"
     # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent`
     pullPolicy: "Always"
     # -- ([]string) List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments
@@ -61,12 +60,14 @@ nautobot:
   livenessProbe:
     # -- Enable the Nautobot Liveness Probe
     enabled: true
-    httpGet:
-      path: "/api/"
-      port: "http"
+    exec:
+      command:
+        - "bash"
+        - "-c"
+        - "nautobot-server health_check"
     initialDelaySeconds: 3
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 15
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
 
@@ -236,6 +237,23 @@ nautobot:
             value: 2
             periodSeconds: 15
 
+  # Add a Persistent Volume Claim for Nautobot static files
+  persistenceStaticFiles:
+    # --- Enable PVC and the relevant volumes
+    enabled: false
+    # --- [Kubernetes StorageClass Name](https://kubernetes.io/docs/concepts/storage/storage-classes/), for the creation of Persistent Volume Claim
+    storageClassName: ""
+    # --- [Kubernetes Volumes AccessMode](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+    accessMode: "ReadWriteOnce"
+    # --- Persistent storage size request
+    size: "1Gi"
+    # --- [Kubernetes PVC Selectors](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector) to specify volume for Persistent Volume Claim
+    selector: {}
+    # e.g.
+    # selector:
+    #   matchLabel:
+    #     nautobot-storage: static
+
   # Nautobot NGINX configuration
   nginx:
     # -- Enable an nginx sidecar to proxy Nautobot traffic (can be useful for large deployments)
@@ -338,7 +356,7 @@ nautobot:
     # -- Name of existing secret to use for Database passwords<sup>[1](#notes)</sup>
     existingSecret: ""
     # -- Password key to be retrieved from existing secret<sup>[1](#notes)</sup>
-    existingSecretPasswordKey: "NAUTOBOT_DB_PASSWORD"
+    existingSecretPasswordKey: ""
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases)] Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST)<sup>[1](#notes)</sup>
     host: "postgres"
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases)] Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME)<sup>[1](#notes)</sup>
@@ -362,7 +380,7 @@ nautobot:
     # -- Name of existing secret to use for Redis passwords<sup>[1](#notes)</sup>
     existingSecret: ""
     # -- Password key to be retrieved from existing secret<sup>[1](#notes)</sup>
-    existingSecretPasswordKey: "NAUTOBOT_REDIS_PASSWORD"
+    existingSecretPasswordKey: ""
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues)] Nautobot external Redis hostname, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_HOST)<sup>[1](#notes)</sup>
     host: ""
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#rq_queues)] Nautobot external Redis password, ignored if `redis.enabled` is `true` (NAUTOBOT_REDIS_PASSWORD)<sup>[1](#notes)</sup>
@@ -376,7 +394,22 @@ nautobot:
 
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#secret_key)] Nautobot Secret Key (NAUTOBOT_SECRET_KEY)<sup>[1](#notes)</sup>
   secretKey: ""
+
+  django:
+    # -- Name of existing secret to use for NAUTOBOT_SECRET_KEY<sup>[1](#notes)</sup>
+    existingSecret: ""
+    # -- SecretKey key to be retrieved from existing secret<sup>[1](#notes)</sup>
+    existingSecretSecretKeyKey: ""
+    # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#secret_key)] Nautobot Secret Key (NAUTOBOT_SECRET_KEY), takes priority over nautobot.secretKey<sup>[1](#notes)</sup>
+    secretKey: ""
+
   superUser:
+    # -- Name of existing secret to use for superuser password and API token<sup>[1](#notes)</sup>
+    existingSecret: ""
+    # -- Password key to be retrieved from existing secret<sup>[1](#notes)</sup>
+    existingSecretPasswordKey: ""
+    # -- API Token key to be retrieved from existing secret<sup>[1](#notes)</sup>
+    existingSecretApiTokenKey: ""
     # -- [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_create_superuser)] Create a new super user account in Nautobot once deployed (NAUTOBOT_CREATE_SUPERUSER)<sup>[1](#notes)</sup>
     enabled: true
     # -- [[ref](https://nautobot.readthedocs.io/en/stable/docker/#nautobot_superuser_api_token)] Configure an API key for the super user if `nautobot.superUser.enabled` is `true` (NAUTOBOT_SUPERUSER_API_TOKEN)<sup>[1](#notes)</sup>

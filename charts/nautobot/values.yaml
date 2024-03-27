@@ -102,8 +102,7 @@ nautobot:
   podSecurityContext:
     # -- Enable the Nautobot Pod security context
     enabled: true
-    fsGroup: 1000
-    runAsGroup: 1000
+    fsGroup: 999
     seccompProfile:
       type: "RuntimeDefault"
 
@@ -121,8 +120,8 @@ nautobot:
     # -- Enable the Nautobot container security context
     enabled: true
     readOnlyRootFilesystem: false  # Must be set to false due to jobs directory
-    runAsUser: 1000
-    runAsGroup: 1000
+    runAsUser: 999
+    runAsGroup: 999
     capabilities:
       drop:
         - "ALL"
@@ -543,8 +542,7 @@ celery:
   podSecurityContext:
     # -- Enable the Worker Pod security context
     enabled: true
-    fsGroup: 1000
-    runAsGroup: 1000
+    fsGroup: 999
     seccompProfile:
       type: "RuntimeDefault"
 

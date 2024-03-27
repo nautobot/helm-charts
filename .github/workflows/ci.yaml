@@ -26,7 +26,7 @@ jobs:
       - run: "echo $HOME/go/bin >> $GITHUB_PATH"
 
       - name: "Setup Helm"
-        uses: "azure/setup-helm@v3"
+        uses: "azure/setup-helm@v4"
       - run: "mkdir template_output"
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
       - run: "helm dependency update charts/nautobot"
@@ -71,7 +71,7 @@ jobs:
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v4"
-      - uses: "azure/setup-helm@v3"
+      - uses: "azure/setup-helm@v4"
       - run: "mkdir template_output"
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
       - run: "helm dependency update charts/nautobot"
@@ -107,7 +107,7 @@ jobs:
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v4"
-      - uses: "azure/setup-helm@v3"
+      - uses: "azure/setup-helm@v4"
       - name: "Install Kubescape"
         run: "curl -s https://raw.githubusercontent.com/kubescape/kubescape/master/install.sh | /bin/bash"
       - run: 'echo "${HOME}/.kubescape/bin" >> $GITHUB_PATH'  # yamllint disable-line rule:quoted-strings

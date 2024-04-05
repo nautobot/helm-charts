@@ -270,7 +270,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- else if .Values.redis.auth.existingSecret -}}
     {{- .Values.redis.auth.existingSecret -}}
   {{- else -}}
-    {{- printf "nautobot-redis" -}}
+    {{- printf "%s-redis" (include "common.names.fullname" .) -}}
   {{- end -}}
 {{- end -}}
 

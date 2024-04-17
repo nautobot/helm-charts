@@ -436,6 +436,8 @@ nautobot:
     threads: 2
     # -- [[ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#buffer-size)] Set the max size of a request (request-body excluded), this generally maps to the size of request headers. By default it is 4k. If you receive a bigger request (for example with big cookies or query string) you may need to increase it. It is a security measure too, so adapt to your app needs instead of maxing it out.<sup>[1](#notes)</sup>
     bufferSize: 4096
+    # -- [[ref]](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#harakiri) Set the harakiri timeout value. If the value is 0 then the timeout is not set.
+    harakiri: 0
 
   # -- ([]map[name,value]string)An array of environment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup>
   extraVars: []  # https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/

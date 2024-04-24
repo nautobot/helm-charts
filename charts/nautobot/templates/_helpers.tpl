@@ -186,13 +186,14 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+
 {{/*
 Generate the secret that is used for `NAUTOBOT_DB_PASSWORD` environmental variable
 in nautobot-deployment.yaml.
 
 The following is the logic:
 * If you have an existing K8s Secret containing the password it will take the secret from there.
-  Note: If you deploy PostgreSQL as part of this chart (postgreslq.enabled==true) you have to
+  Note: If you deploy PostgreSQL as part of this chart (postgresql.enabled==true) you have to
         also define `postgresql.auth.existingSecret`
   Test:
     nautobot:
@@ -208,7 +209,7 @@ The following is the logic:
   define the postgresql.nameOverride it takes "postgresql".
 
   Test1:
-    `kubectl create secret generic my-db-secret --from-literal=password=mydbpassword --from-literal=postgresql-password=myadminpassword`
+    `kubectl create secret generic my-db-secret --from-literal=password=database-password --from-literal=postgresql-password=database-admin-password`
 
     postgresql:
       enabled: true
@@ -229,7 +230,7 @@ The following is the logic:
   Test:
     nautobot:
       db:
-        password: "thisismydbpasssword"
+        password: "database-password"
     postgresql:
       enabled: false
 

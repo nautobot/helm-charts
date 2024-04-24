@@ -234,10 +234,10 @@ The following is the logic:
       {{- printf "%s-%s" .Release.Name (default "postgresql" .Values.postgresql.nameOverride) -}}
     {{- end -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
-    {{- if .Values.postgresqlha.auth.existingSecret -}}
-      {{- .Values.postgresqlha.auth.existingSecret -}}
+    {{- if .Values.postgresqlha.postgresql.existingSecret -}}
+      {{- .Values.postgresqlha.postgresql.existingSecret -}}
     {{- else -}}
-      {{- printf "%s-%s" .Release.Name (default "postgresql" .Values.postgresqlha.nameOverride) -}}
+      {{- printf "%s-%s-postgresql" .Release.Name (default "postgresqlha" .Values.postgresqlha.nameOverride) -}}
     {{- end -}}
   {{- else if eq .Values.mariadb.enabled true -}}
       {{- default (printf "%s-mariadb" .Release.Name ) .Values.mariadb.auth.existingSecret -}}
@@ -257,11 +257,10 @@ The following is the logic:
       {{- printf "password" -}}
     {{- end -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
-    {{- if and .Values.postgresqlha.auth.existingSecret .Values.postgresqlha.auth.secretKeys -}}
-      {{- default "password" .Values.postgresqlha.auth.secretKeys.userPasswordKey -}}
-    {{- else -}}
-      {{- printf "password" -}}
-    {{- end -}}
+    {{/* PostgresqlHA sub-chart don't specify a Secret Key,
+      you need always to create the secret with `password` as key.
+    */}}
+    {{- printf "password" -}}
   {{- else if eq .Values.mariadb.enabled true -}}
       {{- printf "mariadb-password" -}}
   {{- else -}}

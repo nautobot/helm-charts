@@ -1,0 +1,56 @@
+---
+# Nautobot Server
+nautobot:
+  enabled: true
+
+  # # Nautobot database configuration
+  # db:
+  #   engine: "django.db.backends.postgresql"
+  #   existingSecret: ""
+  #   existingSecretPasswordKey: ""
+  #   host: "postgres"
+  #   name: "nautobot"
+  #   password: ""
+  #   port: 5432
+  #   timeout: 300
+  #   user: "nautobot"
+
+
+postgresql:
+  enabled: false
+  auth:
+    username: "nautobot"
+    database: "nautobot"
+    password: ""
+
+redis:
+  enabled: true
+  chitecture: "standalone"
+  auth:
+    enabled: true
+    password: ""
+  image:
+    pullPolicy: "Always"
+
+
+mariadb:
+  enabled: false
+  auth:
+    database: "nautobot"
+    username: "nautobot"
+    password: ""
+    rootPassword: ""
+
+
+postgresqlha:
+  enabled: true
+  # nameOverride: "gerasimos"
+  image:
+    pullPolicy: "Always"
+  postgresql:
+    # existingSecret: "my-secret"
+    database: "nautobot"
+    postgresPassword: ""
+    repmgrPassword: ""
+    username: "nautobot"
+    password: "makis"

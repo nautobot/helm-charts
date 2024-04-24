@@ -269,8 +269,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
     {{- .Values.nautobot.redis.existingSecret -}}
   {{- else if .Values.redis.auth.existingSecret -}}
     {{- .Values.redis.auth.existingSecret -}}
+  {{- else if .Values.redis.nameOverride -}}
+    {{- printf "%s-%s" .Release.Name .Values.redis.nameOverride -}}
   {{- else -}}
-    {{- printf "nautobot-redis" -}}
+    {{- printf "%s-redis" .Release.Name -}}
   {{- end -}}
 {{- end -}}
 

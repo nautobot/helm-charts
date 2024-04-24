@@ -221,7 +221,17 @@ The following is the logic:
 
 * The same logic is used for PostgreSQL in HA mode.
 * TODO: Describe mariadb
-* TODO: describe else
+
+* If you defined the password in "nautobot.db.password" it will create the
+  K8s Secret. This scenario is used for cases when you are using the external
+  database, so you should also disable postgresql: postgresql.enabled=false.
+
+  Test:
+    nautobot:
+      db:
+        password: "thisismydbpasssword"
+    postgresql:
+      enabled: false
 
 */}}
 {{- define "nautobot.database.passwordName" -}}

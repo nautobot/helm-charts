@@ -250,7 +250,11 @@ The following is the logic:
       {{- printf "%s-%s-postgresql" .Release.Name (default "postgresqlha" .Values.postgresqlha.nameOverride) -}}
     {{- end -}}
   {{- else if eq .Values.mariadb.enabled true -}}
-      {{- default (printf "%s-mariadb" .Release.Name ) .Values.mariadb.auth.existingSecret -}}
+    {{- if .Values.mariadb.auth.existingSecret -}}
+      {{- .Values.mariadb.auth.existingSecret -}}
+    {{- else -}}
+      {{- printf "%s-%s" .Release.Name (default "mariadb" .Values.mariadb.nameOverride) -}}
+    {{- end -}}
   {{- else -}}
     {{- printf "%s-db-password" (include "common.names.fullname" .) -}}
   {{- end -}}
@@ -267,8 +271,8 @@ The following is the logic:
       {{- printf "password" -}}
     {{- end -}}
   {{- else if eq .Values.postgresqlha.enabled true -}}
-    {{/* PostgresqlHA sub-chart don't specify a Secret Key,
-      you need always to create the secret with `password` as key.
+    {{/* PostgresqlHA & MariaDB sub-charts don't specify a Secret Key,
+      you need always to create the secrets with necessary keys like `password` before the helm install.
     */}}
     {{- printf "password" -}}
   {{- else if eq .Values.mariadb.enabled true -}}

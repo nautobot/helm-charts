@@ -221,7 +221,17 @@ The following is the logic:
       enabled: true
 
 * The same logic is used for PostgreSQL in HA mode.
-* TODO: Describe mariadb
+
+* If you enable mariadb then you have to disable postgresql. If you define
+  the existing secret, it will use that one. If not, if will create a secret name
+  from '<release name>-' and either 'nameOverride' if defined, or 'mariadb'.
+
+  Test:
+    postgresql:
+      enabled: false
+    mariadb:
+      auth:
+        existingSecret: "my-db-secret"
 
 * If you defined the password in "nautobot.db.password" it will create the
   K8s Secret. This scenario is used for cases when you are using the external

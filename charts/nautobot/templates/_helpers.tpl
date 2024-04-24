@@ -75,7 +75,7 @@ The secret key where the nautobot secret_key used by django will exist.
 Retrieve existing django/nautobot secret key, use one provided via values or generate a random one
 */}}
 {{- define "nautobot.django.secretKey" -}}
-  {{- include "common.secrets.passwords.manage" (dict "secret" (include "nautobot.django.secretName" .) "key" (include "nautobot.django.existingSecretSecretKeyKey" .) "providedValues" (list .Values.nautobot.django.secretKey .Values.nautobot.secretKey) "length" 64 "strong" true "context" $) -}}
+  {{- include "common.secrets.passwords.manage" (dict "secret" (include "nautobot.django.secretName" .) "key" (include "nautobot.django.existingSecretSecretKeyKey" .) "providedValues" (list "nautobot.django.secretKey" "nautobot.secretKey") "length" 64 "strong" true "context" $) -}}
 {{- end -}}
 
 {{- define "nautobot.superUser.secretName" -}}
@@ -91,11 +91,11 @@ Retrieve existing django/nautobot secret key, use one provided via values or gen
 {{- end -}}
 
 {{- define "nautobot.superUser.apiToken" -}}
-  {{- include "common.secrets.passwords.manage" (dict "secret" (include "nautobot.superUser.secretName" . ) "key" (include "nautobot.superUser.existingSecretApiTokenKey" .) "providedValues" (list .Values.nautobot.superUser.apitoken) "length" 40 "strong" false "context" $) -}}
+  {{- include "common.secrets.passwords.manage" (dict "secret" (include "nautobot.superUser.secretName" . ) "key" (include "nautobot.superUser.existingSecretApiTokenKey" .) "providedValues" (list "nautobot.superUser.apitoken") "length" 40 "strong" false "context" $) -}}
 {{- end -}}
 
 {{- define "nautobot.superUser.password" -}}
-  {{- include "common.secrets.passwords.manage" (dict "secret" (include "nautobot.superUser.secretName" . ) "key" (include "nautobot.superUser.existingSecretPasswordKey" .) "providedValues" (list .Values.nautobot.superUser.password) "length" 64 "strong" true "context" $) -}}
+  {{- include "common.secrets.passwords.manage" (dict "secret" (include "nautobot.superUser.secretName" . ) "key" (include "nautobot.superUser.existingSecretPasswordKey" .) "providedValues" (list "nautobot.superUser.password") "length" 64 "strong" true "context" $) -}}
 {{- end -}}
 
 {{/*

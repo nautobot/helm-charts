@@ -15,7 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * [#372](https://github.com/nautobot/helm-charts/pull/372) Fix invalid liveness probes in the Nautobot patch released (v1.6.16+ and v2.1.9+)
 
-
 ## 2.0.5 - 2023-11-29
 
 +/- 2.0.5

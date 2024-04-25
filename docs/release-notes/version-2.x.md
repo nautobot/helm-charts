@@ -3,6 +3,23 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.1 - 2024-04-25
+
+### Added
+
+* [#379](https://github.com/nautobot/helm-charts/pull/379) Add option to define harakiri uwsgi timeout
+
+### Fixed
+
+* [#381](https://github.com/nautobot/helm-charts/pull/381) Fix DB and Redis secrets
+* [#374](https://github.com/nautobot/helm-charts/pull/374) Fix correct secret keys for Django passwords
+
+### Changed
+
+* Upgraded Bitnami Common subchart from 2.13.3 to 2.19.1
+* Upgraded RabbitMQ subchart from 12.5.4 to 12.15.0
+* Upgraded Redis subchart from 18.4.0 to 18.19.4
+
 ## 2.1.0 - 2024-03-27
 
 ### Added

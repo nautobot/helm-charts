@@ -35,7 +35,7 @@ annotations:
     - kind: fixed
       description: Fixed #381 DB and Redis secrets
     - kind: fixed
-      description: Fixed #374 Correct secret keys for 
+      description: Fixed #374 Correct secret keys for Django passwords
     - kind: changed
       description: Upgraded Nautobot from 2.1.9 to 2.2.2
     - kind: changed

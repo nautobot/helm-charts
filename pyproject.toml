@@ -9,9 +9,9 @@ readme = "README.md"
 python = "^3.8"
 invoke = "*"
 # Rendering docs to HTML
-mkdocs = "~1.5.3"
+mkdocs = "~1.6.0"
 # Material for MkDocs theme
-mkdocs-material = "9.4.14"
+mkdocs-material = "9.5.19"
 # Render custom markdown for version added/changed/remove notes
 mkdocs-version-annotations = "1.0.0"
 

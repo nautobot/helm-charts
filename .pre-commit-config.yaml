@@ -3,7 +3,7 @@
 # See https://pre-commit.com for more information
 repos:
   - repo: "https://github.com/pre-commit/pre-commit-hooks"
-    rev: "v4.5.0"
+    rev: "v4.6.0"
     hooks:
       - id: "trailing-whitespace"
       - id: "end-of-file-fixer"
@@ -33,7 +33,7 @@ repos:
           - "docs/"
 
   - repo: "https://github.com/streetsidesoftware/cspell-cli"
-    rev: "v8.0.0"
+    rev: "v8.7.0"
     hooks:
       - id: "cspell"
 
@@ -73,7 +73,7 @@ repos:
   #         - "console,checkov.sarif"
 
   - repo: "https://github.com/norwoodj/helm-docs"
-    rev: "v1.11.3"
+    rev: "v1.13.1"
     hooks:
       - id: "helm-docs"
         args:
@@ -84,7 +84,7 @@ repos:
           - "--template-files=README.md.gotmpl"
 
   - repo: "https://github.com/norwoodj/helm-docs"
-    rev: "v1.11.3"
+    rev: "v1.13.1"
     hooks:
       - id: "helm-docs"
         args:

@@ -69,7 +69,11 @@ listen = {{ .Values.nautobot.uwsgi.listen }}
 
 ; If hosted behind a load balancer uncomment these lines, the harakiri timeout should be greater than your load balancer timeout.
 ; Ref: https://uwsgi-docs.readthedocs.io/en/latest/HTTP.html?highlight=keepalive#http-keep-alive
+{{ if gt (int .Values.nautobot.uwsgi.harakiri) 0 -}}
+harakiri = {{ .Values.nautobot.uwsgi.harakiri }}
+{{ else }}
 ; harakiri = 65
+{{ end -}}
 ; add-header = Connection: Keep-Alive
 ; http-keepalive = 1
 

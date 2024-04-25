@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Upgraded Nautobot from 2.1.9 to 2.2.2
 * Upgraded Bitnami Common subchart from 2.13.3 to 2.19.1
 * Upgraded RabbitMQ subchart from 12.5.4 to 12.15.0
 * Upgraded Redis subchart from 18.4.0 to 18.19.4

@@ -17,6 +17,7 @@ custom-nautobot_configpy
 dbname
 dcim
 devel
+django
 dorny
 dualstack
 fixpathinfo

@@ -30,24 +30,20 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
+    - kind: added
+      description: Added #379 Option to define harakiri uwsgi timeout
     - kind: fixed
-      description: Fixed #371 Update liveness probe to support nautobot 1.6.16 & 2.1.9
+      description: Fixed #381 DB and Redis secrets
     - kind: fixed
-      description: Fixed #338 Allow Nautobot to Scale to 0
-    - kind: fixed
-      description: Fixed #335 Use Nautobot 2.0 by default
+      description: Fixed #374 Correct secret keys for 
     - kind: changed
-      description: Upgraded Nautobot from 1.6.2 to 2.0.5
+      description: Upgraded Nautobot from 2.1.9 to 2.2.2
     - kind: changed
-      description:  Upgraded Bitnami Common subchart from 2.11.1 to 2.13.3
+      description: Upgraded Bitnami Common subchart from 2.13.3 to 2.19.1
     - kind: changed
-      description:  Upgraded PostgreSQL subchart from 12.12.4 to 12.12.10
+      description: Upgraded RabbitMQ subchart from 12.5.4 to 12.15.0
     - kind: changed
-      description:  Upgraded PostgreSQL-HA subchart from 11.9.4 to 11.9.8
-    - kind: changed
-      description:  Upgraded RabbitMQ subchart from 12.1.5 to 12.5.4
-    - kind: changed
-      description:  Upgraded Redis subchart from 18.0.4 to 18.4.0
+      description: Upgraded Redis subchart from 18.4.0 to 18.19.4
 apiVersion: "v2"
 appVersion: "2.2.2"
 version: "2.1.1"

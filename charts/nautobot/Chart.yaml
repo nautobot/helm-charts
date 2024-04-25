@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.0.5-py3.11
+      image: ghcr.io/nautobot/nautobot:2.2.2-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -49,8 +49,8 @@ annotations:
     - kind: changed
       description:  Upgraded Redis subchart from 18.0.4 to 18.4.0
 apiVersion: "v2"
-appVersion: "2.1.9"
-version: "2.1.0"
+appVersion: "2.2.2"
+version: "2.1.1"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

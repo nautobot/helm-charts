@@ -46,7 +46,7 @@ annotations:
       description: Upgraded Redis subchart from 18.4.0 to 18.19.4
 apiVersion: "v2"
 appVersion: "2.2.2"
-version: "2.1.1"
+version: "2.1.2"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

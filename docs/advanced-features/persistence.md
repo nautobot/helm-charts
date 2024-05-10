@@ -4,7 +4,7 @@ The recommended way to store static files is to use an external shared storage s
 
 ```yaml
 nautobot:
-  persistence:
+  persistenceStaticFiles:
     enabled: true
     storageClass: "your-storage-class"
     accessMode: "ReadWriteMany"
@@ -15,7 +15,7 @@ Unfortunately, if the underlying storage solution does not support the `ReadWrit
 
 ```yaml
 nautobot:
-  persistence:
+  persistenceStaticFiles:
     enabled: true
     storageClass: "your-storage-class"
     size: "1Gi"

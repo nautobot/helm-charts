@@ -30,6 +30,10 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
+    - kind: added
+      description: Added #391 option for persistent volume claim for media files
+    - kind: fixed
+      description: Fixed #398 documentation to include Persistent volume changes
     - kind: changed
       description: Upgraded Nautobot from 2.2.2 to 2.2.3
     - kind: changed

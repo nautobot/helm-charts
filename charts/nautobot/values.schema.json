@@ -99,6 +99,35 @@
           ],
           "title": "Persistence"
         },
+        "persistenceMediaFiles": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "storageClassName": {
+              "type": "string"
+            },
+            "accessMode": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "selector": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "accessMode",
+            "enabled",
+            "selector",
+            "size",
+            "storageClassName"
+          ],
+          "title": "Persistence"
+        },
         "command": {
           "type": "array",
           "items": {

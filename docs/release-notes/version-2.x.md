@@ -5,6 +5,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.1.2 - 2024-05-13
 
+### Added
+
+* [#391](https://github.com/nautobot/helm-charts/pull/391) Add persistent volume option for media files
+
+### Fixed
+
+* [#398](https://github.com/nautobot/helm-charts/pull/398) Docs Update: Persistent volumes for static & media files
+
 ### Changed
 
 * Upgraded Nautobot from 2.2.2 to 2.2.3

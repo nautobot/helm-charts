@@ -257,7 +257,7 @@ nautobot:
   # Add a Persistent Volume Claim for Nautobot media files
   persistenceMediaFiles:
     # --- Enable PVC and the relevant volumes
-    enabled: true
+    enabled: false
     # --- [Kubernetes StorageClass Name](https://kubernetes.io/docs/concepts/storage/storage-classes/), for the creation of Persistent Volume Claim
     storageClassName: ""
     # --- [Kubernetes Volumes AccessMode](https://kubernetes.io/docs/concepts/storage/storage-classes/)

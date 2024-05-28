@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.2.3-py3.11
+      image: ghcr.io/nautobot/nautobot:2.2.4-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -35,7 +35,7 @@ annotations:
     - kind: fixed
       description: Fixed #398 documentation to include Persistent volume changes
     - kind: changed
-      description: Upgraded Nautobot from 2.2.2 to 2.2.3
+      description: Upgraded Nautobot from 2.2.2 to 2.2.4
     - kind: changed
       description: Upgraded nginx-prometheus-exporter image from 0.11.0 to 1.1.0
     - kind: changed
@@ -43,7 +43,7 @@ annotations:
     - kind: changed
       description: Upgraded dependency mkdocs-material from 9.5.18 to 9.5.22
 apiVersion: "v2"
-appVersion: "2.2.3"
+appVersion: "2.2.4"
 version: "2.1.2"
 dependencies:
   - condition: "redis.enabled"

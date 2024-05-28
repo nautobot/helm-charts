@@ -33,7 +33,7 @@ repos:
           - "docs/"
 
   - repo: "https://github.com/streetsidesoftware/cspell-cli"
-    rev: "v8.8.0"
+    rev: "v8.8.2"
     hooks:
       - id: "cspell"
 

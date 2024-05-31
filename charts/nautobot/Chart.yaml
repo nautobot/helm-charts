@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.2.2-py3.11
+      image: ghcr.io/nautobot/nautobot:2.2.5-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -31,21 +31,19 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: added
-      description: Added #379 Option to define harakiri uwsgi timeout
+      description: Added #391 option for persistent volume claim for media files
     - kind: fixed
-      description: Fixed #381 DB and Redis secrets
-    - kind: fixed
-      description: Fixed #374 Correct secret keys for Django passwords
+      description: Fixed #398 documentation to include Persistent volume changes
     - kind: changed
-      description: Upgraded Nautobot from 2.1.9 to 2.2.2
+      description: Upgraded Nautobot from 2.2.2 to 2.2.5
     - kind: changed
-      description: Upgraded Bitnami Common subchart from 2.13.3 to 2.19.1
+      description: Upgraded nginx-prometheus-exporter image from 0.11.0 to 1.1.0
     - kind: changed
-      description: Upgraded RabbitMQ subchart from 12.5.4 to 12.15.0
+      description: Upgraded Bitnami Common subchart from 2.19.1 to 2.19.2
     - kind: changed
-      description: Upgraded Redis subchart from 18.4.0 to 18.19.4
+      description: Upgraded dependency mkdocs-material from 9.5.18 to 9.5.22
 apiVersion: "v2"
-appVersion: "2.2.2"
+appVersion: "2.2.5"
 version: "2.1.2"
 dependencies:
   - condition: "redis.enabled"

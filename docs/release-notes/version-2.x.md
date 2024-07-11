@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* [#412](https://github.com/nautobot/helm-charts/pull/412) Fix unecessary lifecycleHooks for Init Containers.
+* [#412](https://github.com/nautobot/helm-charts/pull/412) Fix unnecessary lifecycleHooks for Init Containers.
 * [#345](https://github.com/nautobot/helm-charts/pull/345) Fix Service's target port when Nginx in enabled.
 
 ### Changed

@@ -3,6 +3,100 @@ entries:
   nautobot:
   - annotations:
       artifacthub.io/changes: |
+        - kind: fixed
+          description: Fixed unnecessary lifecycleHooks for Init Containers
+        - kind: fixed
+          description: Fixed Service's target port when Nginx in enabled
+        - kind: changed
+          description: Upgraded Nautobot from 2.2.5 to 2.2.7
+        - kind: changed
+          description: Upgraded Bitnami Common subchart from 2.19.2 to 2.20.3
+        - kind: changed
+          description: Upgraded nginx-prometheus-exporter image from 1.1.0 to 1.2.0
+        - kind: changed
+          description: Upgraded dependency mkdocs-material from 9.5.22 to 9.5.28
+        - kind: changed
+          description: Upgraded Nginx Unprivileged optional container from 1.26 to 1.27
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: nautobot
+          image: ghcr.io/nautobot/nautobot:2.2.7-py3.11
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Nautobot Documentation
+          url: https://docs.nautobot.com/
+        - name: Nautobot Core Documentation
+          url: https://nautobot.readthedocs.io/en/stable/
+        - name: Nautobot Helm Chart Documentation
+          url: https://docs.nautobot.com/projects/helm-charts/en/stable
+        - name: Nautobot
+          url: https://github.com/nautobot/nautobot
+      artifacthub.io/prerelease: "false"
+      artifacthub.io/screenshots: |
+        - title: Main Page
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_main_page.png
+        - title: Config Contexts
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_config_contexts.png
+        - title: GraphQL
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_graphiql.png
+        - title: Prefix hierarchy
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_prefix_hierarchy.png
+        - title: Config Compliance
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_golden_config.png
+        - title: Chatops
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2.2.7
+    created: "2024-07-12T11:01:13.727944364Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 18.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 12.x.x
+    - alias: postgresqlha
+      condition: postgresqlha.enabled
+      name: postgresql-ha
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 11.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.x
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 12.x
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Nautobot is a Network Source of Truth and Network Automation Platform.
+    digest: fb2d2756f9f9d57ece01d08488a28b5a5167e7685b1b17162957ea4acf0c5f67
+    home: https://github.com/nautobot/nautobot
+    icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
+    keywords:
+    - DCIM
+    - IPAM
+    - SOT
+    maintainers:
+    - email: opensource@networktocode.com
+      name: Network to Code
+      url: https://www.networktocode.com/
+    name: nautobot
+    sources:
+    - https://github.com/nautobot/nautobot
+    - https://github.com/nautobot/helm-charts
+    urls:
+    - https://nautobot.github.io/helm-charts/nautobot-2.1.3.tgz
+    version: 2.1.3
+  - annotations:
+      artifacthub.io/changes: |
         - kind: added
           description: Added #391 option for persistent volume claim for media files
         - kind: fixed
@@ -5252,4 +5346,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-31T08:47:37.633378267Z"
+generated: "2024-07-12T11:01:13.703803769Z"

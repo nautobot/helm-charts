@@ -5,15 +5,15 @@ on:  # yamllint disable-line rule:truthy
   push:
     tags: "*"
 jobs:
-  release:
-    runs-on: "ubuntu-22.04"
-    steps:
-      - uses: "actions/checkout@v4"
-      - name: "Publish Helm charts"
-        uses: "stefanprodan/helm-gh-pages@v1.7.0"
-        with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          dependencies: "bitnami,https://charts.bitnami.com/bitnami"
+ # release:
+ #   runs-on: "ubuntu-22.04"
+ #   steps:
+ #     - uses: "actions/checkout@v4"
+ #     - name: "Publish Helm charts"
+ #       uses: "stefanprodan/helm-gh-pages@v1.7.0"
+ #       with:
+ #         token: "${{ secrets.GITHUB_TOKEN }}"
+ #         dependencies: "bitnami,https://charts.bitnami.com/bitnami"
 
   publish-oci:
     runs-on: "ubuntu-22.04"

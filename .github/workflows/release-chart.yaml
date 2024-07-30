@@ -24,7 +24,7 @@ jobs:
         with:
           name: "nautobot"
           repository: "nautobot/helm-charts"
-          tag: "${{ github.ref }}"
+          tag: "${{ github.ref_name }}"
           path: "charts/nautobot"
           registry: "ghcr.io"
           registry_username: "${{ secrets.REGISTRY_USERNAME }}"

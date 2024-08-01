@@ -26,10 +26,6 @@ spec:
     {{- end }}
     {{- if (and $.Values.metrics.capacityMetrics.enabled (eq $.Values.metrics.capacityMetrics.nautobot $nautobotName)) }}
     - port: http
-      interval: {{ $.Values.metrics.serviceMonitor.interval }}
-      scrapeTimeout: {{ $.Values.metrics.serviceMonitor.scrapeTimeout }}
-      path: "/api/plugins/capacity-metrics/rq-metrics"
-    - port: http
       interval: {{ $.Values.metrics.capacityMetrics.interval }}
       scrapeTimeout: {{ $.Values.metrics.capacityMetrics.scrapeTimeout }}
       path: "/api/plugins/capacity-metrics/app-metrics"

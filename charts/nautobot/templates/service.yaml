@@ -32,14 +32,14 @@ spec:
   ports:
     - protocol: "TCP"
       port: {{ $.Values.service.httpsPort }}
-      targetPort: "https"
+      targetPort: {{- if $nautobot.nginx.enabled }} "https-nginx" {{- else }} "https" {{- end }}
       name: "https"
       {{- if (and (eq $.Values.service.type "NodePort") (not (empty $.Values.service.nodePorts.https))) }}
       nodePort: {{ $.Values.service.nodePorts.https }}
       {{- end }}
     - protocol: "TCP"
       port: {{ $.Values.service.port }}
-      targetPort: "http"
+      targetPort: {{- if $nautobot.nginx.enabled }} "http-nginx" {{- else }} "http" {{- end }}
       name: "http"
       {{- if (and (eq $.Values.service.type "NodePort") (not (empty $.Values.service.nodePorts.http))) }}
       nodePort: {{ $.Values.service.nodePorts.http }}

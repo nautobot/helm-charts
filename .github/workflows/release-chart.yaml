@@ -18,12 +18,13 @@ jobs:
   publish-oci:
     runs-on: "ubuntu-22.04"
     steps:
+      - uses: "actions/checkout@v4"
       - name: "Publish Helm charts to OCI"
-        uses: "appany/helm-oci-chart-releaser@v0.4.1"
+        uses: "appany/helm-oci-chart-releaser@v0.4.2"
         with:
           name: "nautobot"
           repository: "nautobot/helm-charts"
-          tag: "${{ github.ref }}"
+          tag: "${{ github.ref_name }}"
           path: "charts/nautobot"
           registry: "ghcr.io"
           registry_username: "${{ secrets.REGISTRY_USERNAME }}"

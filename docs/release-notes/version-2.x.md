@@ -3,6 +3,18 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.2.0 - 2024-08-23
+
+### Fixed
+
+* [#421](https://github.com/nautobot/helm-charts/pull/421) Fix unnecessary prometheus metrics endpoint.
+
+### Changed
+
+* Upgraded Nautobot from 2.2.7 to 2.3.1
+* Upgraded Bitnami Common subchart from 2.20.3 to 2.22.0
+* Upgraded nginx-prometheus-exporter image from 1.2.0 to 1.3.0
+
 ## 2.1.3 - 2024-07-12
 
 ### Fixed

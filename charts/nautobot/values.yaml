@@ -516,7 +516,7 @@ celery:
   # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] Nautobot Celery Worker liveness probe
   # @default -- See values.yaml
   livenessProbe:
-    enabled: false
+    enabled: true
     exec:
       command:
         - "bash"
@@ -534,7 +534,7 @@ celery:
   # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] Nautobot Celery Worker readiness probe
   # @default -- See values.yaml
   readinessProbe:
-    enabled: false
+    enabled: true
     exec:
       command:
         - "bash"

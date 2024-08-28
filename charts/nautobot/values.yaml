@@ -726,9 +726,14 @@ workers:
       - "--loglevel"
       - "$(NAUTOBOT_LOG_LEVEL)"
     livenessProbe:
+      exec:
+        command:
+          - "bash"
+          - "-c"
+          - "[ $(find $NAUTOBOT_CELERY_BEAT_HEARTBEAT_FILE -mmin -0.1 | wc -l) -eq 1 ] || false"
       initialDelaySeconds: 30
     readinessProbe:
-      initialDelaySeconds: 30
+      enabled: false
     resources:
       requests:
         cpu: "5m"

@@ -522,7 +522,7 @@ celery:
         - "bash"
         - "-c"
         - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
-    initialDelaySeconds: 5
+    initialDelaySeconds: 10
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 3
@@ -730,8 +730,7 @@ workers:
         command:
           - "bash"
           - "-c"
-          - "[ $(find $NAUTOBOT_CELERY_BEAT_HEARTBEAT_FILE -mmin -0.1 | wc -l) -eq 1 ] || false"
-      initialDelaySeconds: 30
+          - "[ $(find /tmp/nautobot_celery_beat_heartbeat -mmin -0.1 | wc -l) -eq 1 ] || false"
     readinessProbe:
       enabled: false
     resources:

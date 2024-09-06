@@ -40,6 +40,7 @@ loadbalancer
 loglevel
 middlewares
 mkdocs
+mmin
 nameserver
 nautobot
 nautobots

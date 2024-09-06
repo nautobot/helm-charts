@@ -518,13 +518,13 @@ celery:
   # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] Nautobot Celery Worker liveness probe
   # @default -- See values.yaml
   livenessProbe:
-    enabled: false
+    enabled: true
     exec:
       command:
         - "bash"
         - "-c"
         - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
-    initialDelaySeconds: 5
+    initialDelaySeconds: 10
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 3
@@ -536,7 +536,7 @@ celery:
   # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] Nautobot Celery Worker readiness probe
   # @default -- See values.yaml
   readinessProbe:
-    enabled: false
+    enabled: true
     exec:
       command:
         - "bash"
@@ -730,9 +730,13 @@ workers:
       - "--loglevel"
       - "$(NAUTOBOT_LOG_LEVEL)"
     livenessProbe:
-      initialDelaySeconds: 30
+      exec:
+        command:
+          - "bash"
+          - "-c"
+          - "[ $(find /tmp/nautobot_celery_beat_heartbeat -mmin -0.1 | wc -l) -eq 1 ] || false"
     readinessProbe:
-      initialDelaySeconds: 30
+      enabled: false
     resources:
       requests:
         cpu: "5m"

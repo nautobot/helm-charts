@@ -8,7 +8,7 @@ That said, it is also possible to leverage Kubernetes Persistent Volumes, follow
 nautobot:
   persistenceStaticFiles:
     enabled: true
-    storageClass: "your-storage-class"
+    storageClassName: "your-storage-class"
     accessMode: "ReadWriteMany"
     size: "1Gi"
 ```
@@ -19,7 +19,7 @@ There is also a setting for Media files mounted at `/opt/nautobot/media` of Naut
 nautobot:
   persistenceMediaFiles:
     enabled: true
-    storageClass: "your-storage-class"
+    storageClassName: "your-storage-class"
     accessMode: "ReadWriteMany"
     size: "1Gi"
 ```
@@ -30,7 +30,7 @@ Unfortunately, if the underlying storage solution does not support the `ReadWrit
 nautobot:
   persistenceStaticFiles:
     enabled: true
-    storageClass: "your-storage-class"
+    storageClassName: "your-storage-class"
     size: "1Gi"
     selector:
       matchLabel:

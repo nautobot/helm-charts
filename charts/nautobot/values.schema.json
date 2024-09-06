@@ -247,6 +247,19 @@
           "type": "string",
           "pattern": "^(soft|hard|)$"
         },
+        "annotations": {
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": "Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
         "podAnnotations": {
           "additionalProperties": {
             "type": [

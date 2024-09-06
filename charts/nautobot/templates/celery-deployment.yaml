@@ -12,8 +12,8 @@ metadata:
     {{- if $.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if $.Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if (or $celery.annotations $.Values.commonAnnotations) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge $celery.annotations $.Values.commonAnnotations) "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   {{- if not $celery.autoscaling.enabled }}

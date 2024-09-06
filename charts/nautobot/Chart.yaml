@@ -32,7 +32,7 @@ annotations:
   artifacthub.io/changes: |
     - kind: added
       description: Added annotations to the Nautobot deployment
-    - kind: fixed
+    - kind: changed
       description: Enabled celery readiness and liveliness probes by default
     - kind: changed
       description: Upgraded Nautobot from 2.3.1 to 2.3.2

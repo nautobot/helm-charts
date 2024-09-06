@@ -136,6 +136,8 @@ nautobot:
   args: []
   # -- ([]HostAlias) [[ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/)] Nautobot pods host aliases
   hostAliases: []
+  # -- (map[string]string) [[ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)] Annotations to be applied to Nautobot deployment resource
+  annotations: {}
   # -- (map[string]string) [[ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)] Extra labels for Nautobot pods
   podLabels: {}
   # -- (map[string]string) [[ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)] Annotations for Nautobot pods
@@ -600,6 +602,8 @@ celery:
   args: []
   # -- ([]HostAlias) [[ref](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/)] Nautobot Celery Worker pods host aliases
   hostAliases: []
+  # -- (map[string]string) [[ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)] Annotations to be applied to Nautobot Celery Worker deployment resource
+  annotations: {}
   # -- (map[string]string) [[ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)] Extra labels for Nautobot Celery Worker pods
   podLabels: {}
   # -- (map[string]string) [[ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)] Annotations for Nautobot Celery Worker pods

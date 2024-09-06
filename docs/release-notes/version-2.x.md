@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* [#434](https://github.com/nautobot/helm-charts/pull/434) Enabled celery readiness and liveliness brobes by default.
+* [#434](https://github.com/nautobot/helm-charts/pull/434) Enabled celery readiness and liveliness probes by default.
 
 ### Changed
 

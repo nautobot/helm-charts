@@ -33,7 +33,7 @@ annotations:
     - kind: added
       description: Added annotations to the Nautobot deployment
     - kind: fixed
-      description: Enabled celery readiness and liveliness brobes by default
+      description: Enabled celery readiness and liveliness probes by default
     - kind: changed
       description: Upgraded Nautobot from 2.3.1 to 2.3.2
     - kind: changed

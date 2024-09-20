@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.3.2-py3.11
+      image: ghcr.io/nautobot/nautobot:2.3.4-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -31,16 +31,16 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: added
-      description: Added annotations to the Nautobot deployment
+      description: Added additional properties in the root of values json schema
     - kind: changed
-      description: Enabled celery readiness and liveliness probes by default
+      description: Upgraded Nautobot from 2.3.2 to 2.3.4
     - kind: changed
-      description: Upgraded Nautobot from 2.3.1 to 2.3.2
-    - kind: changed
-      description: Upgraded dependency mkdocs from 1.6.0 to 1.6.1
+      description: Upgraded Bitnami common subchart from 2.22.0 to 2.23.0
+    - kind: fixed
+      description: Documentation for persistent static and media files
 apiVersion: "v2"
-appVersion: "2.3.2"
-version: "2.3.0"
+appVersion: "2.3.4"
+version: "2.3.1"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

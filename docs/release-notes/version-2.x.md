@@ -3,6 +3,21 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.3.1 - 2024-09-20
+
+### Added
+
+* [#444](https://github.com/nautobot/helm-charts/pull/444) Added additional properties in the root of values json schema
+
+### Changed
+
+* Upgraded Nautobot from 2.3.2 to 2.3.4
+* Upgraded Bitnami common subchart from 2.22.0 to 2.23.0
+
+### Fixed
+
+* [#439](https://github.com/nautobot/helm-charts/pull/439) Fix documentation for persistent static and media files.
+
 ## 2.3.0 - 2024-09-06
 
 ### Added

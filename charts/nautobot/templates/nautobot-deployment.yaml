@@ -280,8 +280,10 @@ spec:
           volumeMounts:
             - name: "nautobot-static"
               mountPath: "/opt/nautobot/static"
+            {{- if $nautobot.persistenceMediaFiles.enabled }}
             - name: "nautobot-media"
               mountPath: "/opt/nautobot/media"
+            {{- end }}
             - name: "git-repos"
               mountPath: "/opt/nautobot/git"
             - name: "nautobot-config"
@@ -416,12 +418,10 @@ spec:
         {{- else }}
           emptyDir: {}
         {{- end }}
-        - name: "nautobot-media"
         {{- if $nautobot.persistenceMediaFiles.enabled }}
+        - name: "nautobot-media"
           persistentVolumeClaim:
             claimName: {{ include "common.names.fullname" $ }}-media
-        {{- else }}
-          emptyDir: {}
         {{- end }}
         - name: "git-repos"
           emptyDir: {}

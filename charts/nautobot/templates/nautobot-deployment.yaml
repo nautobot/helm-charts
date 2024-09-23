@@ -277,6 +277,9 @@ spec:
           {{- if $nautobot.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $nautobot.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
+          {{- if $nautobot.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit $nautobot.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: "nautobot-static"
               mountPath: "/opt/nautobot/static"

@@ -30,17 +30,11 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
-    - kind: added
-      description: Added additional properties in the root of values json schema
-    - kind: changed
-      description: Upgraded Nautobot from 2.3.2 to 2.3.4
-    - kind: changed
-      description: Upgraded Bitnami common subchart from 2.22.0 to 2.23.0
     - kind: fixed
-      description: Documentation for persistent static and media files
+      description: Media files directory being overwritten by volumeMount
 apiVersion: "v2"
 appVersion: "2.3.4"
-version: "2.3.1"
+version: "2.3.2"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

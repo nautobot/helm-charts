@@ -90,7 +90,7 @@ nautobot:
   # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot startup probe
   # @default -- See values.yaml
   startupProbe:
-    enabled: true
+    enabled: false
     httpGet:
       path: "/health/"
       port: "http"

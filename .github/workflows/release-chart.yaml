@@ -6,7 +6,7 @@ on:  # yamllint disable-line rule:truthy
     tags: "*"
 jobs:
   release:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-24.04"
     steps:
       - uses: "actions/checkout@v4"
       - name: "Publish Helm charts"
@@ -16,7 +16,7 @@ jobs:
           dependencies: "bitnami,https://charts.bitnami.com/bitnami"
 
   publish-oci:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-24.04"
     steps:
       - uses: "actions/checkout@v4"
       - name: "Publish Helm charts to OCI"

@@ -295,6 +295,9 @@
         "readinessProbe": {
           "$ref": "#/$defs/probe"
         },
+        "startupProbe": {
+          "$ref": "#/$defs/probe"
+        },
         "replicaCount": {
           "type": "integer",
           "minimum": 0

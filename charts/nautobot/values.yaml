@@ -55,7 +55,7 @@ nautobot:
   # -- [[ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)] Number of old ReplicaSets to retain
   revisionHistoryLimit: 3
 
-  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] Nautobot liveness probe
+  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot liveness probe
   # @default -- See values.yaml
   livenessProbe:
     # -- Enable the Nautobot Liveness Probe
@@ -74,7 +74,7 @@ nautobot:
   # -- [[ref](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)] Termination Grace Period Seconds
   terminationGracePeriodSeconds: 30
 
-  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] Nautobot readiness probe
+  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot readiness probe
   # @default -- See values.yaml
   readinessProbe:
     enabled: true
@@ -85,6 +85,19 @@ nautobot:
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
+    successThreshold: 1
+
+  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot startup probe
+  # @default -- See values.yaml
+  startupProbe:
+    enabled: false
+    httpGet:
+      path: "/health/"
+      port: "http"
+    initialDelaySeconds: 3
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
     successThreshold: 1
 
   # -- (ResourceRequirements) (ResourceRequirements) [[ref](http://kubernetes.io/docs/user-guide/compute-resources/)] Nautobot resource requests and limits
@@ -322,7 +335,7 @@ nautobot:
     # -- ([]string) List of names of existing Secrets containing extra env vars for the NGINX containers
     extraEnvVarsSecret: []
 
-    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] NGINX liveness probe
+    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] NGINX liveness probe
     # @default -- See values.yaml
     livenessProbe:
       enabled: true
@@ -334,7 +347,7 @@ nautobot:
       failureThreshold: 3
       successThreshold: 1
 
-    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] NGINX readiness probe
+    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] NGINX readiness probe
     # @default -- See values.yaml
     readinessProbe:
       enabled: true
@@ -515,7 +528,7 @@ celery:
   # -- [[ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)] Number of old ReplicaSets to retain
   revisionHistoryLimit: 3
 
-  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] Nautobot Celery Worker liveness probe
+  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot Celery Worker liveness probe
   # @default -- See values.yaml
   livenessProbe:
     enabled: true
@@ -533,7 +546,7 @@ celery:
   # -- [[ref](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)] Termination Grace Period Seconds
   terminationGracePeriodSeconds: 30
 
-  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] Nautobot Celery Worker readiness probe
+  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot Celery Worker readiness probe
   # @default -- See values.yaml
   readinessProbe:
     enabled: true
@@ -869,7 +882,7 @@ metrics:
         cpu: ".5"
         memory: "128Mi"
 
-    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] NGINX Exporter liveness probe
+    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] NGINX Exporter liveness probe
     # @default -- See values.yaml
     livenessProbe:
       enabled: true
@@ -882,7 +895,7 @@ metrics:
       failureThreshold: 3
       successThreshold: 1
 
-    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] NGINX Exporter readiness probe
+    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] NGINX Exporter readiness probe
     # @default -- See values.yaml
     readinessProbe:
       enabled: true
@@ -935,7 +948,7 @@ metrics:
         cpu: ".01"
         memory: "128Mi"
 
-    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] uWSGI Exporter liveness probe
+    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] uWSGI Exporter liveness probe
     # @default -- See values.yaml
     livenessProbe:
       enabled: true
@@ -948,7 +961,7 @@ metrics:
       failureThreshold: 3
       successThreshold: 1
 
-    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)] uWSGI Exporter readiness probe
+    # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] uWSGI Exporter readiness probe
     # @default -- See values.yaml
     readinessProbe:
       enabled: true

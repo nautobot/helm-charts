@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.3.3 - 2024-10-04
+
+### Added
+
+* [#450](https://github.com/nautobot/helm-charts/pull/450) Added startupProbes for Nautobot deployment.
+
+### Changed
+
+* Upgraded Nautobot from 2.3.4 to 2.3.6
+* Upgraded Bitnami common subchart from 2.23.0 to 2.24.0
+
 ## 2.3.2 - 2024-09-24
 
 ### Fixed

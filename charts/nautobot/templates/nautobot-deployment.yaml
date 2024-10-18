@@ -1,3 +1,7 @@
+# TODO: Move the checksum to `_helpers.tpl` and merge them into one dictionary.
+# That way we can easily merge them into all our deployments.
+# Test excessively, especially that now annotations will be by default not empty.
+{{- $checksum_config := dict "checksum/config" (print $.Template.BasePath "/configmap.yaml" . | sha256sum) "checksum/secret" (print $.Template.BasePath "/secret.yaml" . | sha256sum) }}
 {{- $nautobots := (include "nautobot.nautobots" .) | mustFromJson -}}
 {{- range $nautobotName, $nautobot := $nautobots -}}
 {{- if $nautobot.enabled -}}
@@ -13,7 +17,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if (or $nautobot.annotations $.Values.commonAnnotations) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge $nautobot.annotations $.Values.commonAnnotations) "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge $nautobot.annotations $.Values.commonAnnotations $checksum_config) "context" $ ) | nindent 4 }}
+  {{- else }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $checksum_config "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   {{- if not $nautobot.autoscaling.enabled }}

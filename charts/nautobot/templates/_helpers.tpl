@@ -421,3 +421,11 @@ Get values for the init job if singleInit is true.  Default all values to the ro
 {{- $initJob = mustMergeOverwrite (deepCopy $.Values.nautobot) $.Values.initJob }}
 {{- mustToJson $initJob -}}
 {{- end }}
+
+{{/*
+Create a dict with sha256 hashes of the `configmap.yaml` & `secret.yaml` files in order to automatically
+trigger re-deploy of the Nautobot deployment when the configmap or secret changes.
+*/}}
+# {{- $file_checksums := dict }}
+# {{- $file_checksums = dict "checksum/config" (print $.Template.BasePath "/configmap.yaml" . | sha256sum) }}
+# {{- $file_checksums = dict "checksum/secret" (print $.Template.BasePath "/secret.yaml" . | sha256sum) }}

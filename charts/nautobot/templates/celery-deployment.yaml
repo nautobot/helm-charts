@@ -1,3 +1,4 @@
+{{- $config_checksum := dict "checksum/config" (print $.Template.BasePath "/configmap.yaml" . | sha256sum) "checksum/secret" (print $.Template.BasePath "/secret.yaml" . | sha256sum) }}
 {{- $workers := (include "nautobot.workers" .) | mustFromJson -}}
 {{- range $celeryName, $celery := $workers -}}
 {{- if $celery.enabled }}
@@ -13,7 +14,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if (or $celery.annotations $.Values.commonAnnotations) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge $celery.annotations $.Values.commonAnnotations) "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge $celery.annotations $.Values.commonAnnotations $config_checksum) "context" $ ) | nindent 4 }}
+  {{- else }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $config_checksum "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   {{- if not $celery.autoscaling.enabled }}

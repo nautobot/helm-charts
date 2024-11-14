@@ -153,7 +153,7 @@ extraObjects:
       DATABASE_USER: db-admin
 ```
 
-You can also use Go templating language do define certain parts of a manifest.
+You can also use Go templating language to define certain parts of a manifest.
 All variables from the Helm Chart values file are available. You can also
 use functions that are available in Go templating language.
 

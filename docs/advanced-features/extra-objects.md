@@ -17,7 +17,7 @@ stored in HashiCorp Vault, for example, you can use the ExternalSecrets
 operator to fetch those credentials and create the Kubernetes Secret object.
 The following snippet shows an example:
 
-```
+```yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
@@ -59,7 +59,7 @@ The operator will fetch credentials from Vault and it will create a Kubernetes
 Secret, after this object is deployed. The Helm Chart values will then specify
 the existing secret name such as this:
 
-```
+```yaml
 nautobot:
   superUser:
     existingSecret: "my-secret"
@@ -77,7 +77,7 @@ objects.
 The following snippet shows how the Helm Chart values would look in this
 case:
 
-```
+```yaml
 ---
 nautobot:
   superUser:
@@ -134,7 +134,7 @@ will still need a third-party tool.
 The manifests can be defined as a string or as a dictionary, as shown in the
 following example:
 
-```
+```yaml
 extraObjects:
   - apiVersion: v1
     kind: ConfigMap
@@ -160,7 +160,7 @@ use functions that are available in Go templating language.
 The following example shows how you can specify namespace dynamically, and
 how to define the secret name on a single place.
 
-```
+```yaml
 ---
 nautobot:
   superUser:
@@ -209,7 +209,7 @@ Please note that these objects are processed in a template. So make sure that
 you don't use the same syntax as used for Go templating. You can use back quotes
 to "escape" strings in those cases. The following is an example:
 
-```
+```yaml
 NAUTOBOT_SUPERUSER_PASSWORD: "{{ `{{ .SUPERUSER_PASSWORD | toString }}` }}"
 ```
 

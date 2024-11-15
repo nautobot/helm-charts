@@ -1223,3 +1223,6 @@ postgresqlha:
 rabbitmq:
   # -- Enable deployment of the [Bitnami RabbitMQ](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq) chart, all other `rabbitmq.*` parameters will be passed directly to that chart
   enabled: false
+
+# -- Deploy additional Kubernetes manifests
+extraObjects: []

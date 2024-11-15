@@ -79,6 +79,7 @@ nav:
     - Existing Secrets: "advanced-features/existing-secrets.md"
     - External Database: "advanced-features/external-database.md"
     - External Redis: "advanced-features/external-redis.md"
+    - Extra Objects: "advanced-features/extra-objects.md"
     - Initialization Job: "advanced-features/init-hook.md"
     - Ingress: "advanced-features/ingress.md"
     - MySQL Support: "advanced-features/mysql.md"

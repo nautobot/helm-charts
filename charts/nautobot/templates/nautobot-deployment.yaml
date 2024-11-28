@@ -14,9 +14,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if (or $nautobot.annotations $.Values.commonAnnotations) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge $nautobot.annotations $.Values.commonAnnotations $config_checksum) "context" $ ) | nindent 4 }}
-  {{- else }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $config_checksum "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge $nautobot.annotations $.Values.commonAnnotations) "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   {{- if not $nautobot.autoscaling.enabled }}
@@ -32,7 +30,9 @@ spec:
   template:
     metadata:
       {{- if $nautobot.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" $nautobot.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" (merge $nautobot.podAnnotations $config_checksum) "context" $) | nindent 8 }}
+      {{- else }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" $config_checksum "context" $ ) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" $ | nindent 8 }}
         app.kubernetes.io/component: nautobot-{{ $nautobotName }}

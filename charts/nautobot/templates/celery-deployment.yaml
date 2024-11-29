@@ -1,3 +1,4 @@
+{{- $config_checksum := dict "checksum/config-env" (include "nautobot.configMap.env" . | sha256sum ) "checksum/config" (include "nautobot.configMap.config" . | sha256sum) }}
 {{- $workers := (include "nautobot.workers" .) | mustFromJson -}}
 {{- range $celeryName, $celery := $workers -}}
 {{- if $celery.enabled }}
@@ -29,7 +30,9 @@ spec:
   template:
     metadata:
       {{- if $celery.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" $celery.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" (merge $celery.podAnnotations $config_checksum) "context" $) | nindent 8 }}
+      {{- else }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" $config_checksum "context" $ ) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" $ | nindent 8 }}
         app.kubernetes.io/component: nautobot-celery-{{ $celeryName }}

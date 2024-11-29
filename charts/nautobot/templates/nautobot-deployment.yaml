@@ -1,4 +1,4 @@
-{{- $config_checksum := dict "checksum/config" (print $.Template.BasePath "/configmap.yaml" . | sha256sum) "checksum/secret" (print $.Template.BasePath "/secret.yaml" . | sha256sum) }}
+{{- $config_checksum := dict "checksum/config-env" (include "nautobot.configMap.env" . | sha256sum ) "checksum/config" (include "nautobot.configMap.config" . | sha256sum) }}
 {{- $nautobots := (include "nautobot.nautobots" .) | mustFromJson -}}
 {{- range $nautobotName, $nautobot := $nautobots -}}
 {{- if $nautobot.enabled -}}

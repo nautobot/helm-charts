@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.3.11-py3.11
+      image: ghcr.io/nautobot/nautobot:2.3.12-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -30,17 +30,13 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
-    - kind: added
-      description: Added property to deploy extra k8s objects(manifests)
-    - kind: fixed
-      description: Fixed issue to allow multiple probe types and not only the pre-configured
     - kind: changed
-      description: Upgraded Nautobot from 2.3.7 to 2.3.11
+      description: Upgraded Nautobot from 2.3.11 to 2.3.12
     - kind: changed
-      description: Upgraded Bitnami common subchart from 2.26.0 to 2.27.0
+      description: Upgraded Bitnami common subchart from 2.27.0 to 2.27.2
 apiVersion: "v2"
-appVersion: "2.3.11"
-version: "2.4.0"
+appVersion: "2.3.12"
+version: "2.4.1"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

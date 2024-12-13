@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.4.2 - 2024-12-13
 
+## Added
+
+[#480](https://github.com/nautobot/helm-charts/pull/480) Add functionality for auto-deployments in configuration changes
+
 ### Changed
 
 * Upgraded Nautobot from 2.3.12 to 2.3.13

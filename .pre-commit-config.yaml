@@ -33,12 +33,12 @@ repos:
           - "docs/"
 
   - repo: "https://github.com/streetsidesoftware/cspell-cli"
-    rev: "v8.16.1"
+    rev: "v8.17.0"
     hooks:
       - id: "cspell"
 
   - repo: "https://github.com/gruntwork-io/pre-commit"
-    rev: "v0.1.24"  # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
+    rev: "v0.1.25"  # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
     hooks:
       - id: "helmlint"
 

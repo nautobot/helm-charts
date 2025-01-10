@@ -6,6 +6,9 @@
   "pre-commit": {
     "enabled": true
   },
+  "allowedPostUpgradeCommands": [
+    "scripts/update_version.sh \"{{{prTitle}}}\""
+  ],
   "postUpgradeTasks": {
     "commands": [
       "scripts/update_version.sh \"{{{prTitle}}}\""

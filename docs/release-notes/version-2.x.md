@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.4.4 - 2025-02-07
+
+### Changed
+
+* Upgraded Nautobot from 2.3.16 to 2.4.2
+* Upgraded Upgraded nginx-prometheus-exporter image from 1.4.0 to 1.4.1
+* Upgraded Bitnami common subchart from 2.29.0 to 2.29.1
+
 ## 2.4.3 - 2025-01-10
 
 ### Changed

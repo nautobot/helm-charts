@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.3.16-py3.11
+      image: ghcr.io/nautobot/nautobot:2.4.2-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -31,12 +31,14 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: changed
-      description: Upgraded Nautobot from 2.3.13 to 2.3.16
+      description: Upgraded Nautobot from 2.3.16 to 2.4.2
     - kind: changed
-      description: Upgraded Bitnami common subchart from 2.28.0 to 2.29.0
+      description: Upgraded nginx-prometheus-exporter image from 1.4.0 to 1.4.1
+    - kind: changed
+      description: Upgraded Bitnami common subchart from 2.29.0 to 2.29.1
 apiVersion: "v2"
-appVersion: "2.3.16"
-version: "2.4.3"
+appVersion: "2.4.2"
+version: "2.4.4"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.4.5 - 2025-02-21
+
+### Added
+
+* [#508](https://github.com/nautobot/helm-charts/pull/508) Add documentation for Nginx sidecar advanced feature
+
+### Changed
+
+* Upgraded Nautobot from 2.4.2 to 2.4.3
+* Upgraded Bitnami common subchart from 2.29.1 to 2.30.0
+
 ## 2.4.4 - 2025-02-07
 
 ### Changed
@@ -20,9 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.4.2 - 2024-12-13
 
-## Added
+### Added
 
-[#480](https://github.com/nautobot/helm-charts/pull/480) Add functionality for auto-deployments in configuration changes
+* [#480](https://github.com/nautobot/helm-charts/pull/480) Add functionality for auto-deployments in configuration changes
 
 ### Changed
 
@@ -39,11 +50,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.4.0 - 2024-11-15
 
-## Added
+### Added
 
 * [#471](https://github.com/nautobot/helm-charts/pull/471) Add property to deploy extra k8s objects(manifests).
 
-## Fixed
+### Fixed
 
 * [#463](https://github.com/nautobot/helm-charts/pull/463) Fix allow multiple probe types and not only the pre-configured.
 

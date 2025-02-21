@@ -30,8 +30,12 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
+    - kind: added
+      description: Added documentation for Nginx sidecar container
     - kind: changed
       description: Upgraded Nautobot from 2.4.2 to 2.4.3
+    - kind: changed
+      description: Upgraded Bitnami common subchart from 2.29.1 to 2.30.0
 apiVersion: "v2"
 appVersion: "2.4.3"
 version: "2.4.5"

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Upgraded Nautobot from 2.4.2 to 2.4.3
+* Upgraded Bitnami common subchart from 2.29.1 to 2.30.0
 
 ## 2.4.4 - 2025-02-07
 

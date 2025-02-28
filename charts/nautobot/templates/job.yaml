@@ -127,6 +127,8 @@ spec:
         {{- if $.Values.nautobot.persistenceStaticFiles.enabled }}
           persistentVolumeClaim:
             claimName: {{ include "common.names.fullname" $ }}-static
+        {{- else if and $.Values.nautobot.csiStaticFiles.enabled $.Values.nautobot.csiStaticFiles.csi }}
+          csi: {{- toYaml $.Values.nautobot.csiStaticFiles.csi | nindent 12 }}
         {{- else }}
           emptyDir: {}
         {{- end }}

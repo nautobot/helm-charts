@@ -518,6 +518,16 @@ nautobots:
 #     - "/graphql"
 #   initNautobot: false
 
+# TODO: specify default values for Net pols and also inside the json schema
+# Default values for Network Policy
+networkPolicy:
+  # -- [[ref](https://kubernetes.io/docs/concepts/services-networking/network-policies/)]Enables a Network Policy for Nautobot pods
+  enabled: false
+  allowExternalEgress: true
+  extraIngress: []
+  extraEgress: []
+
+
 # Default values for Celery Workers
 celery:
   # -- Enables the default Celery Worker for Nautobot

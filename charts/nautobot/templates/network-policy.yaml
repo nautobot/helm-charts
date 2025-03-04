@@ -1,67 +1,75 @@
-{{- if .Values.primary.networkPolicy.enabled }}
-kind: NetworkPolicy
+{{- if .Values.networkPolicy.enabled }}
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+kind: NetworkPolicy
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: primary
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.nautobot.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: primary
   policyTypes:
     - Ingress
     - Egress
-  # TODO: check to possible start with allowing all in both cases
-  # then on later stage add more restrictions
-  {{- if .Values.primary.networkPolicy.allowExternalEgress }}
+  {{- if .Values.networkPolicy.allowExternalEgress }}
   egress:
     - {}
   {{- else }}
   egress:
-    # Allow dns resolution
+    # Allow DNS resolution
     - ports:
         - port: 53
           protocol: UDP
         - port: 53
           protocol: TCP
+    # Allow connectivity to backend services (DB, redis, etc)
+    {{- if .Values.postgresql.enabled }}
+        - port: 5432
+    {{- else }}
+        - port: {{ .Values.nautobot.db.port }}
+    {{- end }}
+          protocol: TCP
+    {{- if .Values.redis.enabled }}
+        - port: 6379
+    {{- else }}
+        - port: {{ .Values.nautobot.redis.port }}
+    {{- end }}
+          protocol: TCP
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
-  # TODO: Only allow what is necessary for Web server
-  # Decide if the same policy will be used for all components or if we need to create different policies
   ingress:
+    # Allow connectivity from outside the cluster into the Web application
     - ports:
-        - port: {{ .Values.containerPorts.postgresql }}
-        {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.metrics.containerPorts.metrics }}
-        {{- end }}
-      {{- if not .Values.primary.networkPolicy.allowExternal }}
+        - port: 8443
+          protocol: TCP
+        - port: 8080
+          protocol: TCP
+      from:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+    - ports:
+        - port: 8443
+          protocol: TCP
+        - port: 8080
+          protocol: TCP
       from:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
         - podSelector:
-            matchLabels:
-              {{ template "postgresql.v1.primary.fullname" . }}-client: "true"
-        {{- if .Values.primary.networkPolicy.ingressNSMatchLabels }}
-        - namespaceSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.primary.networkPolicy.ingressNSMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
-          {{- if .Values.primary.networkPolicy.ingressNSPodMatchLabels }}
-          podSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.primary.networkPolicy.ingressNSPodMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
-          {{- end }}
-        {{- end }}
-      {{- end }}
-    {{- if .Values.primary.networkPolicy.extraIngress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.primary.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+    # TODO: add more ingress rules
+    # Rule for metrics `if .Values.metrics.enabled`
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}

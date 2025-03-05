@@ -523,14 +523,14 @@ nautobots:
 networkPolicy:
   # -- [[ref](https://kubernetes.io/docs/concepts/services-networking/network-policies/)]Enables a Network Policy for Nautobot pods
   enabled: false
-  # All the pods to access any destination in any port
+  # -- Permit all Nautobot pods to access any destination in any port
   allowAllEgress: false
-  # Allow outside conncectivity to http/https ports of Nautobot Web
+  # -- Allow outside connectivity to http/https ports of Nautobot Web
   allowExternalIngress: true
-  # Add extra Egress rules the the Network Policy
+  # -- Add extra Egress rules to the Network Policy
   extraEgress: []
   # e.g.
-  # extraEngress:
+  # extraEgress:
   #   - to:
   #       - namespaceSelector: {}
   #         podSelector:
@@ -540,7 +540,7 @@ networkPolicy:
   #       - port: 53
   #         protocol: UDP
 
-  # Add extra Ingress rules the the Network Policy
+  # -- Add extra Ingress rules to the Network Policy
   extraIngress: []
   # e.g.
   # extraIngress:

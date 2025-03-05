@@ -273,6 +273,16 @@ The `mariadb.*` values configure the upstream chart from Bitnami.  Please see th
 | <a name="nautobots">[nautobots](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L494)</a> | map[name]nautobot | See values.yaml | Additional Nautobot deployments, map key is the name of the deployment and the additional keys `enabled`, `ingressPaths`, `initNautobot` are required for each Nautobot deployment, all other keys for each Nautobot will override the defaults provided by the root `.Values.nautobot`. |
 | <a name="nautobots.default">[nautobots.default](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L497)</a> | nautobot | See values.yaml | Values for the Default Nautobot deployment see values.yaml `.nautobot` for assumed defaults |
 
+## NetworkPolicy Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| <a name="networkPolicy.allowAllEgress">[networkPolicy.allowAllEgress](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L525)</a> | bool | `false` | Permit all Nautobot pods to access any destination in any port |
+| <a name="networkPolicy.allowExternalIngress">[networkPolicy.allowExternalIngress](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L527)</a> | bool | `true` | Allow outside connectivity to http/https ports of Nautobot Web |
+| <a name="networkPolicy.enabled">[networkPolicy.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L523)</a> | bool | `false` | [[ref](https://kubernetes.io/docs/concepts/services-networking/network-policies/)]Enables a Network Policy for Nautobot pods |
+| <a name="networkPolicy.extraEgress">[networkPolicy.extraEgress](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L529)</a> | list | `[]` | Add extra Egress rules to the Network Policy |
+| <a name="networkPolicy.extraIngress">[networkPolicy.extraIngress](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L542)</a> | list | `[]` | Add extra Ingress rules to the Network Policy |
+
 ## Postgresql Values
 
 The `postgresql.*` values configure the upstream chart from Bitnami.  Please see the [upstream chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) for complete details on all of its values.

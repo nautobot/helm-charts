@@ -18,7 +18,7 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-  {{- if .Values.networkPolicy.allowExternalEgress }}
+  {{- if .Values.networkPolicy.allowAllEgress }}
   egress:
     - {}
   {{- else }}
@@ -30,7 +30,7 @@ spec:
         - port: 53
           protocol: TCP
     # Allow connectivity to backend services (DB, redis, etc)
-    {{- if .Values.postgresql.enabled }}
+    {{- if or .Values.postgresql.enabled .Values.postgresqlha.enabled }}
         - port: 5432
     {{- else }}
         - port: {{ .Values.nautobot.db.port }}
@@ -47,7 +47,8 @@ spec:
     {{- end }}
   {{- end }}
   ingress:
-    # Allow connectivity from outside the cluster into the Web application
+    {{- if .Values.networkPolicy.allowExternalIngress}}
+    # Allow connectivity from everyone (including outside the cluster) into the Web application
     - ports:
         - port: 8443
           protocol: TCP
@@ -56,6 +57,8 @@ spec:
       from:
         - ipBlock:
             cidr: 0.0.0.0/0
+    {{- end }}
+    # Allow connectivity from the client pods into the Web application
     - ports:
         - port: 8443
           protocol: TCP

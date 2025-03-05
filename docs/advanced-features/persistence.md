@@ -40,3 +40,18 @@ nautobot:
   nodeSelector:
     nautobot-storage: static
 ```
+
+Another supported option is Container Storage Interface (CSI). Following example comes from GCP:
+
+```yaml
+nautobot:
+  csiStaticFiles:
+    enabled: true
+    csi:
+      driver: gcsfuse.csi.storage.gke.io
+      volumeAttributes:
+        bucketName: "your-bucket-name"
+        mountOptions: "implicit-dirs,o=noexec"
+        gcsfuseLoggingSeverity: warning
+        fileCacheCapacity: "1Gi"
+```

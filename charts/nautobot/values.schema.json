@@ -545,6 +545,9 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
+                "disableHttps": {
+                  "type": "boolean"
+                },
                 "listen": {
                   "type": "integer",
                   "minimum": 0

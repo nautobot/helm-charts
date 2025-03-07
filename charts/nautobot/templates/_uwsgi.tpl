@@ -7,7 +7,9 @@ socket = 127.0.0.1:8001
 http = 0.0.0.0:8003
 {{ else }}
 http = 0.0.0.0:8080
+{{- if not .Values.nautobot.uwsgi.disableHttps }}
 https = 0.0.0.0:8443,/opt/nautobot/nautobot.crt,/opt/nautobot/nautobot.key
+{{ end }}
 {{ end }}
 
 {{- if .Values.metrics.uwsgiExporter.enabled -}}

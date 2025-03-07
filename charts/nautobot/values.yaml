@@ -460,6 +460,8 @@ nautobot:
   uWSGIini: ""
 
   uwsgi:
+    # -- Disable HTTPS and use only HTTP protocol in uwsgi.ini configuration
+    disableHttps: false
     # -- [[ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#listen)] Set the uWSGI socket listen queue size.<sup>[1](#notes)</sup>
     listen: 128
     # -- [[ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#processes)] Spawn the specified number of workers/processes<sup>[1](#notes)</sup>

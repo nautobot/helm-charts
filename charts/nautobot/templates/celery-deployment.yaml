@@ -153,6 +153,8 @@ spec:
               mountPath: "/opt/nautobot/nautobot_config.py"
               subPath: "nautobot_config.py"
             {{- end }}
+            - name: prom-cache
+              mountPath: /prom_cache
             {{- if $celery.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $celery.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -162,6 +164,8 @@ spec:
       terminationGracePeriodSeconds: {{ $celery.terminationGracePeriodSeconds }}
       volumes:
         - name: "git-repos"
+          emptyDir: {}
+        - name: "prom-cache"
           emptyDir: {}
         {{- if $.Values.nautobot.config }}
         - name: "nautobot-config"

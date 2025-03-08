@@ -140,6 +140,8 @@ spec:
             - name: "nautobot-certs"
               mountPath: "/opt/certs"
             {{- end }}
+            - name: prom-cache
+              mountPath: /prom_cache
             {{- if $.Values.nautobot.config }}
             - name: "nautobot-config"
               mountPath: "/opt/nautobot/nautobot_config.py"
@@ -309,6 +311,8 @@ spec:
               mountPath: "/opt/nautobot/nautobot_config.py"
               subPath: "nautobot_config.py"
             {{- end }}
+            - name: prom-cache
+              mountPath: /prom_cache
             {{- if $nautobot.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $nautobot.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -456,6 +460,8 @@ spec:
         {{- end }}
         {{- if eq (default false $nautobot.nginx.containerSecurityContext.readOnlyRootFilesystem) true }}
         - name: "nginx-tmp"
+          emptyDir: {}
+        - name: "prom-cache"
           emptyDir: {}
         {{ end }}
         {{- if $nautobot.extraVolumes }}

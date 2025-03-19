@@ -23,48 +23,41 @@ spec:
     - {}
   {{- else }}
   egress:
-    # Allow DNS resolution
     - ports:
+        # Allow DNS resolution
         - port: 53
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Allow connectivity to backend services (DB, redis, etc)
-    {{- if or .Values.postgresql.enabled .Values.postgresqlha.enabled }}
-        - port: 5432
-    {{- else }}
-        - port: {{ .Values.nautobot.db.port }}
-    {{- end }}
+        # Allow connectivity to backend services (DB, redis, etc)
+        - port: {{ include "nautobot.database.port" . }}
           protocol: TCP
-    {{- if .Values.redis.enabled }}
-        - port: 6379
-    {{- else }}
-        - port: {{ .Values.nautobot.redis.port }}
-    {{- end }}
+        - port: {{ include "nautobot.redis.port" . }}
           protocol: TCP
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
-    {{- if .Values.networkPolicy.allowExternalIngress}}
-    # Allow connectivity from everyone (including outside the cluster) into the Web application
     - ports:
+      {{- if not .Values.nautobot.nginx.enabled }}
         - port: 8443
           protocol: TCP
         - port: 8080
           protocol: TCP
+      {{- else }}
+        - port: 80
+          protocol: TCP
+        - port: 443
+          protocol: TCP
+      {{- end }}
       from:
+      {{- if .Values.networkPolicy.allowExternalIngress}}
+        # Allow connectivity from outside the cluster into the Web application
         - ipBlock:
             cidr: 0.0.0.0/0
-    {{- end }}
-    # Allow connectivity from the client pods into the Web application
-    - ports:
-        - port: 8443
-          protocol: TCP
-        - port: 8080
-          protocol: TCP
-      from:
+      {{- end }}
+        # Allow connectivity from the client pods into the Web application
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"

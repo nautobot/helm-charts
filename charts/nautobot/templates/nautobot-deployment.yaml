@@ -140,6 +140,8 @@ spec:
             - name: "nautobot-certs"
               mountPath: "/opt/certs"
             {{- end }}
+            - name: prom-cache
+              mountPath: /prom_cache
             {{- if $.Values.nautobot.config }}
             - name: "nautobot-config"
               mountPath: "/opt/nautobot/nautobot_config.py"
@@ -154,6 +156,9 @@ spec:
         - name: nautobot-certs
           image: {{ include "nautobot.image" $ }}
           imagePullPolicy: {{ $nautobot.image.pullPolicy }}
+          {{- if $nautobot.containerSecurityContext.enabled }}
+          securityContext: {{- omit $nautobot.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           command:
             - "/bin/bash"
           args:
@@ -306,6 +311,8 @@ spec:
               mountPath: "/opt/nautobot/nautobot_config.py"
               subPath: "nautobot_config.py"
             {{- end }}
+            - name: prom-cache
+              mountPath: /prom_cache
             {{- if $nautobot.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $nautobot.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -368,6 +375,10 @@ spec:
             - name: "nautobot-certs"
               mountPath: "/opt/nautobot_certs"
               readOnly: true
+            {{- if eq (default false $nautobot.nginx.containerSecurityContext.readOnlyRootFilesystem) true }}
+            - name: "nginx-tmp"
+              mountPath: "/tmp"
+            {{ end }}
           ports:
             - name: "https-nginx"
               containerPort: 8443
@@ -449,6 +460,12 @@ spec:
         - name: "nautobot-certs"
           emptyDir: {}
         {{- end }}
+        {{- if eq (default false $nautobot.nginx.containerSecurityContext.readOnlyRootFilesystem) true }}
+        - name: "nginx-tmp"
+          emptyDir: {}
+        - name: "prom-cache"
+          emptyDir: {}
+        {{ end }}
         {{- if $nautobot.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" $nautobot.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

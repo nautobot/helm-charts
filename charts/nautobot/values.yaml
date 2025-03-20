@@ -257,7 +257,7 @@ nautobot:
     # --- Enable PVC and the relevant volumes
     enabled: false
     # --- [Kubernetes StorageClass Name](https://kubernetes.io/docs/concepts/storage/storage-classes/), for the creation of Persistent Volume Claim
-    storageClassName: ""
+    storageClassName: "gp2"
     # --- [Kubernetes Volumes AccessMode](https://kubernetes.io/docs/concepts/storage/storage-classes/)
     accessMode: "ReadWriteOnce"
     # --- Persistent storage size request
@@ -1026,7 +1026,7 @@ postgresql:
     # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL database name
     database: "nautobot"
     # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL user password
-    password: ""
+    password: "admin"
   primary:
     podSecurityContext:
       seccompProfile:
@@ -1047,7 +1047,7 @@ redis:
     # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Enable password authentication
     enabled: true
     # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Redis password
-    password: ""
+    password: "admin"
   image:
     pullPolicy: "Always"
   master:

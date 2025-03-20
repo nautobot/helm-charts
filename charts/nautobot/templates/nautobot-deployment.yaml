@@ -311,8 +311,10 @@ spec:
             {{- end }}
           ports:
             {{- if not $nautobot.nginx.enabled }}
+             {{- if not $nautobot.uwsgi.disableHttps }}
             - name: "https"
               containerPort: 8443
+             {{ end }}
             - name: "http"
               containerPort: 8080
             {{ else }}

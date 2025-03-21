@@ -953,6 +953,51 @@
       },
       "description": "List of Nautobot objects (matching the Nautobot spec) to create deployments for"
     },
+    "networkPolicy": {
+      "type": "object",
+      "description": "Network Policy for Nautobot pods",
+      "properties": {
+        "networkPolicy": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "allowAllEgress": {
+              "type": "boolean"
+            },
+            "allowExternalIngress": {
+              "type": "boolean"
+            },
+            "extraEgress": {
+              "type": "array",
+              "items": {
+                "allOf": [
+                  {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.23.12/networkpolicyegressrule.json"
+                  }
+                ]
+              }
+            },
+            "extraIngress": {
+              "type": "array",
+              "items": {
+                "allOf": [
+                  {
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.23.12/networkpolicyingressrule.json"
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "enabled",
+            "allowAllEgress",
+            "allowExternalIngress"
+          ]
+        }
+      }
+    },
     "postgresql": {
       "allOf": [
         {

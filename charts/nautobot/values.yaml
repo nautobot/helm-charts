@@ -518,6 +518,38 @@ nautobots:
 #     - "/graphql"
 #   initNautobot: false
 
+# Default values for Network Policy
+# @default -- See values.yaml
+networkPolicy:
+  # -- [[ref](https://kubernetes.io/docs/concepts/services-networking/network-policies/)]Enables a Network Policy for Nautobot pods
+  enabled: false
+  # -- Permit all Nautobot pods to access any destination in any port
+  allowAllEgress: false
+  # -- Allow outside connectivity to http/https ports of Nautobot Web
+  allowExternalIngress: true
+  # -- Add extra Egress rules to the Network Policy
+  extraEgress: []
+  # e.g.
+  # extraEgress:
+  #   - to:
+  #       - namespaceSelector: {}
+  #         podSelector:
+  #           matchLabels:
+  #             k8s-app: kube-dns
+  #     ports:
+  #       - port: 53
+  #         protocol: UDP
+
+  # -- Add extra Ingress rules to the Network Policy
+  extraIngress: []
+  # e.g.
+  # extraIngress:
+  #   - ports:
+  #       - port: 80
+  #         protocol: TCP
+  #       - port: 443
+  #         protocol: TCP
+
 # Default values for Celery Workers
 celery:
   # -- Enables the default Celery Worker for Nautobot

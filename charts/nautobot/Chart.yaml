@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.4.4-py3.11
+      image: ghcr.io/nautobot/nautobot:2.4.5-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -30,11 +30,17 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
+    - kind: added
+      description: Add functionality for Network Policies
+    - kind: added
+      description: Add support to use uWSGi without https
     - kind: changed
-      description: Upgraded Nautobot from 2.4.3 to 2.4.4
+      description: Upgraded Nautobot from 2.4.4 to 2.4.5
+    - kind: fixed
+      description: Fix usage of uwsgi enabling http and socket when Nginx enabled
 apiVersion: "v2"
-appVersion: "2.4.4"
-version: "2.4.6"
+appVersion: "2.4.5"
+version: "2.5.0"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

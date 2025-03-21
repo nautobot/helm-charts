@@ -41,7 +41,7 @@ nautobot:
     # -- Nautobot image name, common to all deployments
     repository: "nautobot/nautobot"
     # -- Nautobot image tag, common to all deployments
-    tag: "2.4.4-py3.11"
+    tag: "2.4.5-py3.11"
     # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent`
     pullPolicy: "Always"
     # -- ([]string) List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments
@@ -460,6 +460,8 @@ nautobot:
   uWSGIini: ""
 
   uwsgi:
+    # -- Disable HTTPS and use only HTTP protocol in uwsgi.ini configuration
+    disableHttps: false
     # -- [[ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#listen)] Set the uWSGI socket listen queue size.<sup>[1](#notes)</sup>
     listen: 128
     # -- [[ref](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#processes)] Spawn the specified number of workers/processes<sup>[1](#notes)</sup>
@@ -515,6 +517,38 @@ nautobots:
 #     - "/api/graphql"
 #     - "/graphql"
 #   initNautobot: false
+
+# Default values for Network Policy
+# @default -- See values.yaml
+networkPolicy:
+  # -- [[ref](https://kubernetes.io/docs/concepts/services-networking/network-policies/)]Enables a Network Policy for Nautobot pods
+  enabled: false
+  # -- Permit all Nautobot pods to access any destination in any port
+  allowAllEgress: false
+  # -- Allow outside connectivity to http/https ports of Nautobot Web
+  allowExternalIngress: true
+  # -- Add extra Egress rules to the Network Policy
+  extraEgress: []
+  # e.g.
+  # extraEgress:
+  #   - to:
+  #       - namespaceSelector: {}
+  #         podSelector:
+  #           matchLabels:
+  #             k8s-app: kube-dns
+  #     ports:
+  #       - port: 53
+  #         protocol: UDP
+
+  # -- Add extra Ingress rules to the Network Policy
+  extraIngress: []
+  # e.g.
+  # extraIngress:
+  #   - ports:
+  #       - port: 80
+  #         protocol: TCP
+  #       - port: 443
+  #         protocol: TCP
 
 # Default values for Celery Workers
 celery:

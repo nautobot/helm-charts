@@ -1,6 +1,6 @@
 # NGINX sidecar
 
-When using NginX container as a sidecar to Nautobot, requests are being proxied from Nginx to Nautobot.
+When using Nginx container as a sidecar to Nautobot, requests are being proxied from Nginx to Nautobot.
 In order to deploy this, you have to enable `nginx` under nautobot key in `values.yaml` similar to the below:
 
 ```yaml

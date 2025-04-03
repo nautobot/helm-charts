@@ -10,35 +10,38 @@ redis:
     masterSet: nautobot
 ```
 
-Nautobot requires some additional configuration via a [custom `nautobot_config.py`](../custom-nautobot-config/) with the following values set in `nautobot_config.py`:
+The default Nautobot config is no longer sufficient when you enable Redis Sentinel.
+That is why, Nautobot requires some additional configuration via
+a [custom `nautobot_config.py`](../custom-nautobot-config/) with the following
+values set in `nautobot_config.py`:
 
 ```python
 DJANGO_REDIS_CONNECTION_FACTORY = "django_redis.pool.SentinelConnectionFactory"
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://nautobot/0",
+        "LOCATION": "redis://nautobot/0",  # in this context 'nautobot' is the redis master/service name
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.SentinelClient",
-            "SENTINELS": [(os.getenv("NAUTOBOT_REDIS_HOST"), 26379)],
-            "PASSWORD": os.getenv("NAUTOBOT_REDIS_PASSWORD"),
-            "SENTINEL_KWARGS": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
             "CONNECTION_POOL_CLASS": "redis.sentinel.SentinelConnectionPool",
+            "PASSWORD": os.getenv("NAUTOBOT_REDIS_PASSWORD"),
+            "SENTINEL_KWARGS": {
+                "password": os.getenv("NAUTOBOT_REDIS_PASSWORD")
+            },
+            "SENTINELS": [
+                (os.getenv("NAUTOBOT_REDIS_SENTINEL_1"), 26379),
+                (os.getenv("NAUTOBOT_REDIS_SENTINEL_2"), 26379),
+                (os.getenv("NAUTOBOT_REDIS_SENTINEL_3"), 26379),
+            ],
         },
     },
 }
 
-CACHEOPS_REDIS = False
-CACHEOPS_SENTINEL = {
-    "locations": [(os.getenv("NAUTOBOT_REDIS_HOST"), 26379)],
-    "service_name": "nautobot",
-    "socket_timeout": 10,
-    "db": 1,
-    "sentinel_kwargs": {"password": os.getenv("NAUTOBOT_REDIS_PASSWORD")},
-    "password": os.getenv("NAUTOBOT_REDIS_PASSWORD"),
-}
 CELERY_BROKER_URL = (
-    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_HOST')}:26379"
+    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_SENTINEL_1')}:26379;"
+    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_SENTINEL_2')}:26379;"
+    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_SENTINEL_3')}:26379"
+    f"/{os.getenv('NAUTOBOT_REDIS_CELERY_BROKER_DB_INDEX', '0')}"
 )
 CELERY_BROKER_TRANSPORT_OPTIONS = {
     "master_name": "nautobot",

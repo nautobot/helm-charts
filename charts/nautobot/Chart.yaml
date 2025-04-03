@@ -62,7 +62,7 @@ dependencies:
   - condition: "rabbitmq.enabled"
     name: "rabbitmq"
     repository: "oci://registry-1.docker.io/bitnamicharts"
-    version: "12.15.0"
+    version: "15.4.1"
   - name: "common"
     repository: "oci://registry-1.docker.io/bitnamicharts"
     tags:

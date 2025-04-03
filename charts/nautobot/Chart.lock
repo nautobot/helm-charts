@@ -13,9 +13,9 @@ dependencies:
   version: 13.1.3
 - name: rabbitmq
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.15.0
+  version: 15.4.1
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.30.0
-digest: sha256:cb311e933da2974320b08f836900b84161139136c8f7f0966b34563be61fddc4
-generated: "2025-04-03T07:46:09.203574+02:00"
+digest: sha256:6fa7a5ea7de23bd002319f40ad54d72725d72200e32182970ca2ae39cf3e9d15
+generated: "2025-04-03T08:07:21.618667354Z"

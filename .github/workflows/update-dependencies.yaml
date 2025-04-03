@@ -28,8 +28,6 @@ jobs:
         env:
           GO111MODULE: "on"
 
-      - name: "DEBUG"
-        run: "which helm-docs && helm-docs --version"
       - name: "Run helm-docs"
         run: "helm-docs"
 

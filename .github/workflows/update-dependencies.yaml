@@ -3,8 +3,8 @@ name: "Update Dependencies"
 
 on:  # yamllint disable-line rule:truthy
   push:
-    # paths:
-    #   - "charts/nautobot/Chart.yaml"
+    paths:
+      - "charts/nautobot/Chart.yaml"
 
 jobs:
   update-dependencies:

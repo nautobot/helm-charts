@@ -18,5 +18,29 @@
       "**/Chart.yaml",
       "CHANGELOG.md"
     ]
-  }
+  },
+  "packageRules": [
+    {
+      "description": [
+        "Major dependencies update every three months"
+      ],
+      "matchBaseBranches": [
+        "develop"
+      ],
+      "schedule": [
+        "on the 1st day of the month after 3 months"
+      ],
+      "major": {
+        "enabled": true
+      },
+      "rangeStrategy": "bump",
+      "matchCategories": [
+        "helm"
+      ],
+      "labels": [
+        "major",
+        "helm"
+      ]
+    }
+  ]
 }

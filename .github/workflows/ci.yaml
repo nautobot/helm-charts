@@ -29,7 +29,6 @@ jobs:
         uses: "azure/setup-helm@v4"
       - run: "mkdir template_output"
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
-      - run: "helm dependency update charts/nautobot"
 
       - name: "Install helm-docs"
         run: "go install github.com/norwoodj/helm-docs/cmd/helm-docs@v1.11.0"

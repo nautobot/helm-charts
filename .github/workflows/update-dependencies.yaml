@@ -1,7 +1,7 @@
 ---
 name: "Update Dependencies"
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
     paths:
       - "charts/nautobot/Chart.yaml"
@@ -28,7 +28,7 @@ jobs:
           git diff --quiet || echo "::set-output name=changed::true"
 
       - name: "Commit changes"
-        if: steps.git-check.outputs.changed == 'true'
+        if: "steps.git-check.outputs.changed == 'true'"
         run: |
           git add .
           git commit -m "chore: Update helm dependencies"

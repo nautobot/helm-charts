@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 2.5.0](https://img.shields.io/badge/Version-2.5.0-informational?style=flat-square) ![AppVersion: 2.4.5](https://img.shields.io/badge/AppVersion-2.4.5-informational?style=flat-square)
+![Version: 2.5.1](https://img.shields.io/badge/Version-2.5.1-informational?style=flat-square) ![AppVersion: 2.4.6](https://img.shields.io/badge/AppVersion-2.4.6-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -89,12 +89,12 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 
 | Repository | Name | Version |
 |------------|------|---------|
-| oci://registry-1.docker.io/bitnamicharts | common | 2.x.x |
-| oci://registry-1.docker.io/bitnamicharts | mariadb | 13.x |
-| oci://registry-1.docker.io/bitnamicharts | postgresql | 12.x.x |
-| oci://registry-1.docker.io/bitnamicharts | postgresqlha(postgresql-ha) | 11.x.x |
-| oci://registry-1.docker.io/bitnamicharts | rabbitmq | 12.x |
-| oci://registry-1.docker.io/bitnamicharts | redis | 18.x.x |
+| oci://registry-1.docker.io/bitnamicharts | common | 2.30.0 |
+| oci://registry-1.docker.io/bitnamicharts | mariadb | 13.1.3 |
+| oci://registry-1.docker.io/bitnamicharts | postgresql | 12.12.10 |
+| oci://registry-1.docker.io/bitnamicharts | postgresqlha(postgresql-ha) | 11.9.8 |
+| oci://registry-1.docker.io/bitnamicharts | rabbitmq | 12.15.0 |
+| oci://registry-1.docker.io/bitnamicharts | redis | 18.19.4 |
 
 <!-- This section is a duplicate of docs/configuration/reference.md.gotmpl -->
 
@@ -106,7 +106,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 | <a name="celery.annotations">[celery.annotations](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L653)</a> | map[string]string | `{}` | [[ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)] Annotations to be applied to Nautobot Celery Worker deployment resource |
 | <a name="celery.args">[celery.args](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L649)</a> | []string | `[]` | Override default Nautobot Celery Worker container args (useful when using custom images) |
 | <a name="celery.autoscaling">[celery.autoscaling](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L729)</a> | object | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)] Define a horizontal pod autoscaler |
-| <a name="celery.autoscaling.enabled">[celery.autoscaling.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L731)</a> | bool | `false` | Add an horizontal pod autoscaler for the Celery Worker (beta) |
+| <a name="celery.autoscaling.enabled">[celery.autoscaling.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L731)</a> | bool | `false` | Add an horizontal pod autoscaler for the Celery Worker |
 | <a name="celery.command">[celery.command](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L638)</a> | []string | See values.yaml | Override default Nautobot Celery Worker container command (useful when using custom images) |
 | <a name="celery.concurrency">[celery.concurrency](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L559)</a> | int | `0` | [[ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/#concurrency-setting)]Concurrency Setting (0: use the default which is the number of CPUs available on your system)<sup>[2](#notes)</sup> |
 | <a name="celery.containerSecurityContext">[celery.containerSecurityContext](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L626)</a> | [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-2) | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)] Nautobot Celery Worker Container Security Context |
@@ -251,7 +251,7 @@ The `mariadb.*` values configure the upstream chart from Bitnami.  Please see th
 | <a name="nautobot.annotations">[nautobot.annotations](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L153)</a> | map[string]string | `{}` | [[ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)] Annotations to be applied to Nautobot deployment resource |
 | <a name="nautobot.args">[nautobot.args](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L149)</a> | []string | `[]` | Override default Nautobot container args (useful when using custom images) |
 | <a name="nautobot.autoscaling">[nautobot.autoscaling](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L229)</a> | object | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)] Define a horizontal pod autoscaler |
-| <a name="nautobot.autoscaling.enabled">[nautobot.autoscaling.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L231)</a> | bool | `false` | Add an horizontal pod autoscaler for Nautobot (beta) |
+| <a name="nautobot.autoscaling.enabled">[nautobot.autoscaling.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L231)</a> | bool | `false` | Add an horizontal pod autoscaler for Nautobot |
 | <a name="nautobot.command">[nautobot.command](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L143)</a> | []string | `["nautobot-server","start","--ini","/opt/nautobot/uwsgi.ini"]` | Override default Nautobot container command (useful when using custom images) |
 | <a name="nautobot.config">[nautobot.config](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L377)</a> | string | `""` | [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/)] Replace the entire `nautobot_config.py` file with this value<sup>[1](#notes)</sup> |
 | <a name="nautobot.containerSecurityContext">[nautobot.containerSecurityContext](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L131)</a> | [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-2) | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)] Nautobot Container Security Context |
@@ -281,7 +281,7 @@ The `mariadb.*` values configure the upstream chart from Bitnami.  Please see th
 | <a name="nautobot.image.pullSecrets">[nautobot.image.pullSecrets](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L48)</a> | []string | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | <a name="nautobot.image.registry">[nautobot.image.registry](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L40)</a> | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | <a name="nautobot.image.repository">[nautobot.image.repository](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L42)</a> | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
-| <a name="nautobot.image.tag">[nautobot.image.tag](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L44)</a> | string | `"2.4.5-py3.11"` | Nautobot image tag, common to all deployments |
+| <a name="nautobot.image.tag">[nautobot.image.tag](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L44)</a> | string | `"2.4.6-py3.11"` | Nautobot image tag, common to all deployments |
 | <a name="nautobot.initContainers">[nautobot.initContainers](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L219)</a> | [][Container](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container) | `[]` | [[ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)] Add additional init containers to the Nautobot server pods |
 | <a name="nautobot.lifecycleHooks">[nautobot.lifecycleHooks](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L191)</a> | [Lifecycle](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle) | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | <a name="nautobot.livenessProbe">[nautobot.livenessProbe](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L60)</a> | [Probe](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1) | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot liveness probe |

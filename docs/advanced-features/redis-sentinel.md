@@ -38,10 +38,9 @@ CACHES = {
 }
 
 CELERY_BROKER_URL = (
-    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_SENTINEL_1')}:26379;"
-    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_SENTINEL_2')}:26379;"
-    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_SENTINEL_3')}:26379"
-    f"/{os.getenv('NAUTOBOT_REDIS_CELERY_BROKER_DB_INDEX', '0')}"
+    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_SENTINEL_1')}:26379/{os.getenv('NAUTOBOT_REDIS_CELERY_BROKER_DB_INDEX', '0')};"
+    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_SENTINEL_2')}:26379/{os.getenv('NAUTOBOT_REDIS_CELERY_BROKER_DB_INDEX', '0')};"
+    f"sentinel://:{os.getenv('NAUTOBOT_REDIS_PASSWORD')}@{os.getenv('NAUTOBOT_REDIS_SENTINEL_3')}:26379/{os.getenv('NAUTOBOT_REDIS_CELERY_BROKER_DB_INDEX', '0')}"
 )
 CELERY_BROKER_TRANSPORT_OPTIONS = {
     "master_name": "nautobot",

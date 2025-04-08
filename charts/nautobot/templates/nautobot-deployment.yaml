@@ -154,6 +154,9 @@ spec:
         - name: nautobot-certs
           image: {{ include "nautobot.image" $ }}
           imagePullPolicy: {{ $nautobot.image.pullPolicy }}
+          {{- if $nautobot.containerSecurityContext.enabled }}
+          securityContext: {{- omit $nautobot.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           command:
             - "/bin/bash"
           args:

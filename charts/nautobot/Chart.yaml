@@ -31,7 +31,7 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: changed
-      description: nautobot-cert container has its own securityContext
+      description: Add container security context to the nautobot-cert container
 apiVersion: "v2"
 appVersion: "2.4.4"
 version: "2.4.6"

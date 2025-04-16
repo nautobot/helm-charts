@@ -3,6 +3,32 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.1 - 2025-04-04
+
+### Changed
+
+* Upgraded Nautobot from 2.4.5 to 2.4.6
+
+### Fixed
+
+* [#536](https://github.com/nautobot/helm-charts/pull/536) Fix Helm chart dependency checks in CI
+* [#546](https://github.com/nautobot/helm-charts/pull/546) Fix documentation for Redis sentinel usage
+
+## 2.5.0 - 2025-03-21
+
+### Added
+
+* [#516](https://github.com/nautobot/helm-charts/pull/516) Add functionality for Network Policies
+* [#520](https://github.com/nautobot/helm-charts/pull/520) Add support to use uWSGi without https
+
+### Changed
+
+* Upgraded Nautobot from 2.4.4 to 2.4.5
+
+### Fixed
+
+* [#528](https://github.com/nautobot/helm-charts/pull/528) Fix usage of uwsgi enabling http and socket when Nginx enabled
+
 ## 2.4.6 - 2025-03-07
 
 ### Changed

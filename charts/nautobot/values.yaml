@@ -67,7 +67,7 @@ nautobot:
         - "nautobot-server health_check"
     initialDelaySeconds: 3
     periodSeconds: 15
-    timeoutSeconds: 10
+    timeoutSeconds: 15
     failureThreshold: 3
     successThreshold: 1
 
@@ -83,7 +83,7 @@ nautobot:
       port: "http"
     initialDelaySeconds: 3
     periodSeconds: 10
-    timeoutSeconds: 5
+    timeoutSeconds: 10
     failureThreshold: 3
     successThreshold: 1
 
@@ -96,7 +96,7 @@ nautobot:
       port: "http"
     initialDelaySeconds: 3
     periodSeconds: 10
-    timeoutSeconds: 5
+    timeoutSeconds: 10
     failureThreshold: 30
     successThreshold: 1
 

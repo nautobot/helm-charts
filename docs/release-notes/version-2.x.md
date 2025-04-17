@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.2 - 2025-04-17
+
+### Added
+
+* [#524](https://github.com/nautobot/helm-charts/pull/524) Add container security context to the nautobot-cert container
+* [#550](https://github.com/nautobot/helm-charts/pull/550) Add Horizontal Pod Autoscaler (HPA) support for celery workers
+
+### Changed
+
+* [#551](https://github.com/nautobot/helm-charts/pull/551) Increased default timeout seconds for probes by 5 seconds
+
 ## 2.5.1 - 2025-04-04
 
 ### Changed

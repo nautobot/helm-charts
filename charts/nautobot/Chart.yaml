@@ -32,15 +32,13 @@ annotations:
   artifacthub.io/changes: |
     - kind: added
       description: Add container security context to the nautobot-cert container
+    - kind: added
+      description: Add Horizontal Pod Autoscaler (HPA) support for celery workers
     - kind: changed
-      description: Upgraded Nautobot from 2.4.5 to 2.4.6
-    - kind: fixed
-      description: Fix Helm chart dependency checks in CI
-    - kind: fixed
-      description: Fix documentation for Redis sentinel usage
+      description: Increased default timeout seconds for probes by 5 seconds
 apiVersion: "v2"
 appVersion: "2.4.6"
-version: "2.5.1"
+version: "2.5.2"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

@@ -65,7 +65,7 @@ dependencies:
     repository: "oci://registry-1.docker.io/bitnamicharts"
     tags:
       - "bitnami-common"
-    version: "2.30.0"
+    version: "2.30.2"
 description: "Nautobot is a Network Source of Truth and Network Automation Platform."
 home: "https://github.com/nautobot/nautobot"
 icon: "https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png"

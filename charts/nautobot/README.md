@@ -93,7 +93,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 | oci://registry-1.docker.io/bitnamicharts | mariadb | 13.1.3 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql | 12.12.10 |
 | oci://registry-1.docker.io/bitnamicharts | postgresqlha(postgresql-ha) | 11.9.8 |
-| oci://registry-1.docker.io/bitnamicharts | rabbitmq | 12.15.0 |
+| oci://registry-1.docker.io/bitnamicharts | rabbitmq | 16.0.1 |
 | oci://registry-1.docker.io/bitnamicharts | redis | 18.19.4 |
 
 <!-- This section is a duplicate of docs/configuration/reference.md.gotmpl -->

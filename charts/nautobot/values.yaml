@@ -340,7 +340,7 @@ nautobot:
     livenessProbe:
       enabled: true
       tcpSocket:
-        port: "https"
+        port: "https-nginx"
       initialDelaySeconds: 2
       periodSeconds: 10
       timeoutSeconds: 5

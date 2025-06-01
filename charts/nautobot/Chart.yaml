@@ -51,7 +51,7 @@ dependencies:
   - condition: "postgresqlha.enabled"
     name: "postgresql-ha"
     repository: "oci://registry-1.docker.io/bitnamicharts"
-    version: "11.9.8"
+    version: "16.0.9"
     alias: "postgresqlha"
   - condition: "mariadb.enabled"
     name: "mariadb"

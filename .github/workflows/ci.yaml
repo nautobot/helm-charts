@@ -85,7 +85,7 @@ jobs:
         continue-on-error: true
         uses: "snyk/actions/iac@master"
         env:
-          # In order to use the Snyk Action you will need to have a Snyk API token.
+          # In order to use the Snyk Action you will need to have a Snyk API token.123
           # More details in https://github.com/snyk/actions#getting-your-snyk-token
           SNYK_TOKEN: "${{ secrets.SNYK_TOKEN }}"
         with:

@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.4.6-py3.11
+      image: ghcr.io/nautobot/nautobot:2.4.8-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -30,15 +30,15 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
-    - kind: added
-      description: Add container security context to the nautobot-cert container
-    - kind: added
-      description: Add Horizontal Pod Autoscaler (HPA) support for celery workers
     - kind: changed
-      description: Increased default timeout seconds for probes by 5 seconds
+      description: Upgraded Nautobot from 2.4.6 to 2.4.8
+    - kind: changed
+      description: Upgraded Upgraded nginx-prometheus-exporter image from 1.4.1 to 1.4.2
+    - kind: changed
+      description: Upgraded Nginx Unprivileged optional container from 1.27 to 1.28
 apiVersion: "v2"
-appVersion: "2.4.6"
-version: "2.5.2"
+appVersion: "2.4.8"
+version: "2.5.3"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

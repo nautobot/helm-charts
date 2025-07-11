@@ -3,6 +3,19 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.4 - 2025-07-11
+
+### Fixed
+
+[#569](https://github.com/nautobot/helm-charts/pull/569) Fix nginx liveness probes' wrong port configuration
+[#574](https://github.com/nautobot/helm-charts/pull/574) Fix creation of redis secret when password is provided and chart redis is not used
+
+### Changed
+
+* Upgraded Nautobot from 2.4.8 to 2.4.11
+* Upgraded Nginx Unprivileged optional container from 1.28 to 1.29
+* Upgraded Bitnami common subchart from 2.30.0 to 2.30.2
+
 ## 2.5.3 - 2025-05-16
 
 ### Changed

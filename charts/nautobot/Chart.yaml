@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.4.8-py3.11
+      image: ghcr.io/nautobot/nautobot:2.4.11-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -30,15 +30,19 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
+    - kind: fixed
+      description: Fixed nginx liveness probes' wrong port configuration
+    - kind: fixed
+      description: Fixed creation of redis secret when password is provided and chart redis is not used
     - kind: changed
-      description: Upgraded Nautobot from 2.4.6 to 2.4.8
+      description: Upgraded Nautobot from 2.4.8 to 2.4.11
     - kind: changed
-      description: Upgraded Upgraded nginx-prometheus-exporter image from 1.4.1 to 1.4.2
+      description: Upgraded Nginx Unprivileged optional container from 1.28 to 1.29
     - kind: changed
-      description: Upgraded Nginx Unprivileged optional container from 1.27 to 1.28
+      description: Upgraded Bitnami common subchart from 2.30.0 to 2.30.2
 apiVersion: "v2"
-appVersion: "2.4.8"
-version: "2.5.3"
+appVersion: "2.4.11"
+version: "2.5.4"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

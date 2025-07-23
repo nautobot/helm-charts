@@ -1,7 +1,9 @@
 {{- define "nginx.nautobot.conf" -}}
 server {
-    listen 8443 ssl http2 default_server;
-    listen [::]:8443 ssl http2 default_server;
+    listen 8443 ssl default_server;
+    listen [::]:8443 ssl default_server;
+
+    http2 on;
 
     server_name _;
 

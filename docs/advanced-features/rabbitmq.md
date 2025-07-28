@@ -4,10 +4,7 @@
     RabbitMQ Support for Nautobot is not tested by the Nautobot Core team and therefore support is minimal.
 
 !!! warning
-    RabbitMQ Support in this helm chart is considered experimental and should be used with caution.
-
-!!! warning
-    This example is extremely insecure, changes should be made for non-dev deployments.
+    RabbitMQ subchart is dropped in version 2.5.5, any deployment prior to that should remove it from this helm chart.
 
 In some situations it may be desirable to use RabbitMQ for task queuing instead of Redis, this is considered an advanced deployment pattern and should only be used when necessary.  It is important to note that Redis can not be completely replaced as of yet as it is still needed for caching in Nautobot.
 

@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 2.5.4](https://img.shields.io/badge/Version-2.5.4-informational?style=flat-square) ![AppVersion: 2.4.11](https://img.shields.io/badge/AppVersion-2.4.11-informational?style=flat-square)
+![Version: 2.5.5](https://img.shields.io/badge/Version-2.5.5-informational?style=flat-square) ![AppVersion: 2.4.14](https://img.shields.io/badge/AppVersion-2.4.14-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -89,7 +89,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 
 | Repository | Name | Version |
 |------------|------|---------|
-| oci://registry-1.docker.io/bitnamicharts | common | 2.30.2 |
+| oci://registry-1.docker.io/bitnamicharts | common | 2.31.3 |
 | oci://registry-1.docker.io/bitnamicharts | mariadb | 13.1.3 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql | 12.12.10 |
 | oci://registry-1.docker.io/bitnamicharts | postgresqlha(postgresql-ha) | 11.9.8 |
@@ -166,7 +166,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| <a name="extraObjects">[extraObjects](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1262)</a> | list | `[]` | Deploy additional Kubernetes manifests |
+| <a name="extraObjects">[extraObjects](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1273)</a> | list | `[]` | Deploy additional Kubernetes manifests |
 
 ## Ingress Values
 
@@ -200,11 +200,11 @@ The `mariadb.*` values configure the upstream chart from Bitnami.  Please see th
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| <a name="mariadb.auth.database">[mariadb.auth.database](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1136)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB database name |
-| <a name="mariadb.auth.password">[mariadb.auth.password](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1140)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB user password |
-| <a name="mariadb.auth.rootPassword">[mariadb.auth.rootPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1142)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB root user password |
-| <a name="mariadb.auth.username">[mariadb.auth.username](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1138)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB username |
-| <a name="mariadb.enabled">[mariadb.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1133)</a> | bool | `false` | Enable deployment of the [Bitnami mariadb](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart, all other `redis.*` parameters will be passed directly to that chart |
+| <a name="mariadb.auth.database">[mariadb.auth.database](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1140)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB database name |
+| <a name="mariadb.auth.password">[mariadb.auth.password](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1144)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB user password |
+| <a name="mariadb.auth.rootPassword">[mariadb.auth.rootPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1146)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB root user password |
+| <a name="mariadb.auth.username">[mariadb.auth.username](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1142)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB username |
+| <a name="mariadb.enabled">[mariadb.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1137)</a> | bool | `false` | Enable deployment of the [Bitnami mariadb](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart, all other `redis.*` parameters will be passed directly to that chart |
 
 ## Metrics Values
 
@@ -281,7 +281,7 @@ The `mariadb.*` values configure the upstream chart from Bitnami.  Please see th
 | <a name="nautobot.image.pullSecrets">[nautobot.image.pullSecrets](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L48)</a> | []string | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | <a name="nautobot.image.registry">[nautobot.image.registry](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L40)</a> | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | <a name="nautobot.image.repository">[nautobot.image.repository](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L42)</a> | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
-| <a name="nautobot.image.tag">[nautobot.image.tag](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L44)</a> | string | `"2.4.11-py3.11"` | Nautobot image tag, common to all deployments |
+| <a name="nautobot.image.tag">[nautobot.image.tag](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L44)</a> | string | `"2.4.14-py3.11"` | Nautobot image tag, common to all deployments |
 | <a name="nautobot.initContainers">[nautobot.initContainers](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L219)</a> | [][Container](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container) | `[]` | [[ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)] Add additional init containers to the Nautobot server pods |
 | <a name="nautobot.lifecycleHooks">[nautobot.lifecycleHooks](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L191)</a> | [Lifecycle](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle) | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | <a name="nautobot.livenessProbe">[nautobot.livenessProbe](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L60)</a> | [Probe](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1) | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot liveness probe |
@@ -383,9 +383,9 @@ The `postgresql.*` values configure the upstream chart from Bitnami.  Please see
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| <a name="postgresql.auth.database">[postgresql.auth.database](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1059)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL database name |
-| <a name="postgresql.auth.password">[postgresql.auth.password](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1061)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL user password |
-| <a name="postgresql.auth.username">[postgresql.auth.username](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1057)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL username |
+| <a name="postgresql.auth.database">[postgresql.auth.database](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1061)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL database name |
+| <a name="postgresql.auth.password">[postgresql.auth.password](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1063)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL user password |
+| <a name="postgresql.auth.username">[postgresql.auth.username](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1059)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL username |
 | <a name="postgresql.enabled">[postgresql.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1052)</a> | bool | `true` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart |
 
 ## Postgresqlha Values
@@ -394,24 +394,24 @@ The `postgresqlha.*` values configure the upstream chart from Bitnami.  Please s
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| <a name="postgresqlha.enabled">[postgresqlha.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1185)</a> | bool | `false` | Enable deployment of the [Bitnami postgresql-ha](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart, all other `postgresql-ha.*` parameters will be passed directly to that chart |
-| <a name="postgresqlha.pgpool.adminPassword">[postgresqlha.pgpool.adminPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1231)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters)] Pgpool Admin password |
-| <a name="postgresqlha.pgpool.pdb.create">[postgresqlha.pgpool.pdb.create](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1245)</a> | bool | `true` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters)] Enable a Pod Distribution Budget for Pgpool |
-| <a name="postgresqlha.pgpool.replicaCount">[postgresqlha.pgpool.replicaCount](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1235)</a> | int | `2` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters)] The number of replicas to deploy |
-| <a name="postgresqlha.pgpool.srCheckDatabase">[postgresqlha.pgpool.srCheckDatabase](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1233)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters)] Name of the database to perform streaming replication checks |
-| <a name="postgresqlha.pgpool.updateStrategy">[postgresqlha.pgpool.updateStrategy](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1238)</a> | object | See values.yaml | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters)] Strategy used to replace old Pgpool Pods by new ones |
-| <a name="postgresqlha.postgresql.database">[postgresqlha.postgresql.database](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1190)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL database name |
-| <a name="postgresqlha.postgresql.password">[postgresqlha.postgresql.password](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1198)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL user password |
-| <a name="postgresqlha.postgresql.pdb.create">[postgresqlha.postgresql.pdb.create](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1201)</a> | bool | `true` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] Enable a Pod Distribution Budget for Postgres |
-| <a name="postgresqlha.postgresql.postgresPassword">[postgresqlha.postgresql.postgresPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1192)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL postgres user password |
-| <a name="postgresqlha.postgresql.repmgrPassword">[postgresqlha.postgresql.repmgrPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1194)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL Repmgr password |
-| <a name="postgresqlha.postgresql.username">[postgresqlha.postgresql.username](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1196)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL username |
+| <a name="postgresqlha.enabled">[postgresqlha.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1191)</a> | bool | `false` | Enable deployment of the [Bitnami postgresql-ha](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart, all other `postgresql-ha.*` parameters will be passed directly to that chart |
+| <a name="postgresqlha.pgpool.adminPassword">[postgresqlha.pgpool.adminPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1239)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters)] Pgpool Admin password |
+| <a name="postgresqlha.pgpool.pdb.create">[postgresqlha.pgpool.pdb.create](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1253)</a> | bool | `true` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters)] Enable a Pod Distribution Budget for Pgpool |
+| <a name="postgresqlha.pgpool.replicaCount">[postgresqlha.pgpool.replicaCount](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1243)</a> | int | `2` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters)] The number of replicas to deploy |
+| <a name="postgresqlha.pgpool.srCheckDatabase">[postgresqlha.pgpool.srCheckDatabase](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1241)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters)] Name of the database to perform streaming replication checks |
+| <a name="postgresqlha.pgpool.updateStrategy">[postgresqlha.pgpool.updateStrategy](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1246)</a> | object | See values.yaml | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#pgpool-parameters)] Strategy used to replace old Pgpool Pods by new ones |
+| <a name="postgresqlha.postgresql.database">[postgresqlha.postgresql.database](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1198)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL database name |
+| <a name="postgresqlha.postgresql.password">[postgresqlha.postgresql.password](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1206)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL user password |
+| <a name="postgresqlha.postgresql.pdb.create">[postgresqlha.postgresql.pdb.create](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1209)</a> | bool | `true` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] Enable a Pod Distribution Budget for Postgres |
+| <a name="postgresqlha.postgresql.postgresPassword">[postgresqlha.postgresql.postgresPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1200)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL postgres user password |
+| <a name="postgresqlha.postgresql.repmgrPassword">[postgresqlha.postgresql.repmgrPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1202)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL Repmgr password |
+| <a name="postgresqlha.postgresql.username">[postgresqlha.postgresql.username](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1204)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL username |
 
 ## Rabbitmq Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| <a name="rabbitmq.enabled">[rabbitmq.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1259)</a> | bool | `false` | Enable deployment of the [Bitnami RabbitMQ](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq) chart, all other `rabbitmq.*` parameters will be passed directly to that chart |
+| <a name="rabbitmq.enabled">[rabbitmq.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1267)</a> | bool | `false` | Enable deployment of the [Bitnami RabbitMQ](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq) chart, all other `rabbitmq.*` parameters will be passed directly to that chart |
 
 ## Redis Values
 
@@ -419,10 +419,10 @@ The `redis.*` values configure the upstream chart from Bitnami.  Please see the 
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| <a name="redis.architecture">[redis.architecture](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1077)</a> | string | `"standalone"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Redis Architecture valid values: `standalone` or `replication` |
-| <a name="redis.auth.enabled">[redis.auth.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1080)</a> | bool | `true` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Enable password authentication |
-| <a name="redis.auth.password">[redis.auth.password](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1082)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Redis password |
-| <a name="redis.enabled">[redis.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1075)</a> | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart |
+| <a name="redis.architecture">[redis.architecture](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1079)</a> | string | `"standalone"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Redis Architecture valid values: `standalone` or `replication` |
+| <a name="redis.auth.enabled">[redis.auth.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1082)</a> | bool | `true` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Enable password authentication |
+| <a name="redis.auth.password">[redis.auth.password](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1084)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Redis password |
+| <a name="redis.enabled">[redis.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1077)</a> | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart |
 
 ## Service Values
 

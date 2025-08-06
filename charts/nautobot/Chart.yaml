@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.4.11-py3.11
+      image: ghcr.io/nautobot/nautobot:2.4.14-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -31,18 +31,16 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: fixed
-      description: Fixed nginx liveness probes' wrong port configuration
-    - kind: fixed
-      description: Fixed creation of redis secret when password is provided and chart redis is not used
+      description: Fixed nginx config to support https2 using proper syntax
     - kind: changed
-      description: Upgraded Nautobot from 2.4.8 to 2.4.11
+      description: Changed to use bitnamilegacy docker images
     - kind: changed
-      description: Upgraded Nginx Unprivileged optional container from 1.28 to 1.29
+      description: Upgraded Nautobot from 2.4.11 to 2.4.14
     - kind: changed
-      description: Upgraded Bitnami common subchart from 2.30.0 to 2.30.2
+      description: Upgraded Bitnami common subchart from 2.30.2 to 2.31.3
 apiVersion: "v2"
-appVersion: "2.4.11"
-version: "2.5.4"
+appVersion: "2.4.14"
+version: "2.5.5"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"
@@ -69,7 +67,7 @@ dependencies:
     repository: "oci://registry-1.docker.io/bitnamicharts"
     tags:
       - "bitnami-common"
-    version: "2.30.2"
+    version: "2.31.3"
 description: "Nautobot is a Network Source of Truth and Network Automation Platform."
 home: "https://github.com/nautobot/nautobot"
 icon: "https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png"

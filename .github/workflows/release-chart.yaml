@@ -8,7 +8,7 @@ jobs:
   release:
     runs-on: "ubuntu-22.04"
     steps:
-      - uses: "actions/checkout@v4"
+      - uses: "actions/checkout@v5"
       - name: "Publish Helm charts"
         uses: "stefanprodan/helm-gh-pages@v1.7.0"
         with:
@@ -18,7 +18,7 @@ jobs:
   publish-oci:
     runs-on: "ubuntu-22.04"
     steps:
-      - uses: "actions/checkout@v4"
+      - uses: "actions/checkout@v5"
       - name: "Publish Helm charts to OCI"
         uses: "appany/helm-oci-chart-releaser@v0.4.2"
         with:

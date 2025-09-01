@@ -1132,60 +1132,6 @@ redis:
   serviceAccount:
     automountServiceAccountToken: false
 
-mariadb:
-  # -- Enable deployment of the [Bitnami mariadb](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) chart, all other `redis.*` parameters will be passed directly to that chart
-  enabled: false
-  auth:
-    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB database name
-    database: "nautobot"
-    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB username
-    username: "nautobot"
-    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB user password
-    password: ""
-    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#mariadb-common-parameters)] MariaDB root user password
-    rootPassword: ""
-  image:
-    repository: "bitnamilegacy/mariadb"
-    tag: "11.2.3-debian-11-r5"
-    pullPolicy: "Always"
-  metrics:
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop:
-          - "ALL"
-  primary:
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: false  # Must be set to false
-      capabilities:
-        drop:
-          - "ALL"
-    podSecurityContext:
-      seccompProfile:
-        type: "RuntimeDefault"
-    extraEnvVars:
-      - name: "MARIADB_CHARACTER_SET"
-        value: "utf8mb4"
-      - name: "MARIADB_COLLATE"
-        value: "utf8mb4_bin"
-  secondary:
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: false  # Must be set to false
-      capabilities:
-        drop:
-          - "ALL"
-    podSecurityContext:
-      seccompProfile:
-        type: "RuntimeDefault"
-    extraEnvVars:
-      - name: "MARIADB_CHARACTER_SET"
-        value: "utf8mb4"
-      - name: "MARIADB_COLLATE"
-        value: "utf8mb4_bin"
-
 postgresqlha:
   # -- Enable deployment of the [Bitnami postgresql-ha](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart, all other `postgresql-ha.*` parameters will be passed directly to that chart
   enabled: false

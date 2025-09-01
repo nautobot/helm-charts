@@ -8,9 +8,6 @@ dependencies:
 - name: postgresql-ha
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 11.9.8
-- name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.1.3
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.31.4

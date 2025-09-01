@@ -1267,7 +1267,7 @@ rabbitmq:
   enabled: false
   image:
     repository: "bitnamilegacy/rabbitmq"
-    tag: "3.12.13-debian-12-r2"
+    tag: "3.13.7-debian-12-r2"
 
 # -- Deploy additional Kubernetes manifests
 extraObjects: []

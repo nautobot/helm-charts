@@ -165,7 +165,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| <a name="extraObjects">[extraObjects](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1258)</a> | list | `[]` | Deploy additional Kubernetes manifests |
+| <a name="extraObjects">[extraObjects](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1266)</a> | list | `[]` | Deploy additional Kubernetes manifests |
 
 ## Ingress Values
 

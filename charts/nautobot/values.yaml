@@ -41,7 +41,7 @@ nautobot:
     # -- Nautobot image name, common to all deployments
     repository: "nautobot/nautobot"
     # -- Nautobot image tag, common to all deployments
-    tag: "2.4.14-py3.11"
+    tag: "2.4.17-py3.11"
     # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent`
     pullPolicy: "Always"
     # -- ([]string) List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments
@@ -1084,7 +1084,7 @@ redis:
     password: ""
   image:
     repository: "bitnamilegacy/redis"
-    tag: "7.2.4-debian-12-r9"
+    tag: "7.4.2-debian-12-r9"
     pullPolicy: "Always"
   master:
     containerSecurityContext:
@@ -1146,7 +1146,7 @@ mariadb:
     rootPassword: ""
   image:
     repository: "bitnamilegacy/mariadb"
-    tag: "11.0.3-debian-11-r5"
+    tag: "11.2.3-debian-11-r5"
     pullPolicy: "Always"
   metrics:
     containerSecurityContext:
@@ -1191,7 +1191,7 @@ postgresqlha:
   enabled: false
   image:
     repository: "bitnamilegacy/postgresql-repmgr"
-    tag: "16.0.0-debian-11-r2"
+    tag: "16.2.0-debian-11-r2"
     pullPolicy: "Always"
   postgresql:
     # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL database name
@@ -1267,7 +1267,7 @@ rabbitmq:
   enabled: false
   image:
     repository: "bitnamilegacy/rabbitmq"
-    tag: "3.12.13-debian-12-r2"
+    tag: "3.13.7-debian-12-r2"
 
 # -- Deploy additional Kubernetes manifests
 extraObjects: []

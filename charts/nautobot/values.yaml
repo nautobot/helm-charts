@@ -1146,7 +1146,7 @@ mariadb:
     rootPassword: ""
   image:
     repository: "bitnamilegacy/mariadb"
-    tag: "11.0.3-debian-11-r5"
+    tag: "11.2.3-debian-11-r5"
     pullPolicy: "Always"
   metrics:
     containerSecurityContext:

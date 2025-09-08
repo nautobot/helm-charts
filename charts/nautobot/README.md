@@ -1,6 +1,6 @@
 # nautobot
 
-![Version: 2.5.5](https://img.shields.io/badge/Version-2.5.5-informational?style=flat-square) ![AppVersion: 2.4.14](https://img.shields.io/badge/AppVersion-2.4.14-informational?style=flat-square)
+![Version: 2.5.6](https://img.shields.io/badge/Version-2.5.6-informational?style=flat-square) ![AppVersion: 2.4.17](https://img.shields.io/badge/AppVersion-2.4.17-informational?style=flat-square)
 
 Nautobot is a Network Source of Truth and Network Automation Platform.
 
@@ -89,7 +89,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 
 | Repository | Name | Version |
 |------------|------|---------|
-| oci://registry-1.docker.io/bitnamicharts | common | 2.31.3 |
+| oci://registry-1.docker.io/bitnamicharts | common | 2.31.4 |
 | oci://registry-1.docker.io/bitnamicharts | mariadb | 13.1.3 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql | 12.12.10 |
 | oci://registry-1.docker.io/bitnamicharts | postgresqlha(postgresql-ha) | 11.9.8 |
@@ -281,7 +281,7 @@ The `mariadb.*` values configure the upstream chart from Bitnami.  Please see th
 | <a name="nautobot.image.pullSecrets">[nautobot.image.pullSecrets](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L48)</a> | []string | `[]` | List of secret names to be used as image [pull secrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/), common to all deployments |
 | <a name="nautobot.image.registry">[nautobot.image.registry](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L40)</a> | string | `"ghcr.io"` | Nautobot image registry, common to all deployments |
 | <a name="nautobot.image.repository">[nautobot.image.repository](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L42)</a> | string | `"nautobot/nautobot"` | Nautobot image name, common to all deployments |
-| <a name="nautobot.image.tag">[nautobot.image.tag](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L44)</a> | string | `"2.4.14-py3.11"` | Nautobot image tag, common to all deployments |
+| <a name="nautobot.image.tag">[nautobot.image.tag](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L44)</a> | string | `"2.4.17-py3.11"` | Nautobot image tag, common to all deployments |
 | <a name="nautobot.initContainers">[nautobot.initContainers](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L219)</a> | [][Container](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container) | `[]` | [[ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)] Add additional init containers to the Nautobot server pods |
 | <a name="nautobot.lifecycleHooks">[nautobot.lifecycleHooks](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L191)</a> | [Lifecycle](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle) | `{}` | lifecycleHooks for the Nautobot container(s) to automate configuration before or after startup |
 | <a name="nautobot.livenessProbe">[nautobot.livenessProbe](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L60)</a> | [Probe](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1) | See values.yaml | [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot liveness probe |

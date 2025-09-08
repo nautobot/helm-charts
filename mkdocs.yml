@@ -90,7 +90,6 @@ nav:
     - PostgreSQL High Availability: "advanced-features/postgresql-ha.md"
     - PostgreSQL TLS: "advanced-features/postgresql-tls.md"
     - Prometheus Operator Metrics: "advanced-features/prometheus-metrics.md"
-    - RabbitMQ Support: "advanced-features/rabbitmq.md"
     - Redis Sentinel: "advanced-features/redis-sentinel.md"
     - Redis TLS: "advanced-features/redis-tls.md"
     - Static Files Only: "advanced-features/static-only.md"

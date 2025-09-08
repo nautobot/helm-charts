@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.6 - 2025-09-08
+
+### Fixed
+
+* [#597](https://github.com/nautobot/helm-charts/pull/597) Fix ingress by removing bitnami unsupported helpers
+
+### Changed
+
+* Upgraded Nautobot from 2.4.14 to 2.4.17
+* Upgraded minor version of bitnamilegacy docker images
+
 ## 2.5.5 - 2025-08-06
 
 ### Fixed

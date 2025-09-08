@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.4.14-py3.11
+      image: ghcr.io/nautobot/nautobot:2.4.17-py3.11
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -31,16 +31,14 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: fixed
-      description: Fixed nginx config to support https2 using proper syntax
+      description: Fixed ingress by removing bitnami unsupported helpers
     - kind: changed
-      description: Changed to use bitnamilegacy docker images
+      description: Upgraded Nautobot from 2.4.14 to 2.4.17
     - kind: changed
-      description: Upgraded Nautobot from 2.4.11 to 2.4.14
-    - kind: changed
-      description: Upgraded Bitnami common subchart from 2.30.2 to 2.31.3
+      description: Upgraded minor version of bitnamilegacy docker images
 apiVersion: "v2"
-appVersion: "2.4.14"
-version: "2.5.5"
+appVersion: "2.4.17"
+version: "2.5.6"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

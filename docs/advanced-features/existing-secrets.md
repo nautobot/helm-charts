@@ -4,7 +4,6 @@ If you don't want to pass values through helm for...
 
 - Redis
 - PostgreSQL
-- MariaDB
 - Nautobot Secret Key
 - Superuser password and API token
 

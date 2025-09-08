@@ -107,11 +107,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "nautobot.mariadb.fullname" -}}
-{{- $name := default "mariadb" .Values.mariadb.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
 {{- define "nautobot.postgresqlha.fullname" -}}
 {{- $name := default "postgresqlha-pgpool" .Values.postgresqlha.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}

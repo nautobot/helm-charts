@@ -639,7 +639,6 @@
     "nautobots",
     "postgresql",
     "postgresqlha",
-    "rabbitmq",
     "redis",
     "service",
     "serviceAccount"
@@ -1058,17 +1057,6 @@
               "type": "string"
             }
           }
-        }
-      }
-    },
-    "rabbitmq": {
-      "type": "object",
-      "required": [
-        "enabled"
-      ],
-      "properties": {
-        "enabled": {
-          "type": "boolean"
         }
       }
     },

@@ -93,7 +93,6 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 | oci://registry-1.docker.io/bitnamicharts | mariadb | 13.1.3 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql | 12.12.10 |
 | oci://registry-1.docker.io/bitnamicharts | postgresqlha(postgresql-ha) | 11.9.8 |
-| oci://registry-1.docker.io/bitnamicharts | rabbitmq | 12.15.0 |
 | oci://registry-1.docker.io/bitnamicharts | redis | 18.19.4 |
 
 <!-- This section is a duplicate of docs/configuration/reference.md.gotmpl -->
@@ -166,7 +165,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| <a name="extraObjects">[extraObjects](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1273)</a> | list | `[]` | Deploy additional Kubernetes manifests |
+| <a name="extraObjects">[extraObjects](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1266)</a> | list | `[]` | Deploy additional Kubernetes manifests |
 
 ## Ingress Values
 
@@ -406,12 +405,6 @@ The `postgresqlha.*` values configure the upstream chart from Bitnami.  Please s
 | <a name="postgresqlha.postgresql.postgresPassword">[postgresqlha.postgresql.postgresPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1200)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL postgres user password |
 | <a name="postgresqlha.postgresql.repmgrPassword">[postgresqlha.postgresql.repmgrPassword](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1202)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL Repmgr password |
 | <a name="postgresqlha.postgresql.username">[postgresqlha.postgresql.username](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1204)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#postgresql-with-repmgr-parameters)] PostgreSQL username |
-
-## Rabbitmq Values
-
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| <a name="rabbitmq.enabled">[rabbitmq.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1267)</a> | bool | `false` | Enable deployment of the [Bitnami RabbitMQ](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq) chart, all other `rabbitmq.*` parameters will be passed directly to that chart |
 
 ## Redis Values
 

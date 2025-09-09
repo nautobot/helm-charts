@@ -1,6 +1,9 @@
 # RabbitMQ Support
 
 !!! warning
+    RabbitMQ support is deprecated in version 3.0.0 of the charts. Please use another method of deployment prior to upgrading.
+
+!!! warning
     RabbitMQ Support for Nautobot is not tested by the Nautobot Core team and therefore support is minimal.
 
 !!! warning

@@ -638,7 +638,6 @@
     "nautobot",
     "nautobots",
     "postgresql",
-    "postgresqlha",
     "redis",
     "service",
     "serviceAccount"
@@ -1016,49 +1015,6 @@
     },
     "postgresql-ha": {
       "type": "object"
-    },
-    "postgresqlha": {
-      "type": "object",
-      "required": [
-        "enabled",
-        "pgpool",
-        "postgresql"
-      ],
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
-        "pgpool": {
-          "type": "object",
-          "required": [
-            "adminPassword"
-          ],
-          "properties": {
-            "adminPassword": {
-              "type": "string"
-            }
-          }
-        },
-        "postgresql": {
-          "type": "object",
-          "required": [
-            "password",
-            "postgresPassword",
-            "repmgrPassword"
-          ],
-          "properties": {
-            "password": {
-              "type": "string"
-            },
-            "postgresPassword": {
-              "type": "string"
-            },
-            "repmgrPassword": {
-              "type": "string"
-            }
-          }
-        }
-      }
     },
     "redis": {
       "allOf": [

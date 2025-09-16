@@ -16,8 +16,6 @@ mariadb:
   enabled: false
 postgresql:
   enabled: true
-postgresqlha:
-  enabled: false
 rabbitmq:
   enabled: false
 redis:

@@ -27,5 +27,6 @@ For additional configuration for one of the subcharts please see their documenta
 * [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which can be configured under the `postgresql.*` values.
 * [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which can be configured under the `mariadb.*` values.
 * [Bitnami PostgreSQL-HA chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha) which can be configured under the `postgresqlha.*` values.
+* [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which can be configured under the `mariadb.*` values.
 * [Bitnami Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) which can be configured under the `redis.*` values.
 * [Bitnami RabbitMQ chart](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq) which can be configured under the `rabbitmq.*` values.

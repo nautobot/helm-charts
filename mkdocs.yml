@@ -82,7 +82,6 @@ nav:
     - Extra Objects: "advanced-features/extra-objects.md"
     - Initialization Job: "advanced-features/init-hook.md"
     - Ingress: "advanced-features/ingress.md"
-    - MySQL Support: "advanced-features/mysql.md"
     - Nautobot as a Subchart: "advanced-features/nautobot-as-subchart.md"
     - Network Policy: "advanced-features/network-policy.md"
     - Nginx Sidecar: "advanced-features/nginx-sidecar.md"

@@ -633,7 +633,6 @@
     "commonAnnotations",
     "ingress",
     "initJob",
-    "mariadb",
     "metrics",
     "nautobot",
     "nautobots",
@@ -798,23 +797,6 @@
             "upgradeHook": {
               "type": "string",
               "pattern": "^(post-upgrade|pre-upgrade)$"
-            }
-          }
-        }
-      ]
-    },
-    "mariadb": {
-      "allOf": [
-        {
-          "$ref": "https://raw.githubusercontent.com/bitnami/charts/ba59192a4d0b28454f072903e5186d8bb2adf43f/bitnami/mariadb/values.schema.json"
-        },
-        {
-          "required": [
-            "enabled"
-          ],
-          "properties": {
-            "enabled": {
-              "type": "boolean"
             }
           }
         }

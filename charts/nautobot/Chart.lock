@@ -13,3 +13,11 @@ dependencies:
   version: 2.31.4
 digest: sha256:eb64a64013e312bc1b4f89487d93b0b4234b62c65161cc0d563b8328639afd2c
 generated: "2025-09-16T14:36:00.18219213Z"
+- name: postgresql-ha
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 11.9.8
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 2.31.4
+digest: sha256:4ba2c9c3ff99af7bdb0cf1ee99df6bb71f8962a39596550aac19634100789ffb
+generated: "2025-09-08T08:58:57.501611671Z"

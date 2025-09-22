@@ -995,9 +995,6 @@
         }
       ]
     },
-    "postgresql-ha": {
-      "type": "object"
-    },
     "redis": {
       "allOf": [
         {

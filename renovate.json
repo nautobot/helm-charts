@@ -6,19 +6,6 @@
   "pre-commit": {
     "enabled": true
   },
-  "allowedCommands": [
-    "scripts/update_version.sh \".*\""
-  ],
-  "postUpgradeTasks": {
-    "commands": [
-      "scripts/update_version.sh \"Update {{{depName}}} to {{{newVersion}}}\""
-    ],
-    "fileFilters": [
-      "**/README.md",
-      "**/Chart.yaml",
-      "CHANGELOG.md"
-    ]
-  },
   "packageRules": [
     {
       "description": [

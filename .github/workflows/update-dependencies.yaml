@@ -21,7 +21,7 @@ jobs:
           helm dependency update charts/nautobot
 
       - name: "Setup Go"
-        uses: "actions/setup-go@v5"
+        uses: "actions/setup-go@v6"
       - run: "echo $HOME/go/bin >> $GITHUB_PATH"
       - name: "Install helm-docs"
         run: "go install github.com/norwoodj/helm-docs/cmd/helm-docs@v1.11.0"

@@ -7,11 +7,11 @@
     "enabled": true
   },
   "allowedPostUpgradeCommands": [
-    "scripts/update_version.sh \"{{{prTitle}}}\""
+    "scripts/update_version.sh \".*\""
   ],
   "postUpgradeTasks": {
     "commands": [
-      "scripts/update_version.sh \"{{{prTitle}}}\""
+      "scripts/update_version.sh \"Update {{{depName}}} to {{{newVersion}}}\""
     ],
     "fileFilters": [
       "**/README.md",

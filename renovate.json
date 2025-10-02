@@ -6,7 +6,7 @@
   "pre-commit": {
     "enabled": true
   },
-  "allowedPostUpgradeCommands": [
+  "allowedCommands": [
     "scripts/update_version.sh \".*\""
   ],
   "postUpgradeTasks": {

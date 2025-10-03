@@ -42,4 +42,4 @@ jobs:
         run: |
           git add .
           git commit -m "chore: Update docs"
-          git push origin ${{ github.ref_name }}
+          git push origin ${{ github.head_ref }}

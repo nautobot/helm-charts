@@ -8,7 +8,7 @@ on:  # yamllint disable-line rule:truthy
       - "next"
 
 jobs:
-  update-dependencies:
+  update-docs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout"

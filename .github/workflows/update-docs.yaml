@@ -41,5 +41,5 @@ jobs:
         if: "steps.git-check.outputs.changed == 'true'"
         run: |
           git add .
-          git commit -m "chore: Update helm dependencies"
+          git commit -m "chore: Update docs"
           git push origin ${{ github.ref_name }}

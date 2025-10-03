@@ -36,7 +36,7 @@ jobs:
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
-          git diff --quiet || echo "::set-output name=changed::true"
+          git diff --quiet || echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: "Commit changes"
         if: "steps.git-check.outputs.changed == 'true'"

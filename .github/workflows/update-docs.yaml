@@ -1,0 +1,45 @@
+---
+name: "Update Docs"
+
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - "develop"
+      - "next"
+
+jobs:
+  update-dependencies:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v5"
+
+      - name: "Setup Go"
+        uses: "actions/setup-go@v6"
+
+      - name: "Install helm-docs"
+        run: "go install github.com/norwoodj/helm-docs/cmd/helm-docs@v1.11.0"
+        env:
+          GO111MODULE: "on"
+
+      - name: "Update README.md"
+        run: |
+          helm-docs --chart-search-root=charts --template-files=README.md.gotmpl
+
+      - name: "Update reference.md"
+        run: |
+          helm-docs --chart-to-generate=charts/nautobot --template-files=./docs/configuration/reference.md.gotmpl --output-file=../../docs/configuration/reference.md
+
+      - name: "Check for changes"
+        id: "git-check"
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git diff --quiet || echo "::set-output name=changed::true"
+
+      - name: "Commit changes"
+        if: "steps.git-check.outputs.changed == 'true'"
+        run: |
+          git add .
+          git commit -m "chore: Update helm dependencies"
+          git push origin ${{ github.ref_name }}

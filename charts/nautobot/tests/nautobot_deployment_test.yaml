@@ -34,8 +34,8 @@ set:
         mountPath: "/opt/extra-volume-from-configmap"
     initContainers:
       - name: "init-myservice"
-        image: busybox
-        command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+        image: "busybox"
+        command: ["sh", "-c", "echo The app is running! && sleep 3600"]
     command: ["/usr/local/bin/nautobot-server"]
     args: ["run", "server", "--host", "0.0.0.0", "--port", "8000"]
     extraEnvVars:

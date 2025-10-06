@@ -68,8 +68,8 @@ tests:
           path: "metadata.labels"
           content:
             app.kubernetes.io/component: "nautobot-default"
-            app.kubernetes.io/instance: test
-            app.kubernetes.io/name: nautobot
+            app.kubernetes.io/instance: "test"
+            app.kubernetes.io/name: "nautobot"
             test/label: "test/value"
       - isSubset:
           path: "metadata.annotations"
@@ -83,16 +83,16 @@ tests:
       - isSubset:
           path: "spec.selector.matchLabels"
           content:
-            app.kubernetes.io/name: nautobot
+            app.kubernetes.io/name: "nautobot"
             app.kubernetes.io/component: "nautobot-default"
   - it: "Assert pod template metadata is correctly templated."
     asserts:
       - isSubset:
           path: "spec.template.metadata.labels"
           content:
-            app.kubernetes.io/name: nautobot
+            app.kubernetes.io/name: "nautobot"
             app.kubernetes.io/component: "nautobot-default"
-            app.kubernetes.io/instance: test
+            app.kubernetes.io/instance: "test"
             test/pod-label: "test/value"
       - isSubset:
           path: "spec.template.metadata.annotations"

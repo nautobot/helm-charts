@@ -558,7 +558,9 @@ celery:
   enabled: true
 
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/#concurrency-setting)]Concurrency Setting (0: use the default which is the number of CPUs available on your system)<sup>[2](#notes)</sup>
-  concurrency: 0
+  concurrency: 2
+  # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/#celery_task_queues)]Celery Task Queues (space separated list of queues)<sup>[2](#notes)</sup>
+  late_ack: false
   # -- Number of Nautobot Celery Workers replicas to deploy
   replicaCount: 2
   # -- [[ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)] Number of old ReplicaSets to retain

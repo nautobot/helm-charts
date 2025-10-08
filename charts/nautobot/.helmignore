@@ -25,6 +25,8 @@
 # README template
 README.md.gotmpl
 reference.md.gotmpl
+# Unittests dir
+tests/
 # Linter Values
 linter_values.yaml
 linter_values_minimum.yaml

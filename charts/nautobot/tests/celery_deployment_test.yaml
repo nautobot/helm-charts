@@ -1,3 +1,4 @@
+---
 suite: "Test Celery Deployment"
 templates:
   - "celery-deployment.yaml"
@@ -21,7 +22,7 @@ tests:
           enabled: false
     asserts:
       - equal:
-          path: spec.template.spec.containers[0].command
+          path: "spec.template.spec.containers[0].command"
           value:
             - "nautobot-server"
             - "celery"
@@ -34,12 +35,12 @@ tests:
             - "--concurrency"
             - "1"
       - contains:
-          path: spec.template.spec.containers[0].env
+          path: "spec.template.spec.containers[0].env"
           content:
             name: "CELERY_TASK_ACKS_LATE"
             value: "true"
       - contains:
-          path: spec.template.spec.containers[0].env
+          path: "spec.template.spec.containers[0].env"
           content:
             name: "NAUTOBOT_CELERY_WORKER_PREFETCH_MULTIPLIER"
             value: "1"
@@ -51,7 +52,7 @@ tests:
           enabled: false
     asserts:
       - equal:
-          path: spec.template.spec.containers[0].command
+          path: "spec.template.spec.containers[0].command"
           value:
             - "nautobot-server"
             - "celery"
@@ -59,12 +60,12 @@ tests:
             - "--loglevel"
             - "$(NAUTOBOT_LOG_LEVEL)"
       - notContains:
-          path: spec.template.spec.containers[0].env
+          path: "spec.template.spec.containers[0].env"
           content:
             name: "CELERY_TASK_ACKS_LATE"
             value: "true"
       - notContains:
-          path: spec.template.spec.containers[0].env
+          path: "spec.template.spec.containers[0].env"
           content:
             name: "NAUTOBOT_CELERY_WORKER_PREFETCH_MULTIPLIER"
             value: "1"

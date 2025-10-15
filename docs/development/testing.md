@@ -15,13 +15,13 @@ It is possible to do some basic linting with an existing set of `linter_values*.
 
 We really should run functional testing with these templates but they require various levels of system resources which makes this impractical on a developer laptop.
 
-## Unittesting
+## Unit testing
 
-The repository supports Helm unittesting using the `helm-unittest` library (https://github.com/helm-unittest/helm-unittest). Follow the installation docs to install the plugin.
+The repository supports Helm unit testing using the `helm-unittest` library (https://github.com/helm-unittest/helm-unittest). Follow the installation docs to install the plugin.
 
 After the plugin is installed you can run `helm unittest charts/nautobot` command to execute tests. The following snippet show an example:
 
-```
+```shell
 ### Chart [ nautobot ] charts/nautobot
 
  PASS  Test Nautobot K8s Deployment     charts/nautobot/tests/nautobot_deployment_test.yaml
@@ -34,7 +34,6 @@ Time:        6.864226708s
 ```
 
 > Note: The tests are still in development and will be slowly added for majority of templates.
-
 
 ## Functional Testing
 

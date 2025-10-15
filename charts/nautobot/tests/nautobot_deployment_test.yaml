@@ -1,0 +1,256 @@
+---
+suite: "Test Nautobot K8s Deployment"
+templates:
+  - "nautobot-deployment.yaml"
+set:
+  commonLabels:
+    test/label: "test/value"
+  commonAnnotations:
+    test/annotation: "test/value"
+  nautobot:
+    replicaCount: 3
+    image:
+      registry: "docker.io"
+      repository: "nautobot"
+      tag: "nb-tag-2"
+      pullSecrets:
+        - "pull-secrets-1"
+    autoscaling:
+      enabled: false
+    podLabels:
+      test/pod-label: "test/value"
+    podAnnotations:
+      test/pod-annotation: "test/value"
+    extraVolumes:
+      - name: "extra-volume"
+        emptyDir: {}
+      - name: "extra-volume-from-configmap"
+        configMap:
+          name: "test-configmap"
+    extraVolumeMounts:
+      - name: "extra-volume"
+        mountPath: "/opt/extra-volume"
+      - name: "extra-volume-from-configmap"
+        mountPath: "/opt/extra-volume-from-configmap"
+    initContainers:
+      - name: "init-myservice"
+        image: "busybox"
+        command: ["sh", "-c", "echo The app is running! && sleep 3600"]
+    command: ["/usr/local/bin/nautobot-server"]
+    args: ["run", "server", "--host", "0.0.0.0", "--port", "8000"]
+    extraEnvVars:
+      - name: "EXTRA_ENV_VAR"
+        value: "extra-value"
+    extraEnvVarsCM:
+      - "extra-env-vars"
+    extraEnvVarsSecret:
+      - "extra-env-vars-secret"
+  serviceAccount:
+    create: true
+    name: "test-nautobot-sa"
+release:
+  name: "test"
+  namespace: "test"
+tests:
+
+  - it: "Assert Deployment is created"
+    asserts:
+      - isKind:
+          of: "Deployment"
+
+  - it: "Assert metadata is correctly templated."
+    asserts:
+      - equal:
+          path: "metadata.name"
+          value: "test-nautobot-default"
+      - equal:
+          path: "metadata.namespace"
+          value: "test"
+      - isSubset:
+          path: "metadata.labels"
+          content:
+            app.kubernetes.io/component: "nautobot-default"
+            app.kubernetes.io/instance: "test"
+            app.kubernetes.io/name: "nautobot"
+            test/label: "test/value"
+      - isSubset:
+          path: "metadata.annotations"
+          content:
+            test/annotation: "test/value"
+
+  - it: "Assert global spec is correctly templated."
+    asserts:
+      - equal:
+          path: "spec.replicas"
+          value: 3
+      - isSubset:
+          path: "spec.selector.matchLabels"
+          content:
+            app.kubernetes.io/name: "nautobot"
+            app.kubernetes.io/component: "nautobot-default"
+
+  - it: "Assert pod template metadata is correctly templated."
+    asserts:
+      - isSubset:
+          path: "spec.template.metadata.labels"
+          content:
+            app.kubernetes.io/name: "nautobot"
+            app.kubernetes.io/component: "nautobot-default"
+            app.kubernetes.io/instance: "test"
+            test/pod-label: "test/value"
+      - isSubset:
+          path: "spec.template.metadata.annotations"
+          content:
+            test/pod-annotation: "test/value"
+
+  - it: "Assert service account is correctly templated."
+    asserts:
+      - equal:
+          path: "spec.template.spec.serviceAccountName"
+          value: "test-nautobot-sa"
+
+  - it: "Volumes are correctly templated."
+    asserts:
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "nautobot-static"
+            emptyDir: {}
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "git-repos"
+            emptyDir: {}
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "nautobot-config"
+            configMap:
+              name: "test-nautobot-config"
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "extra-volume"
+            emptyDir: {}
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "extra-volume-from-configmap"
+            configMap:
+              name: "test-configmap"
+
+  - it: "Assert init containers spec are correctly templated."
+    asserts:
+      - lengthEqual:
+          path: "spec.template.spec.initContainers"
+          count: 2
+      - equal:
+          path: "spec.template.spec.initContainers[0].name"
+          value: "nautobot-init"
+      - equal:
+          path: "spec.template.spec.initContainers[0].image"
+          value: "docker.io/nautobot:nb-tag-2"
+      - equal:
+          path: "spec.template.spec.initContainers[1].name"
+          value: "init-myservice"
+      - equal:
+          path: "spec.template.spec.initContainers[1].image"
+          value: "busybox"
+
+  - it: "Assert main container spec are correctly templated."
+    asserts:
+      - lengthEqual:
+          path: "spec.template.spec.containers"
+          count: 1
+      - equal:
+          path: "spec.template.spec.containers[0].name"
+          value: "nautobot"
+      - equal:
+          path: "spec.template.spec.containers[0].image"
+          value: "docker.io/nautobot:nb-tag-2"
+      - equal:
+          path: "spec.template.spec.containers[0].command"
+          value: ["/usr/local/bin/nautobot-server"]
+      - equal:
+          path: "spec.template.spec.containers[0].args"
+          value: ["run", "server", "--host", "0.0.0.0", "--port", "8000"]
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "EXTRA_ENV_VAR"
+            value: "extra-value"
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_K8S_COMPONENT"
+            value: "nautobot-default"
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_DB_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                key: "password"
+                name: "test-postgresql"
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_REDIS_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                key: "redis-password"
+                name: "test-redis"
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_SECRET_KEY"
+            valueFrom:
+              secretKeyRef:
+                key: "NAUTOBOT_SECRET_KEY"
+                name: "test-nautobot-env"
+      - contains:
+          path: "spec.template.spec.containers[0].envFrom"
+          content:
+            configMapRef:
+              name: "test-nautobot-env"
+      - contains:
+          path: "spec.template.spec.containers[0].envFrom"
+          content:
+            secretRef:
+              name: "test-nautobot-env"
+      - contains:
+          path: "spec.template.spec.containers[0].envFrom"
+          content:
+            configMapRef:
+              name: "extra-env-vars"
+      - contains:
+          path: "spec.template.spec.containers[0].envFrom"
+          content:
+            secretRef:
+              name: "extra-env-vars-secret"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-static"
+            mountPath: "/opt/nautobot/static"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "git-repos"
+            mountPath: "/opt/nautobot/git"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/uwsgi.ini"
+            subPath: "uwsgi.ini"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "extra-volume"
+            mountPath: "/opt/extra-volume"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "extra-volume-from-configmap"
+            mountPath: "/opt/extra-volume-from-configmap"

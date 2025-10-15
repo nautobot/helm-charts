@@ -33,6 +33,8 @@ Snapshot:    0 passed, 0 total
 Time:        6.864226708s
 ```
 
+> Note: The tests are still in development and will be slowly added for majority of templates.
+
 
 ## Functional Testing
 

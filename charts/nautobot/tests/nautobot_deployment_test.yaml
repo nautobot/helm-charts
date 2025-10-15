@@ -52,10 +52,12 @@ release:
   name: "test"
   namespace: "test"
 tests:
+
   - it: "Assert Deployment is created"
     asserts:
       - isKind:
           of: "Deployment"
+
   - it: "Assert metadata is correctly templated."
     asserts:
       - equal:
@@ -75,6 +77,7 @@ tests:
           path: "metadata.annotations"
           content:
             test/annotation: "test/value"
+
   - it: "Assert global spec is correctly templated."
     asserts:
       - equal:
@@ -85,6 +88,7 @@ tests:
           content:
             app.kubernetes.io/name: "nautobot"
             app.kubernetes.io/component: "nautobot-default"
+
   - it: "Assert pod template metadata is correctly templated."
     asserts:
       - isSubset:
@@ -98,11 +102,13 @@ tests:
           path: "spec.template.metadata.annotations"
           content:
             test/pod-annotation: "test/value"
+
   - it: "Assert service account is correctly templated."
     asserts:
       - equal:
           path: "spec.template.spec.serviceAccountName"
           value: "test-nautobot-sa"
+
   - it: "Volumes are correctly templated."
     asserts:
       - contains:
@@ -132,6 +138,7 @@ tests:
             name: "extra-volume-from-configmap"
             configMap:
               name: "test-configmap"
+
   - it: "Assert init containers spec are correctly templated."
     asserts:
       - lengthEqual:
@@ -149,6 +156,7 @@ tests:
       - equal:
           path: "spec.template.spec.initContainers[1].image"
           value: "busybox"
+
   - it: "Assert main container spec are correctly templated."
     asserts:
       - lengthEqual:

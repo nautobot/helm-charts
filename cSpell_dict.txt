@@ -1,6 +1,7 @@
 acks
 apiserver
 apitoken
+appname
 armo
 armobest
 artifacthub
@@ -9,6 +10,7 @@ autoscaler
 bitnami
 bitnamicharts
 bitnamilegacy
+bootsteps
 cacheops
 chatops
 codeql
@@ -50,6 +52,7 @@ nginxinc
 nginxmetrics
 nindent
 norwoodj
+pathlib
 pgpool
 portname
 postgresqlha

@@ -17,7 +17,7 @@ We really should run functional testing with these templates but they require va
 
 ## Unittesting
 
-The repository support Helm unittesting using the `helm-unittest` library (https://github.com/helm-unittest/helm-unittest). Follow the installation docs to install the plugin.
+The repository supports Helm unittesting using the `helm-unittest` library (https://github.com/helm-unittest/helm-unittest). Follow the installation docs to install the plugin.
 
 After the plugin is installed you can run `helm unittest charts/nautobot` command to execute tests. The following snippet show an example:
 

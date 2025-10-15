@@ -558,7 +558,7 @@ celery:
   enabled: true
 
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/#concurrency-setting)]Concurrency Setting (0: use the default which is the number of CPUs available on your system)<sup>[2](#notes)</sup>
-  concurrency: 2
+  concurrency: 0
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/guides/celery-queues/#queuing-optimizations)]Celery Task Late Acknowledgement
   task_acks_late: false
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/guides/celery-queues/#queuing-optimizations)]Celery Workers Prefetch Multiplier (default is 4). Setting this to 1 means that each worker will only reserve one task at a time.

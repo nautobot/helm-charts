@@ -184,14 +184,6 @@ tests:
           content:
             name: "NAUTOBOT_K8S_COMPONENT"
             value: "nautobot-default"
-      # - contains:
-      #     path: "spec.template.spec.containers[0].env"
-      #     content:
-      #       name: "NAUTOBOT_DB_PASSWORD"
-      #       valueFrom:
-      #         secretKeyRef:
-      #           key: "password"
-      #           name: "test-postgresql"
       - contains:
           path: "spec.template.spec.containers[0].env"
           content:
@@ -344,7 +336,7 @@ tests:
             name: "NAUTOBOT_DB_USER"
             valueFrom:
               secretKeyRef:
-                name: "test-db"
+                name: "test-nautobot-db"
                 key: "username"
       - contains:
           path: "spec.template.spec.containers[0].env"
@@ -352,5 +344,5 @@ tests:
             name: "NAUTOBOT_DB_PASSWORD"
             valueFrom:
               secretKeyRef:
-                name: "test-db"
+                name: "test-nautobot-db"
                 key: "password"

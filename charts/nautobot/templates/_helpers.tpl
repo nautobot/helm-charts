@@ -145,7 +145,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "nautobot.database.secretName" -}}
-{{ printf "%s-%s" .Release.Name "db" | quote }}
+{{ include "common.names.fullname" . }}-db
 {{- end -}}
 
 {{/*
@@ -219,7 +219,7 @@ valueFrom:
     {{- else -}}
 valueFrom:
   secretKeyRef:
-    name: {{ printf "%s-%s" .Release.Name "db" | quote }}
+    name: {{ include "nautobot.database.secretName" . }}
     key: "password"
     {{- end -}}
   {{- end -}}

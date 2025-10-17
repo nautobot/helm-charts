@@ -10,7 +10,6 @@ NAUTOBOT_DB_HOST: {{ include "nautobot.database.host" . | quote }}
 NAUTOBOT_DB_NAME: {{ include "nautobot.database.dbname" . | quote }}
 NAUTOBOT_DB_PORT: {{ include "nautobot.database.port" . | quote }}
 NAUTOBOT_DB_TIMEOUT: {{ .Values.nautobot.db.timeout | quote }}
-NAUTOBOT_DB_USER: {{ include "nautobot.database.username" . | quote }}
 {{- if .Values.nautobot.debug }}
 NAUTOBOT_DEBUG: "True"
 {{- else }}

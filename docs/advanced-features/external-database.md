@@ -15,3 +15,17 @@ nautobot:
 postgresql:
   enabled: false
 ```
+
+If you do not want to set the password in values, you can rather use an existing secret. The following
+is the example of the configuration. Please note that both, username and password are taken from the
+existing secret, that is why both are required in the secret, otherwise the deployment will fail.
+
+```yaml
+nautobot:
+  db:
+    existingSecret: "credentials"
+    existingSecretUsernameKey: "dbusername"
+    existingSecretPasswordKey: "dbpassword"
+postgresql:
+  enabled: false
+```

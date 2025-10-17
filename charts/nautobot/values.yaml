@@ -385,10 +385,12 @@ nautobot:
   db:
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases)] Nautobot database engine, valid values: `django.db.backends.postgresql`, `django_prometheus.db.backends.postgresql` (metrics enabled), `django.db.backends.mysql`, and `django_prometheus.db.backends.mysql` (metrics enabled) (NAUTOBOT_DB_ENGINE)<sup>[1](#notes)</sup>
     engine: "django.db.backends.postgresql"
-    # -- Name of existing secret to use for Database passwords<sup>[1](#notes)</sup>
+    # -- Name of existing secret to use for Database credentials (username and password)<sup>[1](#notes)</sup>
     existingSecret: ""
+    # -- Username key to be retrieved from existing secret<sup>[1](#notes)</sup>
+    existingSecretUsernameKey: "username"
     # -- Password key to be retrieved from existing secret<sup>[1](#notes)</sup>
-    existingSecretPasswordKey: ""
+    existingSecretPasswordKey: "password"
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases)] Nautobot external database hostname, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_HOST)<sup>[1](#notes)</sup>
     host: "postgres"
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/required-settings/#databases)] Nautobot external database name, ignored if `postgresql.enabled` is `true` (NAUTOBOT_DB_NAME)<sup>[1](#notes)</sup>

@@ -187,14 +187,6 @@ tests:
       - contains:
           path: "spec.template.spec.containers[0].env"
           content:
-            name: "NAUTOBOT_DB_PASSWORD"
-            valueFrom:
-              secretKeyRef:
-                key: "password"
-                name: "test-postgresql"
-      - contains:
-          path: "spec.template.spec.containers[0].env"
-          content:
             name: "NAUTOBOT_REDIS_PASSWORD"
             valueFrom:
               secretKeyRef:
@@ -254,3 +246,103 @@ tests:
           content:
             name: "extra-volume-from-configmap"
             mountPath: "/opt/extra-volume-from-configmap"
+
+  # Test different scenarios for Nautobot DB credentials
+  - it: "Test using existing secret for DB credentials when managed PostgreSQL is enabled"
+    set:
+      postgresql:
+        enabled: true
+        auth:
+          username: "mynautobotuser"
+          existingSecret: "test-postgresql"
+          secretKeys:
+            userPasswordKey: "mydbpassword"
+    asserts:
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_DB_USER"
+            value: "mynautobotuser"
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_DB_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                name: "test-postgresql"
+                key: "mydbpassword"
+
+  - it: "Test using DB credentials when managed PostgreSQL is enabled"
+    set:
+      postgresql:
+        enabled: true
+        auth:
+          username: "mynautobotuser"
+          password: "mydbpassword"
+    asserts:
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_DB_USER"
+            value: "mynautobotuser"
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_DB_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                name: "test-postgresql"
+                key: "password"
+
+  - it: "Test using DB credentials when managed PostgreSQL is disabled and existingSecret is set"
+    set:
+      postgresql:
+        enabled: false
+      nautobot:
+        db:
+          existingSecret: "test-external-postgresql"
+          existingSecretUsernameKey: "mydbusername"
+          existingSecretPasswordKey: "mydbpassword"
+    asserts:
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_DB_USER"
+            valueFrom:
+              secretKeyRef:
+                name: "test-external-postgresql"
+                key: "mydbusername"
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_DB_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                name: "test-external-postgresql"
+                key: "mydbpassword"
+
+  - it: "Test using DB credentials when managed PostgreSQL is disabled and existingSecret is not set"
+    set:
+      postgresql:
+        enabled: false
+      nautobot:
+        db:
+          user: "mynautobotuser"
+          password: "mydbpassword"
+    asserts:
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_DB_USER"
+            valueFrom:
+              secretKeyRef:
+                name: "test-nautobot-db"
+                key: "username"
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_DB_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                name: "test-nautobot-db"
+                key: "password"

@@ -9,7 +9,7 @@ If you don't want to pass values through helm for...
 
 ...there's the option of creating these secrets manually and referencing them in the configuration.
 
-### Managed PostgreSQL and Redis deployments
+## Managed PostgreSQL and Redis deployments
 
 For example, if you want to deploy PostgreSQL and Redis with this chart:
 
@@ -38,7 +38,7 @@ For example, if you want to deploy PostgreSQL and Redis with this chart:
         existingSecretPasswordKey: "NAUTOBOT_REDIS_PASSWORD"
     ```
 
-### External PostgreSQL and Redis deployments
+## External PostgreSQL and Redis deployments
 
 If you are using external PostgreSQL and Redis servers you can use the following values:
 
@@ -68,7 +68,7 @@ If you are using external PostgreSQL and Redis servers you can use the following
       enabled: false
     ```
 
-### Existing secret key
+## Existing secret key
 
 To reference an existing NAUTOBOT_SECRET_KEY you can use the following values:
 
@@ -88,7 +88,7 @@ To reference an existing NAUTOBOT_SECRET_KEY you can use the following values:
         existingSecretSecretKeyKey: "secretkey"
     ```
 
-### Existing Superuser Credentials
+## Existing Superuser Credentials
 
 And/or for the superuser credentials you can use this configuration:
 

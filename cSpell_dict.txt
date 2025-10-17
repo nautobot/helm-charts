@@ -45,6 +45,7 @@ middlewares
 mkdocs
 mmin
 mydbpassword
+mydbusername
 mynautobotuser
 nameserver
 nautobot

@@ -1,6 +1,9 @@
 # PostgreSQL High Availability
 
 !!! warning
+    PostgreSQL HA deployment will no longer be supported in version 3.0.0 of the charts. Please use another method to deploy the PostgreSQL HA service before upgrading.
+
+!!! warning
     This chart provides this as an example only.  For true production environments please consider your cloud provider's offerings or deploying the [PostgreSQL-HA](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) separately.
 
 This chart supports the deployment of PostgreSQL in a Highly Available (HA) fashion as provided by the Bitnami [PostgreSQL-HA](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha) chart.  To enable HA PostgreSQL use the following values:

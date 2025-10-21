@@ -1,7 +1,7 @@
 {{- range .Values.extraObjects }}
 ---
   {{- if typeIs "string" . }}
-    {{- tpl . $ }}
+    {{- tpl (. | nindent 0) $ }}
   {{- else }}
     {{- tpl (. | toYaml | nindent 0) $ }}
   {{- end }}

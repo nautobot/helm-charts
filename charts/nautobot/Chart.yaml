@@ -30,15 +30,11 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
-    - kind: changed
-      description: Upgraded Nautobot from 2.4.19 to 2.4.20
-    - kind: changed
-      description: Upgraded nginx-prometheus-exporter from 1.4.2 to 1.5.1
-    - kind: changed
-      description: Updated documentation to reflect the upcoming version 3.0 changes
+    - kind: fixed
+      description: Helm lint for extra objects
 apiVersion: "v2"
 appVersion: "2.4.20"
-version: "2.5.7"
+version: "2.5.8"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

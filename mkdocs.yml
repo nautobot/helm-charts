@@ -72,6 +72,7 @@ nav:
   - Advanced Usage:
     - Overview: "advanced-features/index.md"  # yamllint disable-line rule:indentation
     - Additional Nautobots: "advanced-features/additional-nautobots.md"
+    - Celery Configuration: "advanced-features/celery-configuration.md"
     - Celery Queues: "advanced-features/celery-queues.md"
     - Custom Nautobot Image: "advanced-features/custom-image.md"
     - Custom nautobot_config.py: "advanced-features/custom-nautobot-config.md"

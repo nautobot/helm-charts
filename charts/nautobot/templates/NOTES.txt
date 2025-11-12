@@ -12,7 +12,7 @@ https://docs.nautobot.com/projects/helm-charts/en/stable/configuration/reference
 {{ end }}
 {{- if .Values.nautobot.db.existingSecret -}}
 Please note that future non-patch releases will need to contain database username in the existing secret (nautobot.db.existingSecret).
-The key 'username' (can be modifed with 'existingSecretUsernameKey') will be expected in the existing secret.
+The key 'username' (can be modified with 'existingSecretUsernameKey') will be expected in the existing secret.
 {{ end }}
 {{- if and (or .Values.postgresql.enabled .Values.mariadb.enabled .Values.nautobot.db.host ) (or .Values.redis.enabled .Values.nautobot.redis.host) -}}
 {{- if and .Values.nautobot.nginx.enabled }}

@@ -10,13 +10,13 @@ The celeryBeat helm value has been deprecated and moved to workers.beat see
 https://docs.nautobot.com/projects/helm-charts/en/stable/configuration/reference/#workers-values for more information.
 {{ end }}
 {{ end }}
-{{- if .Value.postgresql.enabled -}}
+{{- if .Values.postgresql.enabled -}}
 The PostgreSQL deployment will no longer be deployed by default in future non-patch releases.
 We will stop recommending the deployment of PostgreSQL as part of this deployment. We will recommend
 deploying the database externally to HelmCharts and using 'existingSecret' to define username
 and password.
 {{ end }}
-{{- if .Value.redis.enabled -}}
+{{- if .Values.redis.enabled -}}
 The Redis deployment will no longer be deployed by default in future non-patch releases.
 We will stop recommending the deployment of Redis as part of this deployment. We will recommend
 deploying Redis externally to this HelmCharts and use 'existingSecret' to define credentials.

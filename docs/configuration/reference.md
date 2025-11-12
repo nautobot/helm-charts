@@ -281,7 +281,7 @@ The `postgresql.*` values configure the upstream chart from Bitnami.  Please see
 | <a name="postgresql.auth.database">[postgresql.auth.database](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1063)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL database name |
 | <a name="postgresql.auth.password">[postgresql.auth.password](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1065)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL user password |
 | <a name="postgresql.auth.username">[postgresql.auth.username](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1061)</a> | string | `"nautobot"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL username |
-| <a name="postgresql.enabled">[postgresql.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1054)</a> | bool | `true` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart |
+| <a name="postgresql.enabled">[postgresql.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1054)</a> | bool | `false` | Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart |
 
 ## Redis Values
 
@@ -292,7 +292,7 @@ The `redis.*` values configure the upstream chart from Bitnami.  Please see the 
 | <a name="redis.architecture">[redis.architecture](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1081)</a> | string | `"standalone"` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Redis Architecture valid values: `standalone` or `replication` |
 | <a name="redis.auth.enabled">[redis.auth.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1084)</a> | bool | `true` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Enable password authentication |
 | <a name="redis.auth.password">[redis.auth.password](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1086)</a> | string | `""` | [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Redis password |
-| <a name="redis.enabled">[redis.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1079)</a> | bool | `true` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart |
+| <a name="redis.enabled">[redis.enabled](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L1079)</a> | bool | `false` | Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart |
 
 ## Service Values
 

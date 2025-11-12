@@ -16,6 +16,8 @@ contrib
 cpus
 custom-nautobot_configpy
 dbname
+dbpassword
+dbusername
 dcim
 devel
 django
@@ -42,9 +44,13 @@ loglevel
 middlewares
 mkdocs
 mmin
+mydbpassword
+mydbusername
+mynautobotuser
 nameserver
 nautobot
 nautobots
+nautobotuser
 nginxinc
 nginxmetrics
 nindent
@@ -56,11 +62,13 @@ prethreaded
 proto
 psql
 rabbitmq
+redispassword
 remediations
 repmgr
 respawn
 sarif
 seccomp
+secretkey
 sigterm
 snyk
 somaxconn

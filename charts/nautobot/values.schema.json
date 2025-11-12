@@ -373,6 +373,9 @@
                 "existingSecret": {
                   "type": "string"
                 },
+                "existingSecretUsernameKey": {
+                  "type": "string"
+                },
                 "existingSecretPasswordKey": {
                   "type": "string"
                 },

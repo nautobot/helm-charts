@@ -11,16 +11,16 @@ https://docs.nautobot.com/projects/helm-charts/en/stable/configuration/reference
 {{ end }}
 {{ end }}
 {{- if .Values.postgresql.enabled }}
-The PostgreSQL deployment will no longer be deployed by default in future non-patch releases.
 In the next major release of the Nautobot helm chart, the deployment of PostgreSQL will disabled by default.
 We recommend only using it for development and testing purposes in the future.
 For production, we recommend deploying the database externally to HelmCharts and using 'existingSecret' to define
 username and password.
 {{ end }}
 {{- if .Values.redis.enabled }}
-The Redis deployment will no longer be deployed by default in future non-patch releases.
-We will stop recommending the deployment of Redis as part of this deployment. We will recommend
-deploying Redis externally to this HelmCharts and use 'existingSecret' to define credentials.
+In the next major release of the Nautobot helm chart, the deployment of Redis will disabled by default.
+We recommend only using it for development and testing purposes in the future.
+For production, we recommend deploying the database externally to HelmCharts and using 'existingSecret' to define
+credentials.
 {{ end }}
 {{- if and (or .Values.postgresql.enabled .Values.mariadb.enabled .Values.nautobot.db.host ) (or .Values.redis.enabled .Values.nautobot.redis.host) -}}
 {{- if and .Values.nautobot.nginx.enabled }}

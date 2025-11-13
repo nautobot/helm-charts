@@ -21,6 +21,10 @@ In the next major release of the Nautobot helm chart, the deployment of Redis wi
 We recommend only using it for development and testing purposes in the future.
 For production, we recommend deploying the database externally to HelmCharts and using 'existingSecret' to define
 credentials.
+{{- if .Values.nautobot.db.existingSecret }}
+Please note that next major release of Nautobot helm chart will need to contain database username
+in the existing secret (nautobot.db.existingSecret).
+The key 'username' (can be modified with 'existingSecretUsernameKey') will be expected in the existing secret.
 {{ end }}
 {{- if and (or .Values.postgresql.enabled .Values.mariadb.enabled .Values.nautobot.db.host ) (or .Values.redis.enabled .Values.nautobot.redis.host) -}}
 {{- if and .Values.nautobot.nginx.enabled }}

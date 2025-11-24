@@ -33,14 +33,44 @@ You can then run `helm search repo nautobot` to see the charts.
 To install a chart from the nautobot repo run:
 
 ```console
-helm install {Release Name} {Repo Name}/{Chart Name} --set postgresql.auth.password="{PostgreSQL Password}" --set redis.auth.password="{Redis Password}"
+helm install {Release Name} {Repo Name}/{Chart Name} \
+  --set postgresql.enabled=true \
+  --set redis.enabled=true
 ```
 
 for example:
 
 ```console
-helm install nautobot nautobot/nautobot --set postgresql.auth.password="change-me" --set redis.auth.password="change-me"
+helm install nautobot nautobot/nautobot \
+  --set postgresql.enabled=true \
+  --set redis.enabled=true
 ```
+
+Note that the above example should only be used for development and testing purposes.
+We recommend deploying an external PostgreSQL database and an external Redis database
+for production use cases. The minimal configuration for those use cases is the following
+
+```console
+helm install {Release Name} {Repo Name}/{Chart Name} \
+    --set nautobot.db.host={Database host} \
+    --set nautobot.db.user={Database username} \
+    --set nautobot.db.password={Database password} \
+    --set nautobot.redis.host={Redis host} \
+    --set nautobot.redis.password={Redis password}
+```
+
+for example:
+
+```console
+helm install nautobot nautobot/nautobot \
+    --set nautobot.db.host=mydatabase.example.com \
+    --set nautobot.db.user=nautobot \
+    --set nautobot.db.password=changeme \
+    --set nautobot.redis.host=myredis.example.com \
+    --set nautobot.redis.password=changeme
+```
+
+Check adance settings for more details on how to define credentials for external databases.
 
 ## Support
 

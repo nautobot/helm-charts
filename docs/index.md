@@ -63,10 +63,10 @@ for example:
 
 ```console
 helm install nautobot nautobot/nautobot \
-    --set nautobot.db.host=mydatabase.example.com \
+    --set nautobot.db.host=database.example.com \
     --set nautobot.db.user=nautobot \
     --set nautobot.db.password=changeme \
-    --set nautobot.redis.host=myredis.example.com \
+    --set nautobot.redis.host=redis.example.com \
     --set nautobot.redis.password=changeme
 ```
 

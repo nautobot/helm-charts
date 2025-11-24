@@ -70,7 +70,7 @@ helm install nautobot nautobot/nautobot \
     --set nautobot.redis.password=changeme
 ```
 
-Check adance settings for more details on how to define credentials for external databases.
+Check advance settings for more details on how to define credentials for external databases.
 
 ## Support
 

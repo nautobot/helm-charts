@@ -10,10 +10,16 @@ helm repo add nautobot https://nautobot.github.io/helm-charts/
 3. Install the Nautobot Chart from the Nautobot repo
 
 !!! note
-    The following command with install the chart with the release name `nautobot` (the release name is a label completely up to the user) DB and Redis passwords are required:
+    The following command with install the chart with the release name `nautobot` (the release name is a label completely up to the user).
+    DB and Redis parameters, such as credentials and host are required.
 
-```no-highlight
-helm install nautobot nautobot/nautobot --set postgresql.auth.password="change-me" --set redis.auth.password="change-me"
+```console
+helm install nautobot nautobot/nautobot \
+    --set nautobot.db.host=database.example.com \
+    --set nautobot.db.user=nautobot \
+    --set nautobot.db.password=changeme \
+    --set nautobot.redis.host=redis.example.com \
+    --set nautobot.redis.password=changeme
 ```
 
 This command deploys Nautobot, on the Kubernetes cluster, in the default configuration. The [Reference](../../configuration/reference/) section lists the parameters that can be customized during installation.
@@ -32,7 +38,7 @@ Immediately after install Helm will present the user with help text similar to t
 1. Get the Nautobot URL:
 
   echo "Nautobot URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace default svc/nautobot 8080:80
+  kubectl port-forward --namespace default svc/nautobot-default 8080:80
 
 2. Get your Nautobot login admin credentials by running:
 
@@ -59,15 +65,13 @@ Other [examples/recommendations](../../advanced-features/) on this site demonstr
 
 ### Required Settings
 
-The following settings are the bare minimum required values to deploy this chart:
+The following settings are the bare minimum required values to deploy this chart for development and testing purposes:
 
 ```yaml
 postgresql:
-  auth:
-    password: "change-me"
+  enabled: true
 redis:
-  auth:
-    password: "change-me"
+  enabled: true
 ```
 
 This will deploy a PostgreSQL database and a Redis instance for Nautobot in the same namespace.

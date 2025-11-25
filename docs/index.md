@@ -46,9 +46,9 @@ helm install nautobot nautobot/nautobot \
   --set redis.enabled=true
 ```
 
-Note that the above example should only be used for development and testing purposes.
-We recommend deploying an external PostgreSQL database and an external Redis database
-for production use cases. The minimal configuration for those use cases is the following
+Note that the above example should only be used for development and testing purposes only.
+We recommend deploying an external PostgreSQL database and an external Redis instance
+for production and other use cases. The minimal configuration for those use cases is the following
 
 ```console
 helm install {Release Name} {Repo Name}/{Chart Name} \

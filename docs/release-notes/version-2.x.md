@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.9 - 2025-11-25
+
+### Changed
+
+* Upgraded Nautobot from 2.4.20 to 2.4.22
+* Updated installation notes to reflect the upcoming version 3.0 changes
+
 ## 2.5.8 - 2025-10-21
 
 ### Fixed

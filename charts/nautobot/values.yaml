@@ -1051,7 +1051,7 @@ metrics:
 
 postgresql:
   # -- Enable deployment of the [Bitnami postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) chart, all other `postgresql.*` parameters will be passed directly to that chart
-  enabled: true
+  enabled: false
   image:
     repository: "bitnamilegacy/postgresql"
     tag: "15.4.0-debian-11-r45"
@@ -1076,7 +1076,7 @@ postgresql:
 
 redis:
   # -- Enable deployment of the [Bitnami redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) chart, all other `redis.*` parameters will be passed directly to that chart
-  enabled: true
+  enabled: false
   # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Redis Architecture valid values: `standalone` or `replication`
   architecture: "standalone"
   auth:

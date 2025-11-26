@@ -375,6 +375,10 @@ nautobot:
   #################################
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/)] Replace the entire `nautobot_config.py` file with this value<sup>[1](#notes)</sup>
   config: ""
+
+  # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/)] Use custom configuration defined in an existing ConfigMap<sup>[1](#notes)</sup>
+  configCM: ""
+
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#debug)] Enable Nautobot Debug (NAUTOBOT_DEBUG)<sup>[1](#notes)</sup>
   debug: false
 
@@ -456,7 +460,7 @@ nautobot:
     password: ""  # NAUTOBOT_SUPERUSER_PASSWORD
 
   # -- [[ref](https://docs.nautobot.com/projects/helm-charts/en/stable/advanced-features/init-hook)] Run the Nautobot initialization tasks as a helm hook instead of an initContainer<sup>[1](#notes)</sup>
-  singleInit: false
+  singleInit: True
 
   # -- [[ref](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html)] Replace the entire `uwsgi.ini` file with this value<sup>[1](#notes)</sup>
   uWSGIini: ""

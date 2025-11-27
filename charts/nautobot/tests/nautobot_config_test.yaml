@@ -1,0 +1,256 @@
+# Test related to Nautobot Configuration specification
+# Test scenarios where no configuration is provided, configuration is provided
+# via value, or configuration is provided via ConfigMap reference.
+---
+suite: "Test Nautobot Configuration settings"
+templates:
+  - "nautobot-deployment.yaml"
+  - "celery-deployment.yaml"
+  - "job.yaml"
+  - "configmap.yaml"
+release:
+  name: "test"
+  namespace: "test"
+tests:
+
+  - it: "Test no configuration is set in the configmap"
+    template: "configmap.yaml"
+    set:
+      nautobot:
+        config: ""
+        configCM: ""
+    documentIndex: 1
+    asserts:
+      - notExists:
+          path: "data['nautobot_config.py']"
+
+  - it: "Test the key is set in the configmap when using nautobot.config value"
+    template: "configmap.yaml"
+    set:
+      nautobot:
+        config: |
+          # Custom Nautobot Configuration
+          NAUTOBOT_CUSTOM_SETTING = True
+        configCM: ""
+    documentIndex: 1
+    asserts:
+      - exists:
+          path: "data['nautobot_config.py']"
+      - equal:
+          path: "data['nautobot_config.py']"
+          value: |
+            # Custom Nautobot Configuration
+            NAUTOBOT_CUSTOM_SETTING = True
+
+  - it: "Test no configuration is set in the configmap when using nautobot.configCM"
+    template: "configmap.yaml"
+    set:
+      nautobot:
+        config: ""
+        configCM: "custom-nautobot-config"
+    documentIndex: 1
+    asserts:
+      - notExists:
+          path: "data['nautobot_config.py']"
+
+  - it: "Test no configuration is mounted nautobot.config and nautobot.configCM are not set"
+    set:
+      nautobot:
+        config: ""
+        configCM: ""
+    asserts:
+      - notContains:
+          path: "spec.template.spec.initContainers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "nautobot-deployment.yaml"
+      - notContains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "nautobot-deployment.yaml"
+      - notContains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "celery-deployment.yaml"
+
+  - it: "Test configuration is mounted when nautobot.config is set"
+    set:
+      nautobot:
+        config: |
+          # Custom Nautobot Configuration
+          NAUTOBOT_CUSTOM_SETTING = True
+        configCM: ""
+    asserts:
+      - contains:
+          path: "spec.template.spec.initContainers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "nautobot-deployment.yaml"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "nautobot-deployment.yaml"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "celery-deployment.yaml"
+
+  - it: "Test configuration is mounted when nautobot.configCM is set"
+    set:
+      nautobot:
+        config: ""
+        configCM: "custom-nautobot-config"
+    asserts:
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "nautobot-config-custom"
+            configMap:
+              name: "custom-nautobot-config"
+        template: "nautobot-deployment.yaml"
+      - contains:
+          path: "spec.template.spec.initContainers[0].volumeMounts"
+          content:
+            name: "nautobot-config-custom"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "nautobot-deployment.yaml"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config-custom"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "nautobot-deployment.yaml"
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "nautobot-config-custom"
+            configMap:
+              name: "custom-nautobot-config"
+        template: "celery-deployment.yaml"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config-custom"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "celery-deployment.yaml"
+
+  - it: "Test the single init job when config is not set"
+    template: "job.yaml"
+    set:
+      nautobot:
+        singleInit: true
+        config: ""
+        configCM: ""
+    asserts:
+      - notContains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "nautobot-deployment.yaml"
+
+  - it: "Test the single init job when config is set via value"
+    template: "job.yaml"
+    set:
+      nautobot:
+        singleInit: true
+        config: |
+          # Custom Nautobot Configuration
+          NAUTOBOT_CUSTOM_SETTING = True
+        configCM: ""
+    asserts:
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+
+  - it: "Test the single init job when config is set via configCM"
+    template: "job.yaml"
+    set:
+      nautobot:
+        singleInit: true
+        config: ""
+        configCM: "custom-nautobot-config"
+    asserts:
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "nautobot-config-custom"
+            configMap:
+              name: "custom-nautobot-config"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config-custom"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+
+  - it: "Test config has precedence when both nautobot.config and nautobot.configCM are set"
+    set:
+      nautobot:
+        config: |
+          # Custom Nautobot Configuration
+          NAUTOBOT_CUSTOM_SETTING = True
+        configCM: "custom-nautobot-config"
+    asserts:
+      - exists:
+          path: "data['nautobot_config.py']"
+        template: "configmap.yaml"
+        documentIndex: 1
+      - equal:
+          path: "data['nautobot_config.py']"
+          value: |
+            # Custom Nautobot Configuration
+            NAUTOBOT_CUSTOM_SETTING = True
+        template: "configmap.yaml"
+        documentIndex: 1
+      - notContains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "nautobot-config-custom"
+            configMap:
+              name: "custom-nautobot-config"
+        template: "nautobot-deployment.yaml"
+      - contains:
+          path: "spec.template.spec.initContainers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "nautobot-deployment.yaml"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "nautobot-deployment.yaml"
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-config"
+            mountPath: "/opt/nautobot/nautobot_config.py"
+            subPath: "nautobot_config.py"
+        template: "celery-deployment.yaml"

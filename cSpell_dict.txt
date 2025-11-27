@@ -12,6 +12,7 @@ cacheops
 changeme
 chatops
 codeql
+configmap
 containerd
 contrib
 cpus

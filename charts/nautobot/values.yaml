@@ -40,7 +40,7 @@ nautobot:
     registry: "registry-1.docker.io"
     # -- Nautobot image name, common to all deployments
     repository: "networktocode/nautobot"
-    # -- Nautobot image tag, common to all deployments
+    # -- Nautobot image tag, common to all deployments (note that 2.4 is still supported)
     tag: "3.0-py3.13"
     # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/), common to all deployments valid values: `Always`, `Never`, or `IfNotPresent`
     pullPolicy: "Always"

@@ -9,6 +9,7 @@ bitnami
 bitnamicharts
 bitnamilegacy
 cacheops
+changeme
 chatops
 codeql
 containerd

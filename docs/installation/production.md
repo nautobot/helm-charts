@@ -19,17 +19,15 @@ nautobot:
   extraVars:
     - name: "NAUTOBOT_BANNER_TOP"
       value: "Production"
+  db:
+    host: "database.example.com"
+    existingSecret: "nautobot-database-credentials"  # must contain username and password
+  redis:
+    host: "redis.example.com"
+    existingSecret: "redis-credentials"
 workers:
   default:
     replicaCount: 2  # In production this should be >= 2
-postgresql:
-  enabled: true  # Consider utilizing an external HA database rather than the built-in database
-  auth:
-    password: "change-me"
-redis:
-  enabled: true  # Consider utilizing an external HA redis rather than the built-in redis
-  auth:
-    password: "change-me"
 ```
 
 [PostgreSQL HA](../../advanced-features/postgresql-ha/) and [Redis Sentinel](../../advanced-features/redis-sentinel/) should be considered when deploying in production, however, support for these services within this helm chart are in early alpha/beta stages, use cautiously.

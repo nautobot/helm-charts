@@ -267,7 +267,7 @@ tests:
             name: "extra-volume-from-configmap"
             mountPath: "/opt/extra-volume-from-configmap"
 
-  # Test different scenarios for Nautobot DB credentials
+  # Test DB credentials scenarios
   - it: "Test using existing secret for DB credentials when managed PostgreSQL is enabled"
     set:
       postgresql:

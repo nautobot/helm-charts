@@ -3,6 +3,38 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.9 - 2025-11-25
+
+### Changed
+
+* Upgraded Nautobot from 2.4.20 to 2.4.22
+* Updated installation notes to reflect the upcoming version 3.0 changes
+
+## 2.5.8 - 2025-10-21
+
+### Fixed
+
+* [#639](https://github.com/nautobot/helm-charts/pull/639) Fix helm lint for extra objects
+
+## 2.5.7 - 2025-10-20
+
+### Changed
+
+* Upgraded Nautobot from 2.4.17 to 2.4.20
+* Upgraded nginx-prometheus-exporter image from 1.4.2 to 1.5.1
+* Updated documentation to reflect the upcoming version 3.0 changes
+
+## 2.5.6 - 2025-09-08
+
+### Fixed
+
+* [#597](https://github.com/nautobot/helm-charts/pull/597) Fix ingress by removing bitnami unsupported helpers
+
+### Changed
+
+* Upgraded Nautobot from 2.4.14 to 2.4.17
+* Upgraded minor version of bitnamilegacy docker images
+
 ## 2.5.5 - 2025-08-06
 
 ### Fixed

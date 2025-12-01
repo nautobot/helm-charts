@@ -1,46 +1,87 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "pre-commit": {
     "enabled": true
   },
-  "allowedPostUpgradeCommands": [
-    "scripts/update_version.sh \"{{{prTitle}}}\""
+  "baseBranchPatterns": [
+    "develop",
+    "next"
   ],
-  "postUpgradeTasks": {
-    "commands": [
-      "scripts/update_version.sh \"{{{prTitle}}}\""
-    ],
-    "fileFilters": [
-      "**/README.md",
-      "**/Chart.yaml",
-      "CHANGELOG.md"
-    ]
-  },
   "packageRules": [
     {
-      "description": [
-        "Major dependencies update every three months"
-      ],
+      "description": "Disable python updates in the develop branch.",
       "matchBaseBranches": [
         "develop"
       ],
+      "matchPackageNames": [
+        "python"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Disable minor and major updates in the develop branch.",
+      "matchBaseBranches": [
+        "develop"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "major"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Weekly patch updates in the develop and next branch.",
+      "matchBaseBranches": [
+        "develop",
+        "next"
+      ],
+      "matchPackageNames": [
+        "!python"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "groupName": "Patch Updates",
       "schedule": [
-        "on the 1st day of the month after 3 months"
+        "before 3am on Monday"
       ],
-      "major": {
-        "enabled": true
-      },
-      "rangeStrategy": "bump",
-      "matchCategories": [
-        "helm"
+      "enabled": true
+    },
+    {
+      "description": "Monthly major updates in the next branch.",
+      "matchBaseBranches": [
+        "next"
       ],
-      "labels": [
-        "major",
-        "helm"
-      ]
+      "matchPackageNames": [
+        "!python"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "schedule": [
+        "before 3am on the first day of the month"
+      ],
+      "enabled": true
+    },
+    {
+      "description": "Bi-weekly minor updates in the next branch.",
+      "matchBaseBranches": [
+        "next"
+      ],
+      "matchPackageNames": [
+        "!python"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "groupName": "Minor Updates",
+      "schedule": [
+        "before 3am every 2 weeks on Monday"
+      ],
+      "enabled": true
     }
   ]
 }

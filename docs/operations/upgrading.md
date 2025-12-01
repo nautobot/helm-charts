@@ -7,9 +7,6 @@
 
 ### To 3.x
 
-* The `rabbitmq` subchart was removed. It must be deployed as a separate installation if used.
-* The `mariadb` subchart was removed. If must be deployed as a separate installation if used.
-* The `postgresqlha` subchart was removed. If must be deployed as a separate installation if used.
 * The `postgresql` and `redis` subcharts are no longer deployed by default. They must be explicitly enabled if used.
 
 ```yaml
@@ -18,6 +15,10 @@ postgresql:
 redis:
   enabled: true
 ```
+
+* The `rabbitmq` subchart was removed. It must be deployed as a separate installation if used.
+* The `mariadb` subchart was removed. If must be deployed as a separate installation if used.
+* The `postgresqlha` subchart was removed. If must be deployed as a separate installation if used.
 
 * The username field is now required in the existing secret if `nautobot.db.existingSecret` is used. By default, the `username` and `password` keys are used. The following snippets show the sample secret and `values.yaml` settings:
 
@@ -82,6 +83,11 @@ celery:
     failureThreshold: 3
     successThreshold: 1
 ```
+
+* The configuration for Celery workers includes new options. If the options are currently set with environmental variables, remove those options and enable them through the Celery settings.
+
+    * Set the value for `celery.task_acks_late` and remove the `CELERY_TASK_ACKS_LATE` environmental variable.
+    * Set the value for `celery.worker_prefetch_multiplier` and remove the `NAUTOBOT_CELERY_WORKER_PREFETCH_MULTIPLIER` environmental variable.
 
 ### To 2.x
 

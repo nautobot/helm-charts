@@ -134,5 +134,10 @@ jobs:
       - name: "Setup Helm"
         uses: "azure/setup-helm@v4"
 
-      - name: "DEBUG"
-        run: "helm version"
+      - name: "Install unittests plugin"
+        run: |
+          helm plugin install https://github.com/helm-unittest/helm-unittest.git
+
+      - name: "Run unittests"
+        run: |
+          "helm unittest charts/nautobot"

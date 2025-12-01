@@ -149,4 +149,4 @@ jobs:
 
       - name: "Run unittests"
         run: |
-          "helm unittest charts/nautobot"
+          helm unittest charts/nautobot

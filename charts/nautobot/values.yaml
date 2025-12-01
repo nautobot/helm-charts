@@ -375,6 +375,10 @@ nautobot:
   #################################
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/)] Replace the entire `nautobot_config.py` file with this value<sup>[1](#notes)</sup>
   config: ""
+
+  # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/)] Use custom configuration defined in an existing ConfigMap<sup>[1](#notes)</sup>
+  configCM: ""
+
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#debug)] Enable Nautobot Debug (NAUTOBOT_DEBUG)<sup>[1](#notes)</sup>
   debug: false
 
@@ -559,6 +563,12 @@ celery:
 
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/#concurrency-setting)]Concurrency Setting (0: use the default which is the number of CPUs available on your system)<sup>[2](#notes)</sup>
   concurrency: 0
+  # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/guides/celery-queues/#queuing-optimizations)]Celery Task Late Acknowledgement
+  task_acks_late: false
+  # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/guides/celery-queues/#queuing-optimizations)]Celery Workers Prefetch Multiplier (default is 4). Setting this to 1 means that each worker will only reserve one task at a time.
+  worker_prefetch_multiplier: 1
+  # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/configuration/settings/?h=celery_health_probes_as_files#celery_health_probes_as_files)]Celery Health probes as files to be used in liveness/readiness probes
+  celery_health_probes_as_files: true
   # -- Number of Nautobot Celery Workers replicas to deploy
   replicaCount: 2
   # -- [[ref](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)] Number of old ReplicaSets to retain
@@ -572,7 +582,7 @@ celery:
       command:
         - "bash"
         - "-c"
-        - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
+        - "[ $(find /tmp/nautobot_celery_worker_heartbeat -mmin -1 | wc -l) -eq 1 ] || false"
     initialDelaySeconds: 10
     periodSeconds: 60
     timeoutSeconds: 10
@@ -590,7 +600,7 @@ celery:
       command:
         - "bash"
         - "-c"
-        - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
+        - "[ $(find /tmp/nautobot_celery_worker_ready | wc -l) -eq 1 ] || false"
     initialDelaySeconds: 10
     periodSeconds: 60
     timeoutSeconds: 10

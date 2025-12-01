@@ -1,5 +1,7 @@
+acks
 apiserver
 apitoken
+appname
 armo
 armobest
 artifacthub
@@ -8,10 +10,12 @@ autoscaler
 bitnami
 bitnamicharts
 bitnamilegacy
+bootsteps
 cacheops
 changeme
 chatops
 codeql
+configmap
 containerd
 contrib
 cpus
@@ -52,11 +56,13 @@ nameserver
 nautobot
 nautobots
 nautobotuser
+nautobotpassword
 networktocode
 nginxinc
 nginxmetrics
 nindent
 norwoodj
+pathlib
 pgpool
 portname
 postgresqlha
@@ -84,6 +90,7 @@ tolerations
 tplvalues
 traefik
 trunc
+unittests
 uwsgi
 uwsgimetrics
 workermetrics

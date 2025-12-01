@@ -1,0 +1,75 @@
+---
+suite: "Test Celery Deployment"
+templates:
+  - "celery-deployment.yaml"
+set:
+  nautobot:
+    db:
+      user: "nautobot"
+      password: "nautobotpassword"
+  celery:
+    worker_prefetch_multiplier: 1
+    task_acks_late: true
+    concurrency: 1
+release:
+  name: "test"
+  namespace: "test"
+tests:
+  - it: "Assert Deployment is created"
+    asserts:
+      - isKind:
+          of: "Deployment"
+  - it: "Assert Workers Deployment has correct celery configuration"
+    set:
+      workers:
+        beat:
+          enabled: false
+    asserts:
+      - equal:
+          path: "spec.template.spec.containers[0].command"
+          value:
+            - "nautobot-server"
+            - "celery"
+            - "worker"
+            - "--loglevel"
+            - "$(NAUTOBOT_LOG_LEVEL)"
+            - "--queues"
+            - "$(CELERY_TASK_QUEUES)"
+            - "--events"
+            - "--concurrency"
+            - "1"
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "CELERY_TASK_ACKS_LATE"
+            value: "true"
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_CELERY_WORKER_PREFETCH_MULTIPLIER"
+            value: "1"
+
+  - it: "Assert Beat Deployment has correct configuration"
+    set:
+      workers:
+        default:
+          enabled: false
+    asserts:
+      - equal:
+          path: "spec.template.spec.containers[0].command"
+          value:
+            - "nautobot-server"
+            - "celery"
+            - "beat"
+            - "--loglevel"
+            - "$(NAUTOBOT_LOG_LEVEL)"
+      - notContains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "CELERY_TASK_ACKS_LATE"
+            value: "true"
+      - notContains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: "NAUTOBOT_CELERY_WORKER_PREFETCH_MULTIPLIER"
+            value: "1"

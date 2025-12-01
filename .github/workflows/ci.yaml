@@ -140,6 +140,13 @@ jobs:
         run: |
           helm plugin install https://github.com/helm-unittest/helm-unittest.git
 
+      - name: "DEBUG"
+        run: |
+          helm version
+          helm plugin list
+          ls -al
+          pwd
+
       - name: "Run unittests"
         run: |
           "helm unittest charts/nautobot"

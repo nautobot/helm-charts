@@ -8,6 +8,11 @@ templates:
   - "celery-deployment.yaml"
   - "job.yaml"
   - "configmap.yaml"
+set:
+  nautobot:
+    db:
+      user: "nautobot"
+      password: "nautobotpassword"
 release:
   name: "test"
   namespace: "test"

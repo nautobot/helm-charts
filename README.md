@@ -36,7 +36,9 @@ helm install {Release Name} {Repo Name}/{Chart Name}
 for example:
 
 ```console
-helm install nautobot nautobot/nautobot --set postgresql.auth.password="change-me" --set redis.auth.password="change-me"
+helm install nautobot nautobot/nautobot \
+    --set postgresql.enabled=true \
+    --set redis.enabled=true
 ```
 
 Please refer to the [Official Nautobot Helm Chart Documentation](https://docs.nautobot.com/projects/helm-charts/en/stable/) for additional information.

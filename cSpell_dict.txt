@@ -27,6 +27,7 @@ dcim
 devel
 django
 dorny
+dvcm
 dualstack
 fixpathinfo
 flushdb

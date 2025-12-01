@@ -5,6 +5,90 @@
 
 ## Major Version Upgrades
 
+### To 3.x
+
+* The `postgresql` and `redis` subcharts are no longer deployed by default. They must be explicitly enabled if used.
+
+```yaml
+postgresql:
+  enabled: true
+redis:
+  enabled: true
+```
+
+* The `rabbitmq` subchart was removed. It must be deployed as a separate installation if used.
+* The `mariadb` subchart was removed. If must be deployed as a separate installation if used.
+* The `postgresqlha` subchart was removed. If must be deployed as a separate installation if used.
+
+* The username field is now required in the existing secret if `nautobot.db.existingSecret` is used. By default, the `username` and `password` keys are used. The following snippets show the sample secret and `values.yaml` settings:
+
+```yaml
+---
+apiVersion: "v1"
+kind: "Secret"
+metadata:
+  name: "nautobot-db-credentials"
+  namespace: "nautobot"
+type: "Opaque"
+data:
+  username: "bmF1dG9ib3Q="
+  password: "cGFzc3dvcmQ="
+```
+
+```yaml
+nautobot:
+  db:
+    existingSecret: "nautobot-db-credentials"
+```
+
+* The default image was changed to 3.x. Make sure that you explicitly set the value to 2.x if you are not ready to upgrade. Also the registry was changed from `ghcr.io` to `registry-1.docker.io`.
+
+```yaml
+nautobot:
+  image:
+    registry: "ghcr.io"
+    repository: "nautobot/nautobot"
+    tag: "2.4.23-py3.11"
+```
+
+* The Nautobot Celery readiness and liveness probes were changed to use files instead of celery pings. This change requires at least Nautobot version `3.0.1`. If older version is used disable this feature:
+
+```yaml
+celery:
+  celery_health_probes_as_files: false
+
+  livenessProbe:
+    enabled: true
+    exec:
+      command:
+        - "bash"
+        - "-c"
+        - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
+    initialDelaySeconds: 10
+    periodSeconds: 60
+    timeoutSeconds: 10
+    failureThreshold: 3
+    successThreshold: 1
+
+  readinessProbe:
+    enabled: true
+    exec:
+      command:
+        - "bash"
+        - "-c"
+        - "nautobot-server celery inspect ping --destination celery@$HOSTNAME"
+    initialDelaySeconds: 10
+    periodSeconds: 60
+    timeoutSeconds: 10
+    failureThreshold: 3
+    successThreshold: 1
+```
+
+* The configuration for Celery workers includes new options. If the options are currently set with environmental variables, remove those options and enable them through the Celery settings.
+
+    * Set the value for `celery.task_acks_late` and remove the `CELERY_TASK_ACKS_LATE` environmental variable.
+    * Set the value for `celery.worker_prefetch_multiplier` and remove the `NAUTOBOT_CELERY_WORKER_PREFETCH_MULTIPLIER` environmental variable.
+
 ### To 2.x
 
 !!! note

@@ -55,6 +55,7 @@ nameserver
 nautobot
 nautobots
 nautobotuser
+nautobotpassword
 networktocode
 nginxinc
 nginxmetrics
@@ -88,6 +89,7 @@ tolerations
 tplvalues
 traefik
 trunc
+unittests
 uwsgi
 uwsgimetrics
 workermetrics

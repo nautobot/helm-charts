@@ -56,7 +56,7 @@ kubernetesProvider:
   scheme:
     "v1/Secret":
       gvr:
-        version:  "v1"
+        version: "v1"
         resource: "secrets"
       namespaced: true
   objects:

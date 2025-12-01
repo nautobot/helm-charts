@@ -19,6 +19,8 @@ nautobot:
     kubernetes.io/arch: "amd64"
   uwsgi:
     bufferSize: 65535
+  db:
+    password: "changeme"
 
 nautobots:
   # Enable a separate deployment specifically for GraphQL requests
@@ -136,11 +138,3 @@ commonAnnotations:
 serviceAccount:
   annotations:
     service_account_annotation: "only_the_sa"
-
-# Needed in this file for pre-commit hook
-postgresql:
-  auth:
-    password: "change-me"
-redis:
-  auth:
-    password: "change-me"

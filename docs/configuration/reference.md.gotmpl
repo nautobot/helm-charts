@@ -63,9 +63,9 @@ hide:
 
 ## {{ title $prefix }} Values
 
-{{ if (has $prefix (list "mariadb" "postgresql" "postgresqlha" "redis")) }}
+{{ if (has $prefix (list "postgresql" "redis")) }}
 
-The `{{ $prefix }}.*` values configure the upstream chart from Bitnami.  Please see the [upstream chart](https://github.com/bitnami/charts/tree/main/bitnami/{{ if (eq $prefix  "postgresqlha") }}postgresql-ha{{ else }}{{ $prefix }}{{ end }}) for complete details on all of its values.
+The `{{ $prefix }}.*` values configure the upstream chart from Bitnami.  Please see the [upstream chart](https://github.com/bitnami/charts/tree/main/bitnami/{{ $prefix }}) for complete details on all of its values.
 
 {{ end }}
 | Key | Type | Default | Description |

@@ -71,11 +71,10 @@ spec:
             {{- if $initJob.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $initJob.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+            - name: NAUTOBOT_DB_USER
+              {{- include "nautobot.database.userEnvVarDef" $ | nindent 14 }}
             - name: NAUTOBOT_DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "nautobot.database.passwordName" $ }}
-                  key: {{ include "nautobot.database.passwordKey" $ }}
+              {{- include "nautobot.database.passEnvVarDef" $ | nindent 14 }}
             - name: NAUTOBOT_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -118,6 +117,10 @@ spec:
             - name: "nautobot-config"
               mountPath: "/opt/nautobot/nautobot_config.py"
               subPath: "nautobot_config.py"
+            {{- else if $initJob.configCM }}
+            - name: "nautobot-config-custom"
+              mountPath: "/opt/nautobot/nautobot_config.py"
+              subPath: "nautobot_config.py"
             {{- end }}
             {{- if $initJob.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $initJob.extraVolumeMounts "context" $) | nindent 12 }}
@@ -135,6 +138,11 @@ spec:
         - name: "nautobot-config"
           configMap:
             name: {{ include "common.names.fullname" $ }}-config-init
+        {{- if and (not $.Values.nautobot.config) $.Values.nautobot.configCM }}
+        - name: "nautobot-config-custom"
+          configMap:
+            name: {{ $.Values.nautobot.configCM }}
+        {{- end }}
         {{- if $initJob.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" $initJob.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

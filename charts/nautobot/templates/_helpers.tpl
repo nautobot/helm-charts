@@ -107,33 +107,13 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "nautobot.mariadb.fullname" -}}
-{{- $name := default "mariadb" .Values.mariadb.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "nautobot.postgresqlha.fullname" -}}
-{{- $name := default "postgresqlha-pgpool" .Values.postgresqlha.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
 
 {{- define "nautobot.database.engine" -}}
-  {{- if (and (or .Values.postgresql.enabled .Values.postgresqlha.enabled) .Values.mariadb.enabled ) -}}
-    {{- fail (printf "Both PostgreSQL and MariaDB can't be enabled at the same time.") -}}
-  {{- else if (and .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
-    {{- fail (printf "Both PostgreSQL and PostgreSQL-HA can't be enabled at the same time.") -}}
-  {{- end -}}
-  {{- if (or .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
+  {{- if .Values.postgresql.enabled -}}
     {{- if (.Values.nautobot.metrics) -}}
       django_prometheus.db.backends.postgresql
     {{- else -}}
       django.db.backends.postgresql
-    {{- end -}}
-  {{- else if .Values.mariadb.enabled -}}
-    {{- if (.Values.nautobot.metrics) -}}
-      django_prometheus.db.backends.mysql
-    {{- else -}}
-      django.db.backends.mysql
     {{- end -}}
   {{- else -}}
     {{- .Values.nautobot.db.engine -}}
@@ -143,10 +123,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.database.host" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- template "nautobot.postgresql.fullname" . }}
-  {{- else if eq .Values.postgresqlha.enabled true -}}
-    {{- template "nautobot.postgresqlha.fullname" . }}
-  {{- else if eq .Values.mariadb.enabled true -}}
-    {{- template "nautobot.mariadb.fullname" . }}
   {{- else -}}
     {{- .Values.nautobot.db.host -}}
   {{- end -}}
@@ -155,141 +131,114 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "nautobot.database.dbname" -}}
   {{- if eq .Values.postgresql.enabled true -}}
     {{- .Values.postgresql.auth.database -}}
-  {{- else if eq .Values.postgresqlha.enabled true -}}
-    {{- .Values.postgresqlha.postgresql.database -}}
-  {{- else if eq .Values.mariadb.enabled true -}}
-    {{- .Values.mariadb.auth.database -}}
   {{- else -}}
     {{- .Values.nautobot.db.name -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "nautobot.database.port" -}}
-  {{- if (or .Values.postgresql.enabled .Values.postgresqlha.enabled) -}}
+  {{- if .Values.postgresql.enabled -}}
     {{- printf "%s" "5432" -}}
-  {{- else if .Values.mariadb.enabled -}}
-    {{- printf "%s" "3306" -}}
   {{- else -}}
     {{- .Values.nautobot.db.port -}}
   {{- end -}}
 {{- end -}}
 
-{{- define "nautobot.database.username" -}}
+{{- define "nautobot.database.secretName" -}}
+{{ include "common.names.fullname" . }}-db
+{{- end -}}
+
+{{/*
+The following scenarios are supported to define the NAUTOBOT_DB_USER env var:
+1) Managed PostgreSQL is enabled (postgresql.enabled=true). The username is taken
+   from there (postgresql.auth.username).
+2) External database is used (postgresql.enabled=false). You have existing K8s Secret
+   containing the username (nautobot.db.existingSecret). The NAUTOBOT_DB_USER env var
+   pulls the username directly from the existing K8s Secret. The key in the K8s secret
+   where the username is stored is defined by nautobot.db.existingSecretUsernameKey.
+3) External database is used (postgresql.enabled=false). You don't have existing K8s
+   Secret. The Chart creates a K8s Secret containing the username and password.
+   The username is taken from nautobot.db.user variable.
+*/}}
+{{- define "nautobot.database.userEnvVarDef" -}}
   {{- if eq .Values.postgresql.enabled true -}}
-    {{- .Values.postgresql.auth.username -}}
-  {{- else if eq .Values.postgresqlha.enabled true -}}
-    {{- .Values.postgresqlha.postgresql.username -}}
-  {{- else if eq .Values.mariadb.enabled true -}}
-    {{- .Values.mariadb.auth.username -}}
+value: {{ .Values.postgresql.auth.username | quote }}
   {{- else -}}
-    {{- .Values.nautobot.db.user -}}
+    {{- if .Values.nautobot.db.existingSecret -}}
+      {{- $secretObj := (lookup "v1" "Secret" .Release.Namespace .Values.nautobot.db.existingSecret) -}}
+      {{- if not $secretObj }}
+        {{ fail (printf "The secret %q does not exist" .Values.nautobot.db.existingSecret) }}
+      {{- end }}
+      {{- if not (hasKey $secretObj.data .Values.nautobot.db.existingSecretUsernameKey) }}
+        {{ fail (printf "USERNAME ERROR: The secret %q does not contain the key %q" .Values.nautobot.db.existingSecret .Values.nautobot.db.existingSecretUsernameKey) }}
+      {{- end }}
+valueFrom:
+  secretKeyRef:
+    name: {{ .Values.nautobot.db.existingSecret | quote}}
+    key: {{ .Values.nautobot.db.existingSecretUsernameKey | quote }}
+    {{- else -}}
+valueFrom:
+  secretKeyRef:
+    name: {{ include "nautobot.database.secretName" . }}
+    key: "username"
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 
 
 {{/*
-Generate the secret that is used for `NAUTOBOT_DB_PASSWORD` environmental variable
-in nautobot-deployment.yaml.
-
-The following is the logic:
-* If you have an existing K8s Secret containing the password it will take the secret from there.
-  Note: If you deploy PostgreSQL as part of this chart (postgresql.enabled==true) you have to
-        also define `postgresql.auth.existingSecret`
-  Test:
-    nautobot:
-      db:
-        existingSecret: "my-db-secret"
-        existingSecretPasswordKey: "password"
-
-* If the existing secret is not defined and you deploy PostgreSQL as part of this chart
-  it either takes the values from the existing secret defined in the postgresql
-  subchart (if defined) or it takes the secret that is generated by the subchart, which
-  is done automatically when the subchart is enabled. The name of the secret that
-  the subchart generates consists of <release name>-<nameOverride>. If you don't
-  define the postgresql.nameOverride it takes "postgresql".
-
-  Test1:
-    `kubectl create secret generic my-db-secret --from-literal=password=database-password --from-literal=postgresql-password=database-admin-password`
-
-    postgresql:
-      enabled: true
-      auth:
-        existingSecret: "my-db-secret"
-
-  Test2:
-    postgresql:
-      enabled: true
-
-* The same logic is used for PostgreSQL in HA mode.
-
-* If you enable mariadb then you have to disable postgresql. If you define
-  the existing secret, it will use that one. If not, if will create a secret name
-  from '<release name>-' and either 'nameOverride' if defined, or 'mariadb'.
-
-  Test:
-    postgresql:
-      enabled: false
-    mariadb:
-      auth:
-        existingSecret: "my-db-secret"
-
-* If you defined the password in "nautobot.db.password" it will create the
-  K8s Secret. This scenario is used for cases when you are using the external
-  database, so you should also disable postgresql: postgresql.enabled=false.
-
-  Test:
-    nautobot:
-      db:
-        password: "database-password"
-    postgresql:
-      enabled: false
-
+The following scenarios are supported to define the NAUTOBOT_DB_PASSWORD env var:
+1) Managed PostgreSQL is enabled (postgresql.enabled=true). You have an existing K8s Secret
+   containing the password (postgresql.auth.existingSecret). The NAUTOBOT_DB_PASSWORD env var
+   pulls the password directly from the existing K8s Secret. The key in the K8s secret
+   where the password is stored is defined by postgresql.auth.secretKeys.userPasswordKey.
+2) Managed PostgreSQL is enabled (postgresql.enabled=true). You don't have existing K8s Secret.
+   The Chart creates a K8s Secret containing the password. The password is taken
+   from postgresql.auth.password. The K8s secret name is <release name>-postgresql if
+   the postgresql.nameOverride is not defined, otherwise it is <release name>-<nameOverride>.
+3) External database is used (postgresql.enabled=false). You have existing K8s Secret
+   containing the password (nautobot.db.existingSecret). The NAUTOBOT_DB_PASSWORD env var
+   pulls the password directly from the existing K8s Secret. The key in the K8s secret
+   where the password is stored is defined by nautobot.db.existingSecretPasswordKey.
+4) External database is used (postgresql.enabled=false). You don't have existing K8s
+   Secret. The Chart creates a K8s Secret containing the password. The password is taken
+   from nautobot.db.password. The K8s secret name is <release name>-db.
 */}}
-{{- define "nautobot.database.passwordName" -}}
-  {{- if .Values.nautobot.db.existingSecret -}}
-    {{- .Values.nautobot.db.existingSecret -}}
-  {{- else if eq .Values.postgresql.enabled true -}}
+{{- define "nautobot.database.passEnvVarDef" -}}
+  {{- if eq .Values.postgresql.enabled true -}}
     {{- if .Values.postgresql.auth.existingSecret -}}
-      {{- .Values.postgresql.auth.existingSecret -}}
+valueFrom:
+  secretKeyRef:
+    name: {{ .Values.postgresql.auth.existingSecret }}
+    key: {{ default "password" .Values.postgresql.auth.secretKeys.userPasswordKey | quote }}
     {{- else -}}
-      {{- printf "%s-%s" .Release.Name (default "postgresql" .Values.postgresql.nameOverride) -}}
-    {{- end -}}
-  {{- else if eq .Values.postgresqlha.enabled true -}}
-    {{- if .Values.postgresqlha.postgresql.existingSecret -}}
-      {{- .Values.postgresqlha.postgresql.existingSecret -}}
-    {{- else -}}
-      {{- printf "%s-%s-postgresql" .Release.Name (default "postgresqlha" .Values.postgresqlha.nameOverride) -}}
-    {{- end -}}
-  {{- else if eq .Values.mariadb.enabled true -}}
-    {{- if .Values.mariadb.auth.existingSecret -}}
-      {{- .Values.mariadb.auth.existingSecret -}}
-    {{- else -}}
-      {{- printf "%s-%s" .Release.Name (default "mariadb" .Values.mariadb.nameOverride) -}}
+valueFrom:
+  secretKeyRef:
+    name: {{ printf "%s-%s" .Release.Name (default "postgresql" .Values.postgresql.nameOverride) | quote }}
+    key: "password"
     {{- end -}}
   {{- else -}}
-    {{- printf "%s-db-password" (include "common.names.fullname" .) -}}
-  {{- end -}}
-{{- end -}}
-
-
-{{- define "nautobot.database.passwordKey" -}}
-  {{- if .Values.nautobot.db.existingSecret -}}
-    {{- .Values.nautobot.db.existingSecretPasswordKey -}}
-  {{- else if eq .Values.postgresql.enabled true -}}
-    {{- if and .Values.postgresql.auth.existingSecret .Values.postgresql.auth.secretKeys -}}
-      {{- default "password" .Values.postgresql.auth.secretKeys.userPasswordKey -}}
+    {{- if .Values.nautobot.db.existingSecret -}}
+      {{- $secretObj := (lookup "v1" "Secret" .Release.Namespace .Values.nautobot.db.existingSecret) -}}
+      {{- if not $secretObj }}
+        {{ fail (printf "The secret %q does not exist" .Values.nautobot.db.existingSecret) }}
+      {{- end }}
+      {{- if not (hasKey $secretObj.data .Values.nautobot.db.existingSecretPasswordKey) }}
+        {{ fail (printf "PASSWORDS ERROR: The secret %q does not contain the key %q" .Values.nautobot.db.existingSecret .Values.nautobot.db.existingSecretPasswordKey) }}
+      {{- end }}
+valueFrom:
+  secretKeyRef:
+    name: {{ .Values.nautobot.db.existingSecret | quote }}
+    key: {{ .Values.nautobot.db.existingSecretPasswordKey | quote }}
     {{- else -}}
-      {{- printf "password" -}}
+      {{- if eq .Values.nautobot.db.password "" -}}
+        {{ fail "PASSWORDS ERROR: nautobot.db.password must not be empty" }}
+      {{- end -}}
+valueFrom:
+  secretKeyRef:
+    name: {{ include "nautobot.database.secretName" . }}
+    key: "password"
     {{- end -}}
-  {{- else if eq .Values.postgresqlha.enabled true -}}
-    {{/* PostgresqlHA & MariaDB sub-charts don't specify a Secret Key,
-      you need always to create the secrets with necessary keys like `password` before the helm install.
-    */}}
-    {{- printf "password" -}}
-  {{- else if eq .Values.mariadb.enabled true -}}
-      {{- printf "mariadb-password" -}}
-  {{- else -}}
-    {{- printf "password" -}}
   {{- end -}}
 {{- end -}}
 

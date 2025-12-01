@@ -1,8 +1,0 @@
----
-postgresql:
-  enabled: false
-
-mariadb:
-  enabled: true
-  auth:
-    password: "change-me"

@@ -29,6 +29,9 @@ NAUTOBOT_REDIS_SSL: {{ include "nautobot.redis.ssl" . | quote }}
 NAUTOBOT_SUPERUSER_EMAIL: {{ .Values.nautobot.superUser.email | quote }}
 NAUTOBOT_SUPERUSER_NAME: {{ .Values.nautobot.superUser.username | quote }}
 {{- end }}
+{{- if .Values.celery.celery_health_probes_as_files }}
+NAUTOBOT_CELERY_HEALTH_PROBES_AS_FILES: "True"
+{{- end }}
 {{- if .Values.nautobot.extraVars }}
 {{- range .Values.nautobot.extraVars }}
 {{ .name }}: {{ .value | quote }}

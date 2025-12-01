@@ -96,6 +96,14 @@ spec:
             {{- if (ne $celeryName "beat") }}
             - name: "CELERY_TASK_QUEUES"
               value: {{ $celery.taskQueues | quote }}
+            {{- if $celery.task_acks_late }}
+            - name: "CELERY_TASK_ACKS_LATE"
+              value: {{ $celery.task_acks_late | quote }}
+            {{- end }}
+            {{- if (ne (int $celery.worker_prefetch_multiplier) 4) }}
+            - name: "NAUTOBOT_CELERY_WORKER_PREFETCH_MULTIPLIER"
+              value: {{ $celery.worker_prefetch_multiplier | quote }}
+            {{- end }}
             {{- if (and $.Values.metrics.enabled $.Values.nautobot.metrics (ne $celeryName "beat")) }}
             - name: "NAUTOBOT_CELERY_WORKER_PROMETHEUS_PORTS"
               value: {{ $celery.metricsPort | quote }}

@@ -375,6 +375,10 @@ nautobot:
   #################################
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/)] Replace the entire `nautobot_config.py` file with this value<sup>[1](#notes)</sup>
   config: ""
+
+  # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/)] Use custom configuration defined in an existing ConfigMap<sup>[1](#notes)</sup>
+  configCM: ""
+
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#debug)] Enable Nautobot Debug (NAUTOBOT_DEBUG)<sup>[1](#notes)</sup>
   debug: false
 

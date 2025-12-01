@@ -352,6 +352,9 @@
             "config": {
               "type": "string"
             },
+            "configCM": {
+              "type": "string"
+            },
             "db": {
               "additionalProperties": false,
               "required": [

@@ -3,6 +3,10 @@ suite: "Test Celery Deployment"
 templates:
   - "celery-deployment.yaml"
 set:
+  nautobot:
+    db:
+      user: "nautobot"
+      password: "nautobotpassword"
   celery:
     worker_prefetch_multiplier: 1
     task_acks_late: true

@@ -159,6 +159,10 @@ spec:
             - name: "nautobot-config"
               mountPath: "/opt/nautobot/nautobot_config.py"
               subPath: "nautobot_config.py"
+            {{- else if $.Values.nautobot.configCM }}
+            - name: "nautobot-config-custom"
+              mountPath: "/opt/nautobot/nautobot_config.py"
+              subPath: "nautobot_config.py"
             {{- end }}
             {{- if $celery.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $celery.extraVolumeMounts "context" $) | nindent 12 }}
@@ -174,6 +178,11 @@ spec:
         - name: "nautobot-config"
           configMap:
             name: {{ include "common.names.fullname" $ }}-config
+        {{- end }}
+        {{- if and (not $.Values.nautobot.config) $.Values.nautobot.configCM }}
+        - name: "nautobot-config-custom"
+          configMap:
+            name: {{ $.Values.nautobot.configCM }}
         {{- end }}
         {{- if $celery.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" $celery.extraVolumes "context" $) | nindent 8 }}

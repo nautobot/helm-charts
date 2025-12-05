@@ -6,7 +6,7 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/images: |
     - name: nautobot
-      image: ghcr.io/nautobot/nautobot:2.4.22-py3.11
+      image: registry-1.docker.io/networktocode/nautobot:3.0-py3.13
   artifacthub.io/links: |
     - name: Nautobot Documentation
       url: https://docs.nautobot.com/
@@ -31,12 +31,28 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: changed
-      description: Upgraded Nautobot from 2.4.20 to 2.4.22
+      description: The `postgresql` and `redis` subcharts are no longer deployed by default. They must be explicitly enabled if used.
     - kind: changed
-      description: Updated installation notes to reflect the upcoming version 3.0 changes
+      description: The `rabbitmq` subchart was removed.
+    - kind: changed
+      description: The `mariadb` subchart was removed.
+    - kind: changed
+      description: The `postgresqlha` subchart was removed.
+    - kind: changed
+      description: The username field is now required in the existing secret if `nautobot.db.existingSecret` is used.
+    - kind: changed
+      description: The default image was changed to 3.x.
+    - kind: changed
+      description: Changed the default Docker registry.
+    - kind: changed
+      description: The Nautobot Celery readiness and liveness probes were changed to use files instead of celery pings.
+    - kind: changed
+      description: Changed Nautobot Celery defaults.
+    - kind: changed
+      description: Ability to point to an existing `ConfigMap` for Nautobot config.
 apiVersion: "v2"
-appVersion: "2.4.22"
-version: "2.5.9"
+appVersion: "3.0"
+version: "3.0.0-rc.1"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

@@ -51,7 +51,7 @@ annotations:
     - kind: changed
       description: Ability to point to an existing `ConfigMap` for Nautobot config.
 apiVersion: "v2"
-appVersion: "3.0.x"
+appVersion: "3.0"
 version: "3.0.0-rc.1"
 dependencies:
   - condition: "redis.enabled"

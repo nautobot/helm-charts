@@ -72,6 +72,7 @@ nav:
   - Advanced Usage:
     - Overview: "advanced-features/index.md"  # yamllint disable-line rule:indentation
     - Additional Nautobots: "advanced-features/additional-nautobots.md"
+    - Celery Configuration: "advanced-features/celery-configuration.md"
     - Celery Queues: "advanced-features/celery-queues.md"
     - Custom Nautobot Image: "advanced-features/custom-image.md"
     - Custom nautobot_config.py: "advanced-features/custom-nautobot-config.md"
@@ -82,15 +83,12 @@ nav:
     - Extra Objects: "advanced-features/extra-objects.md"
     - Initialization Job: "advanced-features/init-hook.md"
     - Ingress: "advanced-features/ingress.md"
-    - MySQL Support: "advanced-features/mysql.md"
     - Nautobot as a Subchart: "advanced-features/nautobot-as-subchart.md"
     - Network Policy: "advanced-features/network-policy.md"
     - Nginx Sidecar: "advanced-features/nginx-sidecar.md"
     - Persistent Volumes for Files: "advanced-features/persistence.md"
-    - PostgreSQL High Availability: "advanced-features/postgresql-ha.md"
     - PostgreSQL TLS: "advanced-features/postgresql-tls.md"
     - Prometheus Operator Metrics: "advanced-features/prometheus-metrics.md"
-    - RabbitMQ Support: "advanced-features/rabbitmq.md"
     - Redis Sentinel: "advanced-features/redis-sentinel.md"
     - Redis TLS: "advanced-features/redis-tls.md"
     - Static Files Only: "advanced-features/static-only.md"

@@ -10,7 +10,6 @@ NAUTOBOT_DB_HOST: {{ include "nautobot.database.host" . | quote }}
 NAUTOBOT_DB_NAME: {{ include "nautobot.database.dbname" . | quote }}
 NAUTOBOT_DB_PORT: {{ include "nautobot.database.port" . | quote }}
 NAUTOBOT_DB_TIMEOUT: {{ .Values.nautobot.db.timeout | quote }}
-NAUTOBOT_DB_USER: {{ include "nautobot.database.username" . | quote }}
 {{- if .Values.nautobot.debug }}
 NAUTOBOT_DEBUG: "True"
 {{- else }}
@@ -29,6 +28,9 @@ NAUTOBOT_REDIS_SSL: {{ include "nautobot.redis.ssl" . | quote }}
 {{- if .Values.nautobot.superUser.enabled }}
 NAUTOBOT_SUPERUSER_EMAIL: {{ .Values.nautobot.superUser.email | quote }}
 NAUTOBOT_SUPERUSER_NAME: {{ .Values.nautobot.superUser.username | quote }}
+{{- end }}
+{{- if .Values.celery.celery_health_probes_as_files }}
+NAUTOBOT_CELERY_HEALTH_PROBES_AS_FILES: "True"
 {{- end }}
 {{- if .Values.nautobot.extraVars }}
 {{- range .Values.nautobot.extraVars }}

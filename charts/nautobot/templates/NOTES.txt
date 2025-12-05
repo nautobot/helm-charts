@@ -10,24 +10,7 @@ The celeryBeat helm value has been deprecated and moved to workers.beat see
 https://docs.nautobot.com/projects/helm-charts/en/stable/configuration/reference/#workers-values for more information.
 {{ end }}
 {{ end }}
-{{- if .Values.postgresql.enabled }}
-In the next major release of the Nautobot helm chart, the deployment of PostgreSQL will disabled by default.
-We recommend only using it for development and testing purposes in the future.
-For production, we recommend deploying the database externally to HelmCharts and using 'existingSecret' to define
-username and password.
-{{ end }}
-{{- if .Values.redis.enabled }}
-In the next major release of the Nautobot helm chart, the deployment of Redis will disabled by default.
-We recommend only using it for development and testing purposes in the future.
-For production, we recommend deploying the database externally to HelmCharts and using 'existingSecret' to define
-credentials.
-{{ end }}
-{{- if .Values.nautobot.db.existingSecret }}
-Please note that next major release of Nautobot helm chart will need to contain database username
-in the existing secret (nautobot.db.existingSecret).
-The key 'username' (can be modified with 'existingSecretUsernameKey') will be expected in the existing secret.
-{{ end }}
-{{- if and (or .Values.postgresql.enabled .Values.mariadb.enabled .Values.nautobot.db.host ) (or .Values.redis.enabled .Values.nautobot.redis.host) -}}
+{{- if and (or .Values.postgresql.enabled .Values.nautobot.db.host ) (or .Values.redis.enabled .Values.nautobot.redis.host) -}}
 {{- if and .Values.nautobot.nginx.enabled }}
 We will update the uwsgi configuration in future releases, which will break default readiness and startup probes when you have nginx enabled.
 You will have to update your configuration or disable probes.
@@ -57,7 +40,7 @@ You will have to update your configuration or disable probes.
 {{- else if eq .Values.service.type "ClusterIP" }}
 
   echo "Nautobot URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }}-default 8080:{{ .Values.service.port }}
 
 {{- end }}
 

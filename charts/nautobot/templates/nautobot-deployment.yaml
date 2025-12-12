@@ -438,12 +438,15 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "common.names.fullname" $ }}-static
         {{- else }}
-          emptyDir: {}
+          {{- toYaml $nautobot.staticFilesVolume | nindent 10 }}
         {{- end }}
         {{- if $nautobot.persistenceMediaFiles.enabled }}
         - name: "nautobot-media"
           persistentVolumeClaim:
             claimName: {{ include "common.names.fullname" $ }}-media
+        {{- else if $nautobot.mediaFilesVolume }}
+        - name: "nautobot-media"
+          {{- toYaml $nautobot.mediaFilesVolume | nindent 10 }}
         {{- end }}
         - name: "git-repos"
           emptyDir: {}

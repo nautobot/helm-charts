@@ -1,7 +1,9 @@
 ---
 postgresql:
+  enabled: true
   auth:
     password: "change-me"
 redis:
+  enabled: true
   auth:
     password: "change-me"

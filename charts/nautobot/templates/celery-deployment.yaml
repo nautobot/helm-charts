@@ -96,6 +96,14 @@ spec:
             {{- if (ne $celeryName "beat") }}
             - name: "CELERY_TASK_QUEUES"
               value: {{ $celery.taskQueues | quote }}
+            {{- if $celery.task_acks_late }}
+            - name: "CELERY_TASK_ACKS_LATE"
+              value: {{ $celery.task_acks_late | quote }}
+            {{- end }}
+            {{- if (ne (int $celery.worker_prefetch_multiplier) 4) }}
+            - name: "NAUTOBOT_CELERY_WORKER_PREFETCH_MULTIPLIER"
+              value: {{ $celery.worker_prefetch_multiplier | quote }}
+            {{- end }}
             {{- if (and $.Values.metrics.enabled $.Values.nautobot.metrics (ne $celeryName "beat")) }}
             - name: "NAUTOBOT_CELERY_WORKER_PROMETHEUS_PORTS"
               value: {{ $celery.metricsPort | quote }}
@@ -104,11 +112,10 @@ spec:
             {{- if $celery.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $celery.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+            - name: NAUTOBOT_DB_USER
+              {{- include "nautobot.database.userEnvVarDef" $ | nindent 14 }}
             - name: NAUTOBOT_DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "nautobot.database.passwordName" $ }}
-                  key: {{ include "nautobot.database.passwordKey" $ }}
+              {{- include "nautobot.database.passEnvVarDef" $ | nindent 14 }}
             - name: NAUTOBOT_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -152,6 +159,10 @@ spec:
             - name: "nautobot-config"
               mountPath: "/opt/nautobot/nautobot_config.py"
               subPath: "nautobot_config.py"
+            {{- else if $.Values.nautobot.configCM }}
+            - name: "nautobot-config-custom"
+              mountPath: "/opt/nautobot/nautobot_config.py"
+              subPath: "nautobot_config.py"
             {{- end }}
             {{- if $celery.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $celery.extraVolumeMounts "context" $) | nindent 12 }}
@@ -167,6 +178,11 @@ spec:
         - name: "nautobot-config"
           configMap:
             name: {{ include "common.names.fullname" $ }}-config
+        {{- end }}
+        {{- if and (not $.Values.nautobot.config) $.Values.nautobot.configCM }}
+        - name: "nautobot-config-custom"
+          configMap:
+            name: {{ $.Values.nautobot.configCM }}
         {{- end }}
         {{- if $celery.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" $celery.extraVolumes "context" $) | nindent 8 }}

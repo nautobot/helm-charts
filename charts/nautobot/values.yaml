@@ -889,6 +889,7 @@ metrics:
   enabled: false
 
   nginxExporter:
+    # -- Enable NGINX Exporter sidecar container
     enabled: false
     # NGINX Exporter image
     image:
@@ -955,6 +956,7 @@ metrics:
       successThreshold: 1
 
   uwsgiExporter:
+    # -- Enable uWSGI Exporter sidecar container
     enabled: false
     # uWSGI Exporter image
     image:

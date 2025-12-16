@@ -23,7 +23,7 @@ redis:
             adaptSecurityContext: "auto"
 ```
 
-Disable security contexts for nautobot, beat, and workers. Add this section under `workers.beat`, `workers.default`, `nautobots.default` and `nautobot`. It may not be suitable to completely disable security contexts in your enviornment. See the [kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for further information on how to configure it implicitly. 
+Disable security contexts for nautobot, beat, and workers. Add this section under `workers.beat`, `workers.default`, `nautobots.default` and `nautobot`. It may not be suitable to completely disable security contexts in your environment. See the [kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for further information on how to configure it implicitly.
 
 ```yaml
 workers:
@@ -42,7 +42,7 @@ etc....
 
 ## Container Permissions
 
-Create a script file called `fix-permissions` and save it in the root of your project. 
+Create a script file called `fix-permissions` and save it in the root of your project.
 
 ```bash
 #!/bin/sh
@@ -55,10 +55,9 @@ chmod -R og+rw $1
 find $1 -type d -exec chmod g+x {} +
 ```
 
-Modify the `Dockerfile` to modify permission inside the container image on build. 
+Modify the `Dockerfile` to modify permission inside the container image on build.
 
-
-Add this in the `Final Image` section of the Dockerfile. You may need to adjust this somewhat depending on your exact setup. For example if you are not using prometheus metrics you don't need to include the lines for the /tmp/prometheus or /tmp/matplotlib folders. 
+Add this in the `Final Image` section of the Dockerfile. You may need to adjust this somewhat depending on your exact setup. For example if you are not using prometheus metrics you don't need to include the lines for the /tmp/prometheus or /tmp/matplotlib folders.
 
 ```shell
 # copy some useful container scripts

@@ -1,4 +1,7 @@
 {{- define "nginx.nautobot.conf" -}}
+{{- if .Values.nautobot.nginx.config }}
+{{- .Values.nautobot.nginx.config | nindent 0 }}
+{{- else }}
 server {
     listen 8443 ssl default_server;
     listen [::]:8443 ssl default_server;
@@ -53,4 +56,5 @@ server {
         stub_status;
     }
 }
+{{- end }}
 {{ end }}

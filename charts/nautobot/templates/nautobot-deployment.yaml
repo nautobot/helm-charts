@@ -164,7 +164,8 @@ spec:
             - "/bin/bash"
           args:
             - "-c"
-            - "cp /opt/nautobot/nautobot.* /opt/certs && chmod g+r /opt/certs/nautobot.* && ls -l /opt/certs/*"
+            # default dir path is `/opt/nautobot` so we copy `/opt/nautobot/nautobot.key` and `/opt/nautobot/nautobot.crt`
+            - "cp {{ $nautobot.nginx.certificates_path }}/nautobot.* /opt/certs && chmod g+r /opt/certs/nautobot.* && ls -l /opt/certs/*"
           env:
             {{- if $nautobot.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" $nautobot.extraEnvVars "context" $) | nindent 12 }}
@@ -327,7 +328,7 @@ spec:
               containerPort: 8080
             {{ else }}
             - name: "http"
-              containerPort: 8003
+              containerPort: 8001
             {{ end }}
         {{- end }}
         {{- if or $nautobot.nginx.enabled $nautobot.staticFilesOnly }}

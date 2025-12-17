@@ -3,6 +3,75 @@ entries:
   nautobot:
   - annotations:
       artifacthub.io/changes: |
+        - kind: added
+          description: Add custom Nginx configuration file and certificates path.
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: nautobot
+          image: registry-1.docker.io/networktocode/nautobot:3.0-py3.13
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Nautobot Documentation
+          url: https://docs.nautobot.com/
+        - name: Nautobot Core Documentation
+          url: https://nautobot.readthedocs.io/en/stable/
+        - name: Nautobot Helm Chart Documentation
+          url: https://docs.nautobot.com/projects/helm-charts/en/stable
+        - name: Nautobot
+          url: https://github.com/nautobot/nautobot
+      artifacthub.io/prerelease: "false"
+      artifacthub.io/screenshots: |
+        - title: Main Page
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_main_page.png
+        - title: Config Contexts
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_config_contexts.png
+        - title: GraphQL
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_graphiql.png
+        - title: Prefix hierarchy
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_prefix_hierarchy.png
+        - title: Config Compliance
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_golden_config.png
+        - title: Chatops
+          url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: "3.0"
+    created: "2025-12-17T13:14:23.370714339Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 18.19.4
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 12.12.10
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.31.4
+    description: Nautobot is a Network Source of Truth and Network Automation Platform.
+    digest: d4d025f69509906a3b9123d5e4759e459fb5951bca7a479999590bb8c6272a0a
+    home: https://github.com/nautobot/nautobot
+    icon: https://raw.githubusercontent.com/nautobot/helm-charts/main/images/NautobotLogoSquare.png
+    keywords:
+    - DCIM
+    - IPAM
+    - SOT
+    maintainers:
+    - email: opensource@networktocode.com
+      name: Network to Code
+      url: https://www.networktocode.com/
+    name: nautobot
+    sources:
+    - https://github.com/nautobot/nautobot
+    - https://github.com/nautobot/helm-charts
+    urls:
+    - https://nautobot.github.io/helm-charts/nautobot-3.0.1.tgz
+    version: 3.0.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: changed
           description: The `postgresql` and `redis` subcharts are no longer deployed by default. They must be explicitly enabled if used.
         - kind: changed
@@ -7496,4 +7565,4 @@ entries:
     urls:
     - https://nautobot.github.io/helm-charts/nautobot-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-12T12:23:43.969684813Z"
+generated: "2025-12-17T13:14:23.355167622Z"

@@ -164,7 +164,7 @@ spec:
             - "/bin/bash"
           args:
             - "-c"
-            # defaut dir path is `/opt/nautobot` so we copy `/opt/nautobot/nautobot.key` and `/opt/nautobot/nautobot.crt`
+            # default dir path is `/opt/nautobot` so we copy `/opt/nautobot/nautobot.key` and `/opt/nautobot/nautobot.crt`
             - "cp {{ $nautobot.nginx.certificates_path }}/nautobot.* /opt/certs && chmod g+r /opt/certs/nautobot.* && ls -l /opt/certs/*"
           env:
             {{- if $nautobot.extraEnvVars }}

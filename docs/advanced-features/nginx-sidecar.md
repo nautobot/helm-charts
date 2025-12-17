@@ -33,3 +33,17 @@ nautobot:
     failureThreshold: 3
     successThreshold: 1
 ```
+
+## Custom Nginx configuration
+
+You can pass a custom Nginx configuration similar with nautobot_config.py and uwsgi.ini files. As an example to pass it through file you can use `--set-file nautobot.nginx.config=nginx.config` when installing the chart.
+
+## Custom certificates
+
+There is an extra `initContainer` that copies the certificates from Nautobot containers into a shared volume that Nginx sidecar is using to get the certificates for TLS termination. If you have internal PKI, you somehow store those certificates into the container. You can specify the path (without the trailing slash `/`) of the directory with the `certificates_path` value. Keep in mind that the files must be named `nautobot.crt` and `nautobot.key`.
+
+```yaml
+nautobot:
+  nginx:
+    certificates_path: "/opt/nautobot/internal_certs"
+```

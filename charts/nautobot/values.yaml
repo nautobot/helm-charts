@@ -324,9 +324,9 @@ nautobot:
           - "NET_BIND_SERVICE"
 
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/http-server/#configure-nginx)] Replace the entire Nginx configuration with this value<sup>[1](#notes)</sup>
-    config:
+    config: ""
 
-    # -- If custom certificated are used, define the directory of certificates mounted in the Nautobot container (they should be named `nautobot.`)
+    # -- If custom certificated are used, define the directory of certificates (without trailing slash) from the Nautobot container (they should be named `nautobot.`)
     certificates_path: "/opt/nautobot"
 
     # -- ([]EnvVar) Extra Env Vars to set only on the NGINX containers

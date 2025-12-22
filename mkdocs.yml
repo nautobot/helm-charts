@@ -92,6 +92,7 @@ nav:
     - Redis Sentinel: "advanced-features/redis-sentinel.md"
     - Redis TLS: "advanced-features/redis-tls.md"
     - Static Files Only: "advanced-features/static-only.md"
+    - Openshift Tips: "advanced-features/openshift-tips.md"
   - Operators Guide:
     - Backup and Restore: "operations/backup-restore.md"  # yamllint disable-line rule:indentation
     - Invalidate Redis Cache: "operations/redis-cache.md"

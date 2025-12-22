@@ -14,6 +14,7 @@ bootsteps
 cacheops
 changeme
 chatops
+chgrp
 codeql
 configmap
 containerd
@@ -47,6 +48,7 @@ kubescape
 kwargs
 loadbalancer
 loglevel
+matplotlib
 middlewares
 mkdocs
 mmin

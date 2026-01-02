@@ -38,12 +38,25 @@ nautobot:
 
 You can pass a custom Nginx configuration similar with nautobot_config.py and uwsgi.ini files. As an example to pass it through file you can use `--set-file nautobot.nginx.config=nginx.config` when installing the chart.
 
-## Custom certificates
+## Custom TLS certificates
 
-There is an extra `initContainer` that copies the certificates from Nautobot containers into a shared volume that Nginx sidecar is using to get the certificates for TLS termination. If you have internal PKI, you somehow store those certificates into the container. You can specify the path (without the trailing slash `/`) of the directory with the `certificates_path` value. Keep in mind that the files must be named `nautobot.crt` and `nautobot.key`.
+### Image built with the certificates
+
+There is an extra `initContainer` that copies the certificates from Nautobot containers into a shared volume that Nginx sidecar is using to get the certificates for TLS termination. If you have internal PKI, you maybe build the nautobot image with those certificates inside. You can specify the path (without the trailing slash `/`) of the directory with the `certificates_path` value. Keep in mind that the files must be named `nautobot.crt` and `nautobot.key`.
 
 ```yaml
 nautobot:
   nginx:
     certificates_path: "/opt/nautobot/internal_certs"
 ```
+
+### TLS certificates as existing kubernetes secret
+
+Another option is to create a kubernetes secret with those certificates, more info in the page for [existing secrets](existing-secrets/). If you have the secret created, then just specify it's name into values as shown below:
+
+```yaml
+nautobot:
+  secret_name_tls: "internal-tls"
+```
+
+Nginx will mount that secret and use it accordingly for serving the application.

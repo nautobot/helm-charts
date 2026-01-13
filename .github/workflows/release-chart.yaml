@@ -5,8 +5,7 @@ on:  # yamllint disable-line rule:truthy
   push:
     tags:
       - "*"
-    branches:
-      - "u/ubajze-667"
+
 jobs:
   check-tag:
     runs-on: "ubuntu-24.04"
@@ -21,38 +20,40 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: "Install dependencies"
-        run: "poetry install --no-root"
-
       - name: "Verify poetry version"
         run: "poetry --version"
+
+      - name: "Install dependencies"
+        run: "poetry install --no-root"
 
       - name: "Run tag check"
         run: "poetry run invoke check-release-tag ${{ github.ref_name }}"
 
-  # release:
-  #   runs-on: "ubuntu-22.04"
-  #   steps:
-  #     - uses: "actions/checkout@v6"
+  release:
+    runs-on: "ubuntu-22.04"
+    needs: "check-tag"
+    steps:
+      - uses: "actions/checkout@v6"
 
-  #     - name: "Publish Helm charts"
-  #       uses: "stefanprodan/helm-gh-pages@v1.7.0"
-  #       with:
-  #         token: "${{ secrets.GITHUB_TOKEN }}"
-  #         dependencies: "bitnami,https://charts.bitnami.com/bitnami"
+      - name: "Publish Helm charts"
+        uses: "stefanprodan/helm-gh-pages@v1.7.0"
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          dependencies: "bitnami,https://charts.bitnami.com/bitnami"
 
-  # publish-oci:
-  #   runs-on: "ubuntu-22.04"
-  #   steps:
-  #     - uses: "actions/checkout@v6"
-  #     - name: "Publish Helm charts to OCI"
-  #       uses: "appany/helm-oci-chart-releaser@v0.5.0"
-  #       with:
-  #         name: "nautobot"
-  #         repository: "nautobot/helm-charts"
-  #         tag: "${{ github.ref_name }}"
-  #         path: "charts/nautobot"
-  #         registry: "ghcr.io"
-  #         registry_username: "${{ secrets.REGISTRY_USERNAME }}"
-  #         registry_password: "${{ secrets.REGISTRY_PASSWORD }}"
-  #         update_dependencies: false
+  publish-oci:
+    runs-on: "ubuntu-22.04"
+    needs: "check-tag"
+    steps:
+      - uses: "actions/checkout@v6"
+      - name: "Publish Helm charts to OCI"
+        uses: "appany/helm-oci-chart-releaser@v0.5.0"
+        with:
+          name: "nautobot"
+          repository: "nautobot/helm-charts"
+          tag: "${{ github.ref_name }}"
+          path: "charts/nautobot"
+          registry: "ghcr.io"
+          registry_username: "${{ secrets.REGISTRY_USERNAME }}"
+          registry_password: "${{ secrets.REGISTRY_PASSWORD }}"
+          update_dependencies: false

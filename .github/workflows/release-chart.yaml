@@ -15,6 +15,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: "Install poetry"
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: "Verify poetry version"
+        run: "poetry --version"
 
   # release:
   #   runs-on: "ubuntu-22.04"

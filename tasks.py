@@ -24,6 +24,10 @@ def check_release_tag(context, tag):
 
     print(f"Checking that provided tag '{tag}' matches Chart.yaml version.")
 
+    if tag.startswith("v"):
+        tag = tag[1:]
+        print(f"Stripped leading 'v' from tag. New tag is '{tag}'.")
+
     print("Loading Chart.yaml.")
     chart_yaml_path = Path("charts/nautobot/Chart.yaml")
     with open(chart_yaml_path, "r", encoding="utf-8") as chart_file:

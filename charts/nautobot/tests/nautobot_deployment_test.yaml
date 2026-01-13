@@ -51,23 +51,6 @@ set:
   serviceAccount:
     create: true
     name: "test-nautobot-sa"
-# Mock existing secrets for testing
-kubernetesProvider:
-  scheme:
-    "v1/Secret":
-      gvr:
-        version: "v1"
-        resource: "secrets"
-      namespaced: true
-  objects:
-    - kind: "Secret"
-      apiVersion: "v1"
-      metadata:
-        name: "test-external-postgresql"
-        namespace: "test"
-      data:
-        mydbusername: "bXluYXV0b2JvdHVzZXI="
-        mydbpassword: "bXlkYnBhc3N3b3Jk"
 release:
   name: "test"
   namespace: "test"

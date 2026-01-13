@@ -20,8 +20,14 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
+      - name: "Install dependencies"
+        run: "poetry install"
+
       - name: "Verify poetry version"
         run: "poetry --version"
+
+      - name: "Run tag check"
+        run: "poetry run invoke check-release-tag ${{ github.ref_name }}"
 
   # release:
   #   runs-on: "ubuntu-22.04"

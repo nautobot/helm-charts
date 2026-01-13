@@ -3,7 +3,8 @@
 name: "Release"
 on:  # yamllint disable-line rule:truthy
   push:
-    tags: "*"
+    tags:
+      - "*"
     branches:
       - "u/ubajze-667"
 jobs:
@@ -21,7 +22,7 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: "Install dependencies"
-        run: "poetry install"
+        run: "poetry install --no-root"
 
       - name: "Verify poetry version"
         run: "poetry --version"

@@ -6,8 +6,14 @@ socket = 127.0.0.1:8001
 {{ else }}
 http = 0.0.0.0:8080
 {{- if not .Values.nautobot.uwsgi.disableHttps }}
+{{- if .Values.nautobot.secret_name_tls }}
+; Enable HTTPS support with provided TLS certs
+https = 0.0.0.0:8443,/opt/certs/nautobot.crt,/opt/certs/nautobot.key
+{{- else }}
+; Enable HTTPS support with self-signed TLS certs
 https = 0.0.0.0:8443,/opt/nautobot/nautobot.crt,/opt/nautobot/nautobot.key
-{{ end }}
+{{- end }}
+{{- end -}}
 {{ end }}
 
 {{- if .Values.metrics.uwsgiExporter.enabled -}}

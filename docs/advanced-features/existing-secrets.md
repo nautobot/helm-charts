@@ -6,6 +6,7 @@ If you don't want to pass values through helm for...
 - PostgreSQL
 - Nautobot Secret Key
 - Superuser password and API token
+- TLS certificates
 
 ...there's the option of creating these secrets manually and referencing them in the configuration.
 
@@ -108,4 +109,23 @@ And/or for the superuser credentials you can use this configuration:
         existingSecret: "superuser"
         existingSecretPasswordKey: "password"
         existingSecretApiTokenKey: "apitoken"
+    ```
+
+## Existing TLS certificates
+
+And/or for serving Nautobot with custom TLS certificates you can use this configuration:
+
+1. Create a secret of tls type with the TLS cert/key pair:
+
+    ```no-highlight
+    kubectl create secret tls internal-tls \
+      --cert=my-custom-cert.crt \
+      --key=my-custom-cert.key
+    ```
+
+2. Then use the name of the created secret in the below helm values to install the chart:
+
+    ```yaml
+    nautobot:
+      secret_name_tls: "internal-tls"
     ```

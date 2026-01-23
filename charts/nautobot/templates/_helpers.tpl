@@ -165,13 +165,6 @@ The following scenarios are supported to define the NAUTOBOT_DB_USER env var:
 value: {{ .Values.postgresql.auth.username | quote }}
   {{- else -}}
     {{- if .Values.nautobot.db.existingSecret -}}
-      {{- $secretObj := (lookup "v1" "Secret" .Release.Namespace .Values.nautobot.db.existingSecret) -}}
-      {{- if not $secretObj }}
-        {{ fail (printf "The secret %q does not exist" .Values.nautobot.db.existingSecret) }}
-      {{- end }}
-      {{- if not (hasKey $secretObj.data .Values.nautobot.db.existingSecretUsernameKey) }}
-        {{ fail (printf "USERNAME ERROR: The secret %q does not contain the key %q" .Values.nautobot.db.existingSecret .Values.nautobot.db.existingSecretUsernameKey) }}
-      {{- end }}
 valueFrom:
   secretKeyRef:
     name: {{ .Values.nautobot.db.existingSecret | quote}}
@@ -219,13 +212,6 @@ valueFrom:
     {{- end -}}
   {{- else -}}
     {{- if .Values.nautobot.db.existingSecret -}}
-      {{- $secretObj := (lookup "v1" "Secret" .Release.Namespace .Values.nautobot.db.existingSecret) -}}
-      {{- if not $secretObj }}
-        {{ fail (printf "The secret %q does not exist" .Values.nautobot.db.existingSecret) }}
-      {{- end }}
-      {{- if not (hasKey $secretObj.data .Values.nautobot.db.existingSecretPasswordKey) }}
-        {{ fail (printf "PASSWORDS ERROR: The secret %q does not contain the key %q" .Values.nautobot.db.existingSecret .Values.nautobot.db.existingSecretPasswordKey) }}
-      {{- end }}
 valueFrom:
   secretKeyRef:
     name: {{ .Values.nautobot.db.existingSecret | quote }}

@@ -3,12 +3,38 @@
 name: "Release"
 on:  # yamllint disable-line rule:truthy
   push:
-    tags: "*"
+    tags:
+      - "*"
+
 jobs:
+  check-tag:
+    runs-on: "ubuntu-24.04"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          fetch-depth: 0
+
+      - name: "Install poetry"
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: "Verify poetry version"
+        run: "poetry --version"
+
+      - name: "Install dependencies"
+        run: "poetry install --no-root"
+
+      - name: "Run tag check"
+        run: "poetry run invoke check-release-tag ${{ github.ref_name }}"
+
   release:
     runs-on: "ubuntu-22.04"
+    needs: "check-tag"
     steps:
       - uses: "actions/checkout@v6"
+
       - name: "Publish Helm charts"
         uses: "stefanprodan/helm-gh-pages@v1.7.0"
         with:
@@ -17,6 +43,7 @@ jobs:
 
   publish-oci:
     runs-on: "ubuntu-22.04"
+    needs: "check-tag"
     steps:
       - uses: "actions/checkout@v6"
       - name: "Publish Helm charts to OCI"

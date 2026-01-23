@@ -31,10 +31,14 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: added
-      description: Add custom Nginx configuration file and certificates path.
+      description: Add support for existing TLS certificates
+    - kind: changed
+      description: Update docs for Openshift deployments
+    - kind: fixed
+      description: Fix issues with `lookup` function in secrets
 apiVersion: "v2"
 appVersion: "3.0"
-version: "3.0.1"
+version: "3.0.2"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

@@ -3,11 +3,25 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.2 - 2026-01-23
+
+### Added
+
+* [#682](https://github.com/nautobot/helm-charts/pull/682) Add support for existing TLS certificates.
+
+### Changed
+
+* [#675](https://github.com/nautobot/helm-charts/pull/675) Update documentation for Openshift deployments.
+
+### Fixed
+
+* [#684](https://github.com/nautobot/helm-charts/pull/684) Fix issues with `lookup` function.
+
 ## 3.0.1 - 2025-12-17
 
 ### Added
 
-* [#676](https://github.com/nautobot/helm-charts/pull/676) Add custom Nginx configuration file and certificates path
+* [#676](https://github.com/nautobot/helm-charts/pull/676) Add custom Nginx configuration file and certificates path.
 
 ## 3.0.0 - 2025-12-12
 

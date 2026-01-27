@@ -13,7 +13,7 @@ https = 0.0.0.0:8443,/opt/certs/nautobot.crt,/opt/certs/nautobot.key
 ; Enable HTTPS support with self-signed TLS certs
 https = 0.0.0.0:8443,/opt/nautobot/nautobot.crt,/opt/nautobot/nautobot.key
 {{- end }}
-{{- end -}}
+{{ end }}
 {{ end }}
 
 {{- if .Values.metrics.uwsgiExporter.enabled -}}

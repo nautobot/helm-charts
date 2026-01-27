@@ -17,7 +17,7 @@ celery:
 
 As a general guideline for kubernetes deployment we propose the below scenario. Have both `concurrency` and `worker_prefetch_multiplier` to `1`. That way only one job is executed simultaneously and another one is waiting in queue. Even if the worker is lost, at most two tasks are affected.
 
-However, this configuration introduces a caveat: **Celery doesn't have capacity to run the `ping` task, so it doesn't reply back**. That's why this chart uses files as health probes for Celery workers based on [this approach](github.com/celery/celery/issues/4079#issuecomment-1270085680).
+However, this configuration introduces a caveat: **Celery doesn't have capacity to run the `ping` task, so it doesn't reply back**. That's why this chart uses files as health probes for Celery workers based on [this approach](https://github.com/celery/celery/issues/4079#issuecomment-1270085680).
 
 ## Example: Single-task Worker configuration
 

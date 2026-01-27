@@ -92,6 +92,7 @@ nav:
     - Redis Sentinel: "advanced-features/redis-sentinel.md"
     - Redis TLS: "advanced-features/redis-tls.md"
     - Static Files Only: "advanced-features/static-only.md"
+    - Openshift Tips: "advanced-features/openshift-tips.md"
   - Operators Guide:
     - Backup and Restore: "operations/backup-restore.md"  # yamllint disable-line rule:indentation
     - Invalidate Redis Cache: "operations/redis-cache.md"
@@ -106,5 +107,6 @@ nav:
     - Testing: "development/testing.md"
     - Comparing Templates: "development/comparing-templates.md"
   - Release Notes:
-    - Version 2.x: "release-notes/version-2.x.md"  # yamllint disable-line rule:indentation
+    - Version 3.x: "release-notes/version-3.x.md"  # yamllint disable-line rule:indentation
+    - Version 2.x: "release-notes/version-2.x.md"
     - Version 1.x: "release-notes/version-1.x.md"

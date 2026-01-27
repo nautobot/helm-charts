@@ -224,6 +224,9 @@ nautobot:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
 
+  # -- (TLSSecretName) [[ref](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets)] Name of existing secret containing TLS certs for HTTPS configuration
+  secret_name_tls: ""
+
   # -- [[ref](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)] Define a horizontal pod autoscaler
   # @default -- See values.yaml
   autoscaling:
@@ -322,6 +325,12 @@ nautobot:
           - "ALL"
         add:
           - "NET_BIND_SERVICE"
+
+    # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/http-server/#configure-nginx)] Replace the entire Nginx configuration with this value<sup>[1](#notes)</sup>
+    config: ""
+
+    # -- If custom certificated are used, define the directory of certificates (without trailing slash) from the Nautobot container (they should be named `nautobot.`)
+    certificates_path: "/opt/nautobot"
 
     # -- ([]EnvVar) Extra Env Vars to set only on the NGINX containers
     extraEnvVars: []
@@ -889,6 +898,7 @@ metrics:
   enabled: false
 
   nginxExporter:
+    # -- Enable NGINX Exporter sidecar container
     enabled: false
     # NGINX Exporter image
     image:
@@ -955,6 +965,7 @@ metrics:
       successThreshold: 1
 
   uwsgiExporter:
+    # -- Enable uWSGI Exporter sidecar container
     enabled: false
     # uWSGI Exporter image
     image:

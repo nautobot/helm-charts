@@ -30,15 +30,11 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
-    - kind: added
-      description: Add support for existing TLS certificates
-    - kind: changed
-      description: Update docs for Openshift deployments
     - kind: fixed
-      description: Fix issues with `lookup` function in secrets
+      description: Fix spacing for the uwsgi.ini template when uwsgi_exporter is enabled
 apiVersion: "v2"
 appVersion: "3.0"
-version: "3.0.2"
+version: "3.0.3"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

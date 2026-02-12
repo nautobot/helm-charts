@@ -217,7 +217,7 @@ valueFrom:
     name: {{ .Values.nautobot.db.existingSecret | quote }}
     key: {{ .Values.nautobot.db.existingSecretPasswordKey | quote }}
     {{- else -}}
-      {{- if eq .Values.nautobot.db.password "" -}}
+      {{- if and (eq .Values.nautobot.db.password "") (.Values.nautobot.validateDbPassword | default true) -}}
         {{ fail "PASSWORDS ERROR: nautobot.db.password must not be empty" }}
       {{- end -}}
 valueFrom:

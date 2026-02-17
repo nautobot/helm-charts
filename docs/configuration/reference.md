@@ -328,6 +328,17 @@ The `redis.*` values configure the upstream chart from Bitnami.  Please see the 
 | <a name="serviceAccount.automountServiceAccountToken">[serviceAccount.automountServiceAccountToken](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L829)</a> | bool | `false` | Auto Mount Service account token |
 | <a name="serviceAccount.create">[serviceAccount.create](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L822)</a> | bool | `true` | Enable creation of a Kubernetes Service Account for Nautobot |
 | <a name="serviceAccount.name">[serviceAccount.name](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L825)</a> | string | `$release_name` | Name of the Kubernetes Service Account for Nautobot |
+| <a name="serviceAccount.roles">[serviceAccount.roles](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L831)</a> | object | See values.yaml | RBAC Roles and RoleBindings configuration |
+| <a name="serviceAccount.roles.jobCreator">[serviceAccount.roles.jobCreator](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L832)</a> | object | See values.yaml | Configuration for job creator role |
+| <a name="serviceAccount.roles.jobCreator.create">[serviceAccount.roles.jobCreator.create](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L834)</a> | bool | `false` | Enable creation of Role and RoleBinding for job creation |
+| <a name="serviceAccount.roles.jobCreator.name">[serviceAccount.roles.jobCreator.name](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L837)</a> | string | `"nautobot-job-creator-{{ .Release.Namespace }}"` | Custom name for the Role |
+| <a name="serviceAccount.roles.jobCreator.namespace">[serviceAccount.roles.jobCreator.namespace](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L840)</a> | string | `{{ .Release.Namespace }}` | Custom namespace for the Role |
+| <a name="serviceAccount.roles.jobCreator.verbs">[serviceAccount.roles.jobCreator.verbs](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L843)</a> | []string | `["create", "get", "list", "watch"]` | List of verbs allowed for the Role |
+| <a name="serviceAccount.roles.podReader">[serviceAccount.roles.podReader](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L844)</a> | object | See values.yaml | Configuration for pod reader role |
+| <a name="serviceAccount.roles.podReader.create">[serviceAccount.roles.podReader.create](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L847)</a> | bool | `false` | Enable creation of Role and RoleBinding for pod reading |
+| <a name="serviceAccount.roles.podReader.name">[serviceAccount.roles.podReader.name](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L850)</a> | string | `"nautobot-pod-reader-{{ .Release.Namespace }}"` | Custom name for the Role |
+| <a name="serviceAccount.roles.podReader.namespace">[serviceAccount.roles.podReader.namespace](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L853)</a> | string | `{{ .Release.Namespace }}` | Custom namespace for the Role |
+| <a name="serviceAccount.roles.podReader.verbs">[serviceAccount.roles.podReader.verbs](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L856)</a> | []string | `["get", "list", "watch"]` | List of verbs allowed for the Role |
 
 ## Workers Values
 

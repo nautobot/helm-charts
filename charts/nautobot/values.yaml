@@ -835,25 +835,9 @@ serviceAccount:
       # -- (string) Custom name for the Role
       # @default -- `nautobot-job-creator-{{ .Release.Namespace }}`
       name: ""
-      # -- (string) Custom namespace for the Role
-      # @default -- `{{ .Release.Namespace }}`
-      namespace: ""
       # -- ([]string) List of verbs allowed for the Role
       # @default -- `["create", "get", "list", "watch"]`
       verbs: ["create", "get", "list", "watch"]
-    podReader:
-      # -- (bool) Enable creation of Role and RoleBinding for pod reading
-      # This makes it so we can automatically determine the current Nautobot image to use for the Kubernetes job pod
-      create: false
-      # -- (string) Custom name for the Role
-      # @default -- `nautobot-pod-reader-{{ .Release.Namespace }}`
-      name: ""
-      # -- (string) Custom namespace for the Role
-      # @default -- `{{ .Release.Namespace }}`
-      namespace: ""
-      # -- ([]string) List of verbs allowed for the Role
-      # @default -- `["get", "list", "watch"]`
-      verbs: ["get", "list", "watch"]
 
 ingress:
   # -- Enable Ingress resource creation

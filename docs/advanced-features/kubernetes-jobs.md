@@ -25,8 +25,6 @@ serviceAccount:
   roles:
     jobCreator:
       create: true
-    podReader:
-      create: true
 ```
 
 For more information and customization options for the ServiceAccount roles, see [RBAC Roles and RoleBindings](rbac-roles.md).

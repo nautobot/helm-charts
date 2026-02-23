@@ -1,14 +1,13 @@
 {{- if .Values.serviceAccount.roles.jobCreator.create }}
 {{- $roleConfig := .Values.serviceAccount.roles.jobCreator }}
 {{- $roleName := $roleConfig.name | default (printf "nautobot-job-creator-%s" .Release.Namespace) }}
-{{- $roleNamespace := $roleConfig.namespace | default .Release.Namespace }}
 {{- $verbs := $roleConfig.verbs | default (list "create" "get" "list" "watch") }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ $roleName | quote }}
-  namespace: {{ $roleNamespace | quote }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -25,7 +24,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ printf "%s-binding" $roleName | quote }}
-  namespace: {{ $roleNamespace | quote }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -36,52 +35,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: {{ template "nautobot.serviceAccountName" . }}
-  namespace: {{ $roleNamespace | quote }}
-roleRef:
-  kind: Role
-  name: {{ $roleName | quote }}
-  apiGroup: rbac.authorization.k8s.io
-{{- end }}
-
-{{- if .Values.serviceAccount.roles.podReader.create }}
-{{- $roleConfig := .Values.serviceAccount.roles.podReader }}
-{{- $roleName := $roleConfig.name | default (printf "nautobot-pod-reader-%s" .Release.Namespace) }}
-{{- $roleNamespace := $roleConfig.namespace | default .Release.Namespace }}
-{{- $verbs := $roleConfig.verbs | default (list "get" "list" "watch") }}
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: {{ $roleName | quote }}
-  namespace: {{ $roleNamespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if (or .Values.serviceAccount.annotations .Values.commonAnnotations) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge .Values.serviceAccount.annotations .Values.commonAnnotations) "context" $ ) | nindent 4 }}
-  {{- end }}
-rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: {{ $verbs | toJson }}
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: {{ printf "%s-binding" $roleName | quote }}
-  namespace: {{ $roleNamespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if (or .Values.serviceAccount.annotations .Values.commonAnnotations) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" (merge .Values.serviceAccount.annotations .Values.commonAnnotations) "context" $ ) | nindent 4 }}
-  {{- end }}
-subjects:
-- kind: ServiceAccount
-  name: {{ template "nautobot.serviceAccountName" . }}
-  namespace: {{ $roleNamespace | quote }}
+  namespace: {{ .Release.Namespace | quote }}
 roleRef:
   kind: Role
   name: {{ $roleName | quote }}

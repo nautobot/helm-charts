@@ -1160,30 +1160,6 @@
                 "name": {
                   "type": "string"
                 },
-                "namespace": {
-                  "type": "string"
-                },
-                "verbs": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "podReader": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "create": {
-                  "type": "boolean"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "namespace": {
-                  "type": "string"
-                },
                 "verbs": {
                   "type": "array",
                   "items": {

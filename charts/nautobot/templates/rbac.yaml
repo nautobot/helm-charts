@@ -1,7 +1,6 @@
 {{- if .Values.serviceAccount.roles.jobCreator.create }}
 {{- $roleConfig := .Values.serviceAccount.roles.jobCreator }}
 {{- $roleName := $roleConfig.name | default (printf "nautobot-job-creator-%s" .Release.Namespace) }}
-{{- $verbs := $roleConfig.verbs | default (list "create" "get" "list" "watch") }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -18,7 +17,7 @@ metadata:
 rules:
 - apiGroups: ["batch"]
   resources: ["jobs"]
-  verbs: {{ $verbs | toJson }}
+  verbs: ["create", "get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding

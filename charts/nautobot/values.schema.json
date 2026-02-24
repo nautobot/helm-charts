@@ -1159,12 +1159,6 @@
                 },
                 "name": {
                   "type": "string"
-                },
-                "verbs": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
                 }
               }
             }

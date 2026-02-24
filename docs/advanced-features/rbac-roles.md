@@ -25,7 +25,7 @@ By default, this creates a Role and RoleBinding with the following default value
 - **Resources**: `jobs`
 - **Verbs**: `create`, `get`, `list`, `watch`
 
-You may customize the role name and verbs if needed.
+You may customize the role name if needed.
 
 ```yaml
 serviceAccount:
@@ -33,5 +33,4 @@ serviceAccount:
     jobCreator:
       create: true
       name: "custom-job-role"
-      verbs: ["create", "get", "list", "watch"]
 ```

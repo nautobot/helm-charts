@@ -835,9 +835,6 @@ serviceAccount:
       # -- (string) Custom name for the Role
       # @default -- `nautobot-job-creator-{{ .Release.Namespace }}`
       name: ""
-      # -- ([]string) List of verbs allowed for the Role
-      # @default -- `["create", "get", "list", "watch"]`
-      verbs: ["create", "get", "list", "watch"]
 
 ingress:
   # -- Enable Ingress resource creation

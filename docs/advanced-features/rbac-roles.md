@@ -19,8 +19,8 @@ serviceAccount:
 
 By default, this creates a Role and RoleBinding with the following default values:
 
-- **Role Name**: `nautobot-job-creator-{{ .Release.Namespace }}`
-- **Namespace**: `{{ .Release.Namespace }}`
+- **Role Name**: `{{ .Release.Name }}-job-creator-{{ .Release.Namespace }}` (e.g., `nautobot-job-creator-default` or `my-nautobot-job-creator-my-namespace`)
+- **Namespace**: `{{ .Release.Namespace }}` (e.g., `default` or `my-namespace`)
 - **API Group**: `batch`
 - **Resources**: `jobs`
 - **Verbs**: `create`, `get`, `list`, `watch`

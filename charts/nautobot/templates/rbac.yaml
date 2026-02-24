@@ -1,6 +1,6 @@
 {{- if .Values.serviceAccount.roles.jobCreator.create }}
 {{- $roleConfig := .Values.serviceAccount.roles.jobCreator }}
-{{- $roleName := $roleConfig.name | default (printf "nautobot-job-creator-%s" .Release.Namespace) }}
+{{- $roleName := $roleConfig.name | default (printf "%s-job-creator-%s" (include "common.names.fullname" .) .Release.Namespace) }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role

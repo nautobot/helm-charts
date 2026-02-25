@@ -2,8 +2,8 @@
 services:
   update-docs:
     build:
-      context: .
-      dockerfile: Dockerfile.update-docs
-    working_dir: /workspace
+      context: "."
+      dockerfile: "Dockerfile.update-docs"
+    working_dir: "/workspace"
     volumes:
-      - ..:/workspace
+      - "..:/workspace"

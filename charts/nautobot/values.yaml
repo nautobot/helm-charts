@@ -956,7 +956,7 @@ route:
   enabled: false
 
   # -- Override API Version
-  apiVersion: gateway.networking.k8s.io/v1
+  apiVersion: "gateway.networking.k8s.io/v1"
 
   # -- Gateway Hostname for the listener to be created for this route, this should match the `route.hostname` value defined in the parentRefs section of the route rules
   hostname: "nautobot.local"

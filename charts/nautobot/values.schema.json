@@ -338,6 +338,103 @@
         }
       }
     },
+    "kubernetesWorker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "jobManifestsMountPath": {
+          "type": "string"
+        },
+        "defaults": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ttlSecondsAfterFinished": {
+              "type": "integer"
+            },
+            "backoffLimit": {
+              "type": "integer"
+            },
+            "annotations": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "podAnnotations": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "labels": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "podLabels": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "initContainers": {
+              "type": "array"
+            },
+            "sidecars": {
+              "type": "array"
+            },
+            "extraEnvVars": {
+              "type": "array"
+            },
+            "extraEnvVarsCM": {
+              "type": "array"
+            },
+            "extraEnvVarsSecret": {
+              "type": "array"
+            },
+            "extraVolumes": {
+              "type": "array"
+            },
+            "extraVolumeMounts": {
+              "type": "array"
+            },
+            "resources": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "cpu": {
+                      "type": "string"
+                    },
+                    "memory": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "limits": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "cpu": {
+                      "type": "string"
+                    },
+                    "memory": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "nautobot": {
       "allOf": [
         {
@@ -807,6 +904,20 @@
         }
       ]
     },
+    "kubernetes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "worker": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/kubernetesWorker"
+            }
+          ]
+        }
+      }
+    },
     "metrics": {
       "additionalProperties": false,
       "type": "object",
@@ -1148,6 +1259,33 @@
         }
       }
     },
+    "serviceAccountJobs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "annotations",
+        "automountServiceAccountToken",
+        "create",
+        "name"
+      ],
+      "properties": {
+        "automountServiceAccountToken": {
+          "type": "boolean"
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type:": "object"
+        },
+        "create": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
     "sops": {
       "type": "object"
     },
@@ -1156,18 +1294,33 @@
       "patternProperties": {
         "^[a-zA-Z0-9]+$": {
           "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["celery", "kubernetes"],
+              "default": "celery"
+            }
+          },
           "allOf": [
             {
-              "$ref": "#/$defs/celery"
-            },
-            {
-              "required": [
-                "enabled"
-              ],
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
+              "if": {
+                "properties": {
+                  "type": {
+                    "const": "kubernetes"
+                  }
                 }
+              },
+              "then": {
+                "$ref": "#/$defs/kubernetesWorker"
+              },
+              "else": {
+                  "$ref": "#/$defs/celery"
               }
             }
           ]

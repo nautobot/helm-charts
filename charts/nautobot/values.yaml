@@ -776,13 +776,61 @@ celery:
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#celery_worker_prometheus_ports)] Ports for Prometheus metric HTTP server running on the celery worker(s) if `nautobot.metrics` is `true`
   metricsPort: 8080
 
+# -- Global and default values for Kubernetes Jobs
+kubernetes:
+  # -- The path where the Nautobot Kubernetes Job manifests will be mounted in the Nautobot Pod.
+  jobsManifestsMountPath: "/var/run/nautobot/manifests"
+
+  # -- Defaults for Kubernetes Job manifests
+  defaults:
+
+    # -- [[ref](https://kubernetes.io/docs/concepts/workloads/controllers/job/#clean-up-finished-jobs-automatically)] Number of seconds to retain finished Job resources before they are automatically deleted by Kubernetes
+    ttlSecondsAfterFinished: 60
+    # -- [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/job/#handling-pod-and-container-failures) Number of retries before marking the Job as failed.
+    backoffLimit: 0
+
+    # -- Annotations for the Kubernetes Jobs objects.
+    annotations: {}
+    # -- Annotations for the Pods created by Kubernetes Jobs.
+    podAnnotations: {}
+    # -- Labels for the Kubernetes Jobs objects.
+    labels: {}
+    # -- Labels for the Pods created by Kubernetes Jobs.
+    podLabels: {}
+
+    # -- ([]Container) [[ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)] Add additional init containers to the Pods created by Kubernetes Jobs
+    initContainers: []
+    # -- ([]Container) Add additional sidecar containers for the Pods created by Kubernetes Jobs
+    sidecars: []
+
+    # -- ([]EnvVar) Extra Env Vars added to the main container of the Pods created by Kubernetes Jobs
+    extraEnvVars: []
+    # -- ([]string) List of names of existing ConfigMaps containing extra env vars for the Pods created by Kubernetes Jobs
+    extraEnvVarsCM: []
+    # -- ([]string) List of names of existing Secrets containing extra env vars for the Pods created by Kubernetes Jobs
+    extraEnvVarsSecret: []
+
+    # -- ([]Volume) List of additional volumes for the Pods created by Kubernetes Jobs
+    extraVolumes: []
+    # -- ([]VolumeMount) List of additional volumeMounts for the Pods created by Kubernetes Jobs
+    extraVolumeMounts: []
+
+    # -- (ResourceRequirements) [[ref](http://kubernetes.io/docs/user-guide/compute-resources/)] Resource requests and limits for Pods created by Kubernetes Jobs
+    resources:
+      requests:
+        cpu: "400m"
+        memory: "1G"
+      limits:
+        cpu: "3328m"
+        memory: "6656M"
+
 # -- (map[name]celery) Additional Celery Worker deployments, map key is the name of the deployment and the additional key `enabled` is required for each Worker deployment, all other keys for each Worker will override the defaults provided by the root `.Values.celery`.
 # @default -- See values.yaml
 workers:
   # -- (celery) Values for the Default Celery Worker deployment see values.yaml `.celery` for assumed defaults
   # @default -- See values.yaml
   default:
-    enabled: true
+    enabled: false
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/)] a comma separated list of Celery Queues to listen on.
     taskQueues: "default"
   # -- (celery) Values for the Celery Beat deployment see values.yaml `.celery` for assumed defaults
@@ -810,6 +858,12 @@ workers:
         cpu: "5m"
         memory: "256M"
 
+  alpha:
+    enabled: true
+    type: "kubernetes"
+
+
+
 # -- DEPRECATED see [`workers.default`](#workers.default) and [`celery`](#celery-values)
 celeryWorker: {}
 
@@ -822,6 +876,18 @@ serviceAccount:
   create: true
   # -- Name of the Kubernetes Service Account for Nautobot
   # @default -- `$release_name`
+  name: ""
+  # -- Service account annotations
+  annotations: {}
+  # -- Auto Mount Service account token
+  automountServiceAccountToken: false
+
+# ServiceAccount for Kubernetes jobs
+serviceAccountJobs:
+  # -- Enable creation of a Kubernetes Service Account for Kubernetes jobs
+  create: false
+  # -- Name of the Kubernetes Service Account for Kubernetes jobs
+  # @default -- `$release_name`-jobs
   name: ""
   # -- Service account annotations
   annotations: {}

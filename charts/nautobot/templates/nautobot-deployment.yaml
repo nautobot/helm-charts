@@ -259,6 +259,10 @@ spec:
                   name: {{ include "nautobot.superUser.secretName" $ }}
                   key: {{ include "nautobot.superUser.existingSecretApiTokenKey" $ }}
             {{- end }}
+            {{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
+            - name: NAUTOBOT_KUBERNETES_JOB_MANIFEST_DIRECTORY
+              value: {{ $.Values.kubernetes.jobsManifestsMountPath | quote }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env
@@ -318,6 +322,11 @@ spec:
             {{- if $nautobot.secret_name_tls }}
             - name: "nautobot-certs"
               mountPath: "/opt/certs"
+            {{- end }}
+            {{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
+            - name: "nautobot-k8s-jobs-manifests"
+              mountPath: {{ $.Values.kubernetes.jobsManifestsMountPath }}
+              readOnly: true
             {{- end }}
             {{- if $nautobot.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $nautobot.extraVolumeMounts "context" $) | nindent 12 }}
@@ -459,6 +468,11 @@ spec:
         - name: "nautobot-config-custom"
           configMap:
             name: {{ $.Values.nautobot.configCM }}
+        {{- end }}
+        {{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
+        - name: "nautobot-k8s-jobs-manifests"
+          configMap:
+            name: {{ include "nautobot.kubernetesJobsConfigMapName" $ }}
         {{- end }}
         {{- if $nautobot.secret_name_tls }}
         - name: "nautobot-certs"

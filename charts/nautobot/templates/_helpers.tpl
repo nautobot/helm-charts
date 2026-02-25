@@ -217,11 +217,6 @@ valueFrom:
     name: {{ .Values.nautobot.db.existingSecret | quote }}
     key: {{ .Values.nautobot.db.existingSecretPasswordKey | quote }}
     {{- else -}}
-      {{- if eq .Values.nautobot.db.password "" -}}
-        {{- if ne .Values.nautobot.notValidateDbPassword true -}}
-          {{ fail "PASSWORDS ERROR: nautobot.db.password must not be empty" }}
-        {{- end -}}
-      {{- end -}}
 valueFrom:
   secretKeyRef:
     name: {{ include "nautobot.database.secretName" . }}

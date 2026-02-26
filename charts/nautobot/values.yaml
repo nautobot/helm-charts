@@ -804,7 +804,10 @@ kubernetes:
     sidecars: []
 
     # -- ([]EnvVar) Extra Env Vars added to the main container of the Pods created by Kubernetes Jobs
-    extraEnvVars: []
+    # extraEnvVars: []
+    extraEnvVars:
+      - name: "ENVIRONMENT"
+        value: "development"
     # -- ([]string) List of names of existing ConfigMaps containing extra env vars for the Pods created by Kubernetes Jobs
     extraEnvVarsCM: []
     # -- ([]string) List of names of existing Secrets containing extra env vars for the Pods created by Kubernetes Jobs

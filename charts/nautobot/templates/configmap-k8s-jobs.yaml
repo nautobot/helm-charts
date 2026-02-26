@@ -137,6 +137,6 @@ metadata:
 data:
   {{- range $workerName, $worker := $workers }}
   {{ $workerName }}: |
-    {{- $worker | toPrettyJson | nindent 4 -}}
+    {{- $worker | toPrettyJson | nindent 4 }}
   {{- end }}
 {{- end }}

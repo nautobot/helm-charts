@@ -804,10 +804,7 @@ kubernetes:
     sidecars: []
 
     # -- ([]EnvVar) Extra Env Vars added to the main container of the Pods created by Kubernetes Jobs
-    # extraEnvVars: []
-    extraEnvVars:
-      - name: "ENVIRONMENT"
-        value: "development"
+    extraEnvVars: []
     # -- ([]string) List of names of existing ConfigMaps containing extra env vars for the Pods created by Kubernetes Jobs
     extraEnvVarsCM: []
     # -- ([]string) List of names of existing Secrets containing extra env vars for the Pods created by Kubernetes Jobs
@@ -833,7 +830,7 @@ workers:
   # -- (celery) Values for the Default Celery Worker deployment see values.yaml `.celery` for assumed defaults
   # @default -- See values.yaml
   default:
-    enabled: false
+    enabled: true
     # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/administration/celery-queues/)] a comma separated list of Celery Queues to listen on.
     taskQueues: "default"
   # -- (celery) Values for the Celery Beat deployment see values.yaml `.celery` for assumed defaults
@@ -860,19 +857,6 @@ workers:
       requests:
         cpu: "5m"
         memory: "256M"
-
-  alpha:
-    enabled: true
-    type: "kubernetes"
-
-  beta:
-    enabled: true
-    type: "kubernetes"
-    extraEnvVars:
-      - name: CELERY_TASK_QUEUES
-        value: "beta"
-
-
 
 # -- DEPRECATED see [`workers.default`](#workers.default) and [`celery`](#celery-values)
 celeryWorker: {}

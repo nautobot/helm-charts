@@ -117,3 +117,10 @@ workers:
     enabled: true
     type: "kubernetes"
 ```
+
+The Job manifest for the Job Queue `alpha` will contain a definition for the
+environmental variable `ENVIRONMENT` with the value `production`, while the
+definition for the `beta` worker will contain the value `development`.
+
+> Please note, that whenever you override the list, it will override the whole list and not merge entries.
+> You must duplicate the entries, if you need to keep some of the entries from `defaults`.

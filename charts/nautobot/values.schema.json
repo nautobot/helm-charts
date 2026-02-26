@@ -1313,16 +1313,22 @@
                 "const": "kubernetes"
               }
             },
-            "required": ["type"]
+            "required": [
+              "type"
+            ]
           },
           "then": {
             "allOf": [
-              {"$ref": "#/$defs/kubernetesWorker"}
+              {
+                "$ref": "#/$defs/kubernetesWorker"
+              }
             ]
           },
           "else": {
             "allOf": [
-              {"$ref": "#/$defs/celery"}
+              {
+                "$ref": "#/$defs/celery"
+              }
             ]
           }
         }

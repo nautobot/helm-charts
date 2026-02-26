@@ -100,12 +100,8 @@ them to the location provided with the `kubernetes.jobsManifestsMountPath`
 attribute:
 
 ```shell
-nautobot@nautobot-default:~$ ls -al /etc/nautobot/job-queues/
-total 16
-drwxr-xr-x 4 root root 4096 Feb 26 07:50 .
-drwxr-xr-x 3 root root 4096 Feb 26 07:50 ..
-drwxr-xr-x 2 root root 4096 Feb 26 07:50 alpha
-drwxr-xr-x 2 root root 4096 Feb 26 07:50 beta
+nautobot@nautobot-default:~$ ls /etc/nautobot/job-queues/
+alpha  beta
 ```
 
 Each worker above inherits settings from the `kubernetes.defaults` section.

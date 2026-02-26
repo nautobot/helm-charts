@@ -3,7 +3,7 @@
 This Helm Chart has direct support for using Kubernetes Jobs for executing
 Nautobot Jobs. This approach is alternative to always-on Celery workers, where
 Celery Pods are constantly running and they pick up Nautobot jobs from the
-task queue. On the other side, the Kubernetes Jobs are created on demand.
+task queue. On the other hand, the Kubernetes Jobs are created on demand.
 
 You can read more on Kubernetes Jobs in the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/jobs/kubernetes-job-support/#nautobot_kubernetes_job_manifest).
 
@@ -13,7 +13,7 @@ You can read more on Kubernetes Jobs in the [Nautobot documentation](https://doc
 
 Before Nautobot can run a Job as a Kubernetes Job, it requires a Job manifest.
 There is one-to-one mapping between a Job Queue and a Kubernetes Job manifest,
-which means that each Job Queue, configured in Nautobot, requires a dedicated
+which means that each Job Queue configured in Nautobot requires a dedicated
 Kubernetes Job manifest.
 
 Nautobot gets manifests from the file system. All manifests must be stored in
@@ -56,7 +56,7 @@ kubernetes:
         value: "development"
 ```
 
-The environmental variable `ENVIRONMENT` will be applied to all of the Kubernetes
+The environment variable `ENVIRONMENT` will be applied to all of the Kubernetes
 Jobs.
 
 The specific Job Queues are enabled or disabled in the `workers` section. This
@@ -82,7 +82,7 @@ workers:
     type: "kubernetes"
 ```
 
-Using the configuration above, the Helm Chart generates two manifests and store
+Using the configuration above, the Helm Chart generates two manifests and stores
 them to the location provided with the `kubernetes.jobsManifestsMountPath`
 attribute:
 
@@ -95,7 +95,7 @@ drwxr-xr-x 2 root root 4096 Feb 26 07:50 alpha
 drwxr-xr-x 2 root root 4096 Feb 26 07:50 beta
 ```
 
-Each worker above, inherits settings from the `kubernetes.defaults` section.
+Each worker above inherits settings from the `kubernetes.defaults` section.
 If you want to override any of those settings you can define them under your
 worker configuration.
 
@@ -119,8 +119,8 @@ workers:
 ```
 
 The Job manifest for the Job Queue `alpha` will contain a definition for the
-environmental variable `ENVIRONMENT` with the value `production`, while the
+environment variable `ENVIRONMENT` with the value `production`, while the
 definition for the `beta` worker will contain the value `development`.
 
-> Please note, that whenever you override the list, it will override the whole list and not merge entries.
-> You must duplicate the entries, if you need to keep some of the entries from `defaults`.
+> Please note that whenever you override the list, it will override the whole list and not merge entries.
+> You must duplicate the entries if you need to keep some of the entries from `defaults`.

@@ -1,7 +1,7 @@
 # Kubernetes Jobs Support
 
 This Helm Chart has support for using Kubernetes jobs for executing
-Nautobot jobs. This approach is alternative to always-on Celery workers, where
+Nautobot jobs. This approach is an alternative to always-on Celery workers, where
 Celery Pods are constantly running and they pick up Nautobot jobs from the
 task queue. On the other hand, the Kubernetes Jobs are created on demand when
 a Nautobot job is started.
@@ -12,24 +12,24 @@ You can read more on Kubernetes Jobs in the [Nautobot documentation](https://doc
 
 ## How is Support for Kubernetes Jobs Implemented
 
-Each Nautobot job has one or more associated job queues. A job queue, defines
-configuration for executing Nautobot jobs. In traditional, Celery-based
+Each Nautobot job has one or more associated job queues. A job queue defines
+configuration for executing Nautobot jobs. In traditional Celery-based
 deployment, each Celery worker defines one or more task queues. If you add
 a job to a specific job queue, then one of the workers that has this task
 queue configured will pick up and execute a job.
 
 The pattern changes a bit, when Kubernetes jobs are used to execute Nautobot
 jobs. The job queue is no longer associated with the task queue on a Celery
-worker. The job queue has a Kubernetes job manifest associated with. There is
+worker. The job queue has a Kubernetes job manifest associated with it. There is
 one-to-one mapping between a job queue and a Kubernetes job manifest, which
 means that each job queue configured in Nautobot requires a dedicated Kubernetes
 job manifest.
 
 Before Nautobot can execute a job, it must first load the Kubernetes job manifest.
 Nautobot gets manifests from the file system. All manifests must be stored in
-a single base directory. There should be one directory for each job queue configured.
-The directory name must match with the job queue configured in Nautobot. Nautobot
-support Kubernetes job manifest in a JSON or YAML formats. The file name must
+a single base directory. There should be one directory for each configured job queue.
+The directory name must match the job queue configured in Nautobot. Nautobot
+supports Kubernetes job manifests in JSON or YAML format. The file name must
 be either `manifest.json` or `manifest.yaml`. The file must contain the Kubernetes
 job manifest.
 
@@ -56,7 +56,7 @@ location is `/etc/nautobot/job-queues`, which is defined with the
 
 The `values.yaml` contains the section `kubernetes.defaults`, where all the
 default values for your job manifests are defined. Any setting defined here, is
-applied to all job manifests. For example, you want to inject an extra environmental
+applied to all job manifests. For example, you want to inject an extra environment
 variable to your jobs. Define this new variable in the `kubernetes.defaults`
 section.
 
@@ -73,7 +73,7 @@ jobs.
 
 The specific job queues are enabled or disabled in the `workers` section. This
 section contains a map of workers that are defined in your environment. Each
-worker must have a unique name, which can consists of alphanumeric symbols.
+worker must have a unique name, which can consist of alphanumeric symbols.
 
 To define a job queue, you must set two values:
 

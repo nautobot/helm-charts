@@ -260,7 +260,7 @@ spec:
                   key: {{ include "nautobot.superUser.existingSecretApiTokenKey" $ }}
             {{- end }}
             {{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
-            - name: NAUTOBOT_KUBERNETES_JOB_MANIFEST_DIRECTORY
+            - name: NAUTOBOT_JOB_QUEUE_PATH
               value: {{ $.Values.kubernetes.jobsManifestsMountPath | quote }}
             {{- end }}
           envFrom:
@@ -324,9 +324,12 @@ spec:
               mountPath: "/opt/certs"
             {{- end }}
             {{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
+            {{- range $i, $workerName := (include "nautobot.kubernetesWorkers" $) | fromJsonArray }}
             - name: "nautobot-k8s-jobs-manifests"
-              mountPath: {{ $.Values.kubernetes.jobsManifestsMountPath }}
+              mountPath: "/etc/nautobot/job-queues/{{ $workerName }}/manifest.json"
+              subPath: "{{ $workerName }}"
               readOnly: true
+            {{- end }}
             {{- end }}
             {{- if $nautobot.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $nautobot.extraVolumeMounts "context" $) | nindent 12 }}

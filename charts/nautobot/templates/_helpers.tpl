@@ -410,6 +410,19 @@ Celery Beat can only have 1 replica enforce that here
 {{- end }}
 
 {{/*
+  Define a list of all workers of type kubernetes.
+*/}}
+{{- define "nautobot.kubernetesWorkers" -}}
+{{- $kubernetesWorkers := list -}}
+{{- range $workerName, $worker := .Values.workers -}}
+  {{- if eq (default "celery" $worker.type) "kubernetes" }}
+    {{- $kubernetesWorkers = append $kubernetesWorkers $workerName -}}
+  {{- end }}
+{{- end }}
+{{- mustToJson $kubernetesWorkers -}}
+{{- end -}}
+
+{{/*
 Get values for the init job if singleInit is true.  Default all values to the root .nautobot defaults
 */}}
 {{ define "nautobot.initJob" }}

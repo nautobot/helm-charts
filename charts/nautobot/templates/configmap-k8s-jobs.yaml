@@ -63,7 +63,7 @@
     {{- range $i, $envVar := $workerData.extraEnvVars -}}
       {{- $_env = append $_env $envVar -}}
     {{- end }}
-    {{- $_env = append $_env (dict "name" "NAUTOBOT_KUBERNETES_JOB_QUEUE_NAME" "value" $workerName) -}}
+    {{- $_env = append $_env (dict "name" "NAUTOBOT_JOB_QUEUE_NAME" "value" $workerName) -}}
 
     {{/* Define environment variable sources. */}}
     {{- $_envFrom := include "nautobot.baseEnvFrom" $ | fromJsonArray -}}

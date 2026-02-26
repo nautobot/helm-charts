@@ -779,7 +779,7 @@ celery:
 # -- Global and default values for Kubernetes Jobs
 kubernetes:
   # -- The path where the Nautobot Kubernetes Job manifests will be mounted in the Nautobot Pod.
-  jobsManifestsMountPath: "/var/run/nautobot/manifests"
+  jobsManifestsMountPath: "/etc/nautobot/job-queues"
 
   # -- Defaults for Kubernetes Job manifests
   defaults:
@@ -861,6 +861,13 @@ workers:
   alpha:
     enabled: true
     type: "kubernetes"
+
+  beta:
+    enabled: true
+    type: "kubernetes"
+    extraEnvVars:
+      - name: CELERY_TASK_QUEUES
+        value: "beta"
 
 
 

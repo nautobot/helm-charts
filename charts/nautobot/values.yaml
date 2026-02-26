@@ -833,7 +833,7 @@ serviceAccount:
       # -- (bool) Enable creation of Role and RoleBinding for job creation
       create: false
       # -- (string) Custom name for the Role
-      # @default -- `{{ .Release.Name }}-job-creator-{{ .Release.Namespace }}`
+      # @default -- `{{ .Release.Name }}-job-creator`
       name: ""
 
 ingress:

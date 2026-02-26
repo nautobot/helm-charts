@@ -1,25 +1,37 @@
 # Kubernetes Jobs Support
 
-This Helm Chart has direct support for using Kubernetes Jobs for executing
-Nautobot Jobs. This approach is alternative to always-on Celery workers, where
+This Helm Chart has support for using Kubernetes jobs for executing
+Nautobot jobs. This approach is alternative to always-on Celery workers, where
 Celery Pods are constantly running and they pick up Nautobot jobs from the
-task queue. On the other hand, the Kubernetes Jobs are created on demand.
+task queue. On the other hand, the Kubernetes Jobs are created on demand when
+a Nautobot job is started.
 
 You can read more on Kubernetes Jobs in the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/jobs/kubernetes-job-support/#nautobot_kubernetes_job_manifest).
 
 > Note, that this Helm Chart requires Nautobot version `3.1`.
 
-## How is the Support for Kubernetes Jobs Implemented
+## How is Support for Kubernetes Jobs Implemented
 
-Before Nautobot can run a Job as a Kubernetes Job, it requires a Job manifest.
-There is one-to-one mapping between a Job Queue and a Kubernetes Job manifest,
-which means that each Job Queue configured in Nautobot requires a dedicated
-Kubernetes Job manifest.
+Each Nautobot job has one or more associated job queues. A job queue, defines
+configuration for executing Nautobot jobs. In traditional, Celery-based
+deployment, each Celery worker defines one or more task queues. If you add
+a job to a specific job queue, then one of the workers that has this task
+queue configured will pick up and execute a job.
 
+The pattern changes a bit, when Kubernetes jobs are used to execute Nautobot
+jobs. The job queue is no longer associated with the task queue on a Celery
+worker. The job queue has a Kubernetes job manifest associated with. There is
+one-to-one mapping between a job queue and a Kubernetes job manifest, which
+means that each job queue configured in Nautobot requires a dedicated Kubernetes
+job manifest.
+
+Before Nautobot can execute a job, it must first load the Kubernetes job manifest.
 Nautobot gets manifests from the file system. All manifests must be stored in
-a single base directory. There should be one directory for each Job Queue. The
-directory contains the `manifest.json` or `manifest.yaml` which contains the
-Kubernetes Job manifest.
+a single base directory. There should be one directory for each job queue configured.
+The directory name must match with the job queue configured in Nautobot. Nautobot
+support Kubernetes job manifest in a JSON or YAML formats. The file name must
+be either `manifest.json` or `manifest.yaml`. The file must contain the Kubernetes
+job manifest.
 
 The following is an example of the directory structure:
 
@@ -35,17 +47,17 @@ The manifest is not stored in memory, so there is no requirement to have all the
 manifests present at startup. Nautobot reads the manifest when a Nautobot job is
 executed.
 
-This Helm Chart generates manifests for you. There will be one Job manifest for
-every Job Queue that you enable in `values.yaml`. The default location is
-`/etc/nautobot/job-queues`, which is defined with the `kubernetes.jobsManifestsMountPath`
-attribute.
+This Helm Chart generates manifests for you. There will be one Kubernetes job
+manifest for every job queue that you enable in `values.yaml`. The default
+location is `/etc/nautobot/job-queues`, which is defined with the
+`kubernetes.jobsManifestsMountPath` attribute.
 
 ## How to Configure Job Queues
 
 The `values.yaml` contains the section `kubernetes.defaults`, where all the
-default values for your Jobs are defined. Any setting defined here, is applied
-to all Kubernetes Jobs. For example, you want to inject an extra environmental
-variable to your Jobs, define this new variable in the `kubernetes.defaults`
+default values for your job manifests are defined. Any setting defined here, is
+applied to all job manifests. For example, you want to inject an extra environmental
+variable to your jobs. Define this new variable in the `kubernetes.defaults`
 section.
 
 ```yaml
@@ -57,20 +69,21 @@ kubernetes:
 ```
 
 The environment variable `ENVIRONMENT` will be applied to all of the Kubernetes
-Jobs.
+jobs.
 
-The specific Job Queues are enabled or disabled in the `workers` section. This
+The specific job queues are enabled or disabled in the `workers` section. This
 section contains a map of workers that are defined in your environment. Each
-worker must have a unique name, which can contain alphanumeric symbols.
+worker must have a unique name, which can consists of alphanumeric symbols.
 
-To define a Kubernetes worker job, you must set two values:
+To define a job queue, you must set two values:
 
 * `workers.<worker name>.enable: true`
 * `workers.<worker name>.type: "kubernetes"`
 
-> Note: The `type` defines the worker type. The default value is `celery`, which makes this Helm Chart backward compatible.
+> Note: The `type` defines the job queue type. The default value is `celery`,
+> which makes this Helm Chart backward compatible.
 
-The following is an example of how you would enable two different Job Queues:
+The following is an example of how you would enable two different job queues:
 
 ```yaml
 workers:
@@ -118,8 +131,8 @@ workers:
     type: "kubernetes"
 ```
 
-The Job manifest for the Job Queue `alpha` will contain a definition for the
-environment variable `ENVIRONMENT` with the value `production`, while the
+The Kubernetes job manifest for the job queue `alpha` will contain a definition
+for the environment variable `ENVIRONMENT` with the value `production`, while the
 definition for the `beta` worker will contain the value `development`.
 
 > Please note that whenever you override the list, it will override the whole list and not merge entries.

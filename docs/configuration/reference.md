@@ -330,7 +330,7 @@ The `redis.*` values configure the upstream chart from Bitnami.  Please see the 
 | <a name="serviceAccount.name">[serviceAccount.name](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L825)</a> | string | `$release_name` | Name of the Kubernetes Service Account for Nautobot |
 | <a name="serviceAccount.roles">[serviceAccount.roles](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L831)</a> | object | `{"jobCreator":{"create":false,"name":""}}` | RBAC Roles and RoleBindings configuration |
 | <a name="serviceAccount.roles.jobCreator.create">[serviceAccount.roles.jobCreator.create](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L834)</a> | bool | `false` | Enable creation of Role and RoleBinding for job creation |
-| <a name="serviceAccount.roles.jobCreator.name">[serviceAccount.roles.jobCreator.name](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L837)</a> | string | `{{ .Release.Name }}-job-creator-{{ .Release.Namespace }}` | Custom name for the Role |
+| <a name="serviceAccount.roles.jobCreator.name">[serviceAccount.roles.jobCreator.name](https://github.com/nautobot/helm-charts/blob/main/charts/nautobot/values.yaml#L837)</a> | string | `{{ .Release.Name }}-job-creator` | Custom name for the Role |
 
 ## Workers Values
 

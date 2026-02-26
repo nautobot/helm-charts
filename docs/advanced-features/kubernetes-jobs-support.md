@@ -35,7 +35,7 @@ job manifest.
 
 The following is an example of the directory structure:
 
-```
+```shell
 .
 ├── alpha
 │   └── manifest.json

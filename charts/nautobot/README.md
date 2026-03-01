@@ -90,7 +90,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 | Repository | Name | Version |
 |------------|------|---------|
 | oci://registry-1.docker.io/bitnamicharts | common | 2.34.0 |
-| oci://registry-1.docker.io/bitnamicharts | postgresql | 12.12.10 |
+| oci://registry-1.docker.io/bitnamicharts | postgresql | 18.5.1 |
 | oci://registry-1.docker.io/bitnamicharts | redis | 18.19.4 |
 
 <!-- This section is a duplicate of docs/configuration/reference.md.gotmpl -->

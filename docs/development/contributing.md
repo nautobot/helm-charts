@@ -86,13 +86,13 @@ Each chart in this repo uses [helm-docs](https://github.com/norwoodj/helm-docs) 
 
 Pre-commit runs [`helm-docs`](https://github.com/norwoodj/helm-docs), this uses the annotations in `values.yaml` plus the `README.md.gotmpl` to generate the `README.md` documentation for the Helm chart.  This ensures all of the configuration options are documented correctly.
 
-To update the README.md files for a chart you can run `helm-docs` directly or use pre-commit:
+To update the README.md files for a chart you can run `invoke update-docs`. Add `--local` to run it locally (`helm-docs` must be installed).
 
 ```no-highlight
-helm-docs
+invoke update-docs
 ```
 
-or
+or using pre-commit:
 
 ```no-highlight
 pre-commit run -av helm-docs

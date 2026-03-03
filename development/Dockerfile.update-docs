@@ -1,0 +1,15 @@
+# Development image that matches the Update Docs CI job:
+# - Go + helm-docs to regenerate README.md and reference.md
+FROM golang:1.23-bookworm
+
+ENV GO111MODULE=on
+
+RUN go install github.com/norwoodj/helm-docs/cmd/helm-docs@v1.11.0
+
+WORKDIR /workspace
+
+# Default: run the same helm-docs commands as .github/workflows/update-docs.yaml
+COPY update-docs.sh /update-docs.sh
+RUN chmod +x /update-docs.sh
+
+ENTRYPOINT ["/update-docs.sh"]

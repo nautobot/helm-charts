@@ -1,7 +1,7 @@
 {{- $config_checksum := dict "checksum/config-env" (include "nautobot.configMap.env" . | sha256sum ) "checksum/config" (include "nautobot.configMap.config" . | sha256sum) }}
 {{- $workers := (include "nautobot.workers" .) | mustFromJson -}}
 {{- range $celeryName, $celery := $workers -}}
-{{- if and $celery.enabled (eq $celery.type "celery") }}
+{{- if and $celery.enabled (eq (default "celery" $celery.type) "celery") }}
 ---
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" $ }}
 kind: Deployment

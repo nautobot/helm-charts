@@ -442,6 +442,7 @@
         },
         "serviceAccountName": {
           "type": "string"
+        }
       }
     },
     "nautobot": {

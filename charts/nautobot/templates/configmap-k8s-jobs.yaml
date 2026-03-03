@@ -23,6 +23,7 @@
 
     {{/* Define Job and Pod annotations and labels. */}}
     {{- $_job_annotations := mergeOverwrite
+      (dict "nautobot-job.io/worker-name" $workerName)
       ((include "common.tplvalues.render" $) | default "{}" | fromYaml)
       $.Values.commonAnnotations
       $workerData.annotations
@@ -36,6 +37,7 @@
     -}}
 
     {{- $_pod_annotations := mergeOverwrite
+      (dict "nautobot-job.io/worker-name" $workerName)
       ((include "common.tplvalues.render" $) | default "{}" | fromYaml)
       $workerData.podAnnotations
     -}}

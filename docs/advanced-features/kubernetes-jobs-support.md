@@ -133,3 +133,28 @@ definition for the `beta` worker will contain the value `development`.
 
 > Please note that whenever you override the list, it will override the whole list and not merge entries.
 > You must duplicate the entries if you need to keep some of the entries from `defaults`.
+
+## Additional Notes
+
+### Kubernetes Service Account Usage
+
+The template will associate the same service account to the job manifests as
+used for the Nautobot pods by default. This approach allows user to spin up new
+K8s jobs from the jobs.
+
+This pattern is not always desirable. To prevent those use cases, you have to
+create a dedicated service account for Kubernetes jobs and then specify the
+the service account name in the configuration for your worker. The following
+examples shows one way of doing this:
+
+```yaml
+workers:
+  alpha:
+    serviceAccountName: nautobot-jobs
+
+extraObjects:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: nautobot-jobs
+```

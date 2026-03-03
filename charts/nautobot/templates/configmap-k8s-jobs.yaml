@@ -111,7 +111,7 @@
           )
           "spec" ( dict
             "restartPolicy" "Never"
-            "serviceAccountName" (include "nautobot.serviceAccountJobsName" $)
+            "serviceAccountName" ($workerData.serviceAccountName | default (include "nautobot.serviceAccountName" $))
             "imagePullSecrets" "IfNotPresent"
             "initContainers" $workerData.initContainers
             "containers" $_containers

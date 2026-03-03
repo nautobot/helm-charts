@@ -439,7 +439,9 @@
               }
             }
           }
-        }
+        },
+        "serviceAccountName": {
+          "type": "string"
       }
     },
     "nautobot": {
@@ -1243,33 +1245,6 @@
       }
     },
     "serviceAccount": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "annotations",
-        "automountServiceAccountToken",
-        "create",
-        "name"
-      ],
-      "properties": {
-        "automountServiceAccountToken": {
-          "type": "boolean"
-        },
-        "annotations": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "type:": "object"
-        },
-        "create": {
-          "type": "boolean"
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "serviceAccountJobs": {
       "type": "object",
       "additionalProperties": false,
       "required": [

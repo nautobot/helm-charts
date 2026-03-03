@@ -43,13 +43,6 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Create the name of the service account to use for Kubernetes jobs
-*/}}
-{{- define "nautobot.serviceAccountJobsName" -}}
-{{ default (printf "%s-jobs" (include "common.names.fullname" .)) .Values.serviceAccountJobs.name }}
-{{- end -}}
-
-{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "nautobot.validateValues" -}}

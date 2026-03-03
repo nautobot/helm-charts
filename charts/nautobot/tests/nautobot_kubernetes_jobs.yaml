@@ -1,0 +1,30 @@
+---
+suite: "Test Nautobot K8s Jobs"
+templates:
+  - "configmap-k8s-jobs.yaml"
+set:
+  nautobot:
+    db:
+      password: "test123"
+release:
+  name: "test"
+  namespace: "test"
+
+tests:
+
+  - it: "Assert ConfigMap is not created with the default configuration"
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: "Job is created when enabled with the default configuration"
+    set:
+      workers:
+        alpha01:
+          enabled: true
+          type: "kubernetes"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: "ConfigMap"

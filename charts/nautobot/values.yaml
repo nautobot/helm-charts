@@ -788,6 +788,11 @@ kubernetes:
     ttlSecondsAfterFinished: 60
     # -- [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/job/#handling-pod-and-container-failures) Number of retries before marking the Job as failed.
     backoffLimit: 0
+    # -- [[ref](https://kubernetes.io/docs/concepts/containers/images/#updating-images)] Image pull policy for the containers in the Kubernetes Jobs.
+    imagePullPolicy: "IfNotPresent"
+
+    # -- Service Account name to be used for the Kubernetes Jobs created by Nautobot, if not set it will use the default Service Account created for Nautobot.
+    serviceAccountName: ""
 
     # -- Annotations for the Kubernetes Jobs objects.
     annotations: {}
@@ -823,9 +828,6 @@ kubernetes:
       limits:
         cpu: "3328m"
         memory: "6656M"
-
-    # -- Service Account name to be used for the Kubernetes Jobs created by Nautobot, if not set it will use the default Service Account created for Nautobot.
-    serviceAccountName: ""
 
 # -- (map[name]celery) Additional Celery Worker deployments, map key is the name of the deployment and the additional key `enabled` is required for each Worker deployment, all other keys for each Worker will override the defaults provided by the root `.Values.celery`.
 # @default -- See values.yaml

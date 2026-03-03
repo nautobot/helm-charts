@@ -6,10 +6,9 @@
   We first construct the Job manifest as a dict for each worker, merging global Kubernetes configuration
   parameters with worker-specific parameters (giving precedence to the latter).
 */}}
-
-{{- $workers := dict }}
-{{- range $workerName, $worker := .Values.workers }}
-  {{- if and (eq (default "celery" $worker.type) "kubernetes") $worker.enabled }}
+{{- $workers := dict -}}
+{{- range $workerName, $worker := .Values.workers -}}
+  {{- if and (eq (default "celery" $worker.type) "kubernetes") $worker.enabled -}}
 
     {{/*
     Merge global configuration parameters with worker-specific parameters,
@@ -53,28 +52,28 @@
     {{- $_volumes := include "nautobot.baseVolumes" $ | fromJsonArray -}}
     {{- range $i, $extraVolume := $workerData.extraVolumes -}}
       {{- $_volumes = append $_volumes $extraVolume -}}
-    {{- end }}
+    {{- end -}}
 
     {{- $_volumeMounts := include "nautobot.baseVolumeMounts" $ | fromJsonArray -}}
     {{- range $i, $extraVolumeMount := $workerData.extraVolumeMounts -}}
       {{- $_volumeMounts = append $_volumeMounts $extraVolumeMount -}}
-    {{- end }}
+    {{- end -}}
 
     {{/* Define environment variables. */}}
     {{- $_env := include "nautobot.baseEnvVars" $ | fromJsonArray -}}
     {{- range $i, $envVar := $workerData.extraEnvVars -}}
       {{- $_env = append $_env $envVar -}}
-    {{- end }}
+    {{- end -}}
     {{- $_env = append $_env (dict "name" "NAUTOBOT_JOB_QUEUE_NAME" "value" $workerName) -}}
 
     {{/* Define environment variable sources. */}}
     {{- $_envFrom := include "nautobot.baseEnvFrom" $ | fromJsonArray -}}
     {{- range $i, $cm := $workerData.extraEnvVarsCM -}}
       {{- $_envFrom = append $_envFrom (dict "configMapRef" (dict "name" $cm)) -}}
-    {{- end }}
+    {{- end -}}
     {{- range $i, $envFrom := $workerData.extraEnvVarsSecret -}}
       {{- $_envFrom = append $_envFrom (dict "secretRef" (dict "name" $envFrom)) -}}
-    {{- end }}
+    {{- end -}}
 
     {{/* Construct the main container spec. */}}
     {{- $_main_container := ( dict
@@ -89,16 +88,16 @@
 
     {{/* Merge the main container spec with sidecar container specs, if any. */}}
     {{- $_containers := list $_main_container -}}
-    {{- range $i, $sidecar := $workerData.sidecars }}
+    {{- range $i, $sidecar := $workerData.sidecars -}}
       {{- $_containers = append $_containers $sidecar -}}
-    {{- end }}
+    {{- end -}}
 
     {{/* Construct the Job manifest as a dict. */}}
     {{- $job := ( dict
       "apiVersion" "batch/v1"
       "kind" "Job"
       "metadata" ( dict
-        "name" ($workerData.jobName | default "nautobot-job")
+        "name" "nautobot-job"
         "namespace" ($workerData.jobNamespace | default $.Release.Namespace)
         "labels" $_job_labels
         "annotations" $_job_annotations
@@ -114,7 +113,7 @@
           "spec" ( dict
             "restartPolicy" "Never"
             "serviceAccountName" ($workerData.serviceAccountName | default (include "nautobot.serviceAccountName" $))
-            "imagePullSecrets" "IfNotPresent"
+            "imagePullSecrets" ((((include "nautobot.imagePullSecrets" $) | fromYaml ).imagePullSecrets) | default list)
             "initContainers" $workerData.initContainers
             "containers" $_containers
             "volumes" $_volumes
@@ -124,10 +123,10 @@
     ) -}}
 
     {{/* Store the Job manifest in the $workers dict under the worker name key. */}}
-    {{- $workers = mustMergeOverwrite $workers (dict $workerName $job) }}
+    {{- $workers = mustMergeOverwrite $workers (dict $workerName $job) -}}
 
-  {{- end }}
-{{- end }}
+  {{- end -}}
+{{- end -}}
 
 {{- if eq (include "nautobot.kubernetesJobsEnabled" .) "true" -}}
 ---

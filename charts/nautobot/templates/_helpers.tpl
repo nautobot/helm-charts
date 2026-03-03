@@ -295,8 +295,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "nautobot.baseEnvVars" -}}
 {{- $baseEnvVars := list -}}
-{{- $baseEnvVars = append $baseEnvVars (dict "name" "NAUTOBOT_DB_USER" "valueFrom" (include "nautobot.database.userEnvVarDef" $ | fromYaml)) -}}
-{{- $baseEnvVars = append $baseEnvVars (dict "name" "NAUTOBOT_DB_PASSWORD" "valueFrom" (include "nautobot.database.passEnvVarDef" $ | fromYaml)) -}}
+{{- $baseEnvVars = append $baseEnvVars (mergeOverwrite (dict "name" "NAUTOBOT_DB_USER") (include "nautobot.database.userEnvVarDef" $ | fromYaml)) -}}
+{{- $baseEnvVars = append $baseEnvVars (mergeOverwrite (dict "name" "NAUTOBOT_DB_PASSWORD") (include "nautobot.database.passEnvVarDef" $ | fromYaml)) -}}
 {{- $baseEnvVars = append $baseEnvVars (dict "name" "NAUTOBOT_REDIS_PASSWORD" "valueFrom" (dict "secretKeyRef" (dict "name" (include "nautobot.redis.passwordName" $) "key" (include "nautobot.redis.passwordKey" $)))) -}}
 {{- $baseEnvVars = append $baseEnvVars (dict "name" "NAUTOBOT_SECRET_KEY" "valueFrom" (dict "secretKeyRef" (dict "name" (include "nautobot.django.secretName" $) "key" (include "nautobot.django.existingSecretSecretKeyKey" $)))) -}}
 {{- mustToJson $baseEnvVars -}}

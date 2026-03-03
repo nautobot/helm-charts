@@ -365,6 +365,10 @@
         "backoffLimit": {
           "type": "integer"
         },
+        "imagePullPolicy": {
+          "type": "string",
+          "pattern": "^(Always|Never|IfNotPresent)$"
+        },
         "annotations": {
           "additionalProperties": {
             "type": "string"

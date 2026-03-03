@@ -2,13 +2,14 @@
 suite: "Test Nautobot K8s Jobs"
 templates:
   - "configmap-k8s-jobs.yaml"
-set:
-  nautobot:
-    db:
-      password: "test123"
+
 release:
   name: "test"
   namespace: "test"
+
+chart:
+  version: "3.0.0"
+  appVersion: "3.0"
 
 tests:
 
@@ -17,10 +18,10 @@ tests:
       - hasDocuments:
           count: 0
 
-  - it: "Job is created when enabled with the default configuration"
+  - it: "Assert ConfigMap is created when a worker is defined"
     set:
       workers:
-        alpha01:
+        example:
           enabled: true
           type: "kubernetes"
     asserts:
@@ -28,3 +29,386 @@ tests:
           count: 1
       - isKind:
           of: "ConfigMap"
+      - exists:
+          path: "data.example"
+      - equal:
+          path: "data.example"
+          value: |
+            {
+              "apiVersion": "batch/v1",
+              "kind": "Job",
+              "metadata": {
+                "annotations": {
+                  "nautobot-job.io/worker-name": "example"
+                },
+                "labels": {
+                  "app.kubernetes.io/component": "nautobot-job",
+                  "app.kubernetes.io/instance": "test",
+                  "app.kubernetes.io/managed-by": "Helm",
+                  "app.kubernetes.io/name": "nautobot",
+                  "app.kubernetes.io/version": "3.0",
+                  "helm.sh/chart": "nautobot-3.0.0"
+                },
+                "name": "nautobot-job",
+                "namespace": "test"
+              },
+              "spec": {
+                "backoffLimit": 0,
+                "template": {
+                  "metadata": {
+                    "annotations": {
+                      "nautobot-job.io/worker-name": "example"
+                    },
+                    "labels": {
+                      "app.kubernetes.io/component": "nautobot-job",
+                      "app.kubernetes.io/instance": "test",
+                      "app.kubernetes.io/managed-by": "Helm",
+                      "app.kubernetes.io/name": "nautobot",
+                      "app.kubernetes.io/version": "3.0",
+                      "helm.sh/chart": "nautobot-3.0.0"
+                    }
+                  },
+                  "spec": {
+                    "containers": [
+                      {
+                        "env": [
+                          {
+                            "name": "NAUTOBOT_DB_USER",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "username",
+                                "name": "test-nautobot-db"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_DB_PASSWORD",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "password",
+                                "name": "test-nautobot-db"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_REDIS_PASSWORD",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "redis-password",
+                                "name": "test-redis"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_SECRET_KEY",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "NAUTOBOT_SECRET_KEY",
+                                "name": "test-nautobot-env"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_JOB_QUEUE_NAME",
+                            "value": "example"
+                          }
+                        ],
+                        "envFrom": [
+                          {
+                            "configMapRef": {
+                              "name": "test-nautobot-env"
+                            }
+                          },
+                          {
+                            "secretRef": {
+                              "name": "test-nautobot-env"
+                            }
+                          }
+                        ],
+                        "image": "registry-1.docker.io/networktocode/nautobot:3.0-py3.13",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "nautobot-job",
+                        "resources": {
+                          "limits": {
+                            "cpu": "3328m",
+                            "memory": "6656M"
+                          },
+                          "requests": {
+                            "cpu": "400m",
+                            "memory": "1G"
+                          }
+                        },
+                        "volumeMounts": [
+                          {
+                            "mountPath": "/opt/nautobot/git",
+                            "name": "git-repos"
+                          }
+                        ]
+                      }
+                    ],
+                    "imagePullSecrets": [],
+                    "initContainers": [],
+                    "restartPolicy": "Never",
+                    "serviceAccountName": "test-nautobot",
+                    "volumes": [
+                      {
+                        "emptyDir": {},
+                        "name": "git-repos"
+                      }
+                    ]
+                  }
+                },
+                "ttlSecondsAfterFinished": 60
+              }
+            }
+
+  - it: "Assert two workers are created when two workers are defined"
+    set:
+      workers:
+        example1:
+          enabled: true
+          type: "kubernetes"
+        example2:
+          enabled: true
+          type: "kubernetes"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - exists:
+          path: "data.example1"
+      - exists:
+          path: "data.example2"
+
+  - it: "Test options are set when defined"
+    set:
+      nautobot:
+        image:
+          pullSecrets:
+            - "test-pull-secrets"
+      workers:
+        example:
+          enabled: true
+          type: "kubernetes"
+          ttlSecondsAfterFinished: 120
+          backoffLimit: 3
+          serviceAccountName: "custom-service-account"
+          annotations:
+            customAnnotation: "customValue"
+          podAnnotations:
+            customPodAnnotation: "customPodValue"
+          labels:
+            customLabel: "customLabelValue"
+          podLabels:
+            customPodLabel: "customPodLabelValue"
+          initContainers:
+            - name: "init-container"
+              image: "busybox"
+              command: ["sh", "-c", "echo Init Container"]
+          sidecars:
+            - name: "sidecar-container"
+              image: "busybox"
+              command: ["sh", "-c", "echo Sidecar Container"]
+          extraEnvVars:
+            - name: "EXTRA_ENV_VAR"
+              value: "extraValue"
+          extraEnvVarsCM:
+            - "custom-env-configmap"
+          extraEnvVarsSecret:
+            - "custom-env-secret"
+          extraVolumes:
+            - name: "extra-volume"
+              emptyDir: {}
+          extraVolumeMounts:
+            - name: "extra-volume"
+              mountPath: "/opt/nautobot/extra"
+          resources:
+            limits:
+              cpu: "10000m"
+              memory: "4000M"
+            requests:
+              cpu: "4000m"
+              memory: "2G"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - exists:
+          path: "data.example"
+      - equal:
+          path: "data.example"
+          value: |
+            {
+              "apiVersion": "batch/v1",
+              "kind": "Job",
+              "metadata": {
+                "annotations": {
+                  "customAnnotation": "customValue",
+                  "nautobot-job.io/worker-name": "example"
+                },
+                "labels": {
+                  "app.kubernetes.io/component": "nautobot-job",
+                  "app.kubernetes.io/instance": "test",
+                  "app.kubernetes.io/managed-by": "Helm",
+                  "app.kubernetes.io/name": "nautobot",
+                  "app.kubernetes.io/version": "3.0",
+                  "customLabel": "customLabelValue",
+                  "helm.sh/chart": "nautobot-3.0.0"
+                },
+                "name": "nautobot-job",
+                "namespace": "test"
+              },
+              "spec": {
+                "backoffLimit": 3,
+                "template": {
+                  "metadata": {
+                    "annotations": {
+                      "customPodAnnotation": "customPodValue",
+                      "nautobot-job.io/worker-name": "example"
+                    },
+                    "labels": {
+                      "app.kubernetes.io/component": "nautobot-job",
+                      "app.kubernetes.io/instance": "test",
+                      "app.kubernetes.io/managed-by": "Helm",
+                      "app.kubernetes.io/name": "nautobot",
+                      "app.kubernetes.io/version": "3.0",
+                      "customPodLabel": "customPodLabelValue",
+                      "helm.sh/chart": "nautobot-3.0.0"
+                    }
+                  },
+                  "spec": {
+                    "containers": [
+                      {
+                        "env": [
+                          {
+                            "name": "NAUTOBOT_DB_USER",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "username",
+                                "name": "test-nautobot-db"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_DB_PASSWORD",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "password",
+                                "name": "test-nautobot-db"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_REDIS_PASSWORD",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "redis-password",
+                                "name": "test-redis"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_SECRET_KEY",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "NAUTOBOT_SECRET_KEY",
+                                "name": "test-nautobot-env"
+                              }
+                            }
+                          },
+                          {
+                            "name": "EXTRA_ENV_VAR",
+                            "value": "extraValue"
+                          },
+                          {
+                            "name": "NAUTOBOT_JOB_QUEUE_NAME",
+                            "value": "example"
+                          }
+                        ],
+                        "envFrom": [
+                          {
+                            "configMapRef": {
+                              "name": "test-nautobot-env"
+                            }
+                          },
+                          {
+                            "secretRef": {
+                              "name": "test-nautobot-env"
+                            }
+                          },
+                          {
+                            "configMapRef": {
+                              "name": "custom-env-configmap"
+                            }
+                          },
+                          {
+                            "secretRef": {
+                              "name": "custom-env-secret"
+                            }
+                          }
+                        ],
+                        "image": "registry-1.docker.io/networktocode/nautobot:3.0-py3.13",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "nautobot-job",
+                        "resources": {
+                          "limits": {
+                            "cpu": "10000m",
+                            "memory": "4000M"
+                          },
+                          "requests": {
+                            "cpu": "4000m",
+                            "memory": "2G"
+                          }
+                        },
+                        "volumeMounts": [
+                          {
+                            "mountPath": "/opt/nautobot/git",
+                            "name": "git-repos"
+                          },
+                          {
+                            "mountPath": "/opt/nautobot/extra",
+                            "name": "extra-volume"
+                          }
+                        ]
+                      },
+                      {
+                        "command": [
+                          "sh",
+                          "-c",
+                          "echo Sidecar Container"
+                        ],
+                        "image": "busybox",
+                        "name": "sidecar-container"
+                      }
+                    ],
+                    "imagePullSecrets": [
+                      {
+                        "name": "test-pull-secrets"
+                      }
+                    ],
+                    "initContainers": [
+                      {
+                        "command": [
+                          "sh",
+                          "-c",
+                          "echo Init Container"
+                        ],
+                        "image": "busybox",
+                        "name": "init-container"
+                      }
+                    ],
+                    "restartPolicy": "Never",
+                    "serviceAccountName": "custom-service-account",
+                    "volumes": [
+                      {
+                        "emptyDir": {},
+                        "name": "git-repos"
+                      },
+                      {
+                        "emptyDir": {},
+                        "name": "extra-volume"
+                      }
+                    ]
+                  }
+                },
+                "ttlSecondsAfterFinished": 120
+              }
+            }

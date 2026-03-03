@@ -30,7 +30,7 @@ jobs:
         run: "poetry run invoke check-release-tag ${{ github.ref_name }}"
 
   release:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-24.04"
     needs: "check-tag"
     steps:
       - uses: "actions/checkout@v6"
@@ -42,7 +42,7 @@ jobs:
           dependencies: "bitnami,https://charts.bitnami.com/bitnami"
 
   publish-oci:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-24.04"
     needs: "check-tag"
     steps:
       - uses: "actions/checkout@v6"

@@ -33,7 +33,7 @@ repos:
           - "docs/"
 
   - repo: "https://github.com/streetsidesoftware/cspell-cli"
-    rev: "v8.19.1"
+    rev: "v9.7.0"
     hooks:
       - id: "cspell"
 
@@ -43,7 +43,7 @@ repos:
       - id: "helmlint"
 
   - repo: "https://github.com/adrienverge/yamllint.git"
-    rev: "v1.37.1"
+    rev: "v1.38.0"
     hooks:
       - id: "yamllint"
         args:

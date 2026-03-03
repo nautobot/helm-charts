@@ -10,6 +10,17 @@ The celeryBeat helm value has been deprecated and moved to workers.beat see
 https://docs.nautobot.com/projects/helm-charts/en/stable/configuration/reference/#workers-values for more information.
 {{ end }}
 {{ end }}
+{{- if and (not .Values.postgresql.enabled) (not .Values.nautobot.db.existingSecret) (eq .Values.nautobot.db.password "") }}
+*********************************************************************
+*** WARNING: No database password configured!  **********************
+*********************************************************************
+
+The external database has been configured without a password. This means:
+- Basic authentication will NOT work
+- The database must be configured with custom authentication (e.g., token-based auth)
+- Ensure your database supports the authentication method you're using
+
+{{ end }}
 {{- if and (or .Values.postgresql.enabled .Values.nautobot.db.host ) (or .Values.redis.enabled .Values.nautobot.redis.host) -}}
 {{- if and .Values.nautobot.nginx.enabled }}
 We will update the uwsgi configuration in future releases, which will break default readiness and startup probes when you have nginx enabled.

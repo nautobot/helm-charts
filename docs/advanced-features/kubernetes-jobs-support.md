@@ -6,7 +6,7 @@ Celery Pods are constantly running and they pick up Nautobot jobs from the
 task queue. On the other hand, the Kubernetes Jobs are created on demand when
 a Nautobot job is started.
 
-You can read more on Kubernetes Jobs in the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/jobs/kubernetes-job-support/#nautobot_kubernetes_job_manifest).
+You can read more on Kubernetes Jobs in the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/jobs/kubernetes-job-support/).
 
 > Note, that support for reading Kubernetes job manifests from a file system is
 > required. Consult the Nautobot docs for more info.
@@ -30,8 +30,8 @@ Before Nautobot can execute a job, it must first load the Kubernetes job manifes
 Nautobot gets manifests from the file system. All manifests must be stored in
 a single base directory. There should be one directory for each configured job queue.
 The directory name must match the job queue configured in Nautobot. Nautobot
-supports Kubernetes job manifests in JSON or YAML format. The file name must
-be either `manifest.json` or `manifest.yaml`. The file must contain the Kubernetes
+supports Kubernetes job manifests in JSON format. The file name must
+be `manifest.json`. The file must contain the Kubernetes
 job manifest.
 
 The following is an example of the directory structure:
@@ -174,12 +174,12 @@ By default, this Helm Chart associates the same service account as used for
 Nautobot to Kubernetes job manifests. As discussed above, the service account
 requires permissions to spin up new Kubernetes jobs. Since the same service
 account is used for Kubernetes jobs by default, it means that your job will have
-permissions to spin up new Kubernetes jobs. Some use cases requires this settings
-as new Kubernetes jobs are created from the parent job. If this use case is not
-something you use in your environment, it is better to prevent creating
-additional Kubernetes jobs from the parent job. You will need a dedicated
-service account for Kubernetes jobs in this case. The following example shows
-how to do that:
+permissions to spin up new Kubernetes jobs (job chaining). Some use cases
+requires this settings as new Kubernetes jobs are created from the parent job.
+If this use case is not something you use in your environment, it is better to
+prevent creating additional Kubernetes jobs from the parent job. You will need
+a dedicated service account for Kubernetes jobs in this case. The following
+example shows how to do that:
 
 ```yaml
 workers:

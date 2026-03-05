@@ -259,10 +259,6 @@ spec:
                   name: {{ include "nautobot.superUser.secretName" $ }}
                   key: {{ include "nautobot.superUser.existingSecretApiTokenKey" $ }}
             {{- end }}
-            {{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
-            - name: NAUTOBOT_JOB_QUEUE_PATH
-              value: {{ $.Values.nautobot.jobsManifestsMountPath | quote }}
-            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" $ }}-env

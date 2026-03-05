@@ -32,6 +32,10 @@ NAUTOBOT_SUPERUSER_NAME: {{ .Values.nautobot.superUser.username | quote }}
 {{- if .Values.celery.celery_health_probes_as_files }}
 NAUTOBOT_CELERY_HEALTH_PROBES_AS_FILES: "True"
 {{- end }}
+{{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
+NAUTOBOT_JOB_QUEUE_PATH: {{ .Values.nautobot.jobsManifestsMountPath | quote }}
+NAUTOBOT_KUBERNETES_JOB_POD_NAMESPACE: {{ .Release.Namespace | quote }}
+{{- end }}
 {{- if .Values.nautobot.extraVars }}
 {{- range .Values.nautobot.extraVars }}
 {{ .name }}: {{ .value | quote }}

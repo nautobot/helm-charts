@@ -90,6 +90,7 @@ nav:
     - Persistent Volumes for Files: "advanced-features/persistence.md"
     - PostgreSQL TLS: "advanced-features/postgresql-tls.md"
     - Prometheus Operator Metrics: "advanced-features/prometheus-metrics.md"
+    - RBAC Roles and RoleBindings: "advanced-features/rbac-roles.md"
     - Redis Sentinel: "advanced-features/redis-sentinel.md"
     - Redis TLS: "advanced-features/redis-tls.md"
     - Static Files Only: "advanced-features/static-only.md"

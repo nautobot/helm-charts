@@ -49,22 +49,21 @@ is executed.
 This Helm Chart generates manifests for you. There will be one Kubernetes job
 manifest for every job queue that you enable in `values.yaml`. The default
 location is `/etc/nautobot/job-queues`, which is defined by the
-`kubernetes.jobsManifestsMountPath` attribute.
+`nautobot.jobsManifestsMountPath` attribute.
 
 ## How to Configure Job Queues
 
-The `values.yaml` file contains the `kubernetes.defaults` section, where all
+The `values.yaml` file contains the `kubernetesJobs` section, where all
 default values for your job manifests are defined. Any setting defined here
 is applied to all job manifests. For example, if you want to inject an extra
 environment variable into your jobs, define this new variable in the
-`kubernetes.defaults` section.
+`kubernetesJobs` section.
 
 ```yaml
-kubernetes:
-  defaults:
-    extraEnvVars:
-      - name: "ENVIRONMENT"
-        value: "development"
+kubernetesJobs:
+  extraEnvVars:
+    - name: "ENVIRONMENT"
+      value: "development"
 ```
 
 The environment variable `ENVIRONMENT` that is configured in the example above
@@ -95,7 +94,7 @@ workers:
 ```
 
 Using the configuration above, the Helm Chart generates two manifests and stores
-them in the location specified by the `kubernetes.jobsManifestsMountPath`
+them in the location specified by the `nautobot.jobsManifestsMountPath`
 attribute:
 
 ```shell
@@ -103,16 +102,15 @@ nautobot@nautobot-default:~$ ls /etc/nautobot/job-queues/
 alpha  beta
 ```
 
-Each worker above inherits settings from the `kubernetes.defaults` section.
+Each worker above inherits settings from the `kubernetesJobs` section.
 If you want to override any of those settings, you can define them under your
 worker configuration.
 
 ```yaml
-kubernetes:
-  defaults:
-    extraEnvVars:
-      - name: "ENVIRONMENT"
-        value: "development"
+kubernetesJobs:
+  extraEnvVars:
+    - name: "ENVIRONMENT"
+      value: "development"
 
 workers:
   alpha:
@@ -132,7 +130,7 @@ definition for the `beta` worker will contain the value `development`.
 
 > **Note:** When you override a list, it will override the entire list and not
 > merge entries. You must duplicate the entries if you need to keep some of the
-> entries from `defaults`.
+> entries from the global `kubernetesJobs` configuration.
 
 ## Additional Notes
 

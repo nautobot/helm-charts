@@ -261,7 +261,7 @@ spec:
             {{- end }}
             {{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
             - name: NAUTOBOT_JOB_QUEUE_PATH
-              value: {{ $.Values.kubernetes.jobsManifestsMountPath | quote }}
+              value: {{ $.Values.nautobot.jobsManifestsMountPath | quote }}
             {{- end }}
           envFrom:
             - configMapRef:

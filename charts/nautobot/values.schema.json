@@ -918,22 +918,12 @@
         }
       ]
     },
-    "kubernetes": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [],
-      "properties": {
-        "jobsManifestsMountPath": {
-          "type": "string"
-        },
-        "defaults": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/kubernetesWorker"
-            }
-          ]
+    "kubernetesJobs": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/kubernetesWorker"
         }
-      }
+      ]
     },
     "metrics": {
       "additionalProperties": false,

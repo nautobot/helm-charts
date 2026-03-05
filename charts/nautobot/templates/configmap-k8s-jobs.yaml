@@ -17,7 +17,7 @@
     with shallow copies of nested dicts/lists that could cause unintended
     side effects when merged with worker-specific parameters.
     */}}
-    {{- $kubernetesDefaults := (toJson $.Values.kubernetes.defaults | fromJson) -}}
+    {{- $kubernetesDefaults := (toJson $.Values.kubernetesJobs | fromJson) -}}
     {{- $workerData := mergeOverwrite dict $kubernetesDefaults $worker -}}
 
     {{/* Define Job and Pod annotations and labels. */}}

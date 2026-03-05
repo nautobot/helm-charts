@@ -6,7 +6,7 @@ Celery Pods are constantly running and they pick up Nautobot jobs from the
 task queue. On the other hand, the Kubernetes Jobs are created on demand when
 a Nautobot job is started.
 
-You can read more on Kubernetes Jobs in the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/jobs/kubernetes-job-support/#nautobot_kubernetes_job_manifest).
+You can read more on Kubernetes Jobs in the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/jobs/kubernetes-job-support/).
 
 > Note, that this Helm Chart requires Nautobot version `3.1`.
 

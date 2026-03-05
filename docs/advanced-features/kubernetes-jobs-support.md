@@ -140,7 +140,7 @@ definition for the `beta` worker will contain the value `development`.
 
 The template will associate the same service account to the job manifests as
 used for the Nautobot pods by default. This approach allows user to spin up new
-K8s jobs from the jobs.
+K8s jobs from the jobs (job chaining).
 
 This pattern is not always desirable. To prevent those use cases, you have to
 create a dedicated service account for Kubernetes jobs and then specify the

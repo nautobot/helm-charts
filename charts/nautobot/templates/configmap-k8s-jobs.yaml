@@ -98,7 +98,6 @@
       "kind" "Job"
       "metadata" ( dict
         "name" "nautobot-job"
-        "namespace" ($workerData.jobNamespace | default $.Release.Namespace)
         "labels" $_job_labels
         "annotations" $_job_annotations
       )

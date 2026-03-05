@@ -322,7 +322,7 @@ spec:
             {{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
             {{- range $i, $workerName := (include "nautobot.kubernetesWorkers" $) | fromJsonArray }}
             - name: "nautobot-k8s-jobs-manifests"
-              mountPath: "/etc/nautobot/job-queues/{{ $workerName }}/manifest.json"
+              mountPath: "{{ printf "%s/%s/manifest.json" $.Values.nautobot.jobsManifestsMountPath $workerName }}"
               subPath: "{{ $workerName }}"
               readOnly: true
             {{- end }}

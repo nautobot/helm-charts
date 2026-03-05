@@ -405,7 +405,12 @@ Celery Beat can only have 1 replica enforce that here
 {{- end }}
 
 {{/*
-  Define a list of all workers of type kubernetes.
+  Define a list of all workers of type kubernetes. The code loops over all
+  workers defined in .Values.workers and checks if their type is "kubernetes".
+  If it is, the worker name is added to the list of kubernetes workers.
+  Finally, the list of kubernetes workers is returned as a JSON array.
+  The example of the JSON array returned would be ["alpha", "beta"]
+  if there are two workers of type kubernetes named alpha and beta.
 */}}
 {{- define "nautobot.kubernetesWorkers" -}}
 {{- $kubernetesWorkers := list -}}

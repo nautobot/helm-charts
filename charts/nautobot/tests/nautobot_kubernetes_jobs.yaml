@@ -412,3 +412,321 @@ tests:
                 "ttlSecondsAfterFinished": 120
               }
             }
+
+  - it: "Test defaults and overrides behavior"
+    set:
+      kubernetesJobs:
+        ttlSecondsAfterFinished: 300
+        backoffLimit: 2
+        extraEnvVars:
+          - name: "ENVIRONMENT"
+            value: "development"
+          - name: "LOG_LEVEL"
+            value: "INFO"
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "512M"
+          limits:
+            cpu: "1000m"
+            memory: "2G"
+      workers:
+        alpha:
+          enabled: true
+          type: "kubernetes"
+          ttlSecondsAfterFinished: 600
+          extraEnvVars:
+            - name: "ENVIRONMENT"
+              value: "production"
+            - name: "WORKER_TYPE"
+              value: "alpha"
+        beta:
+          enabled: true
+          type: "kubernetes"
+          backoffLimit: 5
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256M"
+          extraEnvVars:
+            - name: "WORKER_TYPE"
+              value: "beta"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - exists:
+          path: "data.alpha"
+      - exists:
+          path: "data.beta"
+      - equal:
+          path: "data.alpha"
+          value: |
+            {
+              "apiVersion": "batch/v1",
+              "kind": "Job",
+              "metadata": {
+                "annotations": {
+                  "nautobot-job.io/worker-name": "alpha"
+                },
+                "labels": {
+                  "app.kubernetes.io/component": "nautobot-job",
+                  "app.kubernetes.io/instance": "test",
+                  "app.kubernetes.io/managed-by": "Helm",
+                  "app.kubernetes.io/name": "nautobot",
+                  "app.kubernetes.io/version": "3.0",
+                  "helm.sh/chart": "nautobot-3.0.0"
+                },
+                "name": "nautobot-job",
+                "namespace": "test"
+              },
+              "spec": {
+                "backoffLimit": 2,
+                "template": {
+                  "metadata": {
+                    "annotations": {
+                      "nautobot-job.io/worker-name": "alpha"
+                    },
+                    "labels": {
+                      "app.kubernetes.io/component": "nautobot-job",
+                      "app.kubernetes.io/instance": "test",
+                      "app.kubernetes.io/managed-by": "Helm",
+                      "app.kubernetes.io/name": "nautobot",
+                      "app.kubernetes.io/version": "3.0",
+                      "helm.sh/chart": "nautobot-3.0.0"
+                    }
+                  },
+                  "spec": {
+                    "containers": [
+                      {
+                        "env": [
+                          {
+                            "name": "NAUTOBOT_DB_USER",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "username",
+                                "name": "test-nautobot-db"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_DB_PASSWORD",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "password",
+                                "name": "test-nautobot-db"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_REDIS_PASSWORD",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "redis-password",
+                                "name": "test-redis"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_SECRET_KEY",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "NAUTOBOT_SECRET_KEY",
+                                "name": "test-nautobot-env"
+                              }
+                            }
+                          },
+                          {
+                            "name": "ENVIRONMENT",
+                            "value": "production"
+                          },
+                          {
+                            "name": "WORKER_TYPE",
+                            "value": "alpha"
+                          },
+                          {
+                            "name": "NAUTOBOT_JOB_QUEUE_NAME",
+                            "value": "alpha"
+                          }
+                        ],
+                        "envFrom": [
+                          {
+                            "configMapRef": {
+                              "name": "test-nautobot-env"
+                            }
+                          },
+                          {
+                            "secretRef": {
+                              "name": "test-nautobot-env"
+                            }
+                          }
+                        ],
+                        "image": "registry-1.docker.io/networktocode/nautobot:3.0-py3.13",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "nautobot-job",
+                        "resources": {
+                          "limits": {
+                            "cpu": "1000m",
+                            "memory": "2G"
+                          },
+                          "requests": {
+                            "cpu": "200m",
+                            "memory": "512M"
+                          }
+                        },
+                        "volumeMounts": [
+                          {
+                            "mountPath": "/opt/nautobot/git",
+                            "name": "git-repos"
+                          }
+                        ]
+                      }
+                    ],
+                    "imagePullSecrets": [],
+                    "initContainers": [],
+                    "restartPolicy": "Never",
+                    "serviceAccountName": "test-nautobot",
+                    "volumes": [
+                      {
+                        "emptyDir": {},
+                        "name": "git-repos"
+                      }
+                    ]
+                  }
+                },
+                "ttlSecondsAfterFinished": 600
+              }
+            }
+      - equal:
+          path: "data.beta"
+          value: |
+            {
+              "apiVersion": "batch/v1",
+              "kind": "Job",
+              "metadata": {
+                "annotations": {
+                  "nautobot-job.io/worker-name": "beta"
+                },
+                "labels": {
+                  "app.kubernetes.io/component": "nautobot-job",
+                  "app.kubernetes.io/instance": "test",
+                  "app.kubernetes.io/managed-by": "Helm",
+                  "app.kubernetes.io/name": "nautobot",
+                  "app.kubernetes.io/version": "3.0",
+                  "helm.sh/chart": "nautobot-3.0.0"
+                },
+                "name": "nautobot-job",
+                "namespace": "test"
+              },
+              "spec": {
+                "backoffLimit": 5,
+                "template": {
+                  "metadata": {
+                    "annotations": {
+                      "nautobot-job.io/worker-name": "beta"
+                    },
+                    "labels": {
+                      "app.kubernetes.io/component": "nautobot-job",
+                      "app.kubernetes.io/instance": "test",
+                      "app.kubernetes.io/managed-by": "Helm",
+                      "app.kubernetes.io/name": "nautobot",
+                      "app.kubernetes.io/version": "3.0",
+                      "helm.sh/chart": "nautobot-3.0.0"
+                    }
+                  },
+                  "spec": {
+                    "containers": [
+                      {
+                        "env": [
+                          {
+                            "name": "NAUTOBOT_DB_USER",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "username",
+                                "name": "test-nautobot-db"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_DB_PASSWORD",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "password",
+                                "name": "test-nautobot-db"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_REDIS_PASSWORD",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "redis-password",
+                                "name": "test-redis"
+                              }
+                            }
+                          },
+                          {
+                            "name": "NAUTOBOT_SECRET_KEY",
+                            "valueFrom": {
+                              "secretKeyRef": {
+                                "key": "NAUTOBOT_SECRET_KEY",
+                                "name": "test-nautobot-env"
+                              }
+                            }
+                          },
+                          {
+                            "name": "WORKER_TYPE",
+                            "value": "beta"
+                          },
+                          {
+                            "name": "NAUTOBOT_JOB_QUEUE_NAME",
+                            "value": "beta"
+                          }
+                        ],
+                        "envFrom": [
+                          {
+                            "configMapRef": {
+                              "name": "test-nautobot-env"
+                            }
+                          },
+                          {
+                            "secretRef": {
+                              "name": "test-nautobot-env"
+                            }
+                          }
+                        ],
+                        "image": "registry-1.docker.io/networktocode/nautobot:3.0-py3.13",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "nautobot-job",
+                        "resources": {
+                          "limits": {
+                            "cpu": "1000m",
+                            "memory": "2G"
+                          },
+                          "requests": {
+                            "cpu": "100m",
+                            "memory": "256M"
+                          }
+                        },
+                        "volumeMounts": [
+                          {
+                            "mountPath": "/opt/nautobot/git",
+                            "name": "git-repos"
+                          }
+                        ]
+                      }
+                    ],
+                    "imagePullSecrets": [],
+                    "initContainers": [],
+                    "restartPolicy": "Never",
+                    "serviceAccountName": "test-nautobot",
+                    "volumes": [
+                      {
+                        "emptyDir": {},
+                        "name": "git-repos"
+                      }
+                    ]
+                  }
+                },
+                "ttlSecondsAfterFinished": 300
+              }
+            }

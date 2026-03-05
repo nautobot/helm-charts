@@ -29,8 +29,8 @@ Before Nautobot can execute a job, it must first load the Kubernetes job manifes
 Nautobot gets manifests from the file system. All manifests must be stored in
 a single base directory. There should be one directory for each configured job queue.
 The directory name must match the job queue configured in Nautobot. Nautobot
-supports Kubernetes job manifests in JSON or YAML format. The file name must
-be either `manifest.json` or `manifest.yaml`. The file must contain the Kubernetes
+supports Kubernetes job manifests in JSON format. The file name must
+be `manifest.json`. The file must contain the Kubernetes
 job manifest.
 
 The following is an example of the directory structure:

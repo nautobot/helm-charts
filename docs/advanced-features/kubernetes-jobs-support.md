@@ -8,7 +8,8 @@ a Nautobot job is started.
 
 You can read more on Kubernetes Jobs in the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/jobs/kubernetes-job-support/#nautobot_kubernetes_job_manifest).
 
-> Note, that this Helm Chart requires Nautobot version `3.1`.
+> Note, that support for reading Kubernetes job manifests from a file system is
+> required. Consult the Nautobot docs for more info.
 
 ## How is Support for Kubernetes Jobs Implemented
 
@@ -68,8 +69,8 @@ kubernetes:
         value: "development"
 ```
 
-The environment variable `ENVIRONMENT` will be applied to all of the Kubernetes
-jobs.
+The environment variable `ENVIRONMENT` that is configured in the example above,
+will be applied to all of the Kubernetes jobs.
 
 The specific job queues are enabled or disabled in the `workers` section. This
 section contains a map of workers that are defined in your environment. Each
@@ -136,16 +137,49 @@ definition for the `beta` worker will contain the value `development`.
 
 ## Additional Notes
 
+### Celery Workers
+
+This Helm Chart supports mixing Celery workers and using Kubernetes jobs for
+Nautobot jobs. If you only use one approach it makes sense to disable the other.
+This Helm Chart enables Celery workers by default. So, if you only use Kubernetes
+jobs, you should disable Celery workers. The following snippet shows configuration
+to disable Celery workers:
+
+```yaml
+workers:
+  default:
+    enabled: false
+```
+
+!!! note
+    Scheduled jobs will still require the Celery Beat worker (`workers.beat`) at this time.
+
 ### Kubernetes Service Account Usage
 
-The template will associate the same service account to the job manifests as
-used for the Nautobot pods by default. This approach allows user to spin up new
-K8s jobs from the jobs.
+The Nautobot service account requires additional Kubernetes permissions to be
+able to spin up Kubernetes jobs. The Helm Chart supports creating a new `Role`
+and a new `RoleBinding` in the namespace. These two Kubernetes objects allow
+Nautobot to query the Kubernetes API to read, list, and create Kubernetes jobs.
+The following is the snippet that shows how to configure these permissions for
+your service account:
 
-This pattern is not always desirable. To prevent those use cases, you have to
-create a dedicated service account for Kubernetes jobs and then specify the
-the service account name in the configuration for your worker. The following
-examples shows one way of doing this:
+```yaml
+serviceAccount:
+  roles:
+    jobCreator:
+      create: true
+```
+
+By default, this Helm Chart associates the same service account as used for
+Nautobot to Kubernetes job manifests. As discussed above, the service account
+requires permissions to spin up new Kubernetes jobs. Since the same service
+account is used for Kubernetes jobs by default, it means that your job will have
+permissions to spin up new Kubernetes jobs. Some use cases requires this settings
+as new Kubernetes jobs are created from the parent job. If this use case is not
+something you use in your environment, it is better to prevent creating
+additional Kubernetes jobs from the parent job. You will need a dedicated
+service account for Kubernetes jobs in this case. The following example shows
+how to do that:
 
 ```yaml
 workers:
@@ -159,37 +193,11 @@ extraObjects:
       name: nautobot-jobs
 ```
 
+> If your Kubernetes job needs to query the Kubernetes API (for example, if you
+> need to list pods in the namespace), you must create additional `Role` and
+> `RoleBinding` objects for this new service account. However, this will not be
+> required in most use cases.
 
 
-TODO:
-
-# Using Kubernetes Jobs in Nautobot
-
-If you want to run your Nautobot jobs via Kubernetes Jobs instead of using the Nautobot Celery workers, here are the steps to configure your Nautobot deployment.
-
-## (Optional) Disable the Default Celery Worker
-
-If you want to disable the default Celery worker, you can set the `workers.default.enabled` value to `false`.
-
-```yaml
-workers:
-  default:
-    enabled: false
-```
-
-!!! note
-    Scheduled jobs will still require the Celery Beat worker (`workers.beat`) at this time.
-
-## Add the ServiceAccount Configuration
-
-Here is the recommended configuration for the ServiceAccount that is needed to run Kubernetes Jobs:
-
-```yaml
-serviceAccount:
-  automountServiceAccountToken: true
-  roles:
-    jobCreator:
-      create: true
-```
-
-For more information and customization options for the ServiceAccount roles, see [RBAC Roles and RoleBindings](rbac-roles.md).
+For more information and customization options for the ServiceAccount roles, see
+[RBAC Roles and RoleBindings](rbac-roles.md).

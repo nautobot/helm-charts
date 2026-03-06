@@ -827,6 +827,14 @@ serviceAccount:
   annotations: {}
   # -- Auto Mount Service account token
   automountServiceAccountToken: false
+  # -- RBAC Roles and RoleBindings configuration
+  roles:
+    jobCreator:
+      # -- (bool) Enable creation of Role and RoleBinding for job creation
+      create: false
+      # -- (string) Custom name for the Role
+      # @default -- `{{ .Release.Name }}-job-creator`
+      name: ""
 
 ingress:
   # -- Enable Ingress resource creation

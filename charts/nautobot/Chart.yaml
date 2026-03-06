@@ -30,11 +30,13 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Fix spacing for the uwsgi.ini template when uwsgi_exporter is enabled
+    - kind: added
+      description: Added RBAC roles for k8s jobs.
+    - kind: changed
+      description: Removed validation for DB password.
 apiVersion: "v2"
 appVersion: "3.0"
-version: "3.0.3"
+version: "3.0.4"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

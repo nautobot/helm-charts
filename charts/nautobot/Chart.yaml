@@ -30,6 +30,8 @@ annotations:
     - title: Chatops
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
+    - kind: added
+      description: Added RBAC roles for k8s jobs.
     - kind: changed
       description: Removed validation for DB password.
 apiVersion: "v2"

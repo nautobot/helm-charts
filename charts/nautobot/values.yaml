@@ -984,12 +984,11 @@ route:
   #   namespace: example-namespace
   #   sectionName: example-section
 
-  ## Additional custom rules that can be added to the route
-  extraRules: []
-
   ## Filters define the filters that are applied to requests that match this rule.
   filters: []
 
+  ## Additional custom rules that can be added to the route
+  extraRules: []
 
 metrics:
   # -- Enable and configure a Prometheus [serviceMonitor](https://prometheus-operator.dev/docs/operator/design/#servicemonitor) (requires the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator))

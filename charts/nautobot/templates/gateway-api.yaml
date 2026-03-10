@@ -1,9 +1,5 @@
-{{- $nautobots := (include "nautobot.nautobots" .) | mustFromJson -}}
-{{- $nautobotKeys :=  keys (omit $nautobots "default") | sortAlpha -}}
-{{- $nautobotKeys := append $nautobotKeys "default"}}
----
 {{- if .Values.route.enabled }}
-{{- if .Values.route.gateway.enabled -}}
+{{- if .Values.route.gateway.enabled }}
 apiVersion: {{ .Values.route.apiVersion }}
 kind: Gateway
 metadata:
@@ -64,16 +60,19 @@ metadata:
 spec:
   hostnames:
     - {{ .Values.route.hostname }}
-  {{- if .Values.route.gateway.enabled -}}
+  {{- if .Values.route.gateway.enabled }}
   parentRefs:
     - name: {{ include "common.names.fullname" . }}
   {{- else }}
-  {{- with.Values.route.parentRefs }}
+  {{- with .Values.route.parentRefs }}
   parentRefs:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- end }}
   rules:
+  {{- if .Values.route.extraRules }}
+  {{- toYaml .Values.route.extraRules | nindent 2 }}
+  {{- end }}
   - backendRefs:
     - name: nautobot-default
       port: 80
@@ -81,4 +80,8 @@ spec:
     - path:
         type: PathPrefix
         value: /
+    {{- with .Values.route.filters }}
+    filters:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
 {{- end }}

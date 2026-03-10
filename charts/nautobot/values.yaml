@@ -985,6 +985,11 @@ route:
   #   sectionName: example-section
 
   ## Filters define the filters that are applied to requests that match this rule.
+  # - type: RequestHeaderModifier
+  #     requestHeaderModifier:
+  #       add:
+  #         - name: my-header
+  #           value: foo
   filters: []
 
   ## Additional custom rules that can be added to the route

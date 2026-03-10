@@ -3,7 +3,7 @@ annotations:
   category: "Infrastructure"
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/license: "Apache-2.0"
-  artifacthub.io/prerelease: "false"
+  artifacthub.io/prerelease: "true"
   artifacthub.io/images: |
     - name: nautobot
       image: registry-1.docker.io/networktocode/nautobot:3.0-py3.13

@@ -34,7 +34,7 @@ annotations:
       description: Fix spacing for the uwsgi.ini template when uwsgi_exporter is enabled
 apiVersion: "v2"
 appVersion: "3.0"
-version: "3.0.3"
+version: "3.1.0-alpha.0"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

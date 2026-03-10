@@ -495,6 +495,9 @@ nautobot:
   #   - name: "NAUTOBOT_BANNER_TOP"
   #     value: "Nautobot Helm Chart"
 
+  # -- The path where the Nautobot Kubernetes Job manifests will be mounted in the Nautobot Pod.
+  jobsManifestsMountPath: "/etc/nautobot/job-queues"
+
 # -- Override values for the nautobot-init job if nautobot.singleInit is true
 # @default -- See values.yaml
 initJob:
@@ -775,6 +778,53 @@ celery:
 
   # -- [[ref](https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/#celery_worker_prometheus_ports)] Ports for Prometheus metric HTTP server running on the celery worker(s) if `nautobot.metrics` is `true`
   metricsPort: 8080
+
+# -- Configuration for Kubernetes Jobs
+kubernetesJobs:
+  # -- [[ref](https://kubernetes.io/docs/concepts/workloads/controllers/job/#clean-up-finished-jobs-automatically)] Number of seconds to retain finished Job resources before they are automatically deleted by Kubernetes
+  ttlSecondsAfterFinished: 60
+  # -- [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/job/#handling-pod-and-container-failures) Number of retries before marking the Job as failed.
+  backoffLimit: 0
+  # -- [[ref](https://kubernetes.io/docs/concepts/containers/images/#updating-images)] Image pull policy for the containers in the Kubernetes Jobs.
+  imagePullPolicy: "IfNotPresent"
+
+  # -- Service Account name to be used for the Kubernetes Jobs created by Nautobot, if not set it will use the default Service Account created for Nautobot.
+  serviceAccountName: ""
+
+  # -- Annotations for the Kubernetes Jobs objects.
+  annotations: {}
+  # -- Annotations for the Pods created by Kubernetes Jobs.
+  podAnnotations: {}
+  # -- Labels for the Kubernetes Jobs objects.
+  labels: {}
+  # -- Labels for the Pods created by Kubernetes Jobs.
+  podLabels: {}
+
+  # -- ([]Container) [[ref](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)] Add additional init containers to the Pods created by Kubernetes Jobs
+  initContainers: []
+  # -- ([]Container) Add additional sidecar containers for the Pods created by Kubernetes Jobs
+  sidecars: []
+
+  # -- ([]EnvVar) Extra Env Vars added to the main container of the Pods created by Kubernetes Jobs
+  extraEnvVars: []
+  # -- ([]string) List of names of existing ConfigMaps containing extra env vars for the Pods created by Kubernetes Jobs
+  extraEnvVarsCM: []
+  # -- ([]string) List of names of existing Secrets containing extra env vars for the Pods created by Kubernetes Jobs
+  extraEnvVarsSecret: []
+
+  # -- ([]Volume) List of additional volumes for the Pods created by Kubernetes Jobs
+  extraVolumes: []
+  # -- ([]VolumeMount) List of additional volumeMounts for the Pods created by Kubernetes Jobs
+  extraVolumeMounts: []
+
+  # -- (ResourceRequirements) [[ref](http://kubernetes.io/docs/user-guide/compute-resources/)] Resource requests and limits for Pods created by Kubernetes Jobs
+  resources:
+    requests:
+      cpu: "400m"
+      memory: "1G"
+    limits:
+      cpu: "3328m"
+      memory: "6656M"
 
 # -- (map[name]celery) Additional Celery Worker deployments, map key is the name of the deployment and the additional key `enabled` is required for each Worker deployment, all other keys for each Worker will override the defaults provided by the root `.Values.celery`.
 # @default -- See values.yaml

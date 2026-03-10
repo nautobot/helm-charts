@@ -20,6 +20,13 @@
             "enabled": {
               "type": "boolean"
             },
+            "type": {
+              "type": "string",
+              "enum": [
+                "celery",
+                "kubernetes"
+              ]
+            },
             "taskQueues": {
               "type": "string"
             },
@@ -335,6 +342,110 @@
               "pattern": "^(Recreate|RollingUpdate)$"
             }
           }
+        }
+      }
+    },
+    "kubernetesWorker": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "celery",
+            "kubernetes"
+          ]
+        },
+        "ttlSecondsAfterFinished": {
+          "type": "integer"
+        },
+        "backoffLimit": {
+          "type": "integer"
+        },
+        "imagePullPolicy": {
+          "type": "string",
+          "pattern": "^(Always|Never|IfNotPresent)$"
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "podAnnotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "podLabels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "initContainers": {
+          "type": "array"
+        },
+        "sidecars": {
+          "type": "array"
+        },
+        "extraEnvVars": {
+          "type": "array"
+        },
+        "extraEnvVarsCM": {
+          "type": "array"
+        },
+        "extraEnvVarsSecret": {
+          "type": "array"
+        },
+        "extraVolumes": {
+          "type": "array"
+        },
+        "extraVolumeMounts": {
+          "type": "array"
+        },
+        "resources": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "requests": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "cpu": {
+                  "type": "string"
+                },
+                "memory": {
+                  "type": "string"
+                }
+              }
+            },
+            "limits": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "cpu": {
+                  "type": "string"
+                },
+                "memory": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "serviceAccountName": {
+          "type": "string"
         }
       }
     },
@@ -807,6 +918,13 @@
         }
       ]
     },
+    "kubernetesJobs": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/kubernetesWorker"
+        }
+      ]
+    },
     "metrics": {
       "additionalProperties": false,
       "type": "object",
@@ -1172,23 +1290,35 @@
     "workers": {
       "type": "object",
       "patternProperties": {
-        "^[a-zA-Z0-9]+$": {
+        "^[a-zA-Z0-9-]+$": {
           "type": "object",
-          "allOf": [
-            {
-              "$ref": "#/$defs/celery"
-            },
-            {
-              "required": [
-                "enabled"
-              ],
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                }
+          "required": [
+            "enabled"
+          ],
+          "if": {
+            "properties": {
+              "type": {
+                "const": "kubernetes"
               }
-            }
-          ]
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/kubernetesWorker"
+              }
+            ]
+          },
+          "else": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/celery"
+              }
+            ]
+          }
         }
       },
       "description": "List of Nautobot objects (matching the Nautobot spec) to create deployments for"

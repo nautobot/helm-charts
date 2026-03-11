@@ -12,6 +12,7 @@ With [Kubernetes](https://kubernetes.io/), public clouds, and the [dependency su
 * [External Database](external-database/)
 * [External Redis](external-redis/)
 * [Extra Objects](extra-objects/)
+* [Gateway API](gateway-api/)
 * [Ingress](ingress/)
 * [Initialization Job](init-hook/)
 * [Kubernetes Jobs](kubernetes-jobs/)

@@ -951,6 +951,50 @@ ingress:
   #     - nautobot.local
   #   secretName: nautobot.local-tls
 
+route:
+  # -- Enable HTTPRoute resource creation
+  enabled: false
+
+  # -- Override API Version
+  apiVersion: "gateway.networking.k8s.io/v1"
+
+  # -- Gateway Hostname for the listener to be created for this route, this should match the `route.hostname` value defined in the parentRefs section of the route rules
+  hostname: "nautobot.local"
+
+  gateway:
+    # --Enable Gateway resource creation for the Route resource
+    enabled: false
+    # -- Gateway API Class name
+    gatewayClassName: ""
+    # -- Enable TLS configuration for the hostname defined at `route.hostname` parameter
+    tls: false
+    # -- The name of the secret to use for the TLS certificate
+    secretName: "nautobot-tls"
+    # -- Infrastructure related labels defined as key:value pairs, see the documentation for your specific Gateway provider for more details
+    infrastructureLabels: {}
+    # -- Infrastructure related annotations defines as key:value pairs, see the documentation for your specific Gateway provider for more details
+    infrastructureAnnotations: {}
+
+  # -- Route resource pathMatchType valid values `RegularExpression`, `Exact`, or `PathPrefix`
+  pathMatchType: "PathPrefix"
+
+  # - my-filter.example.com
+  parentRefs: []
+  # - name: example-gateway
+  #   namespace: example-namespace
+  #   sectionName: example-section
+
+  ## Filters define the filters that are applied to requests that match this rule.
+  # - type: RequestHeaderModifier
+  #     requestHeaderModifier:
+  #       add:
+  #         - name: my-header
+  #           value: foo
+  filters: []
+
+  ## Additional custom rules that can be added to the route
+  extraRules: []
+
 metrics:
   # -- Enable and configure a Prometheus [serviceMonitor](https://prometheus-operator.dev/docs/operator/design/#servicemonitor) (requires the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator))
   enabled: false

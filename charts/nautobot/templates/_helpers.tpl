@@ -342,6 +342,7 @@ Celery Beat can only have 1 replica enforce that here
 */}}
 {{- $workers = mustMergeOverwrite $workers (dict "beat" (dict "replicaCount" 1)) }}
 {{- $workers = mustMergeOverwrite $workers (dict "beat" (dict "autoscaling" (dict "enabled" false))) }}
+{{- $workers = mustMergeOverwrite $workers (dict "beat" (dict "pdb" (dict "create" false))) }}
 {{- mustToJson $workers -}}
 {{- end }}
 

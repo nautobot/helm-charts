@@ -8,7 +8,7 @@ Jobs are created on demand when a Nautobot job is started.
 You can read more about Kubernetes Jobs in the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/jobs/kubernetes-job-support/).
 
 > **Note:** Support for reading Kubernetes job manifests from a file system is
-> required. Consult the Nautobot documentation for more information.
+> required, which was added in Nautobot `2.4.29` and `3.0.9` versions.
 
 ## How is Support for Kubernetes Jobs Implemented
 

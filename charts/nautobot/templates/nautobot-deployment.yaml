@@ -319,6 +319,14 @@ spec:
             - name: "nautobot-certs"
               mountPath: "/opt/certs"
             {{- end }}
+            {{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
+            {{- range $i, $workerName := (include "nautobot.kubernetesWorkers" $) | fromJsonArray }}
+            - name: "nautobot-k8s-jobs-manifests"
+              mountPath: "{{ printf "%s/%s/manifest.json" $.Values.nautobot.jobsManifestsMountPath $workerName }}"
+              subPath: "{{ $workerName }}"
+              readOnly: true
+            {{- end }}
+            {{- end }}
             {{- if $nautobot.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $nautobot.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -459,6 +467,11 @@ spec:
         - name: "nautobot-config-custom"
           configMap:
             name: {{ $.Values.nautobot.configCM }}
+        {{- end }}
+        {{- if eq (include "nautobot.kubernetesJobsEnabled" $) "true" }}
+        - name: "nautobot-k8s-jobs-manifests"
+          configMap:
+            name: {{ include "nautobot.kubernetesJobsConfigMapName" $ }}
         {{- end }}
         {{- if $nautobot.secret_name_tls }}
         - name: "nautobot-certs"

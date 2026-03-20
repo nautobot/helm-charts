@@ -290,6 +290,66 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+  Return the base environmental variables that should be included in every
+  Nautobot container (web, celery, etc).
+*/}}
+{{- define "nautobot.baseEnvVars" -}}
+{{- $baseEnvVars := list -}}
+{{- $baseEnvVars = append $baseEnvVars (mergeOverwrite (dict "name" "NAUTOBOT_DB_USER") (include "nautobot.database.userEnvVarDef" $ | fromYaml)) -}}
+{{- $baseEnvVars = append $baseEnvVars (mergeOverwrite (dict "name" "NAUTOBOT_DB_PASSWORD") (include "nautobot.database.passEnvVarDef" $ | fromYaml)) -}}
+{{- $baseEnvVars = append $baseEnvVars (dict "name" "NAUTOBOT_REDIS_PASSWORD" "valueFrom" (dict "secretKeyRef" (dict "name" (include "nautobot.redis.passwordName" $) "key" (include "nautobot.redis.passwordKey" $)))) -}}
+{{- mustToJson $baseEnvVars -}}
+{{- end -}}
+
+{{/*
+  Return the base envFrom that should be included in every Nautobot
+  container (web, celery, etc).
+*/}}
+{{- define "nautobot.baseEnvFrom" -}}
+{{- $baseEnvFrom := list -}}
+{{- $baseEnvFrom = append $baseEnvFrom (dict "configMapRef" (dict "name" (printf "%s-%s" (include "common.names.fullname" $) "env" ))) -}}
+{{- $baseEnvFrom = append $baseEnvFrom (dict "secretRef" (dict "name" (printf "%s-%s" (include "common.names.fullname" $) "env" ))) -}}
+{{- mustToJson $baseEnvFrom -}}
+{{- end -}}
+
+{{/*
+  Return the base volumes that should be included in every Nautobot container
+  (web, celery, etc).
+*/}}
+{{- define "nautobot.baseVolumes" -}}
+{{- $baseVolumes := list -}}
+{{- $baseVolumes = append $baseVolumes (dict "name" "git-repos" "emptyDir" dict) -}}
+{{- if $.Values.nautobot.config -}}
+  {{- $baseVolumes = append $baseVolumes (dict "name" "nautobot-config" "configMap" (dict "name" ((printf "%s-config" (include "common.names.fullname" $))))) -}}
+{{- else if $.Values.nautobot.configCM -}}
+  {{- $baseVolumes = append $baseVolumes (dict "name" "nautobot-config-custom" "configMap" (dict "name" $.Values.nautobot.configCM)) -}}
+{{- end }}
+{{- if $.Values.nautobot.persistenceMediaFiles.enabled -}}
+  {{- $baseVolumes = append $baseVolumes (dict "name" "nautobot-media" "persistentVolumeClaim" (dict "claimName" (printf "%s-media" (include "common.names.fullname" $)))) -}}
+{{- end }}
+{{- mustToJson $baseVolumes -}}
+{{- end -}}
+
+{{/*
+  Return the base volume mounts that should be included in every Nautobot container
+  (web, celery, etc).
+*/}}
+{{- define "nautobot.baseVolumeMounts" -}}
+{{- $baseVolumeMounts := list -}}
+{{- $baseVolumeMounts = append $baseVolumeMounts (dict "name" "git-repos" "mountPath" "/opt/nautobot/git") -}}
+{{- if $.Values.nautobot.config -}}
+  {{- $baseVolumeMounts = append $baseVolumeMounts (dict "name" "nautobot-config" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
+{{- else if $.Values.nautobot.configCM -}}
+  {{- $baseVolumeMounts = append $baseVolumeMounts (dict "name" "nautobot-config-custom" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
+{{- end }}
+{{- if $.Values.nautobot.persistenceMediaFiles.enabled -}}
+  {{- $baseVolumeMounts = append $baseVolumeMounts (dict "name" "nautobot-media" "mountPath" "/opt/nautobot/media") -}}
+{{- end }}
+{{- mustToJson $baseVolumeMounts -}}
+{{- end -}}
+
+
+{{/*
 Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 */}}
 {{- define "common.capabilities.hpa.apiVersion" -}}
@@ -331,7 +391,6 @@ celery
 
 where values in the new workers key will always win over the others
 */}}
-{{- $workers := dict }}
 {{- $workers = mustMergeOverwrite $workers (dict "default" (mustMergeOverwrite (deepCopy $.Values.celery) $.Values.celeryWorker)) }}
 {{- $workers = mustMergeOverwrite $workers (dict "beat" (mustMergeOverwrite (deepCopy $.Values.celery) $.Values.celeryBeat)) }}
 {{- range $celeryName, $celery := .Values.workers }}
@@ -346,6 +405,24 @@ Celery Beat can only have 1 replica enforce that here
 {{- end }}
 
 {{/*
+  Define a list of all workers of type kubernetes. The code loops over all
+  workers defined in .Values.workers and checks if their type is "kubernetes".
+  If it is, the worker name is added to the list of kubernetes workers.
+  Finally, the list of kubernetes workers is returned as a JSON array.
+  The example of the JSON array returned would be ["alpha", "beta"]
+  if there are two workers of type kubernetes named alpha and beta.
+*/}}
+{{- define "nautobot.kubernetesWorkers" -}}
+{{- $kubernetesWorkers := list -}}
+{{- range $workerName, $worker := .Values.workers -}}
+  {{- if eq (default "celery" $worker.type) "kubernetes" }}
+    {{- $kubernetesWorkers = append $kubernetesWorkers $workerName -}}
+  {{- end }}
+{{- end }}
+{{- mustToJson $kubernetesWorkers -}}
+{{- end -}}
+
+{{/*
 Get values for the init job if singleInit is true.  Default all values to the root .nautobot defaults
 */}}
 {{ define "nautobot.initJob" }}
@@ -353,3 +430,24 @@ Get values for the init job if singleInit is true.  Default all values to the ro
 {{- $initJob = mustMergeOverwrite (deepCopy $.Values.nautobot) $.Values.initJob }}
 {{- mustToJson $initJob -}}
 {{- end }}
+
+{{/*
+  Define a ConfigMap name to store Kubernetes Job manifests
+*/}}
+{{- define "nautobot.kubernetesJobsConfigMapName" -}}
+{{- printf "%s-k8s-jobs-manifests" (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
+  Define boolean that check if Kubernetes Jobs should be enabled based on
+  the presence of .Values.workers.
+*/}}
+{{- define "nautobot.kubernetesJobsEnabled" -}}
+{{- $enabled := false -}}
+{{- range $workerName, $worker := .Values.workers -}}
+  {{- if and (eq (default "celery" $worker.type) "kubernetes") $worker.enabled -}}
+    {{- $enabled = true -}}
+  {{- end -}}
+{{- end -}}
+{{- $enabled -}}
+{{- end -}}

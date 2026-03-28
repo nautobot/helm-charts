@@ -255,6 +255,10 @@ nautobot:
             value: 2
             periodSeconds: 15
 
+  # --- Define the volume for the static files
+  staticFilesVolume:
+    emptyDir: {}
+
   # Add a Persistent Volume Claim for Nautobot static files
   persistenceStaticFiles:
     # --- Enable PVC and the relevant volumes
@@ -271,6 +275,9 @@ nautobot:
     # selector:
     #   matchLabel:
     #     nautobot-storage: static
+
+  # --- Define the volume for the media files
+  mediaFilesVolume: {}
 
   # Add a Persistent Volume Claim for Nautobot media files
   persistenceMediaFiles:

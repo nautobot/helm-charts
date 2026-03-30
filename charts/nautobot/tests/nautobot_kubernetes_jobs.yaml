@@ -49,8 +49,7 @@ tests:
                   "app.kubernetes.io/version": "3.0",
                   "helm.sh/chart": "nautobot-3.0.0"
                 },
-                "name": "nautobot-job",
-                "namespace": "test"
+                "name": "nautobot-job"
               },
               "spec": {
                 "backoffLimit": 0,
@@ -96,15 +95,6 @@ tests:
                               "secretKeyRef": {
                                 "key": "redis-password",
                                 "name": "test-redis"
-                              }
-                            }
-                          },
-                          {
-                            "name": "NAUTOBOT_SECRET_KEY",
-                            "valueFrom": {
-                              "secretKeyRef": {
-                                "key": "NAUTOBOT_SECRET_KEY",
-                                "name": "test-nautobot-env"
                               }
                             }
                           },
@@ -228,6 +218,12 @@ tests:
             requests:
               cpu: "4000m"
               memory: "2G"
+          overrides:
+            spec:
+              dnsPolicy: "None"
+              dnsConfig:
+                nameservers:
+                  - "127.0.0.1"
     asserts:
       - hasDocuments:
           count: 1
@@ -253,8 +249,7 @@ tests:
                   "customLabel": "customLabelValue",
                   "helm.sh/chart": "nautobot-3.0.0"
                 },
-                "name": "nautobot-job",
-                "namespace": "test"
+                "name": "nautobot-job"
               },
               "spec": {
                 "backoffLimit": 3,
@@ -302,15 +297,6 @@ tests:
                               "secretKeyRef": {
                                 "key": "redis-password",
                                 "name": "test-redis"
-                              }
-                            }
-                          },
-                          {
-                            "name": "NAUTOBOT_SECRET_KEY",
-                            "valueFrom": {
-                              "secretKeyRef": {
-                                "key": "NAUTOBOT_SECRET_KEY",
-                                "name": "test-nautobot-env"
                               }
                             }
                           },
@@ -379,6 +365,12 @@ tests:
                         "name": "sidecar-container"
                       }
                     ],
+                    "dnsConfig": {
+                      "nameservers": [
+                        "127.0.0.1"
+                      ]
+                    },
+                    "dnsPolicy": "None",
                     "imagePullSecrets": [
                       {
                         "name": "test-pull-secrets"
@@ -476,8 +468,7 @@ tests:
                   "app.kubernetes.io/version": "3.0",
                   "helm.sh/chart": "nautobot-3.0.0"
                 },
-                "name": "nautobot-job",
-                "namespace": "test"
+                "name": "nautobot-job"
               },
               "spec": {
                 "backoffLimit": 2,
@@ -523,15 +514,6 @@ tests:
                               "secretKeyRef": {
                                 "key": "redis-password",
                                 "name": "test-redis"
-                              }
-                            }
-                          },
-                          {
-                            "name": "NAUTOBOT_SECRET_KEY",
-                            "valueFrom": {
-                              "secretKeyRef": {
-                                "key": "NAUTOBOT_SECRET_KEY",
-                                "name": "test-nautobot-env"
                               }
                             }
                           },
@@ -614,8 +596,7 @@ tests:
                   "app.kubernetes.io/version": "3.0",
                   "helm.sh/chart": "nautobot-3.0.0"
                 },
-                "name": "nautobot-job",
-                "namespace": "test"
+                "name": "nautobot-job"
               },
               "spec": {
                 "backoffLimit": 5,
@@ -661,15 +642,6 @@ tests:
                               "secretKeyRef": {
                                 "key": "redis-password",
                                 "name": "test-redis"
-                              }
-                            }
-                          },
-                          {
-                            "name": "NAUTOBOT_SECRET_KEY",
-                            "valueFrom": {
-                              "secretKeyRef": {
-                                "key": "NAUTOBOT_SECRET_KEY",
-                                "name": "test-nautobot-env"
                               }
                             }
                           },

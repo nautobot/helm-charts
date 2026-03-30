@@ -196,3 +196,42 @@ extraObjects:
 
 For more information and customization options for the ServiceAccount roles, see
 [RBAC Roles and RoleBindings](rbac-roles.md).
+
+
+### Custom overrides
+
+The exposed arguments in the `values.yaml` do not cover all configuration options
+for Pods created for the K8s jobs. The additional argument `overrides` can be
+used in those use cases. The whole configuration tree is attached to the `spec.template`
+path and will override any setting defined under the configuration tree. For example,
+if you want to override DNS settings for your Pods, you can use the following configuration
+
+```yaml
+kubernetesJobs:
+  overrides:
+    spec:
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - "127.0.0.1"
+```
+
+This will add the DNS settings under `spec.template.spec`:
+
+```json
+"spec": {
+  "template": {
+    "spec": {
+      "dnsConfig": {
+        "nameservers": [
+          "127.0.0.1"
+        ]
+      },
+      "dnsPolicy": "None",
+    }
+  }
+}
+```
+
+No additional validation is performed for the settings defined under `overrides`.
+Therefore, you must ensure that all the settings are specified correctly.

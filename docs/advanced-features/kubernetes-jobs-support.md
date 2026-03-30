@@ -199,7 +199,6 @@ extraObjects:
 For more information and customization options for the ServiceAccount roles, see
 [RBAC Roles and RoleBindings](rbac-roles.md).
 
-
 ### Custom overrides
 
 The configuration options exposed in `values.yaml` do not cover every Pod setting

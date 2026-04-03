@@ -1080,6 +1080,12 @@
             },
             "labels": {
               "type": "object"
+            },
+            "scrapeProtocols": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         },

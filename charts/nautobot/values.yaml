@@ -1164,6 +1164,8 @@ metrics:
     scrapeTimeout: "30s"
     # -- (map[string]string) Additional labels for the serviceMonitor Object
     labels: {}
+    # -- ([]string) [[ref](https://prometheus.io/docs/instrumenting/content_negotiation/)
+    scrapeProtocols: []
 
   # -- Enable and configure Prometheus Rules.
   # @default -- See values.yaml

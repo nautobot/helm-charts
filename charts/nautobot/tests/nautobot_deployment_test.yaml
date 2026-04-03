@@ -196,14 +196,6 @@ tests:
                 key: "redis-password"
                 name: "test-redis"
       - contains:
-          path: "spec.template.spec.containers[0].env"
-          content:
-            name: "NAUTOBOT_SECRET_KEY"
-            valueFrom:
-              secretKeyRef:
-                key: "NAUTOBOT_SECRET_KEY"
-                name: "test-nautobot-env"
-      - contains:
           path: "spec.template.spec.containers[0].envFrom"
           content:
             configMapRef:

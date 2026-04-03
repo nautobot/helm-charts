@@ -446,6 +446,9 @@
         },
         "serviceAccountName": {
           "type": "string"
+        },
+        "overrides": {
+          "type": "object"
         }
       }
     },
@@ -1077,6 +1080,12 @@
             },
             "labels": {
               "type": "object"
+            },
+            "scrapeProtocols": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         },

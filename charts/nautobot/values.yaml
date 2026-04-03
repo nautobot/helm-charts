@@ -826,6 +826,17 @@ kubernetesJobs:
       cpu: "3328m"
       memory: "6656M"
 
+  # -- (object) Custom PodTemplateSpec overrides merged into each Kubernetes Job at `spec.template`.
+  # For example, set `spec.dnsPolicy` and `spec.dnsConfig` by using:
+  # overrides:
+  #   spec:
+  #     dnsPolicy: "None"
+  #     dnsConfig:
+  #       nameservers:
+  #         - "127.0.0.1"
+  overrides: {}
+
+
 # -- (map[name]celery) Additional Celery Worker deployments, map key is the name of the deployment and the additional key `enabled` is required for each Worker deployment, all other keys for each Worker will override the defaults provided by the root `.Values.celery`.
 # @default -- See values.yaml
 workers:
@@ -1153,6 +1164,8 @@ metrics:
     scrapeTimeout: "30s"
     # -- (map[string]string) Additional labels for the serviceMonitor Object
     labels: {}
+    # -- ([]string) [[ref](https://prometheus.io/docs/instrumenting/content_negotiation/)
+    scrapeProtocols: []
 
   # -- Enable and configure Prometheus Rules.
   # @default -- See values.yaml

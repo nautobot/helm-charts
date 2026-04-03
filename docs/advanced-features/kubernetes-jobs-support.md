@@ -10,7 +10,7 @@ You can read more about Kubernetes Jobs in the [Nautobot documentation](https://
 > **Note:** Support for reading Kubernetes job manifests from a file system is
 > required, which was added in Nautobot `2.4.29` and `3.0.9` versions.
 
-## How is Support for Kubernetes Jobs Implemented
+## How Kubernetes Jobs Support Is Implemented
 
 Each Nautobot job has one or more associated job queues. A job queue defines
 the configuration for executing Nautobot jobs. In traditional Celery-based
@@ -71,11 +71,11 @@ will be applied to all Kubernetes jobs.
 
 Specific job queues are enabled or disabled in the `workers` section. This
 section contains a map of workers defined in your environment. Each worker must
-have a unique name, which can consist of alphanumeric characters.
+have a unique name and can contain alphanumeric characters and hyphens.
 
 To define a job queue, you must set two values:
 
-* `workers.<worker name>.enable: true`
+* `workers.<worker name>.enabled: true`
 * `workers.<worker name>.type: "kubernetes"`
 
 > **Note:** The `type` defines the job queue type. The default value is `celery`,
@@ -171,7 +171,7 @@ with Kubernetes job manifests. As discussed above, the service account requires
 permissions to create new Kubernetes jobs. Since the same service account is used
 for Kubernetes jobs by default, your job will have permissions to create new
 Kubernetes jobs (job chaining). Some use cases require this setting. For example
-your job spins a separate job for each device you want to configure.
+your job may spin up a separate job for each device you want to configure.
 
 If you don't need to spin up new jobs from the parent job, then it is better to
 prevent it. You will need a dedicated service account for Kubernetes jobs in
@@ -180,6 +180,8 @@ this case. The following example shows how to configure this:
 ```yaml
 workers:
   alpha:
+    enabled: true
+    type: "kubernetes"
     serviceAccountName: nautobot-jobs
 
 extraObjects:
@@ -196,3 +198,44 @@ extraObjects:
 
 For more information and customization options for the ServiceAccount roles, see
 [RBAC Roles and RoleBindings](rbac-roles.md).
+
+### Custom overrides
+
+The configuration options exposed in `values.yaml` do not cover every Pod setting
+for Kubernetes Jobs. You can use the `overrides` argument for these advanced use cases.
+The override tree is merged into `spec.template`, so it can add or replace any fields
+under that path. For example, if you want to override DNS settings for your Pods,
+you can use the following configuration:
+
+```yaml
+kubernetesJobs:
+  overrides:
+    spec:
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - "127.0.0.1"
+```
+
+This will add the DNS settings under `spec.template.spec`:
+
+```json
+"spec": {
+  "template": {
+    "spec": {
+      "dnsConfig": {
+        "nameservers": [
+          "127.0.0.1"
+        ]
+      },
+      "dnsPolicy": "None"
+    }
+  }
+}
+```
+
+You can define this globally in `kubernetesJobs.overrides` or per worker in
+`workers.<worker name>.overrides`.
+
+No additional validation is performed for settings defined under `overrides`.
+Make sure that all fields are valid Kubernetes `PodTemplateSpec` fields.

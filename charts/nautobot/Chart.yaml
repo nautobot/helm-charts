@@ -38,6 +38,8 @@ annotations:
       description: Fixed allowing configuration of scrape protocols for Service Monitor.
     - kind: fixed
       description: Fixed removing pdb config for the Celery Beat if enabled for workers.
+    - kind: fixed
+      description: Fixed uwsgi-exporter sidecar dialing localhost; now uses 127.0.0.1 to match the IPv4-only stats listener and avoid IPv6 resolution failures.
 apiVersion: "v2"
 appVersion: "3.0"
 version: "3.1.1"

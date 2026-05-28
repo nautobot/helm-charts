@@ -619,6 +619,21 @@ celery:
     failureThreshold: 3
     successThreshold: 1
 
+  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot Celery Worker startup probe
+  # @default -- See values.yaml
+  startupProbe:
+    enabled: false
+    exec:
+      command:
+        - "bash"
+        - "-c"
+        - "[ $(find /tmp/nautobot_celery_worker_ready | wc -l) -eq 1 ] || false"
+    initialDelaySeconds: 3
+    periodSeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 30
+    successThreshold: 1
+
   # -- (ResourceRequirements) [[ref](http://kubernetes.io/docs/user-guide/compute-resources/)] Nautobot Celery Worker resource requests and limits
   # @default -- See values.yaml
   resources:

@@ -427,7 +427,7 @@ spec:
           securityContext: {{- omit $.Values.metrics.uwsgiExporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           args:
-            - "--stats.uri=http://localhost:1717"
+            - "--stats.uri=http://127.0.0.1:1717"
           {{- if $.Values.metrics.uwsgiExporter.resources }}
           resources: {{- toYaml $.Values.metrics.uwsgiExporter.resources | nindent 12 }}
           {{- end }}

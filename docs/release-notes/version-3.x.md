@@ -3,6 +3,19 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.1.2 - 2026-05-29
+
+### Added
+
+* [#748](https://github.com/nautobot/helm-charts/pull/748) Added startup probes for Celery workers.
+* [#733](https://github.com/nautobot/helm-charts/pull/733) Added option to override settings for kubernetes jobs.
+
+### Fixed
+
+* [#745](https://github.com/nautobot/helm-charts/pull/745) Fixed statement evaluating always true for startup probes in Nautobot deployment.
+* [#742](https://github.com/nautobot/helm-charts/pull/742) Fixed missing namespace for Horizontal Pod Autoscaling resource.
+* [#747](https://github.com/nautobot/helm-charts/pull/747) Fixed uwsgi-exporter sidecar using 127.0.0.1 instead of localhost to avoid IPv6 resolution failures.
+
 ## 3.1.1 - 2026-04-03
 
 ### Added

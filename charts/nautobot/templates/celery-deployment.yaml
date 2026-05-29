@@ -147,6 +147,9 @@ spec:
           {{- if $celery.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $celery.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
+          {{- if $celery.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit $celery.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}
           {{- if (and $.Values.metrics.enabled $.Values.nautobot.metrics (ne $celeryName "beat")) }}
           ports:
             - name: "workermetrics"

@@ -31,16 +31,16 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: added
-      description: Added the kubernetes job manifest to the celery beat pod.
-    - kind: added
-      description: Added option to override settings for kubernetes jobs.
+      description: Added startup probes for Celery workers.
     - kind: fixed
-      description: Fixed allowing configuration of scrape protocols for Service Monitor.
+      description: Fixed statement evaluating always true for startup probes in Nautobot deployment.
     - kind: fixed
-      description: Fixed removing pdb config for the Celery Beat if enabled for workers.
+      description: Fixed missing namespace for Horizontal Pod Autoscaling resource.
+    - kind: fixed
+      description: Fixed uwsgi-exporter sidecar using 127.0.0.1 instead of localhost to avoid IPv6 resolution failures.
 apiVersion: "v2"
 appVersion: "3.0"
-version: "3.1.1"
+version: "3.1.2"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

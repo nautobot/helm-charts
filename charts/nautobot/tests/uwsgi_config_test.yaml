@@ -1,0 +1,36 @@
+# Test related to the uWSGI configuration rendered into the ConfigMap
+---
+suite: "Test uWSGI configuration settings"
+templates:
+  - "configmap.yaml"
+set:
+  nautobot:
+    db:
+      user: "nautobot"
+      password: "nautobotpassword"
+release:
+  name: "test"
+  namespace: "test"
+tests:
+
+  - it: "Test max-fd is not set by default"
+    template: "configmap.yaml"
+    documentIndex: 1
+    asserts:
+      - exists:
+          path: "data['uwsgi.ini']"
+      - notMatchRegex:
+          path: "data['uwsgi.ini']"
+          pattern: "max-fd"
+
+  - it: "Test max-fd is rendered when maxFd is set"
+    template: "configmap.yaml"
+    set:
+      nautobot:
+        uwsgi:
+          maxFd: 1048576
+    documentIndex: 1
+    asserts:
+      - matchRegex:
+          path: "data['uwsgi.ini']"
+          pattern: "max-fd = 1048576"

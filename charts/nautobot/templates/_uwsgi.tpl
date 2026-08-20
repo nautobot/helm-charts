@@ -80,6 +80,11 @@ harakiri = {{ .Values.nautobot.uwsgi.harakiri }}
 {{ else }}
 ; harakiri = 65
 {{ end -}}
+
+; Cap the detected max file descriptor number; uWSGI's http/https router allocates 8 bytes per allowed fd at boot
+{{ if gt (int .Values.nautobot.uwsgi.maxFd) 0 -}}
+max-fd = {{ int .Values.nautobot.uwsgi.maxFd }}
+{{ end -}}
 ; add-header = Connection: Keep-Alive
 ; http-keepalive = 1
 

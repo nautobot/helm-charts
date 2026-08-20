@@ -487,6 +487,8 @@ nautobot:
     bufferSize: 4096
     # -- [[ref]](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#harakiri) Set the harakiri timeout value. If the value is 0 then the timeout is not set.
     harakiri: 0
+    # -- [[ref]](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#max-fd) Cap the file descriptor limit uWSGI sizes its per-fd structures from. On container runtimes that report an unbounded limit (~2^30) the http/https router otherwise allocates 8+GB at startup and is OOMKilled; 1048576 is a safe production value. If the value is 0 then the option is not set.
+    maxFd: 0
 
   # -- ([]map[name,value]string)An array of environment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup>
   extraVars: []  # https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/

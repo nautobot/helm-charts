@@ -91,7 +91,7 @@ See [Uninstall](https://docs.nautobot.com/projects/helm-charts/en/stable/operati
 |------------|------|---------|
 | oci://registry-1.docker.io/bitnamicharts | common | 2.39.0 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql | 12.12.10 |
-| oci://registry-1.docker.io/bitnamicharts | redis | 18.19.4 |
+| oci://registry-1.docker.io/bitnamicharts | redis | 28.0.12 |
 
 <!-- This section is a duplicate of docs/configuration/reference.md.gotmpl -->
 

@@ -64,6 +64,7 @@ jobs:
           #     sarif_file: "checkov.sarif"
 
   snyk-security-check:
+    if: "github.event.pull_request.head.repo.full_name == github.repository"
     name: "Snyk Security Scanning"
     runs-on: "ubuntu-24.04"
     env:
@@ -136,11 +137,11 @@ jobs:
       - name: "Setup Helm"
         uses: "azure/setup-helm@v4"
         with:
-          version: "v3.19.2"  # For reference: https://github.com/helm/helm/issues/31490
+          version: "v4.2.2"  # For reference: https://github.com/helm/helm/issues/31490
 
       - name: "Install unittests plugin"
         run: |
-          helm plugin install https://github.com/helm-unittest/helm-unittest.git
+          helm plugin install --verify=false https://github.com/helm-unittest/helm-unittest.git
 
       - name: "Run tests"
         run: |

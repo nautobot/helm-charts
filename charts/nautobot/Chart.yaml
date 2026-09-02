@@ -31,6 +31,8 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: added
+      description: Added nautobot.uwsgi.maxFd to cap the file descriptor limit uWSGI sizes its router allocation from, preventing multi-GB startup allocations and OOMKills on container runtimes with unbounded fd limits.
+    - kind: added
       description: Added startup probes for Celery workers.
     - kind: fixed
       description: Fixed statement evaluating always true for startup probes in Nautobot deployment.

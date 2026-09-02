@@ -687,6 +687,9 @@
                 },
                 "harakiri": {
                   "type": "integer"
+                },
+                "maxFd": {
+                  "type": "integer"
                 }
               }
             }

@@ -989,15 +989,23 @@ route:
   # -- Gateway Hostname for the listener to be created for this route, this should match the `route.hostname` value defined in the parentRefs section of the route rules
   hostname: "nautobot.local"
 
+  # -- (map[string]string) [[ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)] Annotations to be applied to the Gateway and Route resources
+  annotations: {}
+
   gateway:
     # --Enable Gateway resource creation for the Route resource
     enabled: false
     # -- Gateway API Class name
     gatewayClassName: ""
-    # -- Enable TLS configuration for the hostname defined at `route.hostname` parameter
-    tls: false
-    # -- The name of the secret to use for the TLS certificate
-    secretName: "nautobot-tls"
+    # -- [[ref](https://docs.nautobot.com/projects/helm-charts/en/stable/advanced-features/gateway-api)] TLS configuration for the listener serving the hostname defined at `route.hostname`
+    # @default -- See values.yaml
+    tls:
+      # -- Enable a TLS listener, when `false` the Gateway serves plain HTTP on port 80 and traffic is unencrypted end to end
+      enabled: false
+      # -- (`Terminate`, `Passthrough`) [[ref](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.TLSModeType)] TLS behavior for the listener. `Terminate` decrypts at the Gateway and forwards plain HTTP to Nautobot using an `HTTPRoute`. `Passthrough` forwards the encrypted connection to Nautobot using a `TLSRoute`, giving end-to-end TLS, and requires the pod to serve TLS (see `nautobot.secret_name_tls`)
+      mode: "Terminate"
+      # -- The name of an existing secret containing the TLS certificate presented by the Gateway, only used when `route.gateway.tls.mode` is `Terminate`. When left empty no `certificateRefs` are rendered and the Gateway controller must supply a certificate itself
+      secretName: ""
     # -- Infrastructure related labels defined as key:value pairs, see the documentation for your specific Gateway provider for more details
     infrastructureLabels: {}
     # -- Infrastructure related annotations defines as key:value pairs, see the documentation for your specific Gateway provider for more details

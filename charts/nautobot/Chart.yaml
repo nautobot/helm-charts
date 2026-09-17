@@ -34,12 +34,16 @@ annotations:
       description: Added nautobot.uwsgi.maxFd to cap the file descriptor limit uWSGI sizes its router allocation from, preventing multi-GB startup allocations and OOMKills on container runtimes with unbounded fd limits.
     - kind: added
       description: Added startup probes for Celery workers.
+    - kind: added
+      description: Added support for end-to-end TLS with the Gateway API.
     - kind: fixed
       description: Fixed statement evaluating always true for startup probes in Nautobot deployment.
     - kind: fixed
       description: Fixed missing namespace for Horizontal Pod Autoscaling resource.
     - kind: fixed
       description: Fixed uwsgi-exporter sidecar using 127.0.0.1 instead of localhost to avoid IPv6 resolution failures.
+    - kind: fixed
+      description: Fixed the Gateway API template for multiple bugs and route backend being hardcoded to nautobot-default.
 apiVersion: "v2"
 appVersion: "3.0"
 version: "3.1.2"

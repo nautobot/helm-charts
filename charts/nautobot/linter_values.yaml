@@ -120,6 +120,17 @@ ingress:
       backendProtocol: "https"
   tls: true
 
+route:
+  enabled: true
+  hostname: "nautobot3.local"
+  gateway:
+    enabled: true
+    gatewayClassName: "nginx"
+    tls:
+      enabled: true
+      mode: "Terminate"
+      secretName: "nautobot-route-tls"
+
 metrics:
   enabled: true
   capacityMetrics:

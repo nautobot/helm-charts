@@ -915,6 +915,9 @@
         "hostname": {
           "type": "string"
         },
+        "annotations": {
+          "type": "object"
+        },
         "gateway": {
           "type": "object",
           "additionalProperties": false,
@@ -926,10 +929,28 @@
               "type": "string"
             },
             "tls": {
-              "type": "boolean"
-            },
-            "secretName": {
-              "type": "string"
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "Terminate",
+                    "Passthrough"
+                  ]
+                },
+                "secretName": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "enabled",
+                "mode",
+                "secretName"
+              ]
             },
             "infrastructureLabels": {
               "type": "object"
@@ -943,7 +964,6 @@
             "gatewayClassName",
             "infrastructureAnnotations",
             "infrastructureLabels",
-            "secretName",
             "tls"
           ]
         },
@@ -964,6 +984,7 @@
         }
       },
       "required": [
+        "annotations",
         "apiVersion",
         "enabled",
         "extraRules",

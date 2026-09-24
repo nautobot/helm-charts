@@ -10,9 +10,9 @@ set:
       password: "nautobotpassword"
   route:
     enabled: true
-    gateway:
-      enabled: true
-      gatewayClassName: "nginx"
+  gateway:
+    enabled: true
+    gatewayClassName: "nginx"
 release:
   name: "test"
   namespace: "test"
@@ -49,14 +49,13 @@ tests:
           value: 80
 
   # Mode 2: TLS terminated on the Gateway and http unencrypted to the backend
-  - it: "Assert the listener terminates TLS when route.gateway.tls is enabled"
+  - it: "Assert the listener terminates TLS when route.tls is enabled"
     set:
       route:
-        gateway:
-          tls:
-            enabled: true
-            mode: "Terminate"
-            secretName: "nautobot-gw-tls"
+        tls:
+          enabled: true
+          mode: "Terminate"
+          secretName: "nautobot-gw-tls"
     documentIndex: 0
     asserts:
       - equal:
@@ -78,10 +77,9 @@ tests:
   - it: "Assert no certificateRefs are rendered when secretName is left empty"
     set:
       route:
-        gateway:
-          tls:
-            enabled: true
-            mode: "Terminate"
+        tls:
+          enabled: true
+          mode: "Terminate"
     documentIndex: 0
     asserts:
       - equal:
@@ -93,10 +91,9 @@ tests:
   - it: "Assert the route stays an HTTPRoute to the http port when the Gateway terminates TLS"
     set:
       route:
-        gateway:
-          tls:
-            enabled: true
-            mode: "Terminate"
+        tls:
+          enabled: true
+          mode: "Terminate"
     documentIndex: 1
     asserts:
       - isKind:
@@ -111,11 +108,10 @@ tests:
   - it: "Assert the listener passes TLS through and ignores any secretName"
     set:
       route:
-        gateway:
-          tls:
-            enabled: true
-            mode: "Passthrough"
-            secretName: "nautobot-gw-tls"
+        tls:
+          enabled: true
+          mode: "Passthrough"
+          secretName: "nautobot-gw-tls"
     documentIndex: 0
     asserts:
       - equal:
@@ -136,10 +132,9 @@ tests:
   - it: "Assert a TLSRoute to the https service port is created when the mode is Passthrough"
     set:
       route:
-        gateway:
-          tls:
-            enabled: true
-            mode: "Passthrough"
+        tls:
+          enabled: true
+          mode: "Passthrough"
     documentIndex: 1
     asserts:
       - isKind:
@@ -163,10 +158,9 @@ tests:
     set:
       route:
         apiVersion: "gateway.networking.k8s.io/v1alpha2"
-        gateway:
-          tls:
-            enabled: true
-            mode: "Passthrough"
+        tls:
+          enabled: true
+          mode: "Passthrough"
     documentIndex: 1
     asserts:
       - equal:
@@ -299,10 +293,9 @@ tests:
           ingressPaths:
             - "/extras/report"
       route:
-        gateway:
-          tls:
-            enabled: true
-            mode: "Passthrough"
+        tls:
+          enabled: true
+          mode: "Passthrough"
     documentIndex: 1
     asserts:
       - equal:
@@ -318,10 +311,9 @@ tests:
           - backendRefs:
               - name: "other"
                 port: 80
-        gateway:
-          tls:
-            enabled: true
-            mode: "Passthrough"
+        tls:
+          enabled: true
+          mode: "Passthrough"
     documentIndex: 1
     asserts:
       - isKind:

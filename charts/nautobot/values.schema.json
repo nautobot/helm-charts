@@ -754,6 +754,7 @@
     "celeryBeat",
     "celeryWorker",
     "commonAnnotations",
+    "gateway",
     "ingress",
     "initJob",
     "route",
@@ -803,6 +804,30 @@
     },
     "global": {
       "type": "object"
+    },
+    "gateway": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "gatewayClassName": {
+          "type": "string"
+        },
+        "infrastructureLabels": {
+          "type": "object"
+        },
+        "infrastructureAnnotations": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "enabled",
+        "gatewayClassName",
+        "infrastructureAnnotations",
+        "infrastructureLabels"
+      ]
     },
     "ingress": {
       "type": "object",
@@ -918,53 +943,28 @@
         "annotations": {
           "type": "object"
         },
-        "gateway": {
+        "tls": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
             "enabled": {
               "type": "boolean"
             },
-            "gatewayClassName": {
-              "type": "string"
-            },
-            "tls": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                },
-                "mode": {
-                  "type": "string",
-                  "enum": [
-                    "Terminate",
-                    "Passthrough"
-                  ]
-                },
-                "secretName": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "enabled",
-                "mode",
-                "secretName"
+            "mode": {
+              "type": "string",
+              "enum": [
+                "Terminate",
+                "Passthrough"
               ]
             },
-            "infrastructureLabels": {
-              "type": "object"
-            },
-            "infrastructureAnnotations": {
-              "type": "object"
+            "secretName": {
+              "type": "string"
             }
           },
           "required": [
             "enabled",
-            "gatewayClassName",
-            "infrastructureAnnotations",
-            "infrastructureLabels",
-            "tls"
+            "mode",
+            "secretName"
           ]
         },
         "pathMatchType": {
@@ -989,10 +989,10 @@
         "enabled",
         "extraRules",
         "filters",
-        "gateway",
         "hostname",
         "parentRefs",
-        "pathMatchType"
+        "pathMatchType",
+        "tls"
       ]
     },
     "initJob": {

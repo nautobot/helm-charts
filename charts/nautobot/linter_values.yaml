@@ -123,13 +123,14 @@ ingress:
 route:
   enabled: true
   hostname: "nautobot3.local"
-  gateway:
+  tls:
     enabled: true
-    gatewayClassName: "nginx"
-    tls:
-      enabled: true
-      mode: "Terminate"
-      secretName: "nautobot-route-tls"
+    mode: "Terminate"
+    secretName: "nautobot-route-tls"
+
+gateway:
+  enabled: true
+  gatewayClassName: "nginx"
 
 metrics:
   enabled: true

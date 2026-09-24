@@ -1,20 +1,6 @@
-{{- if .Values.route.enabled }}
-{{- $tls := .Values.route.gateway.tls -}}
+{{- $tls := .Values.route.tls -}}
 {{- $passthrough := and $tls.enabled (eq $tls.mode "Passthrough") -}}
-{{- $nautobots := (include "nautobot.nautobots" .) | mustFromJson -}}
-{{/* The default deployment owns the catch-all path, so it is evaluated last. */}}
-{{- $nautobotKeys := keys (omit $nautobots "default") | sortAlpha -}}
-{{- $nautobotKeys = append $nautobotKeys "default" -}}
-{{- $enabledNautobots := list -}}
-{{- range $nautobotName := $nautobotKeys -}}
-{{- if (index $nautobots $nautobotName).enabled -}}
-{{- $enabledNautobots = append $enabledNautobots $nautobotName -}}
-{{- end -}}
-{{- end -}}
-{{- if and $passthrough (ne (len $enabledNautobots) 1) }}
-{{- fail "`route.gateway.tls.mode=Passthrough` requires exactly one Nautobot deployment because TLSRoute cannot route between deployments. Enable a single deployment, or use `route.gateway.tls.mode=Terminate`." }}
-{{- end }}
-{{- if .Values.route.gateway.enabled }}
+{{- if .Values.gateway.enabled }}
 ---
 apiVersion: {{ .Values.route.apiVersion }}
 kind: Gateway
@@ -29,8 +15,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" (merge .Values.route.annotations .Values.commonAnnotations) "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.route.gateway.gatewayClassName }}
-  gatewayClassName: {{ .Values.route.gateway.gatewayClassName | quote }}
+  {{- if .Values.gateway.gatewayClassName }}
+  gatewayClassName: {{ .Values.gateway.gatewayClassName | quote }}
   {{- end }}
   listeners:
   - hostname: {{ .Values.route.hostname }}
@@ -50,17 +36,31 @@ spec:
     port: 80
     protocol: HTTP
   {{- end }}
-  {{- if (or .Values.route.gateway.infrastructureLabels .Values.route.gateway.infrastructureAnnotations) }}
+  {{- if (or .Values.gateway.infrastructureLabels .Values.gateway.infrastructureAnnotations) }}
   infrastructure:
-  {{- if .Values.route.gateway.infrastructureLabels }}
+  {{- if .Values.gateway.infrastructureLabels }}
     labels:
-      {{- include "common.tplvalues.render" ( dict "value" .Values.route.gateway.infrastructureLabels "context" $ ) | nindent 6 }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.gateway.infrastructureLabels "context" $ ) | nindent 6 }}
   {{- end }}
-  {{- if .Values.route.gateway.infrastructureAnnotations }}
+  {{- if .Values.gateway.infrastructureAnnotations }}
     annotations:
-      {{- include "common.tplvalues.render" ( dict "value" .Values.route.gateway.infrastructureAnnotations "context" $ ) | nindent 6 }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.gateway.infrastructureAnnotations "context" $ ) | nindent 6 }}
   {{- end }}
   {{- end }}
+{{- end }}
+{{- if .Values.route.enabled }}
+{{- $nautobots := (include "nautobot.nautobots" .) | mustFromJson -}}
+{{/* The default deployment owns the catch-all path, so it is evaluated last. */}}
+{{- $nautobotKeys := keys (omit $nautobots "default") | sortAlpha -}}
+{{- $nautobotKeys = append $nautobotKeys "default" -}}
+{{- $enabledNautobots := list -}}
+{{- range $nautobotName := $nautobotKeys -}}
+{{- if (index $nautobots $nautobotName).enabled -}}
+{{- $enabledNautobots = append $enabledNautobots $nautobotName -}}
+{{- end -}}
+{{- end -}}
+{{- if and $passthrough (ne (len $enabledNautobots) 1) }}
+{{- fail "`route.tls.mode=Passthrough` requires exactly one Nautobot deployment because TLSRoute cannot route between deployments. Enable a single deployment, or use `route.tls.mode=Terminate`." }}
 {{- end }}
 ---
 apiVersion: {{ .Values.route.apiVersion }}
@@ -82,7 +82,7 @@ metadata:
 spec:
   hostnames:
     - {{ .Values.route.hostname }}
-  {{- if .Values.route.gateway.enabled }}
+  {{- if .Values.gateway.enabled }}
   parentRefs:
     - name: {{ include "common.names.fullname" . }}
   {{- else }}

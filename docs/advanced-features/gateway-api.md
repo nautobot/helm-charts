@@ -1,28 +1,26 @@
 # Kubernetes Gateway API
 
-The chart manages route either by also creating a `Gateway`, or attaching them to an existing one. Set `route.enabled` to `true` to create the route, and `route.gateway.enabled` to `true` if you also want the chart to create the `Gateway`.
+The chart manages route either by also creating a `Gateway`, or attaching them to an existing one. Set `route.enabled` equal to `true` to create the route, and `gateway.enabled` to `true` if you also want the chart to create the `Gateway`.
 
 ## Attaching to an existing Gateway
 
-When you manage the `Gateway` yourself, leave `route.gateway.enabled` as `false` and point `route.parentRefs` at it:
+When you manage the `Gateway` yourself, leave `gateway.enabled` as `false` and point `route.parentRefs` at it:
 
 ```yaml
 route:
   enabled: true
-  gateway:
-    enabled: false
   parentRefs:
     - name: "example-gateway"
       namespace: "example-namespace"
       sectionName: "https"
-```
 
-!!! note
-    `route.gateway.tls.mode` still selects which route kind is created even when `route.gateway.enabled` is `false`. Set it to match the listener you are attaching to: an `HTTPRoute` needs an `HTTP` or `HTTPS` listener, and a `TLSRoute` needs a `TLS` listener in `Passthrough` mode. The rest of the `route.gateway` block is ignored, since that Gateway is not managed by this chart.
+gateway:
+  enabled: false
+```
 
 ## Encryption options
 
-The chart supports different options of delivering traffic based on the Gateway API's TLS patterns. The `route.gateway.tls` block guides how traffic is encrypted: `enabled` turns the TLS listener on, and `mode` maps directly onto the Gateway API [TLSModeType](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.TLSModeType). The route kind is decided automatically based on the mode, because only a `TLSRoute` can attach to a `Passthrough` listener.
+The chart supports different options of delivering traffic based on the Gateway API's TLS patterns. The `route.tls` block guides how traffic is encrypted: `enabled` turns the TLS listener on, and `mode` maps directly onto the Gateway API [TLSModeType](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.TLSModeType). The route kind is decided automatically based on the mode, because only a `TLSRoute` can attach to a `Passthrough` listener.
 
 | Mode | `tls.enabled` | `tls.mode` | Client to Gateway | Gateway to Pod | Resources created |
 | ---- | ------------- | ---------- | ----------------- | -------------- | ----------------- |
@@ -38,39 +36,41 @@ The Gateway and the backend service serve HTTP only on port 80, and the traffic 
 route:
   enabled: true
   hostname: "nautobot.local"
-  gateway:
-    enabled: true
-    gatewayClassName: "nginx"
-    tls:
-      enabled: false
+  tls:
+    enabled: false
+
+gateway:
+  enabled: true
+  gatewayClassName: "nginx"
 ```
 
 ### TLS termination on the Gateway
 
 In this setup the Gateway decrypts the request, and forwards it to Nautobot over plain HTTP inside the cluster.
 
-The certificate can be supplied by name through `route.gateway.tls.secretName` value as an existing k8s secret of type `kubernetes.io/tls`. Providing certificate is optional, you can leave it empty and no `certificateRefs` are rendered on the listener, which may be wanted if the Gateway controller supplies it (e.g a default wildcard certificate configured on the `GatewayClass`).
+The certificate can be supplied by name through `route.tls.secretName` value as an existing k8s secret of type `kubernetes.io/tls`. Providing certificate is optional, you can leave it empty and no `certificateRefs` are rendered on the listener, which may be wanted if the Gateway controller supplies it (e.g a default wildcard certificate configured on the `GatewayClass`).
 
 ```yaml
 route:
   enabled: true
   hostname: "nautobot.local"
-  gateway:
+  tls:
     enabled: true
-    gatewayClassName: "nginx"
-    tls:
-      enabled: true
-      mode: "Terminate"
-      secretName: "nautobot-gateway-tls"
+    mode: "Terminate"
+    secretName: "nautobot-gateway-tls"
+
+gateway:
+  enabled: true
+  gatewayClassName: "nginx"
 ```
 
 Because the Gateway can read the decrypted request in this mode, `route.pathMatchType`, `route.filters`, and `route.extraRules` all apply.
 
 ### End-to-end TLS encryption
 
-Set `route.gateway.tls.mode` to `Passthrough` to keep traffic encrypted end-to-end. The chart creates a `TLS` listener and a `TLSRoute` as a backend, so the traffic is not decrypted, but forwarded to the Nautobot pods as is. Specifically the Gateway reads the Server Name Indication [SNI](https://en.wikipedia.org/wiki/Server_Name_Indication) from the TLS handshake, matches it against `route.hostname`, and sends it to the Nautobot service on `service.httpsPort`.
+Set `route.tls.mode` to `Passthrough` to keep traffic encrypted end-to-end. The chart creates a `TLS` listener and a `TLSRoute` as a backend, so the traffic is not decrypted, but forwarded to the Nautobot pods as is. Specifically the Gateway reads the Server Name Indication [SNI](https://en.wikipedia.org/wiki/Server_Name_Indication) from the TLS handshake, matches it against `route.hostname`, and sends it to the Nautobot service on `service.httpsPort`.
 
-The certificate is therefore presented by the Nautobot pod, not by the Gateway, and the `route.gateway.tls.secretName` is unused. See [Existing TLS certificates](../existing-secrets/#existing-tls-certificates) for how to create and make Nautobot serve that certificate.
+The certificate is therefore presented by the Nautobot pod, not by the Gateway, and the `route.tls.secretName` is unused. See [Existing TLS certificates](../existing-secrets/#existing-tls-certificates) for how to create and make Nautobot serve that certificate.
 
 ```yaml
 nautobot:
@@ -79,12 +79,13 @@ nautobot:
 route:
   enabled: true
   hostname: "nautobot.local"
-  gateway:
+  tls:
     enabled: true
-    gatewayClassName: "nginx"
-    tls:
-      enabled: true
-      mode: "Passthrough"
+    mode: "Passthrough"
+
+gateway:
+  enabled: true
+  gatewayClassName: "nginx"
 ```
 
 Because the client validates this certificate directly, its subject name must match `route.hostname`. Leaving `nautobot.secret_name_tls` empty falls back to the self-signed certificate in the Nautobot image, which is fine for a quick test but not for production.
@@ -93,7 +94,7 @@ Because the client validates this certificate directly, its subject name must ma
 
 A `TLSRoute` routes on SNI alone. The Gateway never sees HTTP, so anything that depends on inspecting the request does not apply:
 
-* `route.filters` and `route.extraRules` are ignored, because they describe HTTP-level routing. Use `route.gateway.tls.mode: "Terminate"` if you need them.
+* `route.filters` and `route.extraRules` are ignored, because they describe HTTP-level routing. Use `route.tls.mode: "Terminate"` if you need them.
 * `route.pathMatchType` has no effect, because a `TLSRoute` carries no path matches.
 * Only one Nautobot deployment can be served. See [Multiple Nautobot deployments](#multiple-nautobot-deployments).
 * HTTP-to-HTTPS redirects must be handled by a separate HTTP listener and `HTTPRoute`.

@@ -1,0 +1,325 @@
+# Tests for the Gateway API resources and the three supported TLS modes
+---
+suite: "Test Gateway API Route"
+templates:
+  - "gateway-api.yaml"
+set:
+  nautobot:
+    db:
+      user: "nautobot"
+      password: "nautobotpassword"
+  route:
+    enabled: true
+  gateway:
+    enabled: true
+    gatewayClassName: "nginx"
+release:
+  name: "test"
+  namespace: "test"
+tests:
+
+  # Mode 1: HTTP only without encryption
+  - it: "Assert a HTTP listener is created when TLS is disabled"
+    documentIndex: 0
+    asserts:
+      - isKind:
+          of: "Gateway"
+      - equal:
+          path: "spec.listeners[0].name"
+          value: "nautobot-local-http"
+      - equal:
+          path: "spec.listeners[0].protocol"
+          value: "HTTP"
+      - equal:
+          path: "spec.listeners[0].port"
+          value: 80
+      - notExists:
+          path: "spec.listeners[0].tls"
+
+  - it: "Assert a HTTPRoute to the http service port is created when TLS is disabled"
+    documentIndex: 1
+    asserts:
+      - isKind:
+          of: "HTTPRoute"
+      - equal:
+          path: "spec.rules[0].backendRefs[0].name"
+          value: "test-nautobot-default"
+      - equal:
+          path: "spec.rules[0].backendRefs[0].port"
+          value: 80
+
+  # Mode 2: TLS terminated on the Gateway and http unencrypted to the backend
+  - it: "Assert the listener terminates TLS when route.tls is enabled"
+    set:
+      route:
+        tls:
+          enabled: true
+          mode: "Terminate"
+          secretName: "nautobot-gw-tls"
+    documentIndex: 0
+    asserts:
+      - equal:
+          path: "spec.listeners[0].name"
+          value: "nautobot-local-https"
+      - equal:
+          path: "spec.listeners[0].protocol"
+          value: "HTTPS"
+      - equal:
+          path: "spec.listeners[0].port"
+          value: 443
+      - equal:
+          path: "spec.listeners[0].tls.mode"
+          value: "Terminate"
+      - equal:
+          path: "spec.listeners[0].tls.certificateRefs[0].name"
+          value: "nautobot-gw-tls"
+
+  - it: "Assert no certificateRefs are rendered when secretName is left empty"
+    set:
+      route:
+        tls:
+          enabled: true
+          mode: "Terminate"
+    documentIndex: 0
+    asserts:
+      - equal:
+          path: "spec.listeners[0].tls.mode"
+          value: "Terminate"
+      - notExists:
+          path: "spec.listeners[0].tls.certificateRefs"
+
+  - it: "Assert the route stays an HTTPRoute to the http port when the Gateway terminates TLS"
+    set:
+      route:
+        tls:
+          enabled: true
+          mode: "Terminate"
+    documentIndex: 1
+    asserts:
+      - isKind:
+          of: "HTTPRoute"
+      - equal:
+          path: "spec.rules[0].backendRefs[0].port"
+          value: 80
+
+  # Mode 3: end-to-end TLS via passthrough
+  # secretName is set here on purpose: the Gateway presents no certificate in
+  # passthrough mode, so certificateRefs must stay absent even when one is given.
+  - it: "Assert the listener passes TLS through and ignores any secretName"
+    set:
+      route:
+        tls:
+          enabled: true
+          mode: "Passthrough"
+          secretName: "nautobot-gw-tls"
+    documentIndex: 0
+    asserts:
+      - equal:
+          path: "spec.listeners[0].name"
+          value: "nautobot-local-tls"
+      - equal:
+          path: "spec.listeners[0].protocol"
+          value: "TLS"
+      - equal:
+          path: "spec.listeners[0].port"
+          value: 443
+      - equal:
+          path: "spec.listeners[0].tls.mode"
+          value: "Passthrough"
+      - notExists:
+          path: "spec.listeners[0].tls.certificateRefs"
+
+  - it: "Assert a TLSRoute to the https service port is created when the mode is Passthrough"
+    set:
+      route:
+        tls:
+          enabled: true
+          mode: "Passthrough"
+    documentIndex: 1
+    asserts:
+      - isKind:
+          of: "TLSRoute"
+      - equal:
+          path: "apiVersion"
+          value: "gateway.networking.k8s.io/v1"
+      - equal:
+          path: "spec.hostnames[0]"
+          value: "nautobot.local"
+      - equal:
+          path: "spec.rules[0].backendRefs[0].name"
+          value: "test-nautobot-default"
+      - equal:
+          path: "spec.rules[0].backendRefs[0].port"
+          value: 443
+      - notExists:
+          path: "spec.rules[0].matches"
+
+  - it: "Assert the TLSRoute follows the route.apiVersion override"
+    set:
+      route:
+        apiVersion: "gateway.networking.k8s.io/v1alpha2"
+        tls:
+          enabled: true
+          mode: "Passthrough"
+    documentIndex: 1
+    asserts:
+      - equal:
+          path: "apiVersion"
+          value: "gateway.networking.k8s.io/v1alpha2"
+
+  # Backend service wiring
+  - it: "Assert backendRefs follow the release name rather than being hardcoded"
+    release:
+      name: "custom"
+      namespace: "test"
+    documentIndex: 1
+    asserts:
+      - equal:
+          path: "spec.rules[0].backendRefs[0].name"
+          value: "custom-nautobot-default"
+
+  - it: "Assert route and common annotations are merged onto both resources"
+    set:
+      commonAnnotations:
+        common: "annotation"
+      route:
+        annotations:
+          route: "annotation"
+    asserts:
+      - equal:
+          path: "metadata.annotations.common"
+          value: "annotation"
+      - equal:
+          path: "metadata.annotations.route"
+          value: "annotation"
+
+  - it: "Assert pathMatchType is applied to the HTTPRoute match"
+    set:
+      route:
+        pathMatchType: "Exact"
+    documentIndex: 1
+    asserts:
+      - equal:
+          path: "spec.rules[0].matches[0].path.type"
+          value: "Exact"
+
+  # Multiple Nautobot deployments
+  - it: "Assert one rule is rendered per enabled deployment with the default ordered last"
+    set:
+      nautobots:
+        default:
+          enabled: true
+          initNautobot: true
+          ingressPaths:
+            - "/"
+        reports:
+          enabled: true
+          initNautobot: false
+          ingressPaths:
+            - "/extras/report"
+            - "/extras/reports"
+        static:
+          enabled: true
+          initNautobot: false
+          staticFilesOnly: true
+          ingressPaths:
+            - "/ignored"
+    documentIndex: 1
+    asserts:
+      - lengthEqual:
+          path: "spec.rules"
+          count: 3
+      - equal:
+          path: "spec.rules[0].backendRefs[0].name"
+          value: "test-nautobot-reports"
+      - equal:
+          path: "spec.rules[1].backendRefs[0].name"
+          value: "test-nautobot-static"
+      - equal:
+          path: "spec.rules[2].backendRefs[0].name"
+          value: "test-nautobot-default"
+      - equal:
+          path: "spec.rules[0].backendRefs[0].port"
+          value: 80
+      - lengthEqual:
+          path: "spec.rules[0].matches"
+          count: 2
+      - equal:
+          path: "spec.rules[0].matches[0].path.value"
+          value: "/extras/report"
+      - equal:
+          path: "spec.rules[0].matches[1].path.value"
+          value: "/extras/reports"
+      - lengthEqual:
+          path: "spec.rules[1].matches"
+          count: 1
+      - equal:
+          path: "spec.rules[1].matches[0].path.value"
+          value: "/static"
+
+  - it: "Assert a disabled deployment contributes no rule"
+    set:
+      nautobots:
+        default:
+          enabled: true
+          initNautobot: true
+          ingressPaths:
+            - "/"
+        reports:
+          enabled: false
+          initNautobot: false
+          ingressPaths:
+            - "/extras/report"
+    documentIndex: 1
+    asserts:
+      - lengthEqual:
+          path: "spec.rules"
+          count: 1
+      - equal:
+          path: "spec.rules[0].backendRefs[0].name"
+          value: "test-nautobot-default"
+
+  - it: "Assert the TLSRoute backend follows the enabled deployment rather than always being the default"
+    set:
+      nautobots:
+        default:
+          enabled: false
+          initNautobot: true
+          ingressPaths:
+            - "/"
+        reports:
+          enabled: true
+          initNautobot: false
+          ingressPaths:
+            - "/extras/report"
+      route:
+        tls:
+          enabled: true
+          mode: "Passthrough"
+    documentIndex: 1
+    asserts:
+      - equal:
+          path: "spec.rules[0].backendRefs[0].name"
+          value: "test-nautobot-reports"
+
+  - it: "Assert HTTPRoute-only features are dropped from a TLSRoute rather than failing the render"
+    set:
+      route:
+        filters:
+          - type: "RequestHeaderModifier"
+        extraRules:
+          - backendRefs:
+              - name: "other"
+                port: 80
+        tls:
+          enabled: true
+          mode: "Passthrough"
+    documentIndex: 1
+    asserts:
+      - isKind:
+          of: "TLSRoute"
+      - lengthEqual:
+          path: "spec.rules"
+          count: 1
+      - notExists:
+          path: "spec.rules[0].filters"

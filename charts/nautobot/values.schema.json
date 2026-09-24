@@ -754,6 +754,7 @@
     "celeryBeat",
     "celeryWorker",
     "commonAnnotations",
+    "gateway",
     "ingress",
     "initJob",
     "route",
@@ -803,6 +804,30 @@
     },
     "global": {
       "type": "object"
+    },
+    "gateway": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "gatewayClassName": {
+          "type": "string"
+        },
+        "infrastructureLabels": {
+          "type": "object"
+        },
+        "infrastructureAnnotations": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "enabled",
+        "gatewayClassName",
+        "infrastructureAnnotations",
+        "infrastructureLabels"
+      ]
     },
     "ingress": {
       "type": "object",
@@ -915,36 +940,31 @@
         "hostname": {
           "type": "string"
         },
-        "gateway": {
+        "annotations": {
+          "type": "object"
+        },
+        "tls": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
             "enabled": {
               "type": "boolean"
             },
-            "gatewayClassName": {
-              "type": "string"
-            },
-            "tls": {
-              "type": "boolean"
+            "mode": {
+              "type": "string",
+              "enum": [
+                "Terminate",
+                "Passthrough"
+              ]
             },
             "secretName": {
               "type": "string"
-            },
-            "infrastructureLabels": {
-              "type": "object"
-            },
-            "infrastructureAnnotations": {
-              "type": "object"
             }
           },
           "required": [
             "enabled",
-            "gatewayClassName",
-            "infrastructureAnnotations",
-            "infrastructureLabels",
-            "secretName",
-            "tls"
+            "mode",
+            "secretName"
           ]
         },
         "pathMatchType": {
@@ -964,14 +984,15 @@
         }
       },
       "required": [
+        "annotations",
         "apiVersion",
         "enabled",
         "extraRules",
         "filters",
-        "gateway",
         "hostname",
         "parentRefs",
-        "pathMatchType"
+        "pathMatchType",
+        "tls"
       ]
     },
     "initJob": {

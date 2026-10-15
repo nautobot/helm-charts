@@ -3,6 +3,18 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.2.0 - 2026-10-15
+
+### Added
+
+* [#761](https://github.com/nautobot/helm-charts/pull/761) Added `nautobot.uwsgi.maxFd` to limit uWSGI file descriptors, preventing multi-GB startup allocations.
+* [#768](https://github.com/nautobot/helm-charts/pull/768) Added support for end-to-end TLS with the Gateway API.
+
+### Changed
+
+* [#768](https://github.com/nautobot/helm-charts/pull/768) Moved `route.gateway.*` to `gateway.*` and moved the `tls` key under `route.tls`.
+* [#756](https://github.com/nautobot/helm-charts/pull/756) Updated nginx-prometheus-exporter image from 1.5.1 to 1.5.3.
+
 ## 3.1.2 - 2026-05-29
 
 ### Added

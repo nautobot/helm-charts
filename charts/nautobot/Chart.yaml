@@ -31,16 +31,16 @@ annotations:
       url: https://raw.githubusercontent.com/nautobot/nautobot/develop/nautobot/docs/media/ss_plugin_chatops.png
   artifacthub.io/changes: |
     - kind: added
-      description: Added startup probes for Celery workers.
-    - kind: fixed
-      description: Fixed statement evaluating always true for startup probes in Nautobot deployment.
-    - kind: fixed
-      description: Fixed missing namespace for Horizontal Pod Autoscaling resource.
-    - kind: fixed
-      description: Fixed uwsgi-exporter sidecar using 127.0.0.1 instead of localhost to avoid IPv6 resolution failures.
+      description: Added nautobot.uwsgi.maxFd to limit uWSGI file descriptors, preventing multi-GB startup allocations.
+    - kind: added
+      description: Added support for end-to-end TLS with the Gateway API.
+    - kind: changed
+      description: Moved route.gateway.* to gateway.* and moved `tls` key under `route.tls`.
+    - kind: changed
+      description: Updated nginx-prometheus-exporter image from 1.5.1 to 1.5.3.
 apiVersion: "v2"
 appVersion: "3.0"
-version: "3.1.2"
+version: "3.2.0"
 dependencies:
   - condition: "redis.enabled"
     name: "redis"

@@ -6,9 +6,13 @@ on:  # yamllint disable-line rule:truthy
     tags:
       - "*"
 
+permissions: {}
+
 jobs:
   check-tag:
     runs-on: "ubuntu-24.04"
+    permissions:
+      contents: "read"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v6"
@@ -32,6 +36,8 @@ jobs:
   release:
     runs-on: "ubuntu-24.04"
     needs: "check-tag"
+    permissions:
+      contents: "write"  # required to push to the gh-pages branch
     steps:
       - uses: "actions/checkout@v6"
 
@@ -44,6 +50,9 @@ jobs:
   publish-oci:
     runs-on: "ubuntu-24.04"
     needs: "check-tag"
+    permissions:
+      contents: "read"
+      packages: "write"
     steps:
       - uses: "actions/checkout@v6"
       - name: "Publish Helm charts to OCI"

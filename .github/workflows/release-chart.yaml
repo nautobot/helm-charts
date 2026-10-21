@@ -37,7 +37,7 @@ jobs:
     runs-on: "ubuntu-24.04"
     needs: "check-tag"
     permissions:
-      contents: "write"  # required to push to the gh-pages branch
+      contents: "write"
     steps:
       - uses: "actions/checkout@v6"
 

@@ -17,7 +17,7 @@ jobs:
           ref: "${{ github.head_ref }}"
 
       - name: "Setup Go"
-        uses: "actions/setup-go@v6"
+        uses: "actions/setup-go@v7"
 
       - name: "Install helm-docs"
         run: "go install github.com/norwoodj/helm-docs/cmd/helm-docs@v1.11.0"

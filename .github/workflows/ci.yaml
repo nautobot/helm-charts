@@ -17,7 +17,7 @@ jobs:
       GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v6"
+        uses: "actions/checkout@v7"
         with:
           fetch-depth: 0
 
@@ -26,7 +26,7 @@ jobs:
       - run: "echo $HOME/go/bin >> $GITHUB_PATH"
 
       - name: "Setup Helm"
-        uses: "azure/setup-helm@v4"
+        uses: "azure/setup-helm@v5"
       - run: "mkdir template_output"
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
       - run: "helm dependency update charts/nautobot"
@@ -36,7 +36,7 @@ jobs:
         env:
           GO111MODULE: "on"
 
-      - uses: "dorny/paths-filter@v3"
+      - uses: "dorny/paths-filter@v4"
         id: "filter"
         with:
           list-files: "shell"
@@ -71,8 +71,8 @@ jobs:
       GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v6"
-      - uses: "azure/setup-helm@v4"
+        uses: "actions/checkout@v7"
+      - uses: "azure/setup-helm@v5"
       - run: "mkdir template_output"
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
       - run: "helm dependency update charts/nautobot"
@@ -105,8 +105,8 @@ jobs:
       GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v6"
-      - uses: "azure/setup-helm@v4"
+        uses: "actions/checkout@v7"
+      - uses: "azure/setup-helm@v5"
       - name: "Install Kubescape"
         run: "curl -s https://raw.githubusercontent.com/kubescape/kubescape/master/install.sh | /bin/bash"
       - run: 'echo "${HOME}/.kubescape/bin" >> $GITHUB_PATH'  # yamllint disable-line rule:quoted-strings
@@ -132,10 +132,10 @@ jobs:
       - "pre-commit-check"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v6"
+        uses: "actions/checkout@v7"
 
       - name: "Setup Helm"
-        uses: "azure/setup-helm@v4"
+        uses: "azure/setup-helm@v5"
         with:
           version: "v4.2.4"  # For reference: https://github.com/helm/helm/issues/31490
 

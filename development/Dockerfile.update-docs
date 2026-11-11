@@ -1,6 +1,6 @@
 # Development image that matches the Update Docs CI job:
 # - Go + helm-docs to regenerate README.md and reference.md
-FROM golang:1.23-bookworm
+FROM golang:1.26-bookworm
 
 ENV GO111MODULE=on
 

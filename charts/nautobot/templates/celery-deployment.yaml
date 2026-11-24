@@ -147,6 +147,9 @@ spec:
           {{- if $celery.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $celery.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
+          {{- if $celery.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit $celery.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}
           {{- if (and $.Values.metrics.enabled $.Values.nautobot.metrics (ne $celeryName "beat")) }}
           ports:
             - name: "workermetrics"
@@ -163,6 +166,14 @@ spec:
             - name: "nautobot-config-custom"
               mountPath: "/opt/nautobot/nautobot_config.py"
               subPath: "nautobot_config.py"
+            {{- end }}
+            {{- if and (eq $celeryName "beat") (eq (include "nautobot.kubernetesJobsEnabled" $) "true") }}
+            {{- range $i, $workerName := (include "nautobot.kubernetesWorkers" $) | fromJsonArray }}
+            - name: "nautobot-k8s-jobs-manifests"
+              mountPath: "{{ printf "%s/%s/manifest.json" $.Values.nautobot.jobsManifestsMountPath $workerName }}"
+              subPath: "{{ $workerName }}"
+              readOnly: true
+            {{- end }}
             {{- end }}
             {{- if $celery.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" $celery.extraVolumeMounts "context" $) | nindent 12 }}
@@ -183,6 +194,11 @@ spec:
         - name: "nautobot-config-custom"
           configMap:
             name: {{ $.Values.nautobot.configCM }}
+        {{- end }}
+        {{- if and (eq $celeryName "beat") (eq (include "nautobot.kubernetesJobsEnabled" $) "true") }}
+        - name: "nautobot-k8s-jobs-manifests"
+          configMap:
+            name: {{ include "nautobot.kubernetesJobsConfigMapName" $ }}
         {{- end }}
         {{- if $celery.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" $celery.extraVolumes "context" $) | nindent 8 }}

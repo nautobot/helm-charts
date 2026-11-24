@@ -6,6 +6,7 @@ apiVersion: {{ include "common.capabilities.hpa.apiVersion" $ }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" $ }}-{{ $nautobotName }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     app.kubernetes.io/component: nautobot-{{ $nautobotName }}
     {{- if $.Values.commonLabels }}
@@ -32,6 +33,7 @@ apiVersion: {{ include "common.capabilities.hpa.apiVersion" $ }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" $ }}-celery-{{ $celeryName }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     app.kubernetes.io/component: nautobot-celery-{{ $celeryName }}
     {{- if $.Values.commonLabels }}

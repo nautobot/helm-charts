@@ -92,6 +92,23 @@
       {{- $_containers = append $_containers $sidecar -}}
     {{- end -}}
 
+    {{/* Construct and optionally override the PodTemplateSpec. */}}
+    {{- $_podTemplate := ( dict
+      "metadata" ( dict
+        "annotations" $_pod_annotations
+        "labels" $_pod_labels
+      )
+      "spec" ( dict
+        "restartPolicy" "Never"
+        "serviceAccountName" ($workerData.serviceAccountName | default (include "nautobot.serviceAccountName" $))
+        "imagePullSecrets" ((((include "nautobot.imagePullSecrets" $) | fromYaml ).imagePullSecrets) | default list)
+        "initContainers" $workerData.initContainers
+        "containers" $_containers
+        "volumes" $_volumes
+      )
+    ) -}}
+    {{- $_podTemplate = mergeOverwrite $_podTemplate ($workerData.overrides | default dict) -}}
+
     {{/* Construct the Job manifest as a dict. */}}
     {{- $job := ( dict
       "apiVersion" "batch/v1"
@@ -104,20 +121,7 @@
       "spec" ( dict
         "ttlSecondsAfterFinished" $workerData.ttlSecondsAfterFinished
         "backoffLimit" $workerData.backoffLimit
-        "template" ( dict
-          "metadata" ( dict
-            "annotations" $_pod_annotations
-            "labels" $_pod_labels
-          )
-          "spec" ( dict
-            "restartPolicy" "Never"
-            "serviceAccountName" ($workerData.serviceAccountName | default (include "nautobot.serviceAccountName" $))
-            "imagePullSecrets" ((((include "nautobot.imagePullSecrets" $) | fromYaml ).imagePullSecrets) | default list)
-            "initContainers" $workerData.initContainers
-            "containers" $_containers
-            "volumes" $_volumes
-          )
-        )
+        "template" $_podTemplate
       )
     ) -}}
 

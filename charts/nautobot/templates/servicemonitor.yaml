@@ -30,6 +30,10 @@ spec:
       scrapeTimeout: {{ $.Values.metrics.capacityMetrics.scrapeTimeout }}
       path: "/api/plugins/capacity-metrics/app-metrics"
     {{- end }}
+  {{- with $.Values.metrics.serviceMonitor.scrapeProtocols }}
+  scrapeProtocols:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
 {{- if and $nautobot.nginx.enabled $.Values.metrics.nginxExporter.enabled }}
 ---
@@ -49,6 +53,10 @@ spec:
       app.kubernetes.io/component: nautobot-{{ $nautobotName }}
   endpoints:
     - port: "nginxmetrics"
+  {{- with $.Values.metrics.serviceMonitor.scrapeProtocols }}
+  scrapeProtocols:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
 {{- if and $.Values.metrics.uwsgiExporter.enabled (not $nautobot.staticFilesOnly) }}
 ---
@@ -68,6 +76,10 @@ spec:
       app.kubernetes.io/component: nautobot-{{ $nautobotName }}
   endpoints:
     - port: "uwsgimetrics"
+  {{- with $.Values.metrics.serviceMonitor.scrapeProtocols }}
+  scrapeProtocols:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -92,6 +104,10 @@ spec:
       app.kubernetes.io/component: nautobot-celery-{{ $celeryName }}
   endpoints:
     - port: "workermetrics"
+  {{- with $.Values.metrics.serviceMonitor.scrapeProtocols }}
+  scrapeProtocols:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

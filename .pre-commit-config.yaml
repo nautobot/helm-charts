@@ -27,7 +27,7 @@ repos:
     rev: "3.0.0"
     hooks:
       - id: "markdownlint"
-        language_version: "3.1.4"
+        language_version: "3.4.7"
         args:
           - "--ignore-front-matter"
           - "docs/"

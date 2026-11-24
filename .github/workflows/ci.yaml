@@ -17,7 +17,7 @@ jobs:
       GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v6"
+        uses: "actions/checkout@v7"
         with:
           fetch-depth: 0
 
@@ -71,7 +71,7 @@ jobs:
       GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v6"
+        uses: "actions/checkout@v7"
       - uses: "azure/setup-helm@v5"
       - run: "mkdir template_output"
       - run: "helm repo add bitnami https://charts.bitnami.com/bitnami"
@@ -105,7 +105,7 @@ jobs:
       GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v6"
+        uses: "actions/checkout@v7"
       - uses: "azure/setup-helm@v5"
       - name: "Install Kubescape"
         run: "curl -s https://raw.githubusercontent.com/kubescape/kubescape/master/install.sh | /bin/bash"
@@ -132,12 +132,12 @@ jobs:
       - "pre-commit-check"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v6"
+        uses: "actions/checkout@v7"
 
       - name: "Setup Helm"
         uses: "azure/setup-helm@v5"
         with:
-          version: "v4.2.4"  # For reference: https://github.com/helm/helm/issues/31490
+          version: "v4.3.2"  # For reference: https://github.com/helm/helm/issues/31490
 
       - name: "Install unittests plugin"
         run: |

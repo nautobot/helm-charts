@@ -1,0 +1,71 @@
+---
+name: "Sync develop → next"
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - "develop"
+
+permissions:
+  contents: "write"
+  pull-requests: "write"
+
+env:
+  SOURCE_BRANCH: "develop"
+  TARGET_BRANCH: "next"
+  PR_BRANCH: "sync/develop-to-next"
+
+jobs:
+  create-sync-pr:
+    runs-on: "ubuntu-26.04"
+    env:
+      GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          fetch-depth: 0
+
+      - name: "Setup Git"
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: "Create or update sync PR"
+        run: |
+          if [ "$(git rev-list --count "origin/${TARGET_BRANCH}..origin/${SOURCE_BRANCH}")" -eq 0 ]; then
+            echo "${TARGET_BRANCH} already contains ${SOURCE_BRANCH}. Nothing to sync."
+            exit 0
+          fi
+
+          existing_pr=$(gh pr list --head "${PR_BRANCH}" --base "${TARGET_BRANCH}" --json number --jq '.[0].number')
+
+          if [ -n "${existing_pr}" ]; then
+            echo "Updating existing PR #${existing_pr} with latest ${SOURCE_BRANCH}."
+            git checkout "${PR_BRANCH}"
+            git merge --no-edit "origin/${SOURCE_BRANCH}"
+            git push origin "${PR_BRANCH}"
+            exit 0
+          fi
+
+          git checkout -B "${PR_BRANCH}" "origin/${SOURCE_BRANCH}"
+          git push --force origin "${PR_BRANCH}"
+
+          gh pr create \
+            --base "${TARGET_BRANCH}" \
+            --head "${PR_BRANCH}" \
+            --title "Sync ${SOURCE_BRANCH} → ${TARGET_BRANCH}" \
+            --body "$(cat <<'EOF'
+          This PR was automatically created to sync changes from `develop` to `next`.
+
+          Please review the changes and merge if everything looks good.
+
+          :rotating_light: Merge with a **merge commit**, not squash.
+
+          Any conflicts must be resolved manually and pushed directly to this branch to update the PR.
+          EOF
+          )"

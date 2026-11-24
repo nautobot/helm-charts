@@ -12,16 +12,6 @@
   ],
   "packageRules": [
     {
-      "description": "Disable python updates in the develop branch.",
-      "matchBaseBranches": [
-        "develop"
-      ],
-      "matchPackageNames": [
-        "python"
-      ],
-      "enabled": false
-    },
-    {
       "description": "Disable minor and major updates in the develop branch.",
       "matchBaseBranches": [
         "develop"
@@ -31,6 +21,23 @@
         "major"
       ],
       "enabled": false
+    },
+    {
+      "description": "Quarterly Python version bump in the develop branch.",
+      "matchBaseBranches": [
+        "develop"
+      ],
+      "matchManagers": [
+        "poetry"
+      ],
+      "matchPackageNames": [
+        "python"
+      ],
+      "rangeStrategy": "bump",
+      "schedule": [
+        "every 3 months on the first day of the month"
+      ],
+      "enabled": true
     },
     {
       "description": "Allow minor and major pre-commit and GitHub updates in the develop branch.",

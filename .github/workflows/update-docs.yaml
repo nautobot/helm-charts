@@ -10,11 +10,13 @@ on:  # yamllint disable-line rule:truthy
 jobs:
   update-docs:
     runs-on: "ubuntu-latest"
+    permissions:
+      contents: "write"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v7"
         with:
-          fetch-depth: 0
+          ref: "${{ github.head_ref }}"
 
       - name: "Setup Go"
         uses: "actions/setup-go@v7"
@@ -41,7 +43,9 @@ jobs:
 
       - name: "Commit changes"
         if: "steps.git-check.outputs.changed == 'true'"
+        env:
+          HEAD_REF: "${{ github.head_ref }}"
         run: |
           git add .
           git commit -m "chore: Update docs"
-          git push origin ${{ github.head_ref }}
+          git push origin "${HEAD_REF}"

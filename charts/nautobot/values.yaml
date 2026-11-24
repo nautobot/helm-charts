@@ -487,6 +487,8 @@ nautobot:
     bufferSize: 4096
     # -- [[ref]](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#harakiri) Set the harakiri timeout value. If the value is 0 then the timeout is not set.
     harakiri: 0
+    # -- [[ref]](https://uwsgi-docs.readthedocs.io/en/latest/Options.html#max-fd) Cap the file descriptor limit uWSGI sizes its per-fd structures from. On container runtimes that report an unbounded limit (~2^30) the http/https router otherwise allocates 8+GB at startup and is OOMKilled; 1048576 is a safe production value. If the value is 0 then the option is not set.
+    maxFd: 0
 
   # -- ([]map[name,value]string)An array of environment variable objects (`name` and `value` are required) to add to ALL Nautobot and Nautobot Worker related deployments<sup>[1](#notes)</sup>
   extraVars: []  # https://docs.nautobot.com/projects/core/en/stable/configuration/optional-settings/
@@ -617,6 +619,21 @@ celery:
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 3
+    successThreshold: 1
+
+  # -- (Probe) [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)] Nautobot Celery Worker startup probe
+  # @default -- See values.yaml
+  startupProbe:
+    enabled: false
+    exec:
+      command:
+        - "bash"
+        - "-c"
+        - "[ $(find /tmp/nautobot_celery_worker_ready | wc -l) -eq 1 ] || false"
+    initialDelaySeconds: 3
+    periodSeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 30
     successThreshold: 1
 
   # -- (ResourceRequirements) [[ref](http://kubernetes.io/docs/user-guide/compute-resources/)] Nautobot Celery Worker resource requests and limits
@@ -826,6 +843,17 @@ kubernetesJobs:
       cpu: "3328m"
       memory: "6656M"
 
+  # -- (object) Custom PodTemplateSpec overrides merged into each Kubernetes Job at `spec.template`.
+  # For example, set `spec.dnsPolicy` and `spec.dnsConfig` by using:
+  # overrides:
+  #   spec:
+  #     dnsPolicy: "None"
+  #     dnsConfig:
+  #       nameservers:
+  #         - "127.0.0.1"
+  overrides: {}
+
+
 # -- (map[name]celery) Additional Celery Worker deployments, map key is the name of the deployment and the additional key `enabled` is required for each Worker deployment, all other keys for each Worker will override the defaults provided by the root `.Values.celery`.
 # @default -- See values.yaml
 workers:
@@ -961,19 +989,18 @@ route:
   # -- Gateway Hostname for the listener to be created for this route, this should match the `route.hostname` value defined in the parentRefs section of the route rules
   hostname: "nautobot.local"
 
-  gateway:
-    # --Enable Gateway resource creation for the Route resource
+  # -- (map[string]string) [[ref](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)] Annotations to be applied to the Gateway and Route resources
+  annotations: {}
+
+  # -- [[ref](https://docs.nautobot.com/projects/helm-charts/en/stable/advanced-features/gateway-api)] TLS configuration for the route and, when the chart creates one, for the Gateway listener serving `route.hostname`
+  # @default -- See values.yaml
+  tls:
+    # -- Enable TLS, when `false` the traffic is served as plain HTTP on port 80 and is unencrypted end to end
     enabled: false
-    # -- Gateway API Class name
-    gatewayClassName: ""
-    # -- Enable TLS configuration for the hostname defined at `route.hostname` parameter
-    tls: false
-    # -- The name of the secret to use for the TLS certificate
-    secretName: "nautobot-tls"
-    # -- Infrastructure related labels defined as key:value pairs, see the documentation for your specific Gateway provider for more details
-    infrastructureLabels: {}
-    # -- Infrastructure related annotations defines as key:value pairs, see the documentation for your specific Gateway provider for more details
-    infrastructureAnnotations: {}
+    # -- (`Terminate`, `Passthrough`) [[ref](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.TLSModeType)] TLS behavior for the listener, which also selects the kind of route created. `Terminate` decrypts at the Gateway and forwards plain HTTP to Nautobot using an `HTTPRoute`. `Passthrough` forwards the encrypted connection to Nautobot using a `TLSRoute`, giving end-to-end TLS, and requires the pod to serve TLS (see `nautobot.secret_name_tls`)
+    mode: "Terminate"
+    # -- The name of an existing secret containing the TLS certificate presented by the Gateway, only used when `route.tls.mode` is `Terminate` and `gateway.enabled` is `true`. When left empty no `certificateRefs` are rendered and the Gateway controller must supply a certificate itself
+    secretName: ""
 
   # -- Route resource pathMatchType valid values `RegularExpression`, `Exact`, or `PathPrefix`
   pathMatchType: "PathPrefix"
@@ -994,6 +1021,18 @@ route:
 
   ## Additional custom rules that can be added to the route
   extraRules: []
+
+# -- [[ref](https://docs.nautobot.com/projects/helm-charts/en/stable/advanced-features/gateway-api)] Gateway API `Gateway` resource created by this chart. Leave `enabled` as `false` to attach `route` to a Gateway managed elsewhere
+# @default -- See values.yaml
+gateway:
+  # -- Enable Gateway resource creation
+  enabled: false
+  # -- Gateway API Class name
+  gatewayClassName: ""
+  # -- Infrastructure related labels defined as key:value pairs, see the documentation for your specific Gateway provider for more details
+  infrastructureLabels: {}
+  # -- Infrastructure related annotations defines as key:value pairs, see the documentation for your specific Gateway provider for more details
+  infrastructureAnnotations: {}
 
 metrics:
   # -- Enable and configure a Prometheus [serviceMonitor](https://prometheus-operator.dev/docs/operator/design/#servicemonitor) (requires the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator))
@@ -1153,6 +1192,8 @@ metrics:
     scrapeTimeout: "30s"
     # -- (map[string]string) Additional labels for the serviceMonitor Object
     labels: {}
+    # -- ([]string) [[ref](https://prometheus.io/docs/instrumenting/content_negotiation/)
+    scrapeProtocols: []
 
   # -- Enable and configure Prometheus Rules.
   # @default -- See values.yaml

@@ -3,6 +3,60 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.2.0 - 2026-10-15
+
+### Added
+
+* [#761](https://github.com/nautobot/helm-charts/pull/761) Added `nautobot.uwsgi.maxFd` to limit uWSGI file descriptors, preventing multi-GB startup allocations.
+* [#768](https://github.com/nautobot/helm-charts/pull/768) Added support for end-to-end TLS with the Gateway API.
+
+### Changed
+
+* [#768](https://github.com/nautobot/helm-charts/pull/768) Moved `route.gateway.*` to `gateway.*` and moved the `tls` key under `route.tls`.
+* [#756](https://github.com/nautobot/helm-charts/pull/756) Updated nginx-prometheus-exporter image from 1.5.1 to 1.5.3.
+
+## 3.1.2 - 2026-05-29
+
+### Added
+
+* [#748](https://github.com/nautobot/helm-charts/pull/748) Added startup probes for Celery workers.
+* [#733](https://github.com/nautobot/helm-charts/pull/733) Added option to override settings for kubernetes jobs.
+
+### Fixed
+
+* [#745](https://github.com/nautobot/helm-charts/pull/745) Fixed statement evaluating always true for startup probes in Nautobot deployment.
+* [#742](https://github.com/nautobot/helm-charts/pull/742) Fixed missing namespace for Horizontal Pod Autoscaling resource.
+* [#747](https://github.com/nautobot/helm-charts/pull/747) Fixed uwsgi-exporter sidecar using 127.0.0.1 instead of localhost to avoid IPv6 resolution failures.
+
+## 3.1.1 - 2026-04-03
+
+### Added
+
+* [#735](https://github.com/nautobot/helm-charts/pull/735) Added the kubernetes job manifest to the celery beat pod.
+* [#733](https://github.com/nautobot/helm-charts/pull/733) Added option to override settings for kubernetes jobs.
+
+### Fixed
+
+* [#732](https://github.com/nautobot/helm-charts/pull/732) Fixed allowing configuration of scrape protocols for Service Monitor.
+* [#726](https://github.com/nautobot/helm-charts/pull/726) Fixed removing pdb config for the Celery Beat if enabled for workers.
+
+## 3.1.0 - 2026-03-20
+
+### Added
+
+* [#707](https://github.com/nautobot/helm-charts/pull/707) Added support for mounting k8s manifests for Nautobot Jobs.
+* [#708](https://github.com/nautobot/helm-charts/pull/708) Added beta support for Kubernetes Gateway API.
+
+## 3.0.4 - 2026-03-06
+
+### Added
+
+* [#702](https://github.com/nautobot/helm-charts/pull/702) Added RBAC roles for k8s jobs.
+
+### Changed
+
+* [#710](https://github.com/nautobot/helm-charts/pull/710) Removed validation for DB password.
+
 ## 3.0.3 - 2026-01-27
 
 ### Fixed

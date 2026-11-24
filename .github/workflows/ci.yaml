@@ -12,7 +12,7 @@ concurrency:
 jobs:
   pre-commit-check:
     name: "Run pre-commit checks"
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-26.04"
     env:
       GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Setup Go"
-        uses: "actions/setup-go@v6"
+        uses: "actions/setup-go@v7"
       - run: "echo $HOME/go/bin >> $GITHUB_PATH"
 
       - name: "Setup Helm"
@@ -64,8 +64,9 @@ jobs:
           #     sarif_file: "checkov.sarif"
 
   snyk-security-check:
+    if: "github.event.pull_request.head.repo.full_name == github.repository"
     name: "Snyk Security Scanning"
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-26.04"
     env:
       GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
@@ -98,7 +99,7 @@ jobs:
 
   kubescape-security-check:
     name: "Kubescape Security Scanning"
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-26.04"
     env:
       GITHUB_PATH: "/home/runner/.kubescape/bin"
       GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -126,7 +127,7 @@ jobs:
 
   unittests:
     name: "Run Unittests"
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-26.04"
     needs:
       - "pre-commit-check"
     steps:
@@ -136,11 +137,11 @@ jobs:
       - name: "Setup Helm"
         uses: "azure/setup-helm@v5"
         with:
-          version: "v3.19.2"  # For reference: https://github.com/helm/helm/issues/31490
+          version: "v4.2.4"  # For reference: https://github.com/helm/helm/issues/31490
 
       - name: "Install unittests plugin"
         run: |
-          helm plugin install https://github.com/helm-unittest/helm-unittest.git
+          helm plugin install --verify=false https://github.com/helm-unittest/helm-unittest.git
 
       - name: "Run tests"
         run: |

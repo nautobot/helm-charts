@@ -14,10 +14,10 @@ jobs:
       - name: "Checkout"
         uses: "actions/checkout@v6"
         with:
-          ref: "${{ github.head_ref }}"
+          fetch-depth: 0
 
       - name: "Setup Go"
-        uses: "actions/setup-go@v6"
+        uses: "actions/setup-go@v7"
 
       - name: "Install helm-docs"
         run: "go install github.com/norwoodj/helm-docs/cmd/helm-docs@v1.11.0"

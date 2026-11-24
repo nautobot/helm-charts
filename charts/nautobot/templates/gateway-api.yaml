@@ -1,5 +1,7 @@
-{{- if .Values.route.enabled }}
-{{- if .Values.route.gateway.enabled }}
+{{- $tls := .Values.route.tls -}}
+{{- $passthrough := and $tls.enabled (eq $tls.mode "Passthrough") -}}
+{{- if .Values.gateway.enabled }}
+---
 apiVersion: {{ .Values.route.apiVersion }}
 kind: Gateway
 metadata:
@@ -13,40 +15,60 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" (merge .Values.route.annotations .Values.commonAnnotations) "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.route.gateway.gatewayClassName }}
-  gatewayClassName: {{ .Values.route.gateway.gatewayClassName | quote }}
+  {{- if .Values.gateway.gatewayClassName }}
+  gatewayClassName: {{ .Values.gateway.gatewayClassName | quote }}
   {{- end }}
   listeners:
   - hostname: {{ .Values.route.hostname }}
-  {{- if .Values.route.gateway.tls }}
-    name: nautobot-local-https
+  {{- if $tls.enabled }}
+    name: {{ ternary "nautobot-local-tls" "nautobot-local-https" $passthrough }}
     port: 443
-    protocol: HTTPS
+    protocol: {{ ternary "TLS" "HTTPS" $passthrough }}
     tls:
-      mode: Terminate
+      mode: {{ $tls.mode }}
+      {{- if and (not $passthrough) $tls.secretName }}
       certificateRefs:
       - kind: Secret
-        name: {{ .Values.route.gateway.secretName }}
+        name: {{ $tls.secretName }}
+      {{- end }}
   {{- else }}
     name: nautobot-local-http
     port: 80
     protocol: HTTP
   {{- end }}
-  {{- if (or .Values.route.gateway.infrastructureLabels .Values.route.gateway.infrastructureAnnotations) }}
+  {{- if (or .Values.gateway.infrastructureLabels .Values.gateway.infrastructureAnnotations) }}
   infrastructure:
-  {{- if .Values.route.gateway.infrastructureLabels }}
+  {{- if .Values.gateway.infrastructureLabels }}
     labels:
-      {{- include "common.tplvalues.render" ( dict "value" .Values.route.gateway.infrastructureLabels "context" $ ) | nindent 6 }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.gateway.infrastructureLabels "context" $ ) | nindent 6 }}
   {{- end }}
-  {{- if .Values.route.gateway.infrastructureAnnotations }}
+  {{- if .Values.gateway.infrastructureAnnotations }}
     annotations:
-      {{- include "common.tplvalues.render" ( dict "value" .Values.route.gateway.infrastructureAnnotations "context" $ ) | nindent 6 }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.gateway.infrastructureAnnotations "context" $ ) | nindent 6 }}
   {{- end }}
   {{- end }}
 {{- end }}
+{{- if .Values.route.enabled }}
+{{- $nautobots := (include "nautobot.nautobots" .) | mustFromJson -}}
+{{/* The default deployment owns the catch-all path, so it is evaluated last. */}}
+{{- $nautobotKeys := keys (omit $nautobots "default") | sortAlpha -}}
+{{- $nautobotKeys = append $nautobotKeys "default" -}}
+{{- $enabledNautobots := list -}}
+{{- range $nautobotName := $nautobotKeys -}}
+{{- if (index $nautobots $nautobotName).enabled -}}
+{{- $enabledNautobots = append $enabledNautobots $nautobotName -}}
+{{- end -}}
+{{- end -}}
+{{- if and $passthrough (ne (len $enabledNautobots) 1) }}
+{{- fail "`route.tls.mode=Passthrough` requires exactly one Nautobot deployment because TLSRoute cannot route between deployments. Enable a single deployment, or use `route.tls.mode=Terminate`." }}
+{{- end }}
 ---
 apiVersion: {{ .Values.route.apiVersion }}
+{{- if $passthrough }}
+kind: TLSRoute
+{{- else }}
 kind: HTTPRoute
+{{- end }}
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
@@ -60,7 +82,7 @@ metadata:
 spec:
   hostnames:
     - {{ .Values.route.hostname }}
-  {{- if .Values.route.gateway.enabled }}
+  {{- if .Values.gateway.enabled }}
   parentRefs:
     - name: {{ include "common.names.fullname" . }}
   {{- else }}
@@ -70,18 +92,35 @@ spec:
   {{- end }}
   {{- end }}
   rules:
+  {{- if $passthrough }}
+  - backendRefs:
+    - name: {{ printf "%s-%s" (include "common.names.fullname" .) (first $enabledNautobots) }}
+      port: {{ .Values.service.httpsPort }}
+  {{- else }}
   {{- if .Values.route.extraRules }}
   {{- toYaml .Values.route.extraRules | nindent 2 }}
   {{- end }}
+  {{- range $nautobotName := $enabledNautobots }}
+  {{- $nautobot := index $nautobots $nautobotName }}
   - backendRefs:
-    - name: nautobot-default
-      port: 80
+    - name: {{ printf "%s-%s" (include "common.names.fullname" $) $nautobotName }}
+      port: {{ $.Values.service.port }}
     matches:
+    {{- if $nautobot.staticFilesOnly }}
     - path:
-        type: PathPrefix
-        value: /
-    {{- with .Values.route.filters }}
+        type: {{ $.Values.route.pathMatchType }}
+        value: "/static"
+    {{- else }}
+    {{- range $routePath := $nautobot.ingressPaths }}
+    - path:
+        type: {{ $.Values.route.pathMatchType }}
+        value: {{ $routePath | quote }}
+    {{- end }}
+    {{- end }}
+    {{- with $.Values.route.filters }}
     filters:
       {{- toYaml . | nindent 6 }}
     {{- end }}
+  {{- end }}
+  {{- end }}
 {{- end }}

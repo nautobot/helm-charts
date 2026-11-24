@@ -10,6 +10,21 @@
     "develop",
     "next"
   ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Kubernetes version of the JSON schemas referenced in the values schema source. The yannh/kubernetes-json-schema repository has no version tags, its folders follow the Kubernetes releases.",
+      "managerFilePatterns": [
+        "/^charts/nautobot/schema/values\\.schema\\.json$/"
+      ],
+      "matchStrings": [
+        "yannh/kubernetes-json-schema/master/(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "kubernetes-json-schema",
+      "packageNameTemplate": "kubernetes/kubernetes",
+      "datasourceTemplate": "github-releases"
+    }
+  ],
   "packageRules": [
     {
       "description": "Disable python updates in the develop branch.",
@@ -111,6 +126,14 @@
         ".github/**"
       ],
       "enabled": false
+    },
+    {
+      "description": "Separate PR for the Kubernetes JSON schema version, it changes values validation. The schema folder is published a day or two after the Kubernetes release.",
+      "matchDepNames": [
+        "kubernetes-json-schema"
+      ],
+      "groupName": "Kubernetes JSON Schemas",
+      "minimumReleaseAge": "3 days"
     }
   ]
 }

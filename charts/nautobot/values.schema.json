@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from schema/values.schema.json by scripts/build_schema.py. Do not edit.",
   "$defs": {
     "empty-object": {
       "type": "object",

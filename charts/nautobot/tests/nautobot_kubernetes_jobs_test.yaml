@@ -115,7 +115,7 @@ tests:
                             }
                           }
                         ],
-                        "image": "registry-1.docker.io/networktocode/nautobot:3.1-py3.13",
+                        "image": "registry-1.docker.io/networktocode/nautobot:3.2-py3.13",
                         "imagePullPolicy": "IfNotPresent",
                         "name": "nautobot-job",
                         "resources": {
@@ -331,7 +331,7 @@ tests:
                             }
                           }
                         ],
-                        "image": "registry-1.docker.io/networktocode/nautobot:3.1-py3.13",
+                        "image": "registry-1.docker.io/networktocode/nautobot:3.2-py3.13",
                         "imagePullPolicy": "IfNotPresent",
                         "name": "nautobot-job",
                         "resources": {
@@ -542,7 +542,7 @@ tests:
                             }
                           }
                         ],
-                        "image": "registry-1.docker.io/networktocode/nautobot:3.1-py3.13",
+                        "image": "registry-1.docker.io/networktocode/nautobot:3.2-py3.13",
                         "imagePullPolicy": "IfNotPresent",
                         "name": "nautobot-job",
                         "resources": {
@@ -666,7 +666,7 @@ tests:
                             }
                           }
                         ],
-                        "image": "registry-1.docker.io/networktocode/nautobot:3.1-py3.13",
+                        "image": "registry-1.docker.io/networktocode/nautobot:3.2-py3.13",
                         "imagePullPolicy": "IfNotPresent",
                         "name": "nautobot-job",
                         "resources": {

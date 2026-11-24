@@ -16,7 +16,7 @@ jobs:
       - name: "Checkout"
         uses: "actions/checkout@v6"
         with:
-          fetch-depth: 0
+          ref: "${{ github.head_ref }}"
 
       - name: "Setup Go"
         uses: "actions/setup-go@v6"
@@ -48,4 +48,4 @@ jobs:
         run: |
           git add .
           git commit -m "chore: Update docs"
-          git push origin "HEAD:${HEAD_REF}"
+          git push origin "${HEAD_REF}"

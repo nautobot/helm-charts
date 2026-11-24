@@ -33,6 +33,24 @@
       "enabled": false
     },
     {
+      "description": "Allow minor and major pre-commit and GitHub updates in the develop branch.",
+      "matchBaseBranches": [
+        "develop"
+      ],
+      "matchFileNames": [
+        ".pre-commit-config.yaml",
+        ".github/**"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "major"
+      ],
+      "schedule": [
+        "before 3am on Monday"
+      ],
+      "enabled": true
+    },
+    {
       "description": "Weekly patch updates in the develop and next branch.",
       "matchBaseBranches": [
         "develop",
@@ -82,6 +100,17 @@
         "before 3am every 2 weeks on Monday"
       ],
       "enabled": true
+    },
+    {
+      "description": "Disable pre-commit and GitHub updates in the next branch, they go to develop.",
+      "matchBaseBranches": [
+        "next"
+      ],
+      "matchFileNames": [
+        ".pre-commit-config.yaml",
+        ".github/**"
+      ],
+      "enabled": false
     }
   ]
 }

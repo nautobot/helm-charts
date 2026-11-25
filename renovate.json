@@ -128,12 +128,15 @@
       "enabled": false
     },
     {
-      "description": "Separate PR for the Kubernetes JSON schema version, it changes values validation. The schema folder is published a day or two after the Kubernetes release.",
+      "description": "Separate PR every 3 months for the Kubernetes JSON schema version, it changes values validation. The schema folder is published a day or two after the Kubernetes release.",
       "matchDepNames": [
         "kubernetes-json-schema"
       ],
       "groupName": "Kubernetes JSON Schemas",
-      "minimumReleaseAge": "3 days"
+      "minimumReleaseAge": "3 days",
+      "schedule": [
+        "* * 1 */3 *"
+      ]
     }
   ]
 }

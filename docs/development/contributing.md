@@ -145,4 +145,4 @@ To validate a value against a Kubernetes type, reference its schema in the sourc
 * The `<version>-standalone-strict` folders reject unknown fields, the `<version>` folders accept them.
 * The build fails on a `$ref` to any other URL.
 
-Renovate tracks the Kubernetes version and opens a PR that updates all references. A new version can change which values are valid, so review the diff of the built schema in that PR.
+Renovate tracks the Kubernetes version and every 3 months opens a PR that updates all references. A new version can change which values are valid, so review the diff of the built schema in that PR.

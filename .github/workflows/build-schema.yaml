@@ -9,7 +9,7 @@ on:  # yamllint disable-line rule:truthy
     paths:
       - "charts/nautobot/schema/**"
       - "charts/nautobot/values.schema.json"
-      - "scripts/build_schema.py"
+      - "tasks.py"
       - ".github/workflows/build-schema.yaml"
 
 jobs:
@@ -24,8 +24,16 @@ jobs:
           repository: "${{ github.event.pull_request.head.repo.full_name }}"
           ref: "${{ github.event.pull_request.head.ref }}"
 
+      - name: "Install poetry"
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: "Install dependencies"
+        run: "poetry install --no-root"
+
       - name: "Build values.schema.json"
-        run: "python3 scripts/build_schema.py"
+        run: "poetry run invoke build-schema"
 
       - name: "Check for changes"
         id: "git-check"
@@ -47,5 +55,5 @@ jobs:
       - name: "Fail on stale schema in a fork"
         if: "steps.git-check.outputs.changed == 'true' && github.event.pull_request.head.repo.full_name != github.repository"
         run: |
-          echo "::error::values.schema.json is out of date. Run 'python3 scripts/build_schema.py' and commit the result."
+          echo "::error::values.schema.json is out of date. Run 'invoke build-schema' and commit the result."
           exit 1

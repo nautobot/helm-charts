@@ -126,10 +126,10 @@ To change the schema:
 The other CI checks do not run again on the commit made by the workflow. If the linter values or the unit tests use a value that you added to the schema, build the schema yourself and commit both files:
 
 ```no-highlight
-python3 scripts/build_schema.py
+invoke build-schema
 ```
 
-The script needs only Python 3 and internet access. Also run it yourself when the PR comes from a fork, because the workflow cannot push to a fork.
+The task needs internet access. Also run it yourself when the PR comes from a fork, because the workflow cannot push to a fork.
 
 ### Kubernetes Types
 
@@ -137,7 +137,7 @@ To validate a value against a Kubernetes type, reference its schema in the sourc
 
 ```json
 "affinity": {
-  "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/affinity.json"
+  "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/affinity.json"
 }
 ```
 

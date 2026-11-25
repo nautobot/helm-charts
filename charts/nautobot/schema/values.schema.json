@@ -43,7 +43,7 @@
       "type": "object",
       "properties": {
         "affinity": {
-          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/affinity.json"
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/affinity.json"
         },
         "args": {
           "type": "array",
@@ -147,7 +147,7 @@
         "extraEnvVars": {
           "type": "array",
           "items": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/envvar.json"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/envvar.json"
           }
         },
         "extraEnvVarsCM": {
@@ -165,29 +165,29 @@
         "extraVolumeMounts": {
           "type": "array",
           "items": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/volumemount.json"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/volumemount.json"
           }
         },
         "extraVolumes": {
           "type": "array",
           "items": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/volume.json"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/volume.json"
           }
         },
         "hostAliases": {
           "type": "array",
           "items": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/hostalias.json"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/hostalias.json"
           }
         },
         "initContainers": {
           "type": "array",
           "items": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/container.json"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/container.json"
           }
         },
         "lifecycleHooks": {
-          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/lifecycle.json"
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/lifecycle.json"
         },
         "livenessProbe": {
           "$ref": "#/$defs/probe"
@@ -314,12 +314,12 @@
           "minimum": 1
         },
         "resources": {
-          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/resourcerequirements.json"
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/resourcerequirements.json"
         },
         "sidecars": {
           "type": "array",
           "items": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/container.json"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/container.json"
           }
         },
         "terminationGracePeriodSeconds": {
@@ -328,7 +328,7 @@
         "tolerations": {
           "type": "array",
           "items": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/toleration.json"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/toleration.json"
           }
         },
         "updateStrategy": {
@@ -700,7 +700,7 @@
     "probe": {
       "allOf": [
         {
-          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/probe.json"
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10/probe.json"
         },
         {
           "properties": {
@@ -714,7 +714,7 @@
     "securityContext": {
       "allOf": [
         {
-          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/securitycontext.json"
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10/securitycontext.json"
         },
         {
           "required": [
@@ -731,7 +731,7 @@
     "podSecurityContext": {
       "allOf": [
         {
-          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/podsecuritycontext.json"
+          "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10/podsecuritycontext.json"
         },
         {
           "required": [
@@ -1184,7 +1184,7 @@
               "items": {
                 "allOf": [
                   {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/networkpolicyegressrule.json"
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10/networkpolicyegressrule.json"
                   }
                 ]
               }
@@ -1194,7 +1194,7 @@
               "items": {
                 "allOf": [
                   {
-                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12/networkpolicyingressrule.json"
+                    "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10/networkpolicyingressrule.json"
                   }
                 ]
               }
@@ -1272,7 +1272,7 @@
         "extraPorts": {
           "type": "array",
           "items": {
-            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.23.12-standalone-strict/serviceport.json"
+            "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/serviceport.json"
           },
           "description": "Extra ports to expose in the nautobot service (normally used with the `sidecars` value)"
         },

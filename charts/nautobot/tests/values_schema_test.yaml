@@ -1,0 +1,58 @@
+---
+suite: "Test values.schema.json"
+templates:
+  - "nautobot-deployment.yaml"
+tests:
+  - it: "accepts the default values"
+    asserts:
+      - notFailedTemplate: {}
+
+  - it: "accepts newer Kubernetes fields such as a native sidecar"
+    set:
+      nautobot:
+        initContainers:
+          - name: "native-sidecar"
+            image: "busybox"
+            restartPolicy: "Always"
+        resources:
+          claims:
+            - name: "gpu"
+    asserts:
+      - notFailedTemplate: {}
+
+  - it: "rejects an unknown field in a strict Kubernetes type"
+    set:
+      nautobot:
+        resources:
+          bogusResourceField: 1
+    asserts:
+      - failedTemplate:
+          errorPattern: "bogusResourceField"
+
+  - it: "rejects an unknown field in a Kubernetes type inside a list"
+    set:
+      nautobot:
+        extraVolumes:
+          - name: "extra"
+            emptyDir: {}
+            bogusVolumeField: 1
+    asserts:
+      - failedTemplate:
+          errorPattern: "bogusVolumeField"
+
+  - it: "rejects a wrong type in a non-strict Kubernetes type"
+    set:
+      nautobot:
+        livenessProbe:
+          periodSeconds: "ten"
+    asserts:
+      - failedTemplate:
+          errorPattern: "periodSeconds"
+
+  - it: "rejects a wrong type in a chart value"
+    set:
+      nautobot:
+        replicaCount: "three"
+    asserts:
+      - failedTemplate:
+          errorPattern: "replicaCount"

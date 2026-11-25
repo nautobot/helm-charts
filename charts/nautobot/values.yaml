@@ -1228,6 +1228,11 @@ postgresql:
     # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL user password
     password: ""
   primary:
+    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-primary-parameters)] PostgreSQL primary resources, overrides the chart default `nano` resources preset
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "256Mi"
     podSecurityContext:
       seccompProfile:
         type: "RuntimeDefault"
@@ -1252,7 +1257,13 @@ redis:
     repository: "bitnamilegacy/redis"
     tag: "7.4.2-debian-12-r9"
     pullPolicy: "Always"
+  # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-configuration-parameters)] Common Redis configuration, the chart default loads modules that are not available in the Redis 7 image
+  commonConfiguration: |-
+    appendonly yes
+    save ""
   master:
+    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-master-configuration-parameters)] Redis master resources preset, `none` disables the chart default `nano` preset
+    resourcesPreset: "none"
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false
@@ -1265,6 +1276,7 @@ redis:
       seccompProfile:
         type: "RuntimeDefault"
   metrics:
+    resourcesPreset: "none"
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false
@@ -1273,6 +1285,7 @@ redis:
         drop:
           - "ALL"
   replica:
+    resourcesPreset: "none"
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false
@@ -1285,6 +1298,7 @@ redis:
       seccompProfile:
         type: "RuntimeDefault"
   sentinel:
+    resourcesPreset: "none"
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false

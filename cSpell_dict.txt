@@ -100,3 +100,5 @@ uwsgi
 uwsgimetrics
 workermetrics
 wsgi
+appendonly
+loadmodule

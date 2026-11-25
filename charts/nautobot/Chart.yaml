@@ -40,6 +40,10 @@ annotations:
       description: Updated nginx-prometheus-exporter image from 1.5.1 to 1.5.3.
     - kind: changed
       description: Updated default Nautobot image to 3.2.
+    - kind: changed
+      description: Updated Redis subchart from 18.19.4 to 28.3.16 and PostgreSQL subchart from 12.12.10 to 18.12.27.
+    - kind: changed
+      description: Set Redis and PostgreSQL resources and Redis configuration to keep the previous subchart defaults.
 apiVersion: "v2"
 appVersion: "3.2"
 version: "3.2.0"
@@ -47,11 +51,11 @@ dependencies:
   - condition: "redis.enabled"
     name: "redis"
     repository: "oci://registry-1.docker.io/bitnamicharts"
-    version: "18.19.4"
+    version: "28.3.16"
   - condition: "postgresql.enabled"
     name: "postgresql"
     repository: "oci://registry-1.docker.io/bitnamicharts"
-    version: "12.12.10"
+    version: "18.12.27"
   - name: "common"
     repository: "oci://registry-1.docker.io/bitnamicharts"
     tags:

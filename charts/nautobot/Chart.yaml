@@ -44,6 +44,10 @@ annotations:
       description: Updated Redis subchart from 18.19.4 to 28.3.16 and PostgreSQL subchart from 12.12.10 to 18.12.27.
     - kind: changed
       description: Set Redis and PostgreSQL resources and Redis configuration to keep the previous subchart defaults.
+    - kind: changed
+      description: Updated the Kubernetes JSON schemas used for values validation from v1.23.12 to v1.35.10, so newer Kubernetes fields such as native sidecars are accepted.
+    - kind: fixed
+      description: Inlined remote JSON schemas in values.schema.json so Helm no longer downloads them from GitHub during validation.
 apiVersion: "v2"
 appVersion: "3.2"
 version: "3.2.0"

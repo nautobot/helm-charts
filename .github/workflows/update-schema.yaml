@@ -10,7 +10,6 @@ on:  # yamllint disable-line rule:truthy
       - "charts/nautobot/schema/**"
       - "charts/nautobot/values.schema.json"
       - "tasks.py"
-      - ".github/actions/commit-generated-files/**"
       - ".github/workflows/update-schema.yaml"
 
 jobs:
@@ -36,9 +35,43 @@ jobs:
       - name: "Update values.schema.json"
         run: "poetry run invoke update-schema"
 
+      - name: "Check for changes"
+        id: "git-check"
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: "Commit changes"
-        uses: "./.github/actions/commit-generated-files"
-        with:
-          paths: "charts/nautobot/values.schema.json"
-          commit-message: "chore: Update values.schema.json"
-          fix-command: "invoke update-schema"
+        if: "steps.git-check.outputs.changed == 'true' && github.event.pull_request.head.repo.full_name == github.repository"
+        env:
+          HEAD_REF: "${{ github.event.pull_request.head.ref }}"
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add charts/nautobot/values.schema.json
+          git commit -m "chore: Update values.schema.json"
+          git pull --rebase origin "${HEAD_REF}"
+          git push origin "HEAD:refs/heads/${HEAD_REF}"
+
+      # The workflow token cannot push to a fork.
+      - name: "Fail on out of date files in a fork"
+        if: "steps.git-check.outputs.changed == 'true' && github.event.pull_request.head.repo.full_name != github.repository"
+        run: |
+          echo "::error title=values.schema.json is out of date::Run 'invoke update-schema' and commit the result."
+          {
+            echo "## values.schema.json is out of date"
+            echo
+            echo "Run this command in your branch and commit the result:"
+            echo
+            echo '```'
+            echo "invoke update-schema"
+            echo '```'
+            echo
+            echo "Changed files:"
+            echo
+            echo '```'
+            git status --short
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 1

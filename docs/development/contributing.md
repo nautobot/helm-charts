@@ -120,16 +120,16 @@ Helm validates the chart values against `charts/nautobot/values.schema.json`. Th
 To change the schema:
 
 1. Edit `charts/nautobot/schema/values.schema.json`.
-2. Open a PR. The `Build Schema` workflow builds `charts/nautobot/values.schema.json` and commits it to the PR branch.
+2. Open a PR. The `Update Schema` workflow builds `charts/nautobot/values.schema.json` and commits it to the PR branch.
 3. Run `git pull` before you push again.
 
 The other CI checks do not run again on the commit made by the workflow. If the linter values or the unit tests use a value that you added to the schema, build the schema yourself and commit both files:
 
 ```no-highlight
-invoke build-schema
+invoke update-schema
 ```
 
-The task needs internet access. Also run it yourself when the PR comes from a fork, because the workflow cannot push to a fork.
+The task needs internet access. Also run it yourself when the PR comes from a fork. The workflow cannot push to a fork, so it fails and shows the command to run in the job summary.
 
 ### Kubernetes Types
 

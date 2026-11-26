@@ -16,7 +16,8 @@ jobs:
       - name: "Checkout"
         uses: "actions/checkout@v7"
         with:
-          ref: "${{ github.head_ref }}"
+          repository: "${{ github.event.pull_request.head.repo.full_name }}"
+          ref: "${{ github.event.pull_request.head.ref }}"
 
       - name: "Setup Go"
         uses: "actions/setup-go@v7"
@@ -34,18 +35,9 @@ jobs:
         run: |
           helm-docs --chart-to-generate=charts/nautobot --template-files=./docs/configuration/reference.md.gotmpl --output-file=../../docs/configuration/reference.md
 
-      - name: "Check for changes"
-        id: "git-check"
-        run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git diff --quiet || echo "changed=true" >> $GITHUB_OUTPUT
-
       - name: "Commit changes"
-        if: "steps.git-check.outputs.changed == 'true'"
-        env:
-          HEAD_REF: "${{ github.head_ref }}"
-        run: |
-          git add .
-          git commit -m "chore: Update docs"
-          git push origin "${HEAD_REF}"
+        uses: "./.github/actions/commit-generated-files"
+        with:
+          paths: "."
+          commit-message: "chore: Update docs"
+          fix-command: "invoke update-docs"

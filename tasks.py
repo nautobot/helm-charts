@@ -13,7 +13,7 @@ from invoke import task
 SCHEMA_SOURCE = Path("charts/nautobot/schema/values.schema.json")
 SCHEMA_TARGET = Path("charts/nautobot/values.schema.json")
 K8S_SCHEMA_URL = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
-SCHEMA_GENERATED_COMMENT = "Generated from schema/values.schema.json by 'invoke build-schema'. Do not edit."
+SCHEMA_GENERATED_COMMENT = "Generated from schema/values.schema.json by 'invoke update-schema'. Do not edit."
 
 
 @task
@@ -129,7 +129,7 @@ def _localize_k8s_refs(node, paths):
 
 
 @task
-def build_schema(context):
+def update_schema(context):
     """Build charts/nautobot/values.schema.json from charts/nautobot/schema/values.schema.json.
 
     Helm downloads every remote `$ref` each time it validates values. The source schema

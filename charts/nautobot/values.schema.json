@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$comment": "Generated from schema/values.schema.json by 'invoke build-schema'. Do not edit.",
+  "$comment": "Generated from schema/values.schema.json by 'invoke update-schema'. Do not edit.",
   "$defs": {
     "empty-object": {
       "type": "object",

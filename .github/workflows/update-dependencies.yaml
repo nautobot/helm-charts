@@ -2,16 +2,24 @@
 name: "Update Dependencies"
 
 on:  # yamllint disable-line rule:truthy
-  push:
+  pull_request:
+    branches:
+      - "develop"
+      - "next"
     paths:
       - "charts/nautobot/Chart.yaml"
 
 jobs:
   update-dependencies:
     runs-on: "ubuntu-latest"
+    permissions:
+      contents: "write"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v7"
+        with:
+          repository: "${{ github.event.pull_request.head.repo.full_name }}"
+          ref: "${{ github.event.pull_request.head.ref }}"
 
       - name: "Set up Helm"
         uses: "azure/setup-helm@v5"
@@ -31,16 +39,9 @@ jobs:
       - name: "Run helm-docs"
         run: "helm-docs"
 
-      - name: "Check for changes"
-        id: "git-check"
-        run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git diff --quiet || echo "changed=true" >> $GITHUB_OUTPUT
-
       - name: "Commit changes"
-        if: "steps.git-check.outputs.changed == 'true'"
-        run: |
-          git add .
-          git commit -m "chore: Update helm dependencies"
-          git push origin ${{ github.ref_name }}
+        uses: "./.github/actions/commit-generated-files"
+        with:
+          paths: "."
+          commit-message: "chore: Update helm dependencies"
+          fix-command: "helm dependency update charts/nautobot && helm-docs"

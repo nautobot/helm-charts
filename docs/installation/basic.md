@@ -26,6 +26,11 @@ This command deploys Nautobot, on the Kubernetes cluster, in the default configu
 
 > **Tip**: List all releases using `helm list`
 
+!!! warning
+    Chart versions 2.0.0 through 3.2.0 download JSON schemas from GitHub during values validation.
+    This can fail with HTTP 429 (rate limiting) or in air-gapped environments.
+    When installing or upgrading to one of these versions, add `--skip-schema-validation` to the `helm install` or `helm upgrade` command (requires Helm 3.16 or newer).
+
 ## Accessing Nautobot
 
 Immediately after install Helm will present the user with help text similar to the following:

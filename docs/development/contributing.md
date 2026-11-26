@@ -109,3 +109,40 @@ or if you don't have `invoke` installed simply run:
 ```no-highlight
 mkdocs serve -v
 ```
+
+## Values Schema
+
+Helm validates the chart values against `charts/nautobot/values.schema.json`. This file is generated, do not edit it.
+
+* `charts/nautobot/schema/values.schema.json` - The source, edit this file. It references the Kubernetes types with a `$ref` to the [kubernetes-json-schema](https://github.com/yannh/kubernetes-json-schema) repository.
+* `charts/nautobot/values.schema.json` - The built schema. It is a copy of the source with every Kubernetes `$ref` replaced by an inline copy in `$defs`. Helm would otherwise download each `$ref` on every command, which fails without internet access.
+
+To change the schema:
+
+1. Edit `charts/nautobot/schema/values.schema.json`.
+2. Open a PR. The `Update Schema` workflow builds `charts/nautobot/values.schema.json` and commits it to the PR branch.
+3. Run `git pull` before you push again.
+
+The other CI checks do not run again on the commit made by the workflow. If the linter values or the unit tests use a value that you added to the schema, build the schema yourself and commit both files:
+
+```no-highlight
+invoke update-schema
+```
+
+The task needs internet access. Also run it yourself when the PR comes from a fork. The workflow cannot push to a fork, so it fails and shows the command to run in the job summary.
+
+### Kubernetes Types
+
+To validate a value against a Kubernetes type, reference its schema in the source file:
+
+```json
+"affinity": {
+  "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.10-standalone-strict/affinity.json"
+}
+```
+
+* Use the same Kubernetes version as the other references.
+* The `<version>-standalone-strict` folders reject unknown fields, the `<version>` folders accept them.
+* The build fails on a `$ref` to any other URL.
+
+Renovate tracks the Kubernetes version and every 3 months opens a PR that updates all references. A new version can change which values are valid, so review the diff of the built schema in that PR.

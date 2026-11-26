@@ -40,6 +40,10 @@ annotations:
       description: Updated nginx-prometheus-exporter image from 1.5.1 to 1.5.3.
     - kind: changed
       description: Updated default Nautobot image to 3.2.
+    - kind: changed
+      description: Updated the Kubernetes JSON schemas used for values validation from v1.23.12 to v1.35.10, so newer Kubernetes fields such as native sidecars are accepted.
+    - kind: fixed
+      description: Inlined remote JSON schemas in values.schema.json so Helm no longer downloads them from GitHub during validation.
 apiVersion: "v2"
 appVersion: "3.2"
 version: "3.2.0"

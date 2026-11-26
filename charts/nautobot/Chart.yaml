@@ -34,6 +34,8 @@ annotations:
       description: Added nautobot.uwsgi.maxFd to limit uWSGI file descriptors, preventing multi-GB startup allocations.
     - kind: added
       description: Added support for end-to-end TLS with the Gateway API.
+    - kind: added
+      description: Added nautobot.staticFilesVolume and nautobot.mediaFilesVolume to use any Kubernetes volume source for static and media files.
     - kind: changed
       description: Moved route.gateway.* to gateway.* and moved `tls` key under `route.tls`.
     - kind: changed

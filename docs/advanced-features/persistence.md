@@ -40,3 +40,29 @@ nautobot:
   nodeSelector:
     nautobot-storage: static
 ```
+
+## Custom Volumes
+
+If Persistent Volumes are not an option, you can provide any [Kubernetes volume source](https://kubernetes.io/docs/concepts/storage/volumes/) (e.g. `csi`, `nfs`, `hostPath`, `ephemeral` or an existing `persistentVolumeClaim`) for static and media files:
+
+* `nautobot.staticFilesVolume` - mounted at `/opt/nautobot/static`. Defaults to `emptyDir` when not set.
+* `nautobot.mediaFilesVolume` - mounted at `/opt/nautobot/media`. No media volume is mounted when not set.
+
+Below is an example that stores static files in a Google Cloud Storage bucket using the [Cloud Storage FUSE CSI driver](https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/cloud-storage-fuse-csi-driver).
+
+```yaml
+nautobot:
+  staticFilesVolume:
+    csi:
+      driver: gcsfuse.csi.storage.gke.io
+      volumeAttributes:
+        bucketName: "your-bucket-name"
+        mountOptions: "implicit-dirs,o=noexec"
+```
+
+The static files volume is used by the Nautobot Pods and the init Job (`nautobot.singleInit`). The media files volume is used by the Nautobot Pods and the Kubernetes Jobs pods.
+
+Nautobot deployments honour per-instance overrides in `nautobots.<name>`. The init Job and the Kubernetes Jobs pods always use the global `nautobot.*` values, the same as for `persistenceStaticFiles` and `persistenceMediaFiles`. Per-instance values are merged over `nautobot.*`, so to switch the volume type for one instance, set the global key to `null` (e.g. `csi: null`).
+
+!!! note
+    The Persistent Volume Claim takes precedence. If `nautobot.persistenceStaticFiles.enabled` or `nautobot.persistenceMediaFiles.enabled` is `true`, the matching `staticFilesVolume` or `mediaFilesVolume` value is ignored.

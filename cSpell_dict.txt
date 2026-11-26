@@ -33,6 +33,7 @@ dualstack
 fixpathinfo
 flushdb
 fullname
+gcsfuse
 getenv
 gotmpl
 harakiri
@@ -64,6 +65,7 @@ networktocode
 nginxinc
 nginxmetrics
 nindent
+noexec
 norwoodj
 pathlib
 pgpool

@@ -1,0 +1,69 @@
+---
+suite: "Test Nautobot Init Job"
+templates:
+  - "job.yaml"
+set:
+  nautobot:
+    singleInit: true
+release:
+  name: "test"
+  namespace: "test"
+
+tests:
+
+  - it: "Assert init Job is not created by default"
+    set:
+      nautobot:
+        singleInit: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: "Assert static files volume defaults to emptyDir"
+    asserts:
+      - isKind:
+          of: "Job"
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "nautobot-static"
+            emptyDir: {}
+      - contains:
+          path: "spec.template.spec.containers[0].volumeMounts"
+          content:
+            name: "nautobot-static"
+            mountPath: "/opt/nautobot/static"
+
+  - it: "Test custom static files volume"
+    set:
+      nautobot:
+        staticFilesVolume:
+          csi:
+            driver: "gcsfuse.csi.storage.gke.io"
+            volumeAttributes:
+              bucketName: "test-bucket"
+    asserts:
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "nautobot-static"
+            csi:
+              driver: "gcsfuse.csi.storage.gke.io"
+              volumeAttributes:
+                bucketName: "test-bucket"
+
+  - it: "Test PVC takes precedence over custom static files volume"
+    set:
+      nautobot:
+        staticFilesVolume:
+          csi:
+            driver: "gcsfuse.csi.storage.gke.io"
+        persistenceStaticFiles:
+          enabled: true
+    asserts:
+      - contains:
+          path: "spec.template.spec.volumes"
+          content:
+            name: "nautobot-static"
+            persistentVolumeClaim:
+              claimName: "test-nautobot-static"

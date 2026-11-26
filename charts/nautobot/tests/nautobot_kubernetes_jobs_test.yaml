@@ -702,3 +702,22 @@ tests:
                 "ttlSecondsAfterFinished": 300
               }
             }
+
+  - it: "Test custom media files volume is added to the Job"
+    set:
+      workers:
+        example:
+          enabled: true
+          type: "kubernetes"
+      nautobot:
+        mediaFilesVolume:
+          nfs:
+            server: "nfs.example.com"
+            path: "/media"
+    asserts:
+      - matchRegex:
+          path: "data.example"
+          pattern: "\"mountPath\": \"/opt/nautobot/media\",\\s*\"name\": \"nautobot-media\""
+      - matchRegex:
+          path: "data.example"
+          pattern: "\"name\": \"nautobot-media\",\\s*\"nfs\": \\{\\s*\"path\": \"/media\",\\s*\"server\": \"nfs.example.com\""

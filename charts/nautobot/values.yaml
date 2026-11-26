@@ -255,6 +255,15 @@ nautobot:
             value: 2
             periodSeconds: 15
 
+  # -- Volume source for Nautobot static files (e.g. `csi`, `nfs`, `hostPath`, `ephemeral`). Defaults to `emptyDir` when empty. Ignored if `nautobot.persistenceStaticFiles.enabled` is true.
+  staticFilesVolume: {}
+  # e.g.
+  # staticFilesVolume:
+  #   csi:
+  #     driver: gcsfuse.csi.storage.gke.io
+  #     volumeAttributes:
+  #       bucketName: "your-bucket-name"
+
   # Add a Persistent Volume Claim for Nautobot static files
   persistenceStaticFiles:
     # --- Enable PVC and the relevant volumes
@@ -271,6 +280,9 @@ nautobot:
     # selector:
     #   matchLabel:
     #     nautobot-storage: static
+
+  # -- Volume source for Nautobot media files (e.g. `csi`, `nfs`, `hostPath`, `persistentVolumeClaim`). No media volume is mounted when empty. Ignored if `nautobot.persistenceMediaFiles.enabled` is true.
+  mediaFilesVolume: {}
 
   # Add a Persistent Volume Claim for Nautobot media files
   persistenceMediaFiles:

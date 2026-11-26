@@ -1228,6 +1228,8 @@ postgresql:
     # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL user password
     password: ""
   primary:
+    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-primary-parameters)] PostgreSQL primary resources preset, the chart default `nano` preset is too small for Nautobot migrations
+    resourcesPreset: "small"
     podSecurityContext:
       seccompProfile:
         type: "RuntimeDefault"
@@ -1252,7 +1254,13 @@ redis:
     repository: "bitnamilegacy/redis"
     tag: "7.4.2-debian-12-r9"
     pullPolicy: "Always"
+  # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-configuration-parameters)] Common Redis configuration, the chart default loads modules that are not available in the Redis 7 image
+  commonConfiguration: |-
+    appendonly yes
+    save ""
   master:
+    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-master-configuration-parameters)] Redis master resources preset
+    resourcesPreset: "micro"
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false
@@ -1273,6 +1281,8 @@ redis:
         drop:
           - "ALL"
   replica:
+    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-replicas-configuration-parameters)] Redis replica resources preset
+    resourcesPreset: "micro"
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false

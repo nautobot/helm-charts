@@ -1,6 +1,7 @@
 acks
 apiserver
 apitoken
+appendonly
 appname
 armo
 armobest

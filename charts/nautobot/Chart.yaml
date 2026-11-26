@@ -41,6 +41,10 @@ annotations:
     - kind: changed
       description: Updated default Nautobot image to 3.2.
     - kind: changed
+      description: Updated Redis subchart from 18.19.4 to 28.3.16 and PostgreSQL subchart from 12.12.10 to 18.12.27.
+    - kind: changed
+      description: Set Redis and PostgreSQL resources and Redis configuration to keep the previous subchart defaults.
+    - kind: changed
       description: Updated the Kubernetes JSON schemas used for values validation from v1.23.12 to v1.35.10, so newer Kubernetes fields such as native sidecars are accepted.
     - kind: fixed
       description: Inlined remote JSON schemas in values.schema.json so Helm no longer downloads them from GitHub during validation.
@@ -51,11 +55,11 @@ dependencies:
   - condition: "redis.enabled"
     name: "redis"
     repository: "oci://registry-1.docker.io/bitnamicharts"
-    version: "18.19.4"
+    version: "28.3.16"
   - condition: "postgresql.enabled"
     name: "postgresql"
     repository: "oci://registry-1.docker.io/bitnamicharts"
-    version: "12.12.10"
+    version: "18.12.27"
   - name: "common"
     repository: "oci://registry-1.docker.io/bitnamicharts"
     tags:

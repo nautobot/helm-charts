@@ -1228,11 +1228,8 @@ postgresql:
     # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-parameters)] PostgreSQL user password
     password: ""
   primary:
-    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-primary-parameters)] PostgreSQL primary resources, overrides the chart default `nano` resources preset
-    resources:
-      requests:
-        cpu: "250m"
-        memory: "256Mi"
+    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#postgresql-primary-parameters)] PostgreSQL primary resources preset, the chart default `nano` preset is too small for Nautobot migrations
+    resourcesPreset: "small"
     podSecurityContext:
       seccompProfile:
         type: "RuntimeDefault"
@@ -1262,8 +1259,8 @@ redis:
     appendonly yes
     save ""
   master:
-    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-master-configuration-parameters)] Redis master resources preset, `none` disables the chart default `nano` preset
-    resourcesPreset: "none"
+    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-master-configuration-parameters)] Redis master resources preset
+    resourcesPreset: "micro"
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false
@@ -1276,7 +1273,6 @@ redis:
       seccompProfile:
         type: "RuntimeDefault"
   metrics:
-    resourcesPreset: "none"
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false
@@ -1285,7 +1281,8 @@ redis:
         drop:
           - "ALL"
   replica:
-    resourcesPreset: "none"
+    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-replicas-configuration-parameters)] Redis replica resources preset
+    resourcesPreset: "micro"
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false
@@ -1298,7 +1295,6 @@ redis:
       seccompProfile:
         type: "RuntimeDefault"
   sentinel:
-    resourcesPreset: "none"
     containerSecurityContext:
       enabled: true
       allowPrivilegeEscalation: false

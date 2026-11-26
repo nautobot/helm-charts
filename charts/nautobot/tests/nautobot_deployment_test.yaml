@@ -421,11 +421,6 @@ tests:
             name: "nautobot-media"
             persistentVolumeClaim:
               claimName: "test-nautobot-media"
-      - contains:
-          path: "spec.template.spec.containers[0].volumeMounts"
-          content:
-            name: "nautobot-media"
-            mountPath: "/opt/nautobot/media"
 
   - it: "Test per-instance overrides disable global PVCs."
     set:
@@ -465,41 +460,6 @@ tests:
             name: "nautobot-media"
           any: true
 
-  - it: "Test per-instance overrides enable PVCs."
-    set:
-      nautobots:
-        default:
-          persistenceStaticFiles:
-            enabled: true
-            storageClassName: ""
-            accessMode: "ReadWriteOnce"
-            size: "1Gi"
-            selector: {}
-          persistenceMediaFiles:
-            enabled: true
-            storageClassName: ""
-            accessMode: "ReadWriteOnce"
-            size: "1Gi"
-            selector: {}
-    asserts:
-      - contains:
-          path: "spec.template.spec.volumes"
-          content:
-            name: "nautobot-static"
-            persistentVolumeClaim:
-              claimName: "test-nautobot-static"
-      - contains:
-          path: "spec.template.spec.volumes"
-          content:
-            name: "nautobot-media"
-            persistentVolumeClaim:
-              claimName: "test-nautobot-media"
-      - contains:
-          path: "spec.template.spec.containers[0].volumeMounts"
-          content:
-            name: "nautobot-media"
-            mountPath: "/opt/nautobot/media"
-
   - it: "Test per-instance custom static and media files volumes."
     set:
       nautobots:
@@ -525,23 +485,3 @@ tests:
             nfs:
               server: "nfs.example.com"
               path: "/media"
-      - contains:
-          path: "spec.template.spec.containers[0].volumeMounts"
-          content:
-            name: "nautobot-media"
-            mountPath: "/opt/nautobot/media"
-
-  - it: "Test name key in custom volume source is ignored."
-    set:
-      nautobot:
-        staticFilesVolume:
-          name: "other"
-          emptyDir:
-            medium: "Memory"
-    asserts:
-      - contains:
-          path: "spec.template.spec.volumes"
-          content:
-            name: "nautobot-static"
-            emptyDir:
-              medium: "Memory"

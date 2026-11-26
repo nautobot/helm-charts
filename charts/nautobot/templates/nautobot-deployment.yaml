@@ -297,7 +297,7 @@ spec:
           volumeMounts:
             - name: "nautobot-static"
               mountPath: "/opt/nautobot/static"
-            {{- if $nautobot.persistenceMediaFiles.enabled }}
+            {{- if include "nautobot.mediaFilesVolume" (dict "nautobot" $nautobot "context" $) | fromJson }}
             - name: "nautobot-media"
               mountPath: "/opt/nautobot/media"
             {{- end }}
@@ -447,16 +447,10 @@ spec:
       terminationGracePeriodSeconds: {{ $nautobot.terminationGracePeriodSeconds }}
       volumes:
         - name: "nautobot-static"
-        {{- if $nautobot.persistenceStaticFiles.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ include "common.names.fullname" $ }}-static
-        {{- else }}
-          emptyDir: {}
-        {{- end }}
-        {{- if $nautobot.persistenceMediaFiles.enabled }}
+          {{- include "nautobot.staticFilesVolume" (dict "nautobot" $nautobot "context" $) | fromJson | toYaml | nindent 10 }}
+        {{- with include "nautobot.mediaFilesVolume" (dict "nautobot" $nautobot "context" $) | fromJson }}
         - name: "nautobot-media"
-          persistentVolumeClaim:
-            claimName: {{ include "common.names.fullname" $ }}-media
+          {{- toYaml . | nindent 10 }}
         {{- end }}
         - name: "git-repos"
           emptyDir: {}

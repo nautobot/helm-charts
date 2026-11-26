@@ -313,6 +313,32 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+  Return the volume source for Nautobot static files as JSON.
+  The PVC takes precedence over .nautobot.staticFilesVolume, which falls back to emptyDir.
+  Usage: include "nautobot.staticFilesVolume" (dict "nautobot" $nautobot "context" $)
+*/}}
+{{- define "nautobot.staticFilesVolume" -}}
+{{- if .nautobot.persistenceStaticFiles.enabled -}}
+{{- dict "persistentVolumeClaim" (dict "claimName" (printf "%s-static" (include "common.names.fullname" .context))) | mustToJson -}}
+{{- else -}}
+{{- omit (.nautobot.staticFilesVolume | default dict) "name" | default (dict "emptyDir" dict) | mustToJson -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+  Return the volume source for Nautobot media files as JSON, or {} when no media volume is defined.
+  The PVC takes precedence over .nautobot.mediaFilesVolume.
+  Usage: include "nautobot.mediaFilesVolume" (dict "nautobot" $nautobot "context" $)
+*/}}
+{{- define "nautobot.mediaFilesVolume" -}}
+{{- if .nautobot.persistenceMediaFiles.enabled -}}
+{{- dict "persistentVolumeClaim" (dict "claimName" (printf "%s-media" (include "common.names.fullname" .context))) | mustToJson -}}
+{{- else -}}
+{{- omit (.nautobot.mediaFilesVolume | default dict) "name" | mustToJson -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
   Return the base volumes that should be included in every Nautobot container
   (web, celery, etc).
 */}}
@@ -324,8 +350,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- else if $.Values.nautobot.configCM -}}
   {{- $baseVolumes = append $baseVolumes (dict "name" "nautobot-config-custom" "configMap" (dict "name" $.Values.nautobot.configCM)) -}}
 {{- end }}
-{{- if $.Values.nautobot.persistenceMediaFiles.enabled -}}
-  {{- $baseVolumes = append $baseVolumes (dict "name" "nautobot-media" "persistentVolumeClaim" (dict "claimName" (printf "%s-media" (include "common.names.fullname" $)))) -}}
+{{- $mediaFilesVolume := include "nautobot.mediaFilesVolume" (dict "nautobot" $.Values.nautobot "context" $) | fromJson -}}
+{{- if $mediaFilesVolume -}}
+  {{- $baseVolumes = append $baseVolumes (merge (dict "name" "nautobot-media") $mediaFilesVolume) -}}
 {{- end }}
 {{- mustToJson $baseVolumes -}}
 {{- end -}}
@@ -342,7 +369,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- else if $.Values.nautobot.configCM -}}
   {{- $baseVolumeMounts = append $baseVolumeMounts (dict "name" "nautobot-config-custom" "mountPath" "/opt/nautobot/nautobot_config.py" "subPath" "nautobot_config.py") -}}
 {{- end }}
-{{- if $.Values.nautobot.persistenceMediaFiles.enabled -}}
+{{- if include "nautobot.mediaFilesVolume" (dict "nautobot" $.Values.nautobot "context" $) | fromJson -}}
   {{- $baseVolumeMounts = append $baseVolumeMounts (dict "name" "nautobot-media" "mountPath" "/opt/nautobot/media") -}}
 {{- end }}
 {{- mustToJson $baseVolumeMounts -}}

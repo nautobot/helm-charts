@@ -77,6 +77,9 @@
             }
           }
         },
+        "staticFilesVolume": {
+          "type": "object"
+        },
         "persistenceStaticFiles": {
           "type": "object",
           "additionalProperties": false,
@@ -105,6 +108,9 @@
             "storageClassName"
           ],
           "title": "Persistence"
+        },
+        "mediaFilesVolume": {
+          "type": "object"
         },
         "persistenceMediaFiles": {
           "type": "object",

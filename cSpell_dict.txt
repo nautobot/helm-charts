@@ -96,6 +96,7 @@ secretkey
 securitycontext
 servicemonitor
 serviceport
+shellcheck
 sigterm
 snyk
 somaxconn
